@@ -11,6 +11,7 @@ export const GameHeader = (props: {
   balance: number;
   currency: string;
   avatar: React.ReactNode;
+  onOpenProfile?: () => void;
 }) => (
   <header className="flex flex-wrap items-center justify-between gap-4 px-6 py-6">
     <GameLogo />
@@ -21,7 +22,7 @@ export const GameHeader = (props: {
     />
     <div className="flex items-center gap-3">
       <WalletBalanceBadge amount={props.balance} currency={props.currency} />
-      <ProfileMenuButton avatar={props.avatar} />
+      <ProfileMenuButton avatar={props.avatar} onClick={props.onOpenProfile} />
     </div>
   </header>
 );
