@@ -1,6 +1,6 @@
 import { BetPanel } from "@/components/game/home/BetPanel";
-import { RecentWinsList } from "@/components/game/home/RecentWinsList";
-import type { RecentWin } from "@/components/game/home/types";
+import { LeaderboardList } from "@/components/game/home/LeaderboardList";
+import type { LeaderboardEntry } from "@/components/game/home/types";
 
 export const GameSidebarRight = (props: {
   currency: string;
@@ -10,7 +10,7 @@ export const GameSidebarRight = (props: {
   quickAmounts: number[];
   potentialWinMultiplier: number;
   onSelectAmount: (amount: number) => void;
-  recentWins: RecentWin[];
+  leaderboard: LeaderboardEntry[];
 }) => (
   <div className="flex w-full flex-col gap-4 lg:w-80 lg:shrink-0">
     <BetPanel
@@ -22,6 +22,6 @@ export const GameSidebarRight = (props: {
       potentialWinMultiplier={props.potentialWinMultiplier}
       onSelectAmount={props.onSelectAmount}
     />
-    <RecentWinsList wins={props.recentWins} />
+    <LeaderboardList entries={props.leaderboard} />
   </div>
 );

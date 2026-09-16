@@ -10,7 +10,7 @@ export const GameHeader = (props: {
   onSelectMode: (mode: GameMode) => void;
   balance: number;
   currency: string;
-  avatarLabel: string;
+  avatar: React.ReactNode;
 }) => (
   <header className="flex flex-wrap items-center justify-between gap-4 px-6 py-6">
     <GameLogo />
@@ -21,7 +21,7 @@ export const GameHeader = (props: {
     />
     <div className="flex items-center gap-3">
       <WalletBalanceBadge amount={props.balance} currency={props.currency} />
-      <ProfileMenuButton avatarLabel={props.avatarLabel} />
+      <ProfileMenuButton avatar={props.avatar} />
     </div>
   </header>
 );

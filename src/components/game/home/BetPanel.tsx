@@ -1,4 +1,5 @@
 import { CurrencyCoinIcon } from "@/components/assets/CurrencyCoinIcon";
+import { BetAmountSlider } from "@/components/game/home/BetAmountSlider";
 import { BetQuickAmounts } from "@/components/game/home/BetQuickAmounts";
 import { GameCard } from "@/components/game/home/GameCard";
 import { PlaceBetButton } from "@/components/game/home/PlaceBetButton";
@@ -28,14 +29,11 @@ export const BetPanel = (props: {
       onSelect={props.onSelectAmount}
     />
 
-    <input
-      type="range"
+    <BetAmountSlider
       min={props.minAmount}
       max={props.maxAmount}
-      step={1}
       value={props.betAmount}
-      onChange={(event) => props.onSelectAmount(Number(event.target.value))}
-      className="accent-[#6752EF]"
+      onChange={props.onSelectAmount}
     />
 
     <PotentialWinSummary

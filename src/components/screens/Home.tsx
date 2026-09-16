@@ -1,17 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import { Slime } from "@/components/assets/characters/Slime";
 import { GameCenterPlaceholder } from "@/components/game/home/GameCenterPlaceholder";
 import { GameHeader } from "@/components/game/home/GameHeader";
 import { GameSidebarLeft } from "@/components/game/home/GameSidebarLeft";
 import { GameSidebarRight } from "@/components/game/home/GameSidebarRight";
-import type { GameMode, RecentWin } from "@/components/game/home/types";
+import type { GameMode, LeaderboardEntry } from "@/components/game/home/types";
 
-const RECENT_WINS: RecentWin[] = [
-  { icon: "🍔", name: "FAST FOOD", multiplier: 1.85, amount: 18.5, currency: "USDC" },
-  { icon: "🐻", name: "HONEY BEAR", multiplier: 2.4, amount: 24, currency: "USDC" },
-  { icon: "🌻", name: "SUNFLOWER", multiplier: 1.6, amount: 16, currency: "USDC" },
-  { icon: "🍦", name: "ICE CREAM", multiplier: 2.1, amount: 21, currency: "USDC" },
+const LEADERBOARD: LeaderboardEntry[] = [
+  { rank: 1, name: "ceeriil", score: 18500 },
+  { rank: 2, name: "devdanhiel", score: 15200 },
+  { rank: 3, name: "SUNFLOWER", score: 12800 },
+  { rank: 4, name: "ICE_CREAM99", score: 9100 },
 ];
 
 const HOW_IT_WORKS_STEPS = [
@@ -34,7 +35,7 @@ export const HomeScreen = () => {
         onSelectMode={setActiveMode}
         balance={32.5}
         currency="USDC"
-        avatarLabel="🧑"
+        avatar={<Slime width={24} height="24" />}
       />
 
       <div className="flex flex-1 flex-col gap-4 px-6 pb-6 lg:flex-row">
@@ -58,7 +59,7 @@ export const HomeScreen = () => {
           quickAmounts={QUICK_BET_AMOUNTS}
           potentialWinMultiplier={1.85}
           onSelectAmount={setBetAmount}
-          recentWins={RECENT_WINS}
+          leaderboard={LEADERBOARD}
         />
       </div>
     </div>

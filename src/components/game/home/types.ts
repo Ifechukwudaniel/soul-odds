@@ -1,9 +1,7 @@
 export type GameMode = "survival" | "blitz";
 
-export type RecentWin = {
-  icon: string;
+export type LeaderboardEntry = {
+  rank: number;
   name: string;
-  multiplier: number;
-  amount: number;
-  currency: string;
+  score: number;
 };
