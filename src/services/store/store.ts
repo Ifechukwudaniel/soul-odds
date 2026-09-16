@@ -1,8 +1,6 @@
 import { Energy } from "../db/user";
-import { mountStoreDevtool } from "simple-zustand-devtools";
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
-import { Env } from "@/libs/Env";
 
 export type TScreens = "badges" | "boost" | "home" | "refs" | "stats" | "quests" | "social" | "wallet";
 
@@ -321,8 +319,4 @@ export const useAppStore = create<TAppStore>()(
     ),
   ),
 );
-
-if (Env.NODE_ENV === "development") {
-  mountStoreDevtool(STORE_NAME, useAppStore);
-}
 

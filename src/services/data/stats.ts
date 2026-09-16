@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Stat } from "@/pages/api/user/stats";
+import { Stat } from "@/app/api/user/stats/route";
 
 export const getStats = async () :Promise<Stat>=> {
   try {

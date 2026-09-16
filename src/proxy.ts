@@ -21,8 +21,6 @@ const aj = arcjet.withRule(
   }),
 );
 
-const isGameRoute = (pathname: string) => pathname === '/game' || pathname.startsWith('/game/');
-
 export default async function proxy(request: NextRequest) {
   // Verify the request with Arcjet
   // Use `process.env` instead of Env to reduce bundle size in middleware
@@ -32,12 +30,6 @@ export default async function proxy(request: NextRequest) {
     if (decision.isDenied()) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
-  }
-
-  // The /game routes are a Pages Router app (TouchSwap) that isn't localized —
-  // skip next-intl so it doesn't rewrite/redirect them.
-  if (isGameRoute(request.nextUrl.pathname)) {
-    return NextResponse.next();
   }
 
   return handleI18nRouting(request);

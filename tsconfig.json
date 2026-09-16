@@ -70,7 +70,7 @@
     ] // Enable Next.js TypeScript plugin
   },
   // Files to include/exclude from the project
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "TouchSwap-Web"],
   "include": [
     "next-env.d.ts",
     "**/*.ts",

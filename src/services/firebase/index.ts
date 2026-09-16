@@ -1,5 +1,5 @@
 import { seedDatabase } from "@/local_database/seedDb";
-import * as admin from "firebase-admin";
+import admin from "firebase-admin";
 import { Env } from "@/libs/Env";
 
 if (Env.NODE_ENV === "test") {

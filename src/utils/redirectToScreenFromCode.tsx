@@ -1,5 +1,4 @@
 // qrHandler.ts
-import { NextRouter } from "next/router";
 import { TScreenPayload, TScreens } from "@/services/store/store";
 import { notification } from "./notifications";
 
@@ -7,11 +6,9 @@ import { notification } from "./notifications";
 export const redirectToScreenFromCode = (
   code: string,
   setScreen: (action: TScreens, payload?: TScreenPayload | null | undefined) => void,
-  router: NextRouter,
-  reload = true,
 ) => {
   // Remove liveUrl from the result
-  const [action, payload] = code.split("#");
+  const [action] = code.split("#");
 
   switch (action) {
     case "home":
