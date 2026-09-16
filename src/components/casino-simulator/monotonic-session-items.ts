@@ -104,6 +104,6 @@ export function sortSessionItemsNewestFirst(items: CasinoSessionItem[]): CasinoS
       }
       return idA === undefined ? -1 : 1;
     }
-    return idB > idA ? 1 : (idB < idA ? -1 : 0);
+    return idB > idA ? 1 : idB < idA ? -1 : 0;
   });
 }

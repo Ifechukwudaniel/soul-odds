@@ -25,7 +25,9 @@
       "Bash(node blockchain/scripts/fix-hardhat-zod.mjs)",
       "Bash(pnpm run *)",
       "Bash(awk '{print $2}')",
-      "Bash(grep -v -E \"^\\(package\\\\.json|pnpm-lock\\\\.yaml|tsconfig\\\\.json\\)$\")"
+      "Bash(grep -v -E \"^\\(package\\\\.json|pnpm-lock\\\\.yaml|tsconfig\\\\.json\\)$\")",
+      "Bash(pnpm exec *)",
+      "Bash(git ls-tree *)"
     ],
     "additionalDirectories": [
       "/home/daniel/development/wo-/casino-sdk/simulator",

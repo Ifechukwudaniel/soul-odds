@@ -24,10 +24,15 @@ export function CanvasHistoryStrip({
     () =>
       sessions
         .filter((s) => {
-          if (!(s.isSettled || isTerminalPhase(s.phase))) {return false;}
-          if (gameAddress && s.gameAddress.toLowerCase() !== gameAddress.toLowerCase())
-            {return false;}
-          if (hideSessionKey && s.sessionKey === hideSessionKey) {return false;}
+          if (!(s.isSettled || isTerminalPhase(s.phase))) {
+            return false;
+          }
+          if (gameAddress && s.gameAddress.toLowerCase() !== gameAddress.toLowerCase()) {
+            return false;
+          }
+          if (hideSessionKey && s.sessionKey === hideSessionKey) {
+            return false;
+          }
           return true;
         })
         .sort((a, b) => a.lastEventTimestamp - b.lastEventTimestamp)
@@ -38,7 +43,9 @@ export function CanvasHistoryStrip({
           try {
             const wager = BigInt(s.wager ?? '0');
             const payout = BigInt(s.payout ?? '0');
-            if (wager > 0n) {mult = `${(Number((payout * 10000n) / wager) / 10000).toFixed(2)}x`;}
+            if (wager > 0n) {
+              mult = `${(Number((payout * 10000n) / wager) / 10000).toFixed(2)}x`;
+            }
             won = payout > wager;
           } catch {
             // leave the 0.00x fallback

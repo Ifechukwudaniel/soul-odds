@@ -122,9 +122,9 @@ export function App() {
             payout:
               rowPayout > 0n
                 ? rowPayout
-                : (outcome.won
+                : outcome.won
                   ? maxPayout(current.wager, outcome.coinCount, outcome.minWins)
-                  : 0n),
+                  : 0n,
           }
         : current,
     );
@@ -260,7 +260,7 @@ export function App() {
         ? 'Finish setting up your Smart Vault in the host app to play.'
         : 'Restore your session key in the host app before betting.';
 
-  const ctaLabel = roundInFlight ? 'Flipping…' : (roundDone ? 'Play again' : 'Bet');
+  const ctaLabel = roundInFlight ? 'Flipping…' : roundDone ? 'Play again' : 'Bet';
   const canBet =
     walletReady && !roundInFlight && wager !== null && !insufficientBalance && !exceedsRiskLimit;
 

@@ -56,12 +56,18 @@ export function useRoundLedger(
 
   useEffect(() => {
     for (const row of sessionRows ?? []) {
-      if (!trackedRoundsRef.current.has(row.sessionId)) {continue;}
-      if (!(row.status === 'settled' || isTerminalPhase(row.phase))) {continue;}
+      if (!trackedRoundsRef.current.has(row.sessionId)) {
+        continue;
+      }
+      if (!(row.status === 'settled' || isTerminalPhase(row.phase))) {
+        continue;
+      }
       // `payout` is written by the same event that flips the row to settled,
       // but the phase can turn terminal one update earlier — without this
       // gate a winning round would be misread as a loss (payout 0).
-      if (row.payout === undefined) {continue;}
+      if (row.payout === undefined) {
+        continue;
+      }
       const payout = BigInt(row.payout);
       const outcome: RoundOutcome = payout > 0n ? 'win' : 'loss';
       if (pendingRevealRef.current.has(row.sessionId)) {
@@ -79,13 +85,14 @@ export function useRoundLedger(
     }
   }, [sessionRows, endRound]);
 
-  useEffect(() => 
-    () => {
+  useEffect(
+    () => () => {
       for (const roundKey of trackedRoundsRef.current.values()) roundClosed(roundKey);
       trackedRoundsRef.current.clear();
       pendingRevealRef.current.clear();
-    }
-  , []);
+    },
+    [],
+  );
 
   return { trackRound, getRoundKey, queuePendingReveal, endRound };
 }

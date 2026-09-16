@@ -45,7 +45,9 @@ export function useFlashblockPatches({
   const onSessionOpenedRef = useLatestRef(onSessionOpened);
 
   useEffect(() => {
-    if (!sessionRows?.length) {return;}
+    if (!sessionRows?.length) {
+      return;
+    }
     setPatches((current) => pruneFlashblockPatches(current, sessionRows));
   }, [sessionRows]);
 
@@ -55,7 +57,9 @@ export function useFlashblockPatches({
     setPatches({});
 
     return runtime.feed.subscribeFlashblock((event) => {
-      if (event.player !== playerAddress || event.game !== game) {return;}
+      if (event.player !== playerAddress || event.game !== game) {
+        return;
+      }
       setPatches((current) => applyFlashblockEvent(current, event));
       if (event.eventName === 'CasinoSessionOpened') {
         onSessionOpenedRef.current?.(event.sessionId, event.transactionHash);

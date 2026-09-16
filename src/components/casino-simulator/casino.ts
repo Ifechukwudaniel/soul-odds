@@ -1,7 +1,7 @@
 // Session types, phase helpers and calldata encoding shared with the
 // production host.
 import { encodeFunctionData, getAddress, parseEventLogs } from 'viem';
-import type { Address, Hex,TransactionReceipt } from 'viem';
+import type { Address, Hex, TransactionReceipt } from 'viem';
 import { casinoGameFacetAbi, erc20Abi } from './casino-abi';
 
 export function toAddress(value: string): Address {

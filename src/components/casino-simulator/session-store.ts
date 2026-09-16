@@ -133,9 +133,9 @@ function evolve(state: CasinoSessionRow, event: CasinoSessionChainEvent): Casino
         randomnessRequestId: event.requestId ?? state.randomnessRequestId,
         randomnessFulfilled:
           event.requestId === undefined
-            ? (event.randomness !== undefined
+            ? event.randomness !== undefined
               ? true
-              : state.randomnessFulfilled)
+              : state.randomnessFulfilled
             : false,
         randomnessRequests,
         encodedSession: event.encodedSession,

@@ -29,14 +29,15 @@ from an empty folder to a working game running locally.
 | [Repo Structure](./REPO_STRUCTURE.md)                 | What's inside the `@chain/casino-sdk` package.                                                                                                             |
 | [Changelog](./CHANGELOG.md)                           | Date-versioned SDK release notes.                                                                                                                          |
 
-## What's in the package
+## What's in this app
 
-- `src/` — the bridge SDK: `connectGameToHost` (guest), `connectHostToGame` (host), shared
-  types, manifest validation. Also distributed via the `@chain/ui` shadcn registry as
-  `shadcn add @chain/casino-sdk`.
-- `simulator/contracts/ICasinoGameV2.sol` — the canonical on-chain game interface.
-- `examples/coinflip-public/` — a complete example game (contract + UI + manifest) to copy from.
-- `simulator/` — the local test environment ([docs](./LOCAL_SIMULATOR.md)).
+- `src/libs/casino-sdk/` — the bridge SDK: `connectGameToHost` (guest), `connectHostToGame`
+  (host), shared types, manifest validation.
+- `blockchain/contracts/ICasinoGameV2.sol` — the canonical on-chain game interface.
+- `src/components/casino-coinflip/` (served at `/casino/coinflip`) — a complete example game
+  (contract + UI + manifest) to copy from.
+- `src/components/casino-simulator/` (served at `/casino-simulator`) — the local test environment
+  ([docs](./LOCAL_SIMULATOR.md)).
 
 ## The short version of shipping a game
 

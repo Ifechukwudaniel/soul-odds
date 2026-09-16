@@ -285,7 +285,8 @@ async function main() {
   // harness never sees a version missing the games already in the folder.
   await watchGameContracts({
     contractsDir: resolve(here, '../contracts'),
-    deployGame: async (abi, bytecode) => await deployContract(publicClient, deployer, abi, bytecode),
+    deployGame: async (abi, bytecode) =>
+      await deployContract(publicClient, deployer, abi, bytecode),
     registerGame: async (address, name) => {
       const hash = await deployer.writeContract({
         address: host,

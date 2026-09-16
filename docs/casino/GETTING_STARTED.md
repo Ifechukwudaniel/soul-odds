@@ -20,36 +20,37 @@ the contract settles the outcome → your UI animates the result and reveals the
 
 ## Step 1 — get the SDK
 
-Download the SDK package: [↓ Download Casino SDK (.zip)](/sdk/casino-sdk.zip)
-(if you are reading this inside the unzipped package, you already have everything).
-
-The package contains the bridge SDK sources (`src/`), the canonical Solidity interface
-(`simulator/contracts/ICasinoGameV2.sol`), a complete example game (`examples/coinflip-public/`), and the
-[local simulator](./LOCAL_SIMULATOR.md) — a full offline test environment.
+Building a game outside this app? Download the SDK package: [↓ Download Casino SDK (.zip)](/sdk/casino-sdk.zip).
+If you're working inside this app instead, you already have everything — the bridge SDK sources
+live in `src/libs/casino-sdk/`, the canonical Solidity interface in
+`blockchain/contracts/ICasinoGameV2.sol`, a complete example game in `src/components/casino-coinflip/`,
+and the [local simulator](./LOCAL_SIMULATOR.md) is a full offline test environment.
 
 You will need [Node.js](https://nodejs.org) (v22+) installed — nothing else. The local chain is
-an in-memory Hardhat node bundled with the simulator's dependencies.
+an in-memory Hardhat node bundled with the app's dependencies.
 
 ## Step 2 — run the local stack
 
-From the unzipped package root:
+If you're working inside this app rather than a standalone unzipped package:
 
 ```sh
-npm install   # one install covers the simulator, VRF node and example game (npm workspaces)
-npm start     # local chain + VRF node + casino deployment + simulator (:3300) + coinflip example (:3100)
+bun install
+bun run blockchain:local   # local chain + VRF node + casino deployment
+bun run dev                # the app, including the simulator at /casino-simulator
 ```
 
-Open **http://localhost:3300**. The simulator detects the local deployment, fills in its setup
-panel and mounts the coinflip example. Place a few bets — this is the exact production host
-behavior (optimistic sessions, delayed indexer feed, balance guarding) running against a real
-VRF node on your machine. The player account starts with 1,000,000 test chUSD.
+Open **http://localhost:3000/casino-simulator**. The simulator detects the local deployment, fills
+in its setup panel and mounts the coinflip example (`/casino/coinflip`, also part of this app).
+Place a few bets — this is the exact production host behavior (optimistic sessions, delayed
+indexer feed, balance guarding) running against a real VRF node on your machine. The player
+account starts with 1,000,000 test chUSD.
 
 Everything you do from here on is: replace the coinflip contract and UI with your own.
 
 ## Step 3 — write your game contract
 
 Implement [`ICasinoGameV2`](./CHAIN_WTF_CASINO_GAMES.md#21-icasinogamev2-full-solidity)
-(`simulator/contracts/ICasinoGameV2.sol` in the package). The functions that matter most:
+(`blockchain/contracts/ICasinoGameV2.sol` in this app). The functions that matter most:
 
 | Function          | What it does                                                                              |
 | ----------------- | ----------------------------------------------------------------------------------------- |
@@ -80,7 +81,7 @@ Two rules worth knowing before you write a line of code:
 
 ## Step 4 — deploy locally and connect it
 
-Drop your `.sol` file into `simulator/contracts/`. The local node watches the folder: it
+Drop your `.sol` file into `blockchain/contracts/`. The local node watches the folder: it
 compiles the file with solc, deploys every contract in it that implements `ICasinoGameV2`,
 registers it on the local host and adds it to the simulator's game picker within a couple of
 seconds. Edit the file and it redeploys automatically at a fresh address — no restart, no
@@ -88,7 +89,7 @@ external toolchain.
 
 If your contract needs constructor arguments, deploy it yourself instead with your usual
 toolchain against the simulator's chain (`http://127.0.0.1:8545`; the full deployment is served
-at `http://localhost:3300/__local-contracts.json`). For example with Foundry:
+at `http://localhost:3000/local-contracts.json`). For example with Foundry:
 
 ```sh
 forge create src/MyGame.sol:MyGame --rpc-url http://127.0.0.1:8545 \

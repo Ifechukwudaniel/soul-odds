@@ -26,7 +26,9 @@ export function useGameBridge(input: {
   recordPushRef.current ??= createSnapshotTraceRecorder();
 
   useEffect(() => {
-    if (!iframe || !gameUrl) {return;}
+    if (!iframe || !gameUrl) {
+      return;
+    }
 
     let childOrigin: string;
     try {
@@ -43,10 +45,11 @@ export function useGameBridge(input: {
           await (methodsRef.current.reportContentSize?.(input) ?? Promise.resolve()),
         openSession: async (input) => await methodsRef.current.openSession(input),
         submitAction: async (input) => await methodsRef.current.submitAction(input),
-        cancelStuckRandomness: async (input) => await methodsRef.current.cancelStuckRandomness(input),
+        cancelStuckRandomness: async (input) =>
+          await methodsRef.current.cancelStuckRandomness(input),
         getRandomnessVerification: async (input) =>
           await (methodsRef.current.getRandomnessVerification?.(input) ??
-          Promise.reject(new Error('Randomness verification is not available.'))),
+            Promise.reject(new Error('Randomness verification is not available.'))),
         revealOutcome: async (input) => await methodsRef.current.revealOutcome(input),
       },
     });
@@ -54,7 +57,9 @@ export function useGameBridge(input: {
     let destroyed = false;
     void connection.promise
       .then(async (guestApi) => {
-        if (destroyed) {return;}
+        if (destroyed) {
+          return;
+        }
         guestApiRef.current = guestApi;
         if (snapshotRef.current) {
           lastPushedRef.current = JSON.stringify(snapshotRef.current);
@@ -76,12 +81,16 @@ export function useGameBridge(input: {
 
   useEffect(() => {
     const guestApi = guestApiRef.current;
-    if (!guestApi || !snapshot) {return;}
+    if (!guestApi || !snapshot) {
+      return;
+    }
     // Upstream layers rebuild the snapshot object on every store/patch tick,
     // most without a semantic change. Games react to every setState (some
     // replay animations), so only content changes are pushed.
     const serialized = JSON.stringify(snapshot);
-    if (serialized === lastPushedRef.current) {return;}
+    if (serialized === lastPushedRef.current) {
+      return;
+    }
     lastPushedRef.current = serialized;
     recordPushRef.current?.(snapshot);
     void guestApi.setState(snapshot).catch(() => {
