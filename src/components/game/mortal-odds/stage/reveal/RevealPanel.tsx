@@ -7,21 +7,20 @@ import { BetsBreakdown } from "@/components/game/mortal-odds/stage/reveal/BetsBr
 import { LifespanChart } from "@/components/game/mortal-odds/stage/reveal/LifespanChart";
 import { fmtYear } from "@/lib/mortal-odds/format";
 import { revealBeats, visibleBetCount } from "@/lib/mortal-odds/reveal-beats";
+import { serifFont } from "@/styles/serif-font";
 import { playClickSound } from "@/utils/playClickSound";
 import type { RevealResult } from "@/hooks/useMortalOddsDraw";
 import type { Place, RoundCharge } from "@/types";
 
-export const RevealPanel = (props: {
-  reveal: RevealResult;
-  place: Place;
-  currentYear: number;
-  currency: string;
-  charges: RoundCharge[];
-  onNext: () => void;
-  drawCost: number;
-  canAffordDraw: boolean;
-}) => {
-  const { life, results, net, skill, story, lifespan } = props.reveal;
+const FactCard = (props: { label: string; value: string }) => (
+  <div className="rounded-lg border border-white/10 bg-[#101a3d]/40 px-3 py-2 text-left">
+    <p className="text-[10px] text-white/40 uppercase tracking-[0.15em]">{props.label}</p>
+    <p className="font-semibold text-sm text-white">{props.value}</p>
+  </div>
+);
+
+export const RevealPanel = (props: { reveal: RevealResult; place: Place; currentYear: number; currency: string; charges: RoundCharge[]; onNext: () => void; drawCost: number; canAffordDraw: boolean }) => {
+  const { life, results, net, skill, story, lifespan, realMedianAge, bookieMedianAge } = props.reveal;
   const [beat, setBeat] = useState(0);
 
   const beats = revealBeats(results);
@@ -34,12 +33,12 @@ export const RevealPanel = (props: {
 
   function nextLabel() {
     if (isFinished) {
-      return `Next human · ${props.drawCost}`;
+      return `Summon another soul · ${props.drawCost}`;
     }
     if (remainingBets > 0) {
       return `Reveal next bet (${remainingBets} left)`;
     }
-    return "See the damage";
+    return "Let Anubis speak";
   }
 
   const alive = life.deathYear >= props.currentYear;
@@ -49,34 +48,26 @@ export const RevealPanel = (props: {
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: "easeOut" }} className="flex h-full w-full flex-col">
       <GameCard className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto" containerClassName="flex h-full w-full flex-col">
-        <h3 className="font-bold text-lg text-white">{fate}</h3>
+        <h3 className={`${serifFont.className} font-bold text-2xl text-white`}>{fate}</h3>
 
-        <dl className="grid grid-cols-3 gap-2 text-sm">
-          <div>
-            <dt className="text-white/50 text-xs">Born</dt>
-            <dd className="font-semibold text-white">
-              {fmtYear(life.year)}, {props.place.name}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-white/50 text-xs">{alive ? "Projected death" : "Died"}</dt>
-            <dd className="font-semibold text-white">{fmtYear(life.deathYear)}</dd>
-          </div>
-          <div>
-            <dt className="text-white/50 text-xs">Cause</dt>
-            <dd className="font-semibold text-white">{life.shock ? life.shock.label : "Ordinary life and death"}</dd>
-          </div>
-        </dl>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+          <FactCard label="Born" value={`${fmtYear(life.year)}, ${props.place.name}`} />
+          <FactCard label={alive ? "Projected death" : "Died"} value={fmtYear(life.deathYear)} />
+          <FactCard label="Cause" value={life.shock ? life.shock.label : "Ordinary life and death"} />
+          <FactCard label="Literate" value={life.literate ? "Yes" : "No"} />
+          <FactCard label="Lived in a city" value={life.city ? "Yes" : "No"} />
+        </div>
 
-        <p className="text-sm text-white/70">{story}</p>
+        <p className={`${serifFont.className} text-base text-white/80 leading-relaxed`}>{story}</p>
 
         <div>
-          <p className="mb-1 flex gap-3 text-white/50 text-xs">
-            <span>Age at death, people born there and then:</span>
-            <span className="text-[#5EEAD4]">— Real</span>
+          <p className="mb-1 flex flex-wrap gap-x-3 gap-y-1 text-white/50 text-xs">
+            <span className="text-[#3FB6A8]">■ Real spread</span>
             <span className="text-[#F5B83D]">- - Bookie assumed</span>
+            <span className="text-[#F5B83D]">○ Bookie's typical age</span>
+            <span className="text-[#4C6FD1]">● Real typical age</span>
           </p>
-          <LifespanChart histogram={lifespan} deathAge={life.age} />
+          <LifespanChart histogram={lifespan} deathAge={life.age} realMedianAge={realMedianAge} bookieMedianAge={bookieMedianAge} />
         </div>
 
         {results.length === 0 ? (
@@ -97,17 +88,17 @@ export const RevealPanel = (props: {
             <dl className="flex flex-col gap-1 text-sm">
               <div className="flex justify-between">
                 <dt className="text-white/50">Bets</dt>
-                <dd className={net >= 0 ? "text-[#4ADE80]" : "text-[#F87171]"}>
+                <dd className={net >= 0 ? "text-[#6BA84F]" : "text-[#B7410E]"}>
                   {net >= 0 ? "+" : "−"}
                   {Math.abs(net).toFixed(2)}
                 </dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-white/50">Steps paid for</dt>
+                <dt className="text-white/50">Paid to the scribe</dt>
                 <dd className="text-[#F5B83D]">−{fees.toFixed(2)}</dd>
               </div>
             </dl>
-            <p className={`font-bold text-lg ${roundNet >= 0 ? "text-[#4ADE80]" : "text-[#F87171]"}`}>
+            <p className={`font-bold text-lg ${roundNet >= 0 ? "text-[#6BA84F]" : "text-[#B7410E]"}`}>
               {roundNet >= 0 ? "Up" : "Down"} {Math.abs(roundNet).toFixed(2)} {props.currency} this round
             </p>
           </motion.div>
@@ -124,7 +115,7 @@ export const RevealPanel = (props: {
               setBeat((current) => current + 1);
             }
           }}
-          className="accent-gradient rounded-full px-6 py-3 font-bold text-slate-950 disabled:opacity-40"
+          className="rounded-full bg-[#F5B83D] px-6 py-3 font-bold text-slate-950 hover:bg-[#f0ad24] disabled:opacity-40"
         >
           {nextLabel()}
         </button>

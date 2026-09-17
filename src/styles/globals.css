@@ -20,7 +20,7 @@ body {
   color: white;
   background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
   font-family: "SF Mono", sans-serif;
-  background: #08030d;
+  background: #0b0a08;
   overflow-y: hidden !important;
   width: 100%;
   -khtml-user-select: none;
@@ -62,7 +62,59 @@ main {
   background: radial-gradient(40.91% 67.55% at 28.81% 50%, #9181f0 0%, #6752ef 100%);
 }
 
-/* Selected/active fill for the game UI, taken from the menu bar's gold icons. Pairs with dark text. */
+/* Anubis palette: Egyptian funerary art — gold leaf, faience turquoise, lapis, carnelian on obsidian. */
+:root {
+  --anubis-gold: #f5b83d;
+  --anubis-gold-leaf: #d4af37;
+  --anubis-faience: #3fb6a8;
+  --anubis-lapis: #1f3a93;
+  --anubis-lapis-deep: #101a3d;
+  --anubis-carnelian: #b7410e;
+  --anubis-papyrus: #e8dcc0;
+  --anubis-obsidian: #0b0a08;
+}
+
+/* Cartouche: the oval name-ring of Egyptian inscription — a pill with flat end bars. */
+.cartouche {
+  --bar: 3px;
+  position: relative;
+  border-radius: 9999px;
+  background: linear-gradient(91.67deg, #fde991 0%, #baaf7f 40%, #fde991 70%, #b07464 100%);
+  padding: 1px;
+}
+
+.cartouche::before,
+.cartouche::after {
+  content: "";
+  position: absolute;
+  top: 18%;
+  height: 64%;
+  width: var(--bar);
+  background: var(--anubis-gold-leaf);
+  border-radius: 1px;
+}
+
+.cartouche::before { left: -6px; }
+.cartouche::after { right: -6px; }
+
+.cartouche > * {
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #14224a 0%, var(--anubis-lapis-deep) 100%);
+}
+
+/* Faint hieroglyphic rule used between card sections. */
+.glyph-rule {
+  height: 1px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(232, 220, 192, 0.25) 0 6px,
+    transparent 6px 10px,
+    rgba(245, 184, 61, 0.3) 10px 13px,
+    transparent 13px 20px
+  );
+}
+
+/* Selected/active fill: gold leaf. Pairs with dark text. */
 .accent-gradient {
   background: linear-gradient(180deg, #ffb359 0%, #fbbb3f 100%);
 }

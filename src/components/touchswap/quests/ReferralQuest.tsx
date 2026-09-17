@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { ReferralButton } from "./ReferralButton";
 import { useAppStore } from "@/services/store/store";
 

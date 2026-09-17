@@ -28,7 +28,7 @@ export const BetsBreakdown = (props: { results: BetResult[]; currency: string; v
             <td className="py-2 text-white/70">{r.outcomeLabel}</td>
             <td className="py-2 text-right text-white/50">{Math.round(r.bookieP * 100)}%</td>
             <td className="py-2 text-right text-white/50">{Math.round(r.realP * 100)}%</td>
-            <td className={`py-2 text-right font-bold ${r.net >= 0 ? "text-[#4ADE80]" : "text-[#F87171]"}`}>
+            <td className={`py-2 text-right font-bold ${r.net >= 0 ? "text-[#6BA84F]" : "text-[#B7410E]"}`}>
               {r.net >= 0 ? "+" : "−"}
               {Math.abs(r.net).toFixed(2)}
             </td>

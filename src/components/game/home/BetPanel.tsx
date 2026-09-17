@@ -6,6 +6,7 @@ import { PlaceBetButton } from "@/components/game/home/PlaceBetButton";
 import { PotentialWinSummary } from "@/components/game/home/PotentialWinSummary";
 import { SlipRow } from "@/components/game/home/SlipRow";
 import { betOdds } from "@/lib/mortal-odds/bets";
+import { serifFont } from "@/styles/serif-font";
 import type { Bet, MarketPrices, Price, RoundCharge } from "@/types";
 
 export const BetPanel = (props: {
@@ -20,6 +21,7 @@ export const BetPanel = (props: {
   charges: RoundCharge[];
   onPlaceBet: () => void;
   canPlaceBet: boolean;
+  isLocked: boolean;
   requiredBets: number;
 }) => {
   const bets = Object.values(props.bets);
@@ -35,14 +37,27 @@ export const BetPanel = (props: {
   const unpicked = Math.max(0, props.requiredBets - bets.length);
 
   return (
-    <GameCard className="flex flex-col gap-4">
-      <h2 className="font-bold text-white">Your Bet</h2>
+    <GameCard className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto" containerClassName="flex h-full w-full flex-col">
+      <h2 className={`${serifFont.className} font-bold text-white"`}>Your wager</h2>
 
-      <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/60 px-4 py-3">
+      <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/60 px-4 py-3">
         <CurrencyCoinIcon width={28} height="28" />
         <span className="font-bold text-2xl text-white">{atRisk.toFixed(2)}</span>
         <span className="text-white/50">{props.currency}</span>
       </div>
+
+      <PotentialWinSummary amount={totalPotentialWin} currency={props.currency} betCount={bets.length} />
+
+      {props.canPlaceBet && (
+        <div className="flex flex-col gap-1">
+          <PlaceBetButton label="Place Bet" disabled={unpicked > 0} onClick={props.onPlaceBet} />
+          {unpicked > 0 && (
+            <p className="text-center text-white/40 text-xs">
+              {unpicked} more {unpicked === 1 ? "prediction" : "predictions"} to pick
+            </p>
+          )}
+        </div>
+      )}
 
       <div className="flex flex-col gap-1">
         {props.charges.map((charge) => (
@@ -59,7 +74,7 @@ export const BetPanel = (props: {
             </span>
           </motion.div>
         ))}
-        {props.charges.length === 0 && <p className="text-sm text-white/40">Nothing staked yet. Drawing a human costs chips.</p>}
+        {props.charges.length === 0 && <p className="text-sm text-white/40">Nothing on the scales yet. Summoning a soul costs deben.</p>}
       </div>
 
       <div>
@@ -74,23 +89,11 @@ export const BetPanel = (props: {
             bet={bet}
             potentialWin={potentialWins[index] ?? null}
             currency={props.currency}
-            onRemove={() => props.onRemoveBet(bet.marketId)}
+            onRemove={props.isLocked ? undefined : () => props.onRemoveBet(bet.marketId)}
           />
         ))}
       </div>
 
-      <PotentialWinSummary amount={totalPotentialWin} currency={props.currency} betCount={bets.length} />
-
-      {props.canPlaceBet && (
-        <div className="flex flex-col gap-1">
-          <PlaceBetButton label="Place Bet" disabled={unpicked > 0} onClick={props.onPlaceBet} />
-          {unpicked > 0 && (
-            <p className="text-center text-white/40 text-xs">
-              {unpicked} more {unpicked === 1 ? "prediction" : "predictions"} to pick
-            </p>
-          )}
-        </div>
-      )}
     </GameCard>
   );
 };

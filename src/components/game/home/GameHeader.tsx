@@ -8,7 +8,7 @@ export const GameHeader = (props: {
   avatar: React.ReactNode;
   onOpenProfile?: () => void;
 }) => (
-  <header className="flex flex-wrap items-center justify-between gap-4 px-6 py-6">
+  <header className="container mx-auto flex h-[10dvh] shrink-0 flex-wrap items-center justify-between gap-4 px-4">
     <GameLogo />
     <div className="flex items-center gap-3">
       <WalletBalanceBadge amount={props.balance} currency={props.currency} />

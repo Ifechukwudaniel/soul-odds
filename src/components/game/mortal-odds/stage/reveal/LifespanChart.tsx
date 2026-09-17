@@ -5,6 +5,7 @@ const WIDTH = 600;
 const HEIGHT = 130;
 const BASE_Y = HEIGHT - 30;
 const TOP_Y = 18;
+const MARKER_Y = BASE_Y - 12;
 
 function ageX(age: number): number {
   const clamped = Math.min(100, Math.max(0, age));
@@ -13,8 +14,13 @@ function ageX(age: number): number {
 
 const TICKS = Array.from({ length: 11 }, (_, i) => i * 10);
 
-/** Real (bars) vs bookie-assumed (dashed line) age-at-death spread, with the actual death age marked. */
-export const LifespanChart = (props: { histogram: LifespanHistogram; deathAge: number }) => {
+/** Real (bars) vs bookie-assumed (dashed line) age-at-death spread, with median markers and the actual death age. */
+export const LifespanChart = (props: {
+  histogram: LifespanHistogram;
+  deathAge: number;
+  realMedianAge: number;
+  bookieMedianAge: number;
+}) => {
   const cap = lifespanCap(props.histogram);
   const barY = (v: number) => BASE_Y - ((BASE_Y - TOP_Y) * Math.min(v, cap)) / cap;
   const barWidth = ageX(5) - ageX(0) - 2;
@@ -41,7 +47,7 @@ export const LifespanChart = (props: { histogram: LifespanHistogram; deathAge: n
         const capped = v > cap;
         return (
           <g key={i}>
-            <rect x={x} y={barY(v)} width={barWidth} height={BASE_Y - barY(v)} fill="#5EEAD4" fillOpacity={0.6} />
+            <rect x={x} y={barY(v)} width={barWidth} height={BASE_Y - barY(v)} fill="#3FB6A8" fillOpacity={0.6} />
             {capped && (
               <text x={x + barWidth / 2} y={TOP_Y - 6} textAnchor="middle" fontSize={9} fill="currentColor" fillOpacity={0.7}>
                 {Math.round(v * 100)}%
@@ -59,9 +65,14 @@ export const LifespanChart = (props: { histogram: LifespanHistogram; deathAge: n
         strokeDasharray="4 3"
       />
 
+      {/* Bookie's typical (median) age: hollow gold ring */}
+      <circle cx={ageX(props.bookieMedianAge)} cy={MARKER_Y} r={6} fill="none" stroke="#F5B83D" strokeWidth={2} />
+      {/* Real typical (median) age: filled lavender dot */}
+      <circle cx={ageX(props.realMedianAge)} cy={MARKER_Y} r={4} fill="#4C6FD1" />
+
       <path
         d={`M${ageX(props.deathAge) - 5} ${BASE_Y - 16} L${ageX(props.deathAge) + 5} ${BASE_Y - 4} M${ageX(props.deathAge) + 5} ${BASE_Y - 16} L${ageX(props.deathAge) - 5} ${BASE_Y - 4}`}
-        stroke="#F87171"
+        stroke="#B7410E"
         strokeWidth={2}
         strokeLinecap="round"
       />

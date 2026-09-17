@@ -8,7 +8,7 @@ import type { Place } from "@/types";
 export const WhereSlide = (props: { year: number; place: Place; local: string }) => (
   <div className="flex h-full flex-col items-center gap-3 text-center">
     <div className="shrink-0">
-      <h3 className="font-bold text-white text-xl">Where in the world?</h3>
+      <h3 className="font-bold text-white text-xl">In which land?</h3>
       <p className="mt-1 max-w-lg text-sm text-white/50">
         Where people lived in {fmtYear(props.year)}. Brighter clusters held more people.
       </p>

@@ -3,7 +3,10 @@
 import { useEffect, useState } from "react";
 import type { SetStateAction } from "react";
 import toost from "react-hot-toast";
+import { Slime } from "@/components/assets/characters/Slime";
 import { DevLogin } from "@/components/DevLogin";
+import { GameHeader } from "@/components/game/home/GameHeader";
+import { ProfileModal } from "@/components/game/home/profile/ProfileModal";
 import { Loader } from "@/components/Loader";
 import { Menubar } from "@/components/Menubar";
 import {
@@ -17,6 +20,7 @@ import {
   StatsScreen,
 } from "@/components/screens";
 import { ONE_SECOND } from "@/constants";
+import { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
 import { getFreeBoost, getNoLevelBoost, getPayedBoost } from "@/services/data/boost";
 import { getUser } from "@/services/data/user";
 import { socketInstance } from "@/services/socket";
@@ -24,21 +28,12 @@ import { useAppStore } from "@/services/store/store";
 import { checkIfMoreThanADay } from "@/utils";
 import { notification } from "@/utils/notifications";
 
-const screens = {
-  badges: <BadgesScreen />,
-  boost: <BoostScreen />,
-  home: <HomeScreen />,
-  refs: <RefsScreen />,
-  stats: <StatsScreen />,
-  quests: <QuestScreen />,
-  social: <SocialQuestScreen />,
-  wallet: <ConnectQuestScreen />,
-};
-
 export default function GamePage() {
   const [, setIsConnected] = useState(false);
   const [, setTransport] = useState("N/A");
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const screen = useAppStore((state) => state.screen);
+  const setScreen = useAppStore((state) => state.setScreen);
   const setUser = useAppStore((state) => state.updateUser);
   const setPaidBoosts = useAppStore((state) => state.setPaidBoosts);
   const setFreeBoosts = useAppStore((state) => state.setFreeBoosts);
@@ -49,6 +44,18 @@ export default function GamePage() {
   const [loginError, setLoginError] = useState<string | null>(null);
   const state = useAppStore((state) => state);
   const freeBoost = useAppStore((state) => state.freeBoosts);
+  const player = useMortalOddsPlayer();
+
+  const screens = {
+    badges: <BadgesScreen />,
+    boost: <BoostScreen />,
+    home: <HomeScreen player={player} />,
+    refs: <RefsScreen />,
+    stats: <StatsScreen />,
+    quests: <QuestScreen />,
+    social: <SocialQuestScreen />,
+    wallet: <ConnectQuestScreen />,
+  };
 
   const screenRender = screens[screen];
 
@@ -147,11 +154,29 @@ export default function GamePage() {
   }
 
   return (
-    <>
-      {screenRender}
+    <div className="flex h-screen w-full flex-col">
+      <GameHeader
+        balance={player.stats.bankroll}
+        currency="chips"
+        avatar={<Slime width={24} height="24" />}
+        onOpenProfile={() => setIsProfileOpen(true)}
+      />
+
+      <div className="min-h-0 flex-1 overflow-y-auto">{screenRender}</div>
+
       <div className="container mx-auto px-6">
         <Menubar />
       </div>
-    </>
+
+      <ProfileModal
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
+        username="ceeriil"
+        handle="ceeriil"
+        rank="Silver"
+        leaderboardRank={42881}
+        onViewRankPage={() => setScreen("badges")}
+      />
+    </div>
   );
 }

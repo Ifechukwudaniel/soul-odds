@@ -8,7 +8,10 @@ import { WhereSlide } from "@/components/game/mortal-odds/stage/draw/WhereSlide"
 import { playClickSound } from "@/utils/playClickSound";
 import type { Draw, PlaceContext } from "@/types";
 
-const STEPS = ["when", "where"] as const;
+const STEPS = [
+  { key: "when", label: "the age" },
+  { key: "where", label: "the land" },
+] as const;
 
 
 export const DrawSequence = (props: {
@@ -26,7 +29,7 @@ export const DrawSequence = (props: {
   canAffordDraw: boolean;
   canAffordLocation: boolean;
 }) => {
-  const activeIndex = STEPS.indexOf(props.step);
+  const activeIndex = STEPS.findIndex((entry) => entry.key === props.step);
   const isWhere = props.step === "where";
 
   return (
@@ -34,7 +37,7 @@ export const DrawSequence = (props: {
       className="flex min-h-0 flex-1 flex-col gap-3"
       containerClassName="flex h-full w-full flex-col"
     >
-      <StageStepper steps={STEPS} activeIndex={activeIndex} />
+      <StageStepper steps={STEPS.map((entry) => entry.label)} activeIndex={activeIndex} />
 
       <StageSlide slideKey={props.step} direction={isWhere ? 1 : -1}>
         {isWhere ? (
@@ -62,9 +65,9 @@ export const DrawSequence = (props: {
               props.onRedraw();
             }
           }}
-          className="rounded-lg border border-white/15 px-4 py-3 font-semibold text-sm text-white/70 hover:text-white disabled:opacity-30"
+          className="rounded-full border border-white/20 px-5 py-2.5 font-semibold text-sm text-white/70 hover:border-white/40 hover:text-white disabled:opacity-30"
         >
-          {isWhere ? "← Back" : `Redraw · ${props.drawCost}`}
+          {isWhere ? "← Back" : `↻ Redraw · ${props.drawCost}`}
         </button>
 
         <div className="flex flex-col items-end gap-1">
@@ -75,14 +78,11 @@ export const DrawSequence = (props: {
               playClickSound();
               props.onAdvance();
             }}
-            className="chamfer-btn chamfer-btn-glow flex items-center gap-3 px-8 py-3 font-bold text-base text-white disabled:opacity-40"
+            className="rounded-full border-2 border-[#F5B83D] px-6 py-2.5 font-bold text-[#F5B83D] hover:bg-[#F5B83D]/10 disabled:opacity-40"
           >
-            <span className="tracking-wide drop-shadow-[0_1px_1px_rgba(0,0,0,0.55)]">
-              {isWhere ? "Make your predictions" : `Reveal location · ${props.locationCost}`}
-            </span>
-            <span className="drop-shadow-[0_1px_1px_rgba(0,0,0,0.55)]">→</span>
+            {isWhere ? "Weigh their fate" : `Reveal the land · ${props.locationCost}`} →
           </button>
-          {!isWhere && !props.canAffordLocation && <p className="text-[#F87171] text-xs">Not enough chips</p>}
+          {!isWhere && !props.canAffordLocation && <p className="text-[#B7410E] text-xs">Not enough deben</p>}
         </div>
       </div>
     </GameCard>

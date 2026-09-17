@@ -103,9 +103,9 @@ export const PredictionsPanel = (props: {
                 playClickSound();
                 goTo(step + 1);
               }}
-              className="rounded-lg border border-white/10 px-3 py-1.5 text-sm text-white/70 disabled:opacity-30"
+              className="rounded-lg bg-white px-4 py-1.5 font-bold text-slate-950 text-sm hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              ›
+              Next
             </button>
           </div>
         </div>

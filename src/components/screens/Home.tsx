@@ -2,30 +2,24 @@
 
 import { useReducedMotion } from "framer-motion";
 import { useState } from "react";
-import { Slime } from "@/components/assets/characters/Slime";
-import { GameHeader } from "@/components/game/home/GameHeader";
-import { ProfileModal } from "@/components/game/home/profile/ProfileModal";
 import { MortalOddsStage } from "@/components/game/mortal-odds/MortalOddsStage";
 import { useMortalOddsBets } from "@/hooks/useMortalOddsBets";
 import { useMortalOddsDraw } from "@/hooks/useMortalOddsDraw";
-import { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
+import type { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
 import { STEP_COSTS } from "@/lib/mortal-odds/config";
 import type { RoundCharge } from "@/types";
-import { useAppStore } from "@/services/store/store";
 
 const CHIP_SIZES = [1, 5, 10, 25, 50];
-const CURRENCY = "chips";
+const CURRENCY = "deben";
 
-export const HomeScreen = () => {
+export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlayer> }) => {
   const [chipSize, setChipSize] = useState(10);
   const [charges, setCharges] = useState<RoundCharge[]>([]);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const setScreen = useAppStore((state) => state.setScreen);
 
   const reducedMotion = useReducedMotion() ?? false;
   const round = useMortalOddsDraw({ reducedMotion });
   const slip = useMortalOddsBets();
-  const player = useMortalOddsPlayer();
+  const { player } = props;
 
   const isRedraw = round.phase === "when" || round.phase === "where";
   const drawCost = isRedraw ? STEP_COSTS.redraw : STEP_COSTS.draw;
@@ -55,15 +49,8 @@ export const HomeScreen = () => {
   };
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <GameHeader
-        balance={player.stats.bankroll}
-        currency={CURRENCY}
-        avatar={<Slime width={24} height="24" />}
-        onOpenProfile={() => setIsProfileOpen(true)}
-      />
-
-      <div className="flex flex-1 flex-col gap-4 px-6 pb-28 lg:flex-row">
+    <div className="flex h-full w-full flex-col">
+      <div className="container mx-auto flex flex-1 flex-col gap-4 px-4 pb-[10dvh] lg:flex-row">
         <MortalOddsStage
           round={round}
           bets={slip.bets}
@@ -85,16 +72,6 @@ export const HomeScreen = () => {
           onRemoveBet={slip.remove}
         />
       </div>
-
-      <ProfileModal
-        isOpen={isProfileOpen}
-        onClose={() => setIsProfileOpen(false)}
-        username="ceeriil"
-        handle="ceeriil"
-        rank="Silver"
-        leaderboardRank={42881}
-        onViewRankPage={() => setScreen("badges")}
-      />
     </div>
   );
 };

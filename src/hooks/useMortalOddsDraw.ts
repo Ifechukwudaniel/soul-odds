@@ -14,7 +14,7 @@ import {
   worldPopCurve,
 } from "@/lib/mortal-odds/config";
 import { drawBirth, pickPlace, placeContext as buildPlaceContext } from "@/lib/mortal-odds/draw";
-import { buildLifespanHistogram } from "@/lib/mortal-odds/lifespan";
+import { buildLifespanHistogram, medianAge } from "@/lib/mortal-odds/lifespan";
 import type { LifespanHistogram } from "@/lib/mortal-odds/lifespan";
 import type { BookieLife, FullModelConfig } from "@/lib/mortal-odds/model";
 import { drawSex, sampleLife, simulateBookie, simulateFull } from "@/lib/mortal-odds/model";
@@ -31,10 +31,10 @@ const SPIN_YEAR_RANGE = CURRENT_YEAR + 12000;
 
 const fullModelConfig: FullModelConfig = { curves: bookieCurves, mods: regionModifiersConfig, shocks: shocksConfig };
 
-export type MortalOddsDrawPhase = "idle" | "drawing" | "when" | "where" | "predicting" | "revealed";
+export type MortalOddsDrawPhase = "idle" | "drawing" | "when" | "where" | "predicting" | "confirming" | "revealed";
 
 /** The beats a player steps through after the year lands, in order. Add a beat here and the nav follows. */
-const SEQUENCE: MortalOddsDrawPhase[] = ["when", "where", "predicting"];
+const SEQUENCE: MortalOddsDrawPhase[] = ["when", "where", "predicting", "confirming"];
 
 function stepSequence(phase: MortalOddsDrawPhase, delta: number): MortalOddsDrawPhase {
   const index = SEQUENCE.indexOf(phase);
@@ -42,7 +42,16 @@ function stepSequence(phase: MortalOddsDrawPhase, delta: number): MortalOddsDraw
   return SEQUENCE[index + delta] ?? phase;
 }
 
-export type RevealResult = { life: Life; results: BetResult[]; net: number; skill: number; story: string; lifespan: LifespanHistogram };
+export type RevealResult = {
+  life: Life;
+  results: BetResult[];
+  net: number;
+  skill: number;
+  story: string;
+  lifespan: LifespanHistogram;
+  realMedianAge: number;
+  bookieMedianAge: number;
+};
 
 type State = {
   phase: MortalOddsDrawPhase;
@@ -113,7 +122,7 @@ const initialState: State = {
   reveal: null,
 };
 
-/** Drives the idle -> drawing -> drawn -> predicting -> revealed round: picks a human, prices every market, then settles bets against a real simulated life. */
+/** Drives the idle -> drawing -> when -> where -> predicting -> confirming -> revealed round: picks a human, prices every market, then settles bets against a real simulated life. */
 export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   phase: MortalOddsDrawPhase;
   era: EraFilter;
@@ -174,7 +183,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   };
 
   const placeBets = (bets: Record<string, Bet>): { net: number; skill: number } | null => {
-    if (state.phase !== "predicting" || !state.draw || !state.prices || !state.samples) return null;
+    if (state.phase !== "confirming" || !state.draw || !state.prices || !state.samples) return null;
 
     const { draw, prices, samples: bookieSamples } = state;
     const rng = createRng();
@@ -185,8 +194,10 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     const childDeathShare = truthSamples.filter((s) => s.age < 5).length / truthSamples.length;
     const story = tellStory({ life, place: draw.place, currentYear: CURRENT_YEAR, childDeathShare, jobs: jobsConfig, rng });
     const lifespan = buildLifespanHistogram({ truthSamples, bookieSamples });
+    const realMedianAge = medianAge(truthSamples);
+    const bookieMedianAge = medianAge(bookieSamples);
 
-    dispatch({ type: "reveal", reveal: { life, results, net, skill, story, lifespan } });
+    dispatch({ type: "reveal", reveal: { life, results, net, skill, story, lifespan, realMedianAge, bookieMedianAge } });
     return { net, skill };
   };
 

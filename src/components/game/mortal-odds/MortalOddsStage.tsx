@@ -6,6 +6,7 @@ import { DrawHero } from "@/components/game/mortal-odds/stage/DrawHero";
 import { DrawSequence } from "@/components/game/mortal-odds/stage/draw/DrawSequence";
 import { PredictionsPanel } from "@/components/game/mortal-odds/stage/markets/PredictionsPanel";
 import { RevealPanel } from "@/components/game/mortal-odds/stage/reveal/RevealPanel";
+import { BetSummary } from "@/components/game/mortal-odds/stage/summary/BetSummary";
 import type { MortalOddsBets } from "@/hooks/useMortalOddsBets";
 import type { MortalOddsRound } from "@/hooks/useMortalOddsDraw";
 import { marketsConfig } from "@/lib/mortal-odds/config";
@@ -51,8 +52,9 @@ export const MortalOddsStage = (props: {
             priceDeathYear={props.priceDeathYear}
             onRemoveBet={props.onRemoveBet}
             charges={props.charges}
-            onPlaceBet={props.onPlaceBet}
+            onPlaceBet={round.advance}
             canPlaceBet={round.phase === "predicting"}
+            isLocked={round.phase === "confirming"}
             requiredBets={marketsConfig.length}
           />
         </div>
@@ -93,6 +95,19 @@ export const MortalOddsStage = (props: {
               onSetChoice={props.onSetChoice}
               onBack={round.retreat}
               key={`${round.draw.year}-${round.draw.region}-${round.draw.place.name}`}
+            />
+          )}
+
+          {round.phase === "confirming" && round.draw && round.prices && (
+            <BetSummary
+              draw={round.draw}
+              bets={props.bets}
+              prices={round.prices}
+              priceDeathYear={round.priceDeathYear}
+              charges={props.charges}
+              currency={props.currency}
+              onBack={round.retreat}
+              onConfirm={props.onPlaceBet}
             />
           )}
 

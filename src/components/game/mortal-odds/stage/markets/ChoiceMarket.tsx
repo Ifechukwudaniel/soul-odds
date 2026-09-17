@@ -23,7 +23,7 @@ export const ChoiceMarket = (props: {
   return (
     <div className="flex h-full flex-col items-center justify-center gap-5 text-center">
       <div className="flex flex-col items-center gap-1">
-        <Icon size={32} className="text-[#5EEAD4]" />
+        <Icon size={32} className="text-[#3FB6A8]" />
         <h3 className="font-bold text-white text-xl">{props.market.title}</h3>
         {props.market.note && <p className="max-w-xs text-white/40 text-xs">{props.market.note}</p>}
         <p className="mt-1 text-white/40 text-[11px]">Bookie odds</p>
