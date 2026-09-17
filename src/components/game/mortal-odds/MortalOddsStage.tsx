@@ -2,7 +2,6 @@
 
 import { MotionConfig } from "framer-motion";
 import { DrawHero } from "@/components/game/mortal-odds/stage/DrawHero";
-import { EraFilter } from "@/components/game/mortal-odds/stage/EraFilter";
 import { MarketPager } from "@/components/game/mortal-odds/stage/markets/MarketPager";
 import type { MortalOddsBets } from "@/hooks/useMortalOddsBets";
 import type { MortalOddsRound } from "@/hooks/useMortalOddsDraw";
@@ -21,8 +20,6 @@ export const MortalOddsStage = (props: {
   return (
     <MotionConfig reducedMotion="user">
       <div className="flex w-full flex-1 flex-col gap-3" aria-live="polite">
-        <EraFilter activeEra={round.era} disabled={round.phase === "drawing"} onSelect={round.setEra} />
-
         <DrawHero
           phase={round.phase}
           draw={round.draw}

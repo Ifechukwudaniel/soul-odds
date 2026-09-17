@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { GlobeIcon } from "@/components/assets/GlobeIcon";
+import { FaDiceD6 } from "react-icons/fa";
+import { DrawStatCard } from "@/components/game/mortal-odds/stage/DrawStatCard";
 import { HistoryTimeline } from "@/components/game/mortal-odds/stage/HistoryTimeline";
 import { REGIONS } from "@/lib/mortal-odds/config";
 import { fmtYear } from "@/lib/mortal-odds/format";
@@ -19,27 +20,23 @@ export const DrawHero = (props: {
 }) => {
   const isDrawing = props.phase === "drawing";
 
-  const yearLabel = isDrawing ? fmtYear(props.displayYear ?? 0) : props.draw ? fmtYear(props.draw.year) : "?";
+  const yearLabel = isDrawing ? fmtYear(props.displayYear ?? 0) : props.draw ? fmtYear(props.draw.year) : "0000";
+  const regionLabel = props.draw ? REGIONS[props.draw.region] : "—";
 
   return (
-    <div className="flex w-full flex-col items-center gap-1 text-center">
-      <p className="font-semibold text-[#9181F0] text-[10px] uppercase tracking-[0.2em]">Your person</p>
+    <div className="flex w-full flex-col items-center gap-1 text-center mt-[10rem]">
+      <p className="font-medium text-white/80 text-[11px] uppercase tracking-[0.2em]">Your person</p>
 
-      <p className={`font-bold text-4xl text-[#F5B83D] leading-none ${isDrawing ? "opacity-55" : ""}`}>{yearLabel}</p>
-
-      <AnimatePresence>
-        {props.draw && (
-          <motion.div
-            key={`${props.draw.year}-${props.draw.region}-${props.draw.place.name}`}
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="mt-1 flex items-center gap-1.5 rounded-full border border-white/10 bg-slate-900/60 px-3 py-1"
-          >
-            <GlobeIcon width={13} height="13" className="text-[#5EEAD4]" />
-            <span className="font-semibold text-white text-xs">{REGIONS[props.draw.region]}</span>
-          </motion.div>
-        )}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={props.draw ? `${props.draw.year}-${props.draw.region}-${props.draw.place.name}` : "empty"}
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: isDrawing ? 0.55 : 1, scale: 1 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
+          className="w-full max-w-lg"
+        >
+          <DrawStatCard yearLabel={yearLabel} regionLabel={regionLabel} />
+        </motion.div>
       </AnimatePresence>
 
       {isDrawing ? (
@@ -53,28 +50,31 @@ export const DrawHero = (props: {
           className="mt-1 max-w-md text-sm text-white/70"
         >
           Born in <b className="text-white">{props.context.where}</b>.{" "}
-          <span className="text-white/50">{props.context.local}</span>{" "}
-          <span className="text-white/50">{props.context.when}</span>
+          <span className="text-[#b0aeb5]">{props.context.local}</span>{" "}
+          <span className="text-[#b0aeb5]">{props.context.when}</span>
         </motion.p>
       ) : (
         <div className="mt-1 max-w-md">
-          <p className="font-bold text-sm text-white">Nobody drawn yet.</p>
-          <p className="text-white/50 text-xs">{IDLE_DESCRIPTION}</p>
+          <p className="font-medium text-sm text-white">Nobody drawn yet.</p>
+          <p className="text-[#b0aeb5] text-xs mb-12 mt-1 leading-[1.5]">{IDLE_DESCRIPTION}</p>
         </div>
       )}
-
-      <div className="mt-1 w-full max-w-sm">
-        <HistoryTimeline year={props.draw?.year ?? null} currentYear={props.currentYear} />
-      </div>
 
       <button
         type="button"
         disabled={isDrawing}
         onClick={props.onDraw}
-        className="purple-gradient mt-1 rounded-full px-5 py-2 font-bold text-sm text-white shadow-[0_0_16px_rgba(103,82,239,0.5)] disabled:opacity-40"
+        className="chamfer-btn chamfer-btn-glow mt-1 flex items-center gap-3 px-8 py-3 font-bold text-base text-white disabled:opacity-40"
       >
-        🎲 {props.draw ? "Draw another human" : "Draw a human"}
+        <FaDiceD6 size={20} className="drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]" />
+        <span className="tracking-wide drop-shadow-[0_1px_1px_rgba(0,0,0,0.55)]">
+          {props.draw ? "Draw another human" : "Draw a human"}
+        </span>
       </button>
+
+      <div className="mt-12 w-full max-w-sm">
+        <HistoryTimeline year={props.draw?.year ?? null} currentYear={props.currentYear} />
+      </div>
     </div>
   );
 };
