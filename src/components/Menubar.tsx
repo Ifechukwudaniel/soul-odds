@@ -7,6 +7,7 @@ import { SpeakerIcon } from "./assets/SpeakerIcon";
 import { StatsIcon } from "./assets/StatsIcon";
 import { TaskIcon } from "./assets/TaskIcon";
 import { TScreens, useAppStore } from "@/services/store/store";
+import { playClickSound } from "@/utils/playClickSound";
 /* import { isSSR , initHapticFeedback, HapticFeedback} from "@tma.js/sdk-react";
  */
 type MenuLink = {
@@ -56,6 +57,7 @@ export const Menubar = () => {
   const setScreen = useAppStore(state => state.setScreen);
 
   const handleMenuClick = (label: string) => {
+    playClickSound();
     setScreen(label as TScreens);
     hapticFeedback?.impactOccurred("light");
   };
