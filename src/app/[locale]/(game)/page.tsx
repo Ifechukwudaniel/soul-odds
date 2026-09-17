@@ -157,7 +157,7 @@ export default function GamePage() {
     <div className="flex h-screen w-full flex-col">
       <GameHeader
         balance={player.stats.bankroll}
-        currency="chips"
+        currency="deben"
         avatar={<Slime width={24} height="24" />}
         onOpenProfile={() => setIsProfileOpen(true)}
       />

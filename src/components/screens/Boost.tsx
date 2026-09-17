@@ -1,9 +1,6 @@
 import React from "react";
 import { Balance } from "../Balance";
-import { AutoSwipeIcon } from "../assets/AutoSwipeIcon";
-import { EnergyLimitIcon } from "../assets/EnergyLimitIcon";
-import { MultiTapIcon } from "../assets/MultiTapIcon";
-import { SpeedBoostIcon } from "../assets/SpeedBoostIcon";
+import { RelicIcon } from "../assets/RelicIcon";
 import { BoostCard } from "../touchswap/BoostCard";
 import { useAppStore } from "@/services/store/store";
 import { motion } from "framer-motion";
@@ -21,33 +18,33 @@ type BoostCardList = {
 
 export const boostCardLists: BoostCardList[] = [
   {
-    title: "Recharge Speed boost",
+    title: "Hieroglyphs",
     desc: "Increases the speed at which your energy regenerates by +1 every second.",
-    icon: <SpeedBoostIcon width={"35"} height={"32"} />,
+    icon: <RelicIcon relic="scarab" size={40} />,
     initalCost: 250,
     id: 3,
     noLevel: true,
   },
   {
-    title: "Multi Tap",
+    title: "Golden mask",
     desc: "Increases the amount gained +5",
-    icon: <MultiTapIcon width={"48"} height={"32"} />,
+    icon: <RelicIcon relic="mask" size={40} />,
     initalCost: 500,
     id: 4,
     noLevel: true,
   },
   {
-    title: "Increase Energy Limit",
+    title: "Obelisk",
     desc: "Increases the speed at which your energy regenerates by +1 every second.",
-    icon: <EnergyLimitIcon width={"31"} height={"32"} />,
+    icon: <RelicIcon relic="obelisk" size={40} />,
     initalCost: 250,
     id: 5,
     noLevel: true,
   },
   {
-    title: "Auto swipe",
+    title: "Treasure chest",
     desc: "Perform actions on your behalf without your direct input when your energy is full. Works for 12 hours.",
-    icon: <AutoSwipeIcon width={"36"} height={"32"} />,
+    icon: <RelicIcon relic="chest" size={40} />,
     initalCost: 200000,
     id: 6,
     noLevel: false,

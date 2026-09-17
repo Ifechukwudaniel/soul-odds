@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 export type MortalOddsPlayerStats = { bankroll: number; rounds: number; bestRound: number; streak: number; skill: number };
 
-const START_BANKROLL = 1000;
+const START_BANKROLL = 10000;
 const STORAGE_KEY = "mortal-odds-player:v1";
 const DEFAULTS: MortalOddsPlayerStats = { bankroll: START_BANKROLL, rounds: 0, bestRound: 0, streak: 0, skill: 0 };
 

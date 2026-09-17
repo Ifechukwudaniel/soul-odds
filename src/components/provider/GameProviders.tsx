@@ -6,6 +6,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Loader } from "@/components/Loader";
 import AppWalletProvider from "@/components/provider/AppWalletProvider";
 import { FrameProvider } from "@/components/provider/FrameContext";
+import { DesertHorizon } from "@/components/game/mortal-odds/DesertHorizon";
 
 const ErrorBoundaryError = (props: { error: unknown }) => (
   <div>
@@ -43,7 +44,8 @@ export const GameProviders = (props: { children: React.ReactNode }) => {
               className="relative overflow-x-hidden"
               style={{ background: `url('/img/stars.svg') repeat` }}
             >
-              {props.children}
+              <DesertHorizon />
+              <div className="relative z-10">{props.children}</div>
             </main>
           </AppWalletProvider>
           <Toaster />
