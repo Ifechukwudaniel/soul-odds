@@ -3,6 +3,7 @@
 import { MotionConfig } from "framer-motion";
 import { DrawHero } from "@/components/game/mortal-odds/stage/DrawHero";
 import { MarketPager } from "@/components/game/mortal-odds/stage/markets/MarketPager";
+import { RevealPanel } from "@/components/game/mortal-odds/stage/reveal/RevealPanel";
 import type { MortalOddsBets } from "@/hooks/useMortalOddsBets";
 import type { MortalOddsRound } from "@/hooks/useMortalOddsDraw";
 
@@ -10,6 +11,7 @@ export const MortalOddsStage = (props: {
   round: MortalOddsRound;
   bets: MortalOddsBets["bets"];
   chipSize: number;
+  currency: string;
   onDraw: () => void;
   onSetChoice: MortalOddsBets["setChoice"];
   onSetDeathYear: MortalOddsBets["setDeathYear"];
@@ -42,6 +44,10 @@ export const MortalOddsStage = (props: {
             onRemoveBet={props.onRemoveBet}
             key={`${round.draw.year}-${round.draw.region}-${round.draw.place.name}`}
           />
+        )}
+
+        {round.phase === "revealed" && round.reveal && round.draw && (
+          <RevealPanel reveal={round.reveal} place={round.draw.place} currentYear={round.currentYear} currency={props.currency} onNext={props.onDraw} />
         )}
       </div>
     </MotionConfig>

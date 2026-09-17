@@ -10,6 +10,7 @@ import type { GameMode, LeaderboardEntry } from "@/components/game/home/types";
 import { MortalOddsStage } from "@/components/game/mortal-odds/MortalOddsStage";
 import { useMortalOddsBets } from "@/hooks/useMortalOddsBets";
 import { useMortalOddsDraw } from "@/hooks/useMortalOddsDraw";
+import { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
 import { useAppStore } from "@/services/store/store";
 
 const LEADERBOARD: LeaderboardEntry[] = [
@@ -20,6 +21,7 @@ const LEADERBOARD: LeaderboardEntry[] = [
 ];
 
 const CHIP_SIZES = [1, 5, 10, 25, 50];
+const CURRENCY = "chips";
 
 export const HomeScreen = () => {
   const [activeMode, setActiveMode] = useState<GameMode>("survival");
@@ -30,10 +32,17 @@ export const HomeScreen = () => {
   const reducedMotion = useReducedMotion() ?? false;
   const round = useMortalOddsDraw({ reducedMotion });
   const slip = useMortalOddsBets();
+  const player = useMortalOddsPlayer();
 
   const onDraw = () => {
     slip.reset();
     round.drawHuman();
+  };
+
+  const onPlaceBet = () => {
+    const result = round.placeBets(slip.bets);
+    if (result) player.commitRound(result);
+    slip.reset();
   };
 
   return (
@@ -42,17 +51,18 @@ export const HomeScreen = () => {
         activeMode={activeMode}
         blitzTimeLabel="03:00"
         onSelectMode={setActiveMode}
-        balance={32.5}
-        currency="USDC"
+        balance={player.stats.bankroll}
+        currency={CURRENCY}
         avatar={<Slime width={24} height="24" />}
         onOpenProfile={() => setIsProfileOpen(true)}
       />
 
-      <div className="flex flex-1 flex-col gap-4 px-6 pb-6 lg:flex-row">
+      <div className="flex flex-1 flex-col gap-4 px-6 pb-28 lg:flex-row">
         <MortalOddsStage
           round={round}
           bets={slip.bets}
           chipSize={chipSize}
+          currency={CURRENCY}
           onDraw={onDraw}
           onSetChoice={slip.setChoice}
           onSetDeathYear={slip.setDeathYear}
@@ -60,7 +70,7 @@ export const HomeScreen = () => {
         />
 
         <GameSidebarRight
-          currency="chips"
+          currency={CURRENCY}
           chipSize={chipSize}
           quickAmounts={CHIP_SIZES}
           onSelectChip={setChipSize}
@@ -68,6 +78,8 @@ export const HomeScreen = () => {
           prices={round.prices}
           priceDeathYear={round.priceDeathYear}
           onRemoveBet={slip.remove}
+          onPlaceBet={onPlaceBet}
+          canPlaceBet={round.phase === "drawn"}
           leaderboard={LEADERBOARD}
         />
       </div>

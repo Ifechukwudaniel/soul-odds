@@ -12,6 +12,8 @@ export const GameSidebarRight = (props: {
   prices: MarketPrices | null;
   priceDeathYear: (guessYear: number) => Price;
   onRemoveBet: (marketId: string) => void;
+  onPlaceBet: () => void;
+  canPlaceBet: boolean;
   leaderboard: LeaderboardEntry[];
 }) => (
   <div className="flex w-full flex-col gap-4 lg:w-80 lg:shrink-0">
@@ -24,6 +26,8 @@ export const GameSidebarRight = (props: {
       prices={props.prices}
       priceDeathYear={props.priceDeathYear}
       onRemoveBet={props.onRemoveBet}
+      onPlaceBet={props.onPlaceBet}
+      canPlaceBet={props.canPlaceBet}
     />
     <LeaderboardList entries={props.leaderboard} />
   </div>

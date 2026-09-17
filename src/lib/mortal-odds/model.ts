@@ -1,5 +1,8 @@
 import { interpolate } from "@/lib/mortal-odds/curves";
+import { applyShocks } from "@/lib/mortal-odds/shocks";
+import type { RegionModifiersConfig, ShockConfig } from "@/lib/mortal-odds/config";
 import type { Rng } from "@/lib/mortal-odds/rng";
+import type { Life, RegionId, Sex, Shock } from "@/types";
 
 export type BookieCurves = {
   q5: ReadonlyArray<readonly [number, number]>;
@@ -10,6 +13,19 @@ export type BookieCurves = {
 };
 
 export type BookieLife = { age: number; deathYear: number; literate: boolean; city: boolean };
+
+function clamp(x: number, lo: number, hi: number): number {
+  return Math.min(hi, Math.max(lo, x));
+}
+
+function mix(a: number, b: number, t: number): number {
+  return a + (b - a) * t;
+}
+
+/** A boy 51.2% of the time, matching the real sex ratio at birth. */
+export function drawSex(rng: Rng): Sex {
+  return rng() < 0.512 ? "boy" : "girl";
+}
 
 /** Box-Muller normal sample. */
 function normal(options: { mean: number; sd: number; rng: Rng }): number {
@@ -55,5 +71,109 @@ export function simulateBookie(options: { year: number; rng: Rng; curves: Bookie
   const { year, rng, curves, sims } = options;
   const samples: BookieLife[] = new Array(sims);
   for (let i = 0; i < sims; i++) samples[i] = sampleLifeBookie({ year, rng, curves });
+  return samples;
+}
+
+function regionMod(options: { region: RegionId; year: number; mods: RegionModifiersConfig }): { q: number; shift: number } {
+  const { region, year, mods } = options;
+  const a = clamp((year - 1800) / 150, 0, 1);
+  const b = clamp((year - 1950) / 40, 0, 1);
+  const [iq, is] = mods.regionMods.industrial[region];
+  const [mq, ms] = mods.regionMods.modern[region];
+  return { q: mix(mix(1, iq, a), mq, b), shift: mix(mix(0, is, a), ms, b) };
+}
+
+function sexShift(options: { sex: Sex; year: number }): number {
+  const w = clamp((options.year - 1900) / 60, 0, 1);
+  return options.sex === "girl" ? 1 + 3 * w : -(1 + w);
+}
+
+function literacyP(options: {
+  year: number;
+  region: RegionId;
+  sex: Sex;
+  curve: ReadonlyArray<readonly [number, number]>;
+  mods: RegionModifiersConfig;
+}): number {
+  const { year, region, sex, curve, mods } = options;
+  const era = year < 1500 ? "ancient" : year < 1950 ? "early" : "modern";
+  const r = mods.literacyMultiplier[era][region];
+  const s = mods.sexLiteracyMultiplier[year < 1950 ? "old" : "new"][sex];
+  return Math.min(0.99, interpolate({ points: curve, x: year }) * r * s);
+}
+
+function cityP(options: {
+  year: number;
+  region: RegionId;
+  curve: ReadonlyArray<readonly [number, number]>;
+  mods: RegionModifiersConfig;
+}): number {
+  const { year, region, curve, mods } = options;
+  const r = mods.cityMultiplier[year < 1800 ? "old" : "new"][region];
+  return Math.min(0.95, interpolate({ points: curve, x: year }) * r);
+}
+
+export type FullModelConfig = {
+  curves: BookieCurves;
+  mods: RegionModifiersConfig;
+  shocks: ShockConfig[];
+};
+
+/** The full model: region, sex and catastrophes all shape the outcome, unlike the bookie's. */
+export function sampleLife(options: {
+  year: number;
+  region: RegionId;
+  sex: Sex;
+  withHistory: boolean;
+  rng: Rng;
+  config: FullModelConfig;
+}): Life {
+  const { year, region, sex, withHistory, rng, config } = options;
+  const mod = regionMod({ region, year, mods: config.mods });
+  const sexQ5 = config.mods.sexChildMortalityMultiplier[sex];
+  const q5 = Math.min(0.9, interpolate({ points: config.curves.q5, x: year }) * mod.q * sexQ5);
+
+  let age =
+    rng() < q5
+      ? Math.floor(rng() ** 2 * 5)
+      : adultAge({
+          mean: interpolate({ points: config.curves.adultMean, x: year }) + mod.shift + sexShift({ sex, year }),
+          sd: interpolate({ points: config.curves.adultSd, x: year }),
+          rng,
+        });
+
+  let shock: Shock | null = null;
+  if (withHistory) {
+    const hit = applyShocks({ year, region, sex, age, rng, shocks: config.shocks });
+    if (hit) {
+      age = hit.age;
+      shock = hit.shock;
+    }
+  }
+
+  return {
+    year,
+    region,
+    sex,
+    age,
+    shock,
+    deathYear: year + age,
+    literate: age >= 10 && rng() < literacyP({ year, region, sex, curve: config.curves.literacy, mods: config.mods }),
+    city: rng() < cityP({ year, region, curve: config.curves.urban, mods: config.mods }),
+  };
+}
+
+export function simulateFull(options: {
+  year: number;
+  region: RegionId;
+  rng: Rng;
+  config: FullModelConfig;
+  sims: number;
+}): Life[] {
+  const { year, region, rng, config, sims } = options;
+  const samples: Life[] = new Array(sims);
+  for (let i = 0; i < sims; i++) {
+    samples[i] = sampleLife({ year, region, sex: drawSex(rng), withHistory: true, rng, config });
+  }
   return samples;
 }

@@ -16,6 +16,8 @@ export const BetPanel = (props: {
   prices: MarketPrices | null;
   priceDeathYear: (guessYear: number) => Price;
   onRemoveBet: (marketId: string) => void;
+  onPlaceBet: () => void;
+  canPlaceBet: boolean;
 }) => {
   const bets = Object.values(props.bets);
   const totalStaked = bets.reduce((sum, bet) => sum + bet.stake, 0);
@@ -59,7 +61,7 @@ export const BetPanel = (props: {
 
       <PotentialWinSummary amount={totalPotentialWin} currency={props.currency} betCount={bets.length} />
 
-      <PlaceBetButton label="Place Bet" disabled={bets.length === 0} />
+      <PlaceBetButton label="Place Bet" disabled={!props.canPlaceBet || bets.length === 0} onClick={props.onPlaceBet} />
     </GameCard>
   );
 };

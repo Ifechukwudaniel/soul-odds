@@ -1,19 +1,39 @@
 import { animate } from "framer-motion";
 import { useEffect, useReducer, useRef } from "react";
-import { bookieCurves, DEATH_WINDOW, erasConfig, marketsConfig, placesConfig, PRICING_CONFIG, SIMS, worldPopCurve } from "@/lib/mortal-odds/config";
+import {
+  bookieCurves,
+  DEATH_WINDOW,
+  erasConfig,
+  jobsConfig,
+  marketsConfig,
+  placesConfig,
+  PRICING_CONFIG,
+  regionModifiersConfig,
+  shocksConfig,
+  SIMS,
+  worldPopCurve,
+} from "@/lib/mortal-odds/config";
 import { drawBirth, pickPlace, placeContext as buildPlaceContext } from "@/lib/mortal-odds/draw";
-import type { BookieLife } from "@/lib/mortal-odds/model";
-import { simulateBookie } from "@/lib/mortal-odds/model";
-import { computeMarketPrices, deathYearP, medianDeathYear, priceFromP } from "@/lib/mortal-odds/pricing";
+import { buildLifespanHistogram } from "@/lib/mortal-odds/lifespan";
+import type { LifespanHistogram } from "@/lib/mortal-odds/lifespan";
+import type { BookieLife, FullModelConfig } from "@/lib/mortal-odds/model";
+import { drawSex, sampleLife, simulateBookie, simulateFull } from "@/lib/mortal-odds/model";
+import { computeMarketPrices, computeTrueProbabilities, deathYearP, medianDeathYear, priceFromP } from "@/lib/mortal-odds/pricing";
 import { createRng } from "@/lib/mortal-odds/rng";
+import { resolveBets } from "@/lib/mortal-odds/settle";
+import { tellStory } from "@/lib/mortal-odds/story";
 import { playClickSound } from "@/utils/playClickSound";
-import type { Draw, EraFilter, MarketPrices, PlaceContext, Price } from "@/types";
+import type { Bet, BetResult, Draw, EraFilter, Life, MarketPrices, PlaceContext, Price } from "@/types";
 
 const CURRENT_YEAR = new Date().getFullYear();
 const SPIN_DURATION_S = 0.75;
 const SPIN_YEAR_RANGE = CURRENT_YEAR + 12000;
 
-export type MortalOddsDrawPhase = "idle" | "drawing" | "drawn";
+const fullModelConfig: FullModelConfig = { curves: bookieCurves, mods: regionModifiersConfig, shocks: shocksConfig };
+
+export type MortalOddsDrawPhase = "idle" | "drawing" | "drawn" | "revealed";
+
+export type RevealResult = { life: Life; results: BetResult[]; net: number; skill: number; story: string; lifespan: LifespanHistogram };
 
 type State = {
   phase: MortalOddsDrawPhase;
@@ -24,6 +44,7 @@ type State = {
   samples: BookieLife[] | null;
   prices: MarketPrices | null;
   defaultDeathGuess: number | null;
+  reveal: RevealResult | null;
 };
 
 type Action =
@@ -37,7 +58,8 @@ type Action =
       defaultDeathGuess: number;
     }
   | { type: "tick"; year: number }
-  | { type: "finish" };
+  | { type: "finish" }
+  | { type: "reveal"; reveal: RevealResult };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -53,11 +75,14 @@ function reducer(state: State, action: Action): State {
         prices: action.prices,
         defaultDeathGuess: action.defaultDeathGuess,
         displayYear: null,
+        reveal: null,
       };
     case "tick":
       return { ...state, displayYear: action.year };
     case "finish":
       return { ...state, phase: "drawn", displayYear: null };
+    case "reveal":
+      return { ...state, phase: "revealed", reveal: action.reveal };
   }
 }
 
@@ -70,9 +95,10 @@ const initialState: State = {
   samples: null,
   prices: null,
   defaultDeathGuess: null,
+  reveal: null,
 };
 
-/** Drives the idle -> drawing -> drawn stage: picks a human, prices every market, then spins before landing. */
+/** Drives the idle -> drawing -> drawn -> revealed round: picks a human, prices every market, then settles bets against a real simulated life. */
 export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   phase: MortalOddsDrawPhase;
   era: EraFilter;
@@ -83,8 +109,10 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   prices: MarketPrices | null;
   priceDeathYear: (guessYear: number) => Price;
   defaultDeathGuess: number | null;
+  reveal: RevealResult | null;
   setEra: (era: EraFilter) => void;
   drawHuman: () => void;
+  placeBets: (bets: Record<string, Bet>) => { net: number; skill: number } | null;
 } {
   const [state, dispatch] = useReducer(reducer, initialState);
   const spin = useRef<ReturnType<typeof animate> | null>(null);
@@ -128,6 +156,23 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     return priceFromP({ p, config: PRICING_CONFIG });
   };
 
+  const placeBets = (bets: Record<string, Bet>): { net: number; skill: number } | null => {
+    if (state.phase !== "drawn" || !state.draw || !state.prices || !state.samples) return null;
+
+    const { draw, prices, samples: bookieSamples } = state;
+    const rng = createRng();
+    const life = sampleLife({ year: draw.year, region: draw.region, sex: drawSex(rng), withHistory: true, rng, config: fullModelConfig });
+    const truthSamples = simulateFull({ year: draw.year, region: draw.region, rng, config: fullModelConfig, sims: SIMS });
+    const trueProbabilities = computeTrueProbabilities({ markets: marketsConfig, samples: truthSamples });
+    const { results, net, skill } = resolveBets({ life, bets, prices, priceDeathYear, trueProbabilities, truthSamples });
+    const childDeathShare = truthSamples.filter((s) => s.age < 5).length / truthSamples.length;
+    const story = tellStory({ life, place: draw.place, currentYear: CURRENT_YEAR, childDeathShare, jobs: jobsConfig, rng });
+    const lifespan = buildLifespanHistogram({ truthSamples, bookieSamples });
+
+    dispatch({ type: "reveal", reveal: { life, results, net, skill, story, lifespan } });
+    return { net, skill };
+  };
+
   return {
     phase: state.phase,
     era: state.era,
@@ -138,8 +183,10 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     prices: state.prices,
     priceDeathYear,
     defaultDeathGuess: state.defaultDeathGuess,
+    reveal: state.reveal,
     setEra: (era) => dispatch({ type: "set-era", era }),
     drawHuman,
+    placeBets,
   };
 }
 

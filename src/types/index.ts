@@ -51,3 +51,38 @@ export type MarketPrices = Record<string, Record<string, Price>>;
 export type Bet =
   | { marketId: string; kind: "choice"; optionId: string; stake: number }
   | { marketId: "dy"; kind: "range"; guessYear: number; stake: number };
+
+export type Sex = "girl" | "boy";
+
+export type Shock = {
+  id: string;
+  label: string;
+  phrase: string;
+  from: number;
+  to: number;
+  ages?: [number, number];
+};
+
+export type Life = {
+  year: number;
+  region: RegionId;
+  sex: Sex;
+  age: number;
+  deathYear: number;
+  shock: Shock | null;
+  literate: boolean;
+  city: boolean;
+};
+
+export type BetResult = {
+  marketId: string;
+  marketLabel: string;
+  won: boolean;
+  stake: number;
+  net: number;
+  skill: number;
+  pickLabel: string;
+  outcomeLabel: string;
+  bookieP: number;
+  realP: number;
+};
