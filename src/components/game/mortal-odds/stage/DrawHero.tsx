@@ -1,9 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { FaDiceD6 } from "react-icons/fa";
+import { GameCard } from "@/components/game/home/GameCard";
 import { DrawStatCard } from "@/components/game/mortal-odds/stage/DrawStatCard";
 import { HistoryTimeline } from "@/components/game/mortal-odds/stage/HistoryTimeline";
 import { REGIONS } from "@/lib/mortal-odds/config";
 import { fmtYear } from "@/lib/mortal-odds/format";
+import { playClickSound } from "@/utils/playClickSound";
 import type { MortalOddsDrawPhase } from "@/hooks/useMortalOddsDraw";
 import type { Draw, PlaceContext } from "@/types";
 
@@ -17,6 +19,7 @@ export const DrawHero = (props: {
   displayYear: number | null;
   currentYear: number;
   onDraw: () => void;
+  onContinue: () => void;
 }) => {
   const isDrawing = props.phase === "drawing";
 
@@ -24,7 +27,7 @@ export const DrawHero = (props: {
   const regionLabel = props.draw ? REGIONS[props.draw.region] : "—";
 
   return (
-    <div className="flex w-full flex-col items-center gap-1 text-center mt-[10rem]">
+    <GameCard className="flex flex-col items-center gap-1 py-10 text-center" containerClassName="w-full">
       <p className="font-medium text-white/80 text-[11px] uppercase tracking-[0.2em]">Your person</p>
 
       <AnimatePresence mode="wait">
@@ -60,21 +63,43 @@ export const DrawHero = (props: {
         </div>
       )}
 
-      <button
-        type="button"
-        disabled={isDrawing}
-        onClick={props.onDraw}
-        className="chamfer-btn chamfer-btn-glow mt-1 flex items-center gap-3 px-8 py-3 font-bold text-base text-white disabled:opacity-40"
-      >
-        <FaDiceD6 size={20} className="drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]" />
-        <span className="tracking-wide drop-shadow-[0_1px_1px_rgba(0,0,0,0.55)]">
+      {props.phase === "drawn" ? (
+        <div className="mt-1 flex items-center gap-3">
+          <button
+            type="button"
+            onClick={props.onDraw}
+            className="rounded-lg border border-white/15 px-4 py-3 font-semibold text-sm text-white/70 hover:text-white"
+          >
+            Draw another human
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              playClickSound();
+              props.onContinue();
+            }}
+            className="chamfer-btn chamfer-btn-glow flex items-center gap-3 px-8 py-3 font-bold text-base text-white"
+          >
+            <span className="tracking-wide drop-shadow-[0_1px_1px_rgba(0,0,0,0.55)]">Make your predictions</span>
+            <span className="drop-shadow-[0_1px_1px_rgba(0,0,0,0.55)]">→</span>
+          </button>
+        </div>
+      ) : (
+        <button
+          type="button"
+          disabled={isDrawing}
+          onClick={props.onDraw}
+          className="mt-1 flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-white px-8 py-3 font-bold text-slate-950 hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          <FaDiceD6 size={20} />
           {props.draw ? "Draw another human" : "Draw a human"}
-        </span>
-      </button>
+        </button>
+      )}
 
       <div className="mt-12 w-full max-w-sm">
         <HistoryTimeline year={props.draw?.year ?? null} currentYear={props.currentYear} />
       </div>
-    </div>
+    </GameCard>
   );
 };

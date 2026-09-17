@@ -40,8 +40,8 @@ export const GameProviders = (props: { children: React.ReactNode }) => {
         <Suspense fallback={<Loader />}>
           <AppWalletProvider>
             <main
-              className="relative bg-cover overflow-x-hidden"
-              style={{ background: `url('/img/bg.png')` }}
+              className="relative overflow-x-hidden"
+              style={{ background: `url('/img/stars.svg') repeat` }}
             >
               {props.children}
             </main>

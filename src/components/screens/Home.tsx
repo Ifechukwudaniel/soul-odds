@@ -6,7 +6,7 @@ import { Slime } from "@/components/assets/characters/Slime";
 import { GameHeader } from "@/components/game/home/GameHeader";
 import { GameSidebarRight } from "@/components/game/home/GameSidebarRight";
 import { ProfileModal } from "@/components/game/home/profile/ProfileModal";
-import type { GameMode, LeaderboardEntry } from "@/components/game/home/types";
+import type { LeaderboardEntry } from "@/components/game/home/types";
 import { MortalOddsStage } from "@/components/game/mortal-odds/MortalOddsStage";
 import { useMortalOddsBets } from "@/hooks/useMortalOddsBets";
 import { useMortalOddsDraw } from "@/hooks/useMortalOddsDraw";
@@ -24,7 +24,6 @@ const CHIP_SIZES = [1, 5, 10, 25, 50];
 const CURRENCY = "chips";
 
 export const HomeScreen = () => {
-  const [activeMode, setActiveMode] = useState<GameMode>("survival");
   const [chipSize, setChipSize] = useState(10);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const setScreen = useAppStore((state) => state.setScreen);
@@ -48,9 +47,6 @@ export const HomeScreen = () => {
   return (
     <div className="flex min-h-screen w-full flex-col">
       <GameHeader
-        activeMode={activeMode}
-        blitzTimeLabel="03:00"
-        onSelectMode={setActiveMode}
         balance={player.stats.bankroll}
         currency={CURRENCY}
         avatar={<Slime width={24} height="24" />}
@@ -65,8 +61,7 @@ export const HomeScreen = () => {
           currency={CURRENCY}
           onDraw={onDraw}
           onSetChoice={slip.setChoice}
-          onSetDeathYear={slip.setDeathYear}
-          onRemoveBet={slip.remove}
+          onPlaceBet={onPlaceBet}
         />
 
         <GameSidebarRight
@@ -79,7 +74,7 @@ export const HomeScreen = () => {
           priceDeathYear={round.priceDeathYear}
           onRemoveBet={slip.remove}
           onPlaceBet={onPlaceBet}
-          canPlaceBet={round.phase === "drawn"}
+          canPlaceBet={round.phase === "predicting"}
           leaderboard={LEADERBOARD}
         />
       </div>

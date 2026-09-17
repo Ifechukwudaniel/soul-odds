@@ -6,8 +6,8 @@ import type { LeaderboardEntry } from "@/components/game/home/types";
 export const LeaderboardList = (props: { entries: LeaderboardEntry[] }) => (
   <GameCard className="flex flex-col gap-4">
     <div className="flex items-center justify-between">
-      <h2 className="font-bold text-white">Leaderboard</h2>
-      <button type="button" onClick={playClickSound} className="text-sm text-white/50 hover:text-white">
+      <h2 className="font-semibold text-white">Leaderboard</h2>
+      <button type="button" onClick={playClickSound} className="text-sm text-white/50 hover:text-white sf-pro-medium">
         View All →
       </button>
     </div>

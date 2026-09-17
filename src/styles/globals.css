@@ -82,7 +82,7 @@ main {
   );
   position: relative;
   clip-path: var(--octagon);
-  background-color: #f36dfd;
+  background-color: #9181f0;
 }
 
 .chamfer-btn::before {
@@ -90,7 +90,7 @@ main {
   position: absolute;
   inset: var(--inset);
   clip-path: var(--octagon);
-  background: linear-gradient(180deg, #6825df 0%, #3e22d6 100%);
+  background: radial-gradient(40.91% 67.55% at 28.81% 50%, #9181f0 0%, #6752ef 100%);
   z-index: -1;
 }
 
@@ -110,7 +110,7 @@ main {
   );
   position: relative;
   clip-path: var(--octagon);
-  background: linear-gradient(135deg, #f36dfd 0%, #6825df 55%, #3e22d6 100%);
+  background: linear-gradient(135deg, #9181f0 0%, #6752ef 100%);
 }
 
 .stat-card::before {

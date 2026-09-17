@@ -2,7 +2,7 @@
 
 import { MotionConfig } from "framer-motion";
 import { DrawHero } from "@/components/game/mortal-odds/stage/DrawHero";
-import { MarketPager } from "@/components/game/mortal-odds/stage/markets/MarketPager";
+import { PredictionsPanel } from "@/components/game/mortal-odds/stage/markets/PredictionsPanel";
 import { RevealPanel } from "@/components/game/mortal-odds/stage/reveal/RevealPanel";
 import type { MortalOddsBets } from "@/hooks/useMortalOddsBets";
 import type { MortalOddsRound } from "@/hooks/useMortalOddsDraw";
@@ -14,40 +14,40 @@ export const MortalOddsStage = (props: {
   currency: string;
   onDraw: () => void;
   onSetChoice: MortalOddsBets["setChoice"];
-  onSetDeathYear: MortalOddsBets["setDeathYear"];
-  onRemoveBet: MortalOddsBets["remove"];
+  onPlaceBet: () => void;
 }) => {
   const { round } = props;
+  const isPredicting = round.phase === "predicting";
 
   return (
     <MotionConfig reducedMotion="user">
       <div className="flex w-full flex-1 flex-col gap-3" aria-live="polite">
-        <DrawHero
-          phase={round.phase}
-          draw={round.draw}
-          context={round.context}
-          displayYear={round.displayYear}
-          currentYear={round.currentYear}
-          onDraw={props.onDraw}
-        />
-
-        {round.phase === "drawn" && round.draw && round.prices && round.defaultDeathGuess !== null && (
-          <MarketPager
-            draw={round.draw}
+        {isPredicting && round.draw && round.prices ? (
+          <PredictionsPanel
             prices={round.prices}
-            priceDeathYear={round.priceDeathYear}
-            defaultDeathGuess={round.defaultDeathGuess}
             chipSize={props.chipSize}
             bets={props.bets}
             onSetChoice={props.onSetChoice}
-            onSetDeathYear={props.onSetDeathYear}
-            onRemoveBet={props.onRemoveBet}
+            onBack={round.closePredictions}
+            onPlaceBet={props.onPlaceBet}
             key={`${round.draw.year}-${round.draw.region}-${round.draw.place.name}`}
           />
-        )}
+        ) : (
+          <>
+            <DrawHero
+              phase={round.phase}
+              draw={round.draw}
+              context={round.context}
+              displayYear={round.displayYear}
+              currentYear={round.currentYear}
+              onDraw={props.onDraw}
+              onContinue={round.openPredictions}
+            />
 
-        {round.phase === "revealed" && round.reveal && round.draw && (
-          <RevealPanel reveal={round.reveal} place={round.draw.place} currentYear={round.currentYear} currency={props.currency} onNext={props.onDraw} />
+            {round.phase === "revealed" && round.reveal && round.draw && (
+              <RevealPanel reveal={round.reveal} place={round.draw.place} currentYear={round.currentYear} currency={props.currency} onNext={props.onDraw} />
+            )}
+          </>
         )}
       </div>
     </MotionConfig>
