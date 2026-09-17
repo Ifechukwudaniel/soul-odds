@@ -60,7 +60,7 @@ describe("regionShare", () => {
 
 describe("placeContext", () => {
   it("produces the expected sentences for a fixed draw", () => {
-    const draw = { year: 1000, region: "eur" as const, place: { name: "Iberia", continent: "Europe", share: 0.2 } };
+    const draw = { year: 1000, region: "eur" as const, place: { name: "Iberia", continent: "Europe", share: 0.2, lat: 40, lon: -4 } };
     const context = placeContext({ draw, erasConfig, worldPopCurve, currentYear: CURRENT_YEAR });
     expect(context.where).toBe("Iberia, Europe");
     expect(context.local).toMatch(/^About .+ people lived there then\.$/);

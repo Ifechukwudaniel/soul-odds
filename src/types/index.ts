@@ -1,5 +1,3 @@
-import React from "react";
-
 export type LinkTask = {
   title: string;
   completed: boolean;
@@ -30,7 +28,7 @@ export type UserTask = {
 export type RegionId = "ssa" | "mena" | "eur" | "sas" | "eas" | "sea" | "ame";
 export type EraFilter = "all" | "ce" | "modern";
 
-export type Place = { name: string; continent: string; share: number };
+export type Place = { name: string; continent: string; share: number; lat: number; lon: number };
 export type Draw = { year: number; region: RegionId; place: Place };
 export type PlaceContext = { where: string; local: string; when: string };
 
@@ -47,6 +45,9 @@ export type MarketConfig = {
 export type ChanceTag = "Likely" | "Toss-up" | "Unlikely" | "Long shot";
 export type Price = { p: number; odds: number | null; tag: ChanceTag };
 export type MarketPrices = Record<string, Record<string, Price>>;
+
+/** A step of the round the player has already paid for, shown as a line on the bet panel. */
+export type RoundCharge = { id: string; label: string; amount: number };
 
 export type Bet =
   | { marketId: string; kind: "choice"; optionId: string; stake: number }

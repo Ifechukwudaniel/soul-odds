@@ -31,7 +31,16 @@ const SPIN_YEAR_RANGE = CURRENT_YEAR + 12000;
 
 const fullModelConfig: FullModelConfig = { curves: bookieCurves, mods: regionModifiersConfig, shocks: shocksConfig };
 
-export type MortalOddsDrawPhase = "idle" | "drawing" | "drawn" | "predicting" | "revealed";
+export type MortalOddsDrawPhase = "idle" | "drawing" | "when" | "where" | "predicting" | "revealed";
+
+/** The beats a player steps through after the year lands, in order. Add a beat here and the nav follows. */
+const SEQUENCE: MortalOddsDrawPhase[] = ["when", "where", "predicting"];
+
+function stepSequence(phase: MortalOddsDrawPhase, delta: number): MortalOddsDrawPhase {
+  const index = SEQUENCE.indexOf(phase);
+  if (index === -1) return phase;
+  return SEQUENCE[index + delta] ?? phase;
+}
 
 export type RevealResult = { life: Life; results: BetResult[]; net: number; skill: number; story: string; lifespan: LifespanHistogram };
 
@@ -59,8 +68,8 @@ type Action =
     }
   | { type: "tick"; year: number }
   | { type: "finish" }
-  | { type: "open-predictions" }
-  | { type: "close-predictions" }
+  | { type: "advance" }
+  | { type: "retreat" }
   | { type: "reveal"; reveal: RevealResult };
 
 function reducer(state: State, action: Action): State {
@@ -82,11 +91,11 @@ function reducer(state: State, action: Action): State {
     case "tick":
       return { ...state, displayYear: action.year };
     case "finish":
-      return { ...state, phase: "drawn", displayYear: null };
-    case "open-predictions":
-      return { ...state, phase: "predicting" };
-    case "close-predictions":
-      return { ...state, phase: "drawn" };
+      return { ...state, phase: "when", displayYear: null };
+    case "advance":
+      return { ...state, phase: stepSequence(state.phase, 1) };
+    case "retreat":
+      return { ...state, phase: stepSequence(state.phase, -1) };
     case "reveal":
       return { ...state, phase: "revealed", reveal: action.reveal };
   }
@@ -118,8 +127,8 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   reveal: RevealResult | null;
   setEra: (era: EraFilter) => void;
   drawHuman: () => void;
-  openPredictions: () => void;
-  closePredictions: () => void;
+  advance: () => void;
+  retreat: () => void;
   placeBets: (bets: Record<string, Bet>) => { net: number; skill: number } | null;
 } {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -194,8 +203,8 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     reveal: state.reveal,
     setEra: (era) => dispatch({ type: "set-era", era }),
     drawHuman,
-    openPredictions: () => dispatch({ type: "open-predictions" }),
-    closePredictions: () => dispatch({ type: "close-predictions" }),
+    advance: () => dispatch({ type: "advance" }),
+    retreat: () => dispatch({ type: "retreat" }),
     placeBets,
   };
 }

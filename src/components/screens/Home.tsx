@@ -4,27 +4,21 @@ import { useReducedMotion } from "framer-motion";
 import { useState } from "react";
 import { Slime } from "@/components/assets/characters/Slime";
 import { GameHeader } from "@/components/game/home/GameHeader";
-import { GameSidebarRight } from "@/components/game/home/GameSidebarRight";
 import { ProfileModal } from "@/components/game/home/profile/ProfileModal";
-import type { LeaderboardEntry } from "@/components/game/home/types";
 import { MortalOddsStage } from "@/components/game/mortal-odds/MortalOddsStage";
 import { useMortalOddsBets } from "@/hooks/useMortalOddsBets";
 import { useMortalOddsDraw } from "@/hooks/useMortalOddsDraw";
 import { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
+import { STEP_COSTS } from "@/lib/mortal-odds/config";
+import type { RoundCharge } from "@/types";
 import { useAppStore } from "@/services/store/store";
-
-const LEADERBOARD: LeaderboardEntry[] = [
-  { rank: 1, name: "ceeriil", score: 18500 },
-  { rank: 2, name: "devdanhiel", score: 15200 },
-  { rank: 3, name: "SUNFLOWER", score: 12800 },
-  { rank: 4, name: "ICE_CREAM99", score: 9100 },
-];
 
 const CHIP_SIZES = [1, 5, 10, 25, 50];
 const CURRENCY = "chips";
 
 export const HomeScreen = () => {
   const [chipSize, setChipSize] = useState(10);
+  const [charges, setCharges] = useState<RoundCharge[]>([]);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const setScreen = useAppStore((state) => state.setScreen);
 
@@ -33,9 +27,25 @@ export const HomeScreen = () => {
   const slip = useMortalOddsBets();
   const player = useMortalOddsPlayer();
 
+  const isRedraw = round.phase === "when" || round.phase === "where";
+  const drawCost = isRedraw ? STEP_COSTS.redraw : STEP_COSTS.draw;
+
   const onDraw = () => {
+    if (!player.spend(drawCost)) {
+      return;
+    }
+    const charge = { id: `draw-${charges.length}`, label: isRedraw ? "Redraw" : "Draw", amount: drawCost };
+    setCharges(isRedraw ? [...charges, charge] : [charge]);
     slip.reset();
     round.drawHuman();
+  };
+
+  const onRevealLocation = () => {
+    if (!player.spend(STEP_COSTS.location)) {
+      return;
+    }
+    setCharges([...charges, { id: `location-${charges.length}`, label: "Location", amount: STEP_COSTS.location }]);
+    round.advance();
   };
 
   const onPlaceBet = () => {
@@ -62,20 +72,17 @@ export const HomeScreen = () => {
           onDraw={onDraw}
           onSetChoice={slip.setChoice}
           onPlaceBet={onPlaceBet}
-        />
-
-        <GameSidebarRight
-          currency={CURRENCY}
-          chipSize={chipSize}
+          onRevealLocation={onRevealLocation}
+          drawCost={drawCost}
+          locationCost={STEP_COSTS.location}
+          canAffordDraw={player.canAfford(drawCost)}
+          canAffordLocation={player.canAfford(STEP_COSTS.location)}
+          charges={charges}
           quickAmounts={CHIP_SIZES}
           onSelectChip={setChipSize}
-          bets={slip.bets}
           prices={round.prices}
           priceDeathYear={round.priceDeathYear}
           onRemoveBet={slip.remove}
-          onPlaceBet={onPlaceBet}
-          canPlaceBet={round.phase === "predicting"}
-          leaderboard={LEADERBOARD}
         />
       </div>
 

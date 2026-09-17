@@ -12,10 +12,10 @@ export const HistoryTimeline = (props: { year: number | null; currentYear: numbe
       role="img"
       aria-label="Where the birth year sits in human history"
     >
-      <line x1={10} x2={590} y1={18} y2={18} stroke="#9181F0" strokeOpacity={0.3} />
+      <line x1={10} x2={590} y1={18} y2={18} stroke="#5EEAD4" strokeOpacity={0.3} />
       {ticks.map((tick) => (
         <g key={tick.label}>
-          <circle cx={tick.x} cy={18} r={3} fill="#9181F0" fillOpacity={0.5} />
+          <circle cx={tick.x} cy={18} r={3} fill="#5EEAD4" fillOpacity={0.5} />
           <text x={tick.x} y={38} textAnchor={tick.anchor} fill="currentColor" fillOpacity={0.5} fontSize={11}>
             {tick.label}
           </text>
@@ -23,8 +23,8 @@ export const HistoryTimeline = (props: { year: number | null; currentYear: numbe
       ))}
       {markerX !== null && (
         <motion.g initial={false} animate={{ x: markerX }} transition={{ duration: 0.5, ease: "easeOut" }}>
-          <circle cx={0} cy={18} r={5} fill="#9181F0" />
-          <circle cx={0} cy={18} r={9} fill="#9181F0" fillOpacity={0.35} />
+          <circle cx={0} cy={18} r={5} fill="#5EEAD4" />
+          <circle cx={0} cy={18} r={9} fill="#5EEAD4" fillOpacity={0.35} />
         </motion.g>
       )}
     </svg>

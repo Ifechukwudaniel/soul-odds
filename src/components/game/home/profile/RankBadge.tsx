@@ -8,7 +8,7 @@ export const RankBadge = (props: { label: string; onClick?: () => void }) => (
       playClickSound();
       props.onClick?.();
     }}
-    className="purple-gradient flex items-center gap-2 rounded-full border border-black px-4 py-1.5 text-sm font-bold text-white"
+    className="accent-gradient flex items-center gap-2 rounded-full border border-black px-4 py-1.5 text-sm font-bold text-slate-950"
   >
     <FaStar className="h-4 w-4" />
     {props.label}

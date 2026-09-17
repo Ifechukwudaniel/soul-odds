@@ -20,6 +20,8 @@ function readStats(): MortalOddsPlayerStats {
 /** Bankroll and round stats for Mortal Odds, persisted to localStorage like the MVP's own save. */
 export function useMortalOddsPlayer(): {
   stats: MortalOddsPlayerStats;
+  canAfford: (amount: number) => boolean;
+  spend: (amount: number) => boolean;
   commitRound: (options: { net: number; skill: number }) => void;
   reset: () => void;
 } {
@@ -38,6 +40,17 @@ export function useMortalOddsPlayer(): {
     }
   };
 
+  const canAfford = (amount: number) => stats.bankroll >= amount;
+
+  /** Charges a step of the round. Returns false and leaves the bankroll alone when the player is short. */
+  const spend = (amount: number) => {
+    if (!canAfford(amount)) {
+      return false;
+    }
+    persist({ ...stats, bankroll: Math.round((stats.bankroll - amount) * 100) / 100 });
+    return true;
+  };
+
   const commitRound = (options: { net: number; skill: number }) => {
     persist({
       bankroll: Math.max(0, Math.round((stats.bankroll + options.net) * 100) / 100),
@@ -48,5 +61,5 @@ export function useMortalOddsPlayer(): {
     });
   };
 
-  return { stats, commitRound, reset: () => persist(DEFAULTS) };
+  return { stats, canAfford, spend, commitRound, reset: () => persist(DEFAULTS) };
 }

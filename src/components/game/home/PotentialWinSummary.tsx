@@ -5,7 +5,7 @@ export const PotentialWinSummary = (props: { amount: number; currency: string; b
         <span>✨</span>
         Potential win
       </p>
-      <p className="font-bold text-[#9181F0]">
+      <p className="font-bold text-[#F5B83D]">
         {props.amount.toFixed(2)} {props.currency}
       </p>
     </div>

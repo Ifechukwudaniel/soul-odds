@@ -23,7 +23,7 @@ export const ProfileHeader = (props: { username: string; handle: string; rank: s
           playClickSound();
           props.onEditAvatar?.();
         }}
-        className="purple-gradient absolute right-0 bottom-0 flex h-7 w-7 items-center justify-center rounded-full border border-black"
+        className="accent-gradient absolute right-0 bottom-0 flex h-7 w-7 items-center justify-center rounded-full border border-black"
       >
         <FaPen className="h-3 w-3 text-white" />
       </button>

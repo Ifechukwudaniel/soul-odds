@@ -12,7 +12,7 @@ export const SlipRow = (props: { bet: Bet; potentialWin: number | null; currency
         <span className="font-semibold text-sm text-white">{label.pick}</span>
       </div>
       <div className="flex items-center gap-3">
-        <span className="font-bold text-[#9181F0] text-sm">
+        <span className="font-bold text-[#F5B83D] text-sm">
           {props.potentialWin === null ? "—" : `${props.potentialWin.toFixed(2)} ${props.currency}`}
         </span>
         <button

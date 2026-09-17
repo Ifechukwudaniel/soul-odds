@@ -12,7 +12,7 @@ export const LeaderboardRankRow = (props: { rank: number; onClick?: () => void }
   >
     <FaTrophy className="h-6 w-6 shrink-0 text-amber-400" />
     <p className="flex-1 text-left text-sm text-white/60">Leaderboard Rank</p>
-    <p className="font-bold text-[#9181F0]">#{props.rank.toLocaleString()}</p>
+    <p className="font-bold text-[#F5B83D]">#{props.rank.toLocaleString()}</p>
     <span className="text-white/40">›</span>
   </button>
 );

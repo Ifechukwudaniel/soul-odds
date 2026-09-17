@@ -6,10 +6,14 @@ import marketsJson from "@/config/mortal-odds/markets.json";
 import placesJson from "@/config/mortal-odds/places.json";
 import regionModifiersJson from "@/config/mortal-odds/region-modifiers.json";
 import shocksJson from "@/config/mortal-odds/shocks.json";
+import worldLandJson from "@/config/mortal-odds/world-land.json";
 import type { PricingConfig } from "@/lib/mortal-odds/pricing";
 import type { EraFilter, MarketConfig, RegionId } from "@/types";
 
 export const MODES: Record<EraFilter, number> = { all: -Infinity, ce: 1, modern: 1750 };
+
+/** What each step of a round costs the player, before any bet is placed. */
+export const STEP_COSTS = { draw: 5, redraw: 5, location: 10 };
 
 export const SIMS = 5000;
 export const DEATH_WINDOW = 5;
@@ -29,6 +33,9 @@ export const REGIONS: Record<RegionId, string> = {
 export const HUMANS_EVER = 117e9;
 
 const regionIdSchema = z.enum(["ssa", "mena", "eur", "sas", "eas", "sea", "ame"]);
+
+/** Every region id, typed — avoids casting the result of Object.keys over region-keyed records. */
+export const REGION_IDS = regionIdSchema.options;
 
 const regionSharesSchema = z.object({
   ssa: z.number(),
@@ -54,6 +61,8 @@ const placeConfigSchema = z.object({
   name: z.string(),
   continent: z.string(),
   weight: z.number().positive(),
+  lat: z.number().min(-90).max(90),
+  lon: z.number().min(-180).max(180),
 });
 
 const placesConfigSchema = z.record(regionIdSchema, z.array(placeConfigSchema).min(1));
@@ -68,6 +77,9 @@ const curvesConfigSchema = z.object({
   literacy: curvePointsSchema,
   urban: curvePointsSchema,
 });
+
+/** Land outlines as bare [lon, lat] rings — Natural Earth 110m, stripped of GeoJSON envelope and rounded to 0.1°. */
+const worldLandSchema = z.array(z.array(z.tuple([z.number(), z.number()])).min(4)).min(1);
 
 const marketOptionSchema = z.object({ id: z.string(), label: z.string() });
 
@@ -137,10 +149,12 @@ const regionModifiersConfigSchema = z.object({
 
 export type EraConfig = z.infer<typeof eraConfigSchema>;
 export type PlaceConfig = z.infer<typeof placeConfigSchema>;
+export type LandRing = z.infer<typeof worldLandSchema>[number];
 export type ShockConfig = z.infer<typeof shockConfigSchema>;
 export type JobsConfig = z.infer<typeof jobsConfigSchema>;
 export type RegionModifiersConfig = z.infer<typeof regionModifiersConfigSchema>;
 
+export const worldLand: LandRing[] = worldLandSchema.parse(worldLandJson);
 export const erasConfig: EraConfig[] = erasConfigSchema.parse(erasJson);
 export const placesConfig: Record<RegionId, PlaceConfig[]> = placesConfigSchema.parse(placesJson);
 export const marketsConfig: MarketConfig[] = marketsConfigSchema.parse(marketsJson);

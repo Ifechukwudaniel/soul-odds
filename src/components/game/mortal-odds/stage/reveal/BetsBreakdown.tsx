@@ -1,6 +1,7 @@
+import { motion } from "framer-motion";
 import type { BetResult } from "@/types";
 
-export const BetsBreakdown = (props: { results: BetResult[]; currency: string }) => (
+export const BetsBreakdown = (props: { results: BetResult[]; currency: string; visibleCount: number }) => (
   <div className="overflow-x-auto">
     <table className="w-full min-w-[460px] text-sm">
       <thead>
@@ -14,8 +15,14 @@ export const BetsBreakdown = (props: { results: BetResult[]; currency: string })
         </tr>
       </thead>
       <tbody>
-        {props.results.map((r) => (
-          <tr key={r.marketId} className="border-t border-white/10">
+        {props.results.slice(0, props.visibleCount).map((r) => (
+          <motion.tr
+            key={r.marketId}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="border-t border-white/10"
+          >
             <td className="py-2 text-white/70">{r.marketLabel}</td>
             <td className="py-2 font-semibold text-white">{r.pickLabel}</td>
             <td className="py-2 text-white/70">{r.outcomeLabel}</td>
@@ -25,7 +32,7 @@ export const BetsBreakdown = (props: { results: BetResult[]; currency: string })
               {r.net >= 0 ? "+" : "−"}
               {Math.abs(r.net).toFixed(2)}
             </td>
-          </tr>
+          </motion.tr>
         ))}
       </tbody>
     </table>

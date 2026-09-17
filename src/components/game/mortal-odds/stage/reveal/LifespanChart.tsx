@@ -41,7 +41,7 @@ export const LifespanChart = (props: { histogram: LifespanHistogram; deathAge: n
         const capped = v > cap;
         return (
           <g key={i}>
-            <rect x={x} y={barY(v)} width={barWidth} height={BASE_Y - barY(v)} fill="#9181F0" fillOpacity={0.6} />
+            <rect x={x} y={barY(v)} width={barWidth} height={BASE_Y - barY(v)} fill="#5EEAD4" fillOpacity={0.6} />
             {capped && (
               <text x={x + barWidth / 2} y={TOP_Y - 6} textAnchor="middle" fontSize={9} fill="currentColor" fillOpacity={0.7}>
                 {Math.round(v * 100)}%

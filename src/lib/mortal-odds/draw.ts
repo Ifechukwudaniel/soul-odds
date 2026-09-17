@@ -2,6 +2,7 @@ import type { EraConfig, PlaceConfig } from "@/lib/mortal-odds/config";
 import { HUMANS_EVER, MODES } from "@/lib/mortal-odds/config";
 import { interpolate } from "@/lib/mortal-odds/curves";
 import { fmtNumber, fmtPeople, periodName } from "@/lib/mortal-odds/format";
+import { eraFor } from "@/lib/mortal-odds/geo";
 import { pickWeighted } from "@/lib/mortal-odds/rng";
 import type { Rng } from "@/lib/mortal-odds/rng";
 import type { Draw, EraFilter, Place, PlaceContext, RegionId } from "@/types";
@@ -27,16 +28,13 @@ export function pickPlace(options: { region: RegionId; rng: Rng; placesConfig: R
   const candidates = placesConfig[region];
   const picked = pickWeighted({ items: candidates, weight: (p) => p.weight, rng });
   const total = candidates.reduce((sum, p) => sum + p.weight, 0);
-  return { name: picked.name, continent: picked.continent, share: picked.weight / total };
+  return { name: picked.name, continent: picked.continent, share: picked.weight / total, lat: picked.lat, lon: picked.lon };
 }
 
 /** The drawn region's share of births in the year's era, relative to all regions that era. */
 export function regionShare(options: { year: number; region: RegionId; erasConfig: EraConfig[] }): number {
   const { year, region, erasConfig } = options;
-  const last = erasConfig[erasConfig.length - 1];
-  const era =
-    erasConfig.find((e) => year >= e.from && e.to !== null && year < e.to) ?? last;
-  if (!era) throw new Error("regionShare: erasConfig must not be empty");
+  const era = eraFor({ year, erasConfig });
   const total = Object.values(era.shares).reduce((sum, share) => sum + share, 0);
   return era.shares[region] / total;
 }

@@ -14,7 +14,7 @@ export const GameDeepLinkRedirect = () => {
   useEffect(() => {
     const code = pathname.replace(/^\/game\/?/, "");
     redirectToScreenFromCode(code, setScreen);
-    router.push("/game");
+    router.push("/");
   }, [pathname, router, setScreen]);
 
   return null;
