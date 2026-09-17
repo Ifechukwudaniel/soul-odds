@@ -1,13 +1,15 @@
 "use client";
 
+import { useReducedMotion } from "framer-motion";
 import { useState } from "react";
 import { Slime } from "@/components/assets/characters/Slime";
-import { GameCenterPlaceholder } from "@/components/game/home/GameCenterPlaceholder";
 import { GameHeader } from "@/components/game/home/GameHeader";
-import { GameSidebarLeft } from "@/components/game/home/GameSidebarLeft";
 import { GameSidebarRight } from "@/components/game/home/GameSidebarRight";
 import { ProfileModal } from "@/components/game/home/profile/ProfileModal";
 import type { GameMode, LeaderboardEntry } from "@/components/game/home/types";
+import { MortalOddsStage } from "@/components/game/mortal-odds/MortalOddsStage";
+import { useMortalOddsBets } from "@/hooks/useMortalOddsBets";
+import { useMortalOddsDraw } from "@/hooks/useMortalOddsDraw";
 import { useAppStore } from "@/services/store/store";
 
 const LEADERBOARD: LeaderboardEntry[] = [
@@ -17,19 +19,22 @@ const LEADERBOARD: LeaderboardEntry[] = [
   { rank: 4, name: "ICE_CREAM99", score: 9100 },
 ];
 
-const HOW_IT_WORKS_STEPS = [
-  "Solve the visual puzzle",
-  "Get your reward in USDC",
-  "Cash out or risk it all",
-];
-
-const QUICK_BET_AMOUNTS = [1, 5, 10, 25, 50];
+const CHIP_SIZES = [1, 5, 10, 25, 50];
 
 export const HomeScreen = () => {
   const [activeMode, setActiveMode] = useState<GameMode>("survival");
-  const [betAmount, setBetAmount] = useState(10);
+  const [chipSize, setChipSize] = useState(10);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const setScreen = useAppStore((state) => state.setScreen);
+
+  const reducedMotion = useReducedMotion() ?? false;
+  const round = useMortalOddsDraw({ reducedMotion });
+  const slip = useMortalOddsBets();
+
+  const onDraw = () => {
+    slip.reset();
+    round.drawHuman();
+  };
 
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -44,26 +49,25 @@ export const HomeScreen = () => {
       />
 
       <div className="flex flex-1 flex-col gap-4 px-6 pb-6 lg:flex-row">
-        <GameSidebarLeft
-          modeTitle="Survival Mode"
-          modeDescription="Solve puzzles, manage your hearts, and cash out or risk for a bigger reward."
-          lives={3}
-          maxLives={4}
-          currentStreak={3}
-          maxWin="$12.40"
-          howItWorksSteps={HOW_IT_WORKS_STEPS}
+        <MortalOddsStage
+          round={round}
+          bets={slip.bets}
+          chipSize={chipSize}
+          onDraw={onDraw}
+          onSetChoice={slip.setChoice}
+          onSetDeathYear={slip.setDeathYear}
+          onRemoveBet={slip.remove}
         />
 
-        <GameCenterPlaceholder />
-
         <GameSidebarRight
-          currency="USDC"
-          betAmount={betAmount}
-          minAmount={1}
-          maxAmount={50}
-          quickAmounts={QUICK_BET_AMOUNTS}
-          potentialWinMultiplier={1.85}
-          onSelectAmount={setBetAmount}
+          currency="chips"
+          chipSize={chipSize}
+          quickAmounts={CHIP_SIZES}
+          onSelectChip={setChipSize}
+          bets={slip.bets}
+          prices={round.prices}
+          priceDeathYear={round.priceDeathYear}
+          onRemoveBet={slip.remove}
           leaderboard={LEADERBOARD}
         />
       </div>
