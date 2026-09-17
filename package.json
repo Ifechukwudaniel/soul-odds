@@ -33,7 +33,7 @@
     "game:emulators": "firebase emulators:start --only firestore",
     "blockchain:node": "tsx blockchain/local-node/index.ts",
     "blockchain:verify-network": "tsx blockchain/verify-network/cli.ts",
-    "blockchain:local": "run-p blockchain:node blockchain:verify-network",
+    "blockchain:local": "run-s blockchain:node",
     "blockchain:compile-contracts": "node blockchain/scripts/compile-contracts.mjs"
   },
   "dependencies": {
