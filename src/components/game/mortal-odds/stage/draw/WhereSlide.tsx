@@ -1,9 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { WorldMap } from "@/components/game/mortal-odds/stage/map/WorldMap";
+import { ROAM_DURATION, WorldMap } from "@/components/game/mortal-odds/stage/map/WorldMap";
 import { fmtYear } from "@/lib/mortal-odds/format";
 import type { Place } from "@/types";
+import { Frame } from "@/components/assets/Frame";
 
 export const WhereSlide = (props: { year: number; place: Place; local: string }) => (
   <div className="flex h-full flex-col items-center gap-3 text-center">
@@ -19,8 +20,9 @@ export const WhereSlide = (props: { year: number; place: Place; local: string })
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="aspect-2/1 h-full max-w-full overflow-hidden rounded-lg border border-white/10"
+        className="aspect-2/1 h-full max-w-full overflow-hidden  rounded-lg border border-[#FDE991]/15 relative"
       >
+       
         <WorldMap year={props.year} marker={{ lat: props.place.lat, lon: props.place.lon }} />
       </motion.div>
     </div>
@@ -28,7 +30,7 @@ export const WhereSlide = (props: { year: number; place: Place; local: string })
     <motion.div
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay: 0.5 }}
+      transition={{ duration: 0.35, delay: ROAM_DURATION + 0.15 }}
       className="shrink-0"
     >
       <p className="font-bold text-white text-xl">
