@@ -23,7 +23,15 @@ export const DrawHero = (props: { currentYear: number; onDraw: () => void; drawC
     >
       Summon a soul
     </button> */}
-    <ButtonDemo/>
+   <button
+  type="button"
+  disabled={!props.canAfford}
+  onClick={props.onDraw}
+  aria-label="Summon a soul"
+  className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
+>
+  <ButtonDemo />
+</button>
     <p className="text-white/40 text-xs">Costs {props.drawCost} deben</p>
     {!props.canAfford && <p className="text-[#B7410E] text-xs">Not enough chips</p>}
 

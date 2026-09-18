@@ -24,7 +24,7 @@ export const WhenSlide = (props: {
   return (
     <div className="flex h-full flex-col items-center justify-center gap-5 overflow-y-auto text-center">
       <h2 className={`${serifFont.className} font-bold text-3xl text-white sm:text-4xl`}>In which age?</h2>
-      <p className="max-w-lg text-sm text-white/50">{INTRO}</p>
+      <p className="max-w-lg text-[0.8rem] text-white/50">{INTRO}</p>
 
       <div className="w-full max-w-2xl">
         <PopulationChart year={props.isSpinning ? props.currentYear : props.year} currentYear={props.currentYear} />

@@ -82,9 +82,12 @@ export const BoostCard: React.FC<BoostCardProps> = ({ title, icon, desc, initial
         <h3 className="text-[0.8rem] font-[500] mb-2 leading-[1.6]">{title}</h3>
         <Balance size="base" count={cost || initialCost} noCost={levelEnded} singleCost={noLevel} />
         {!levelEnded && cost && <p className="text-[0.8rem] mt-3 font-[500]">{`Level ${level}/${maximumLevel}`}</p>}
-        <div className="absolute bottom-5 right-3">
-          <OpenBtnIcon />
-        </div>
+        <div className="absolute right-3 bottom-5">
+  <OpenBtnIcon
+    size={21}
+    className="h-[21px] w-[21px] md:h-[36px] md:w-[36px]"
+  />
+</div>
       </div>
       <Modal
         title={title}

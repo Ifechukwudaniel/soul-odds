@@ -9,8 +9,8 @@ export const PotentialWinSummary = (props: { amount: number; currency: string; b
         {props.amount.toFixed(2)} {props.currency}
       </p>
     </div>
-    <span className="rounded-full border border-blue-400/40 px-2 py-1 text-blue-300 text-xs font-semibold">
+  {/*   <span className="rounded-full border border-blue-400/40 px-2 py-1 text-blue-300 text-xs font-semibold">
       {props.betCount} {props.betCount === 1 ? "bet" : "bets"}
-    </span>
+    </span> */}
   </div>
 );
