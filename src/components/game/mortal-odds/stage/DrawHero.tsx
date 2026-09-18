@@ -2,6 +2,7 @@ import { GiAnubis } from "react-icons/gi";
 import { GameCard } from "@/components/game/home/GameCard";
 import { HUMANS_EVER } from "@/lib/mortal-odds/config";
 import { fmtNumber } from "@/lib/mortal-odds/format";
+import { ButtonDemo } from "@/components/assets/ButtonDemo";
 
 export const DrawHero = (props: { currentYear: number; onDraw: () => void; drawCost: number; canAfford: boolean }) => (
   <GameCard
@@ -14,14 +15,15 @@ export const DrawHero = (props: { currentYear: number; onDraw: () => void; drawC
 
     <p className="mt-4 font-semibold text-white/80 text-xs uppercase tracking-[0.2em]">Choose one</p>
 
-    <button
+    {/* <button
       type="button"
       disabled={!props.canAfford}
       onClick={props.onDraw}
       className="cursor-pointer rounded-full bg-[#F5B83D] px-8 py-3 font-bold text-slate-950 hover:bg-[#f0ad24] disabled:cursor-not-allowed disabled:opacity-40"
     >
       Summon a soul
-    </button>
+    </button> */}
+    <ButtonDemo/>
     <p className="text-white/40 text-xs">Costs {props.drawCost} deben</p>
     {!props.canAfford && <p className="text-[#B7410E] text-xs">Not enough chips</p>}
 
