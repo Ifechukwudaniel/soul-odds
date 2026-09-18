@@ -18,36 +18,36 @@ type BoostCardList = {
 
 export const boostCardLists: BoostCardList[] = [
   {
-    title: "Hieroglyphs",
-    desc: "Increases the speed at which your energy regenerates by +1 every second.",
-    icon: <RelicIcon relic="sarcophagus"  width={70} height={80} />,
-    initalCost: 250,
+    title: "Soul's Rest",
+    desc: "Reduces the cost of drawing a soul by 1 chip per level.",
+    icon: <RelicIcon relic="sarcophagus" width={70} height={80} />,
+    initalCost: 10000,
     id: 3,
-    noLevel: true,
+    noLevel: false,
   },
   {
-    title: "Golden mask",
-    desc: "Increases the amount gained +5",
+    title: "Mask of Truth",
+    desc: "Reduces the cost of drawing a soul's location by 1 chip per level.",
     icon: <RelicIcon relic="mask" size={40} />,
-    initalCost: 500,
+    initalCost: 10000,
     id: 4,
-    noLevel: true,
+    noLevel: false,
   },
   {
-    title: "Obelisk",
-    desc: "Increases the speed at which your energy regenerates by +1 every second.",
+    title: "Divine Luck",
+    desc: "Increases your payout by 1% per level.",
     icon: <RelicIcon relic="obelisk" size={40} />,
-    initalCost: 250,
+    initalCost: 10000,
     id: 5,
-    noLevel: true,
+    noLevel: false,
   },
   {
-    title: "Treasure chest",
-    desc: "Perform actions on your behalf without your direct input when your energy is full. Works for 12 hours.",
+    title: "Pharaoh's Fortune",
+    desc: "Doubles your payout when you get the entire round right.",
     icon: <RelicIcon relic="chest" size={40} />,
     initalCost: 200000,
     id: 6,
-    noLevel: false,
+    noLevel: true,
   },
 ];
 
@@ -67,12 +67,10 @@ export const BoostScreen = () => {
       >
         <h2 className="text-2xl font-[500] mb-3">Boosters</h2>
         <p className="text-sm sf-pro-medium">
-          Use these powerups to increase your ranking and the amount of coins you gain!
+           Enhance your draws, judgments, and rewards with ancient powers.
         </p>
         <div className="bg-[#182334] h-[1px] w-full my-4" />
         <div className="mt-1">
-          <h3 className="text-sm mb-2 font-[500]">Balance</h3>
-          <Balance count={balance} />
           <div className="grid grid-cols-2 gap-4 gap-x-[10px] my-6 overflow-y-scroll pb-32 max-h-full h-[100%]">
             {boostCardLists.map(({ id, title, icon, desc, initalCost, noLevel }, index) => (
               <motion.div

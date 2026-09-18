@@ -1,20 +1,39 @@
-import React, { use, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import Image from "next/image";
 import { Loader } from "../Loader";
-import { RefsIcon } from "../assets/RefsIcon";
-import { ONE_SECOND, RefeshInterval } from "@/constants";
+import {  RefeshInterval } from "@/constants";
 import { getUserRefers } from "@/services/data/refers";
 import { User } from "@/services/db/user";
 import { useAppStore } from "@/services/store/store";
 import { notification } from "@/utils/notifications";
-/* import { HapticFeedback, initHapticFeedback, isSSR } from "@tma.js/sdk-react";
- */
+
 export const InviteComponent = ({ copyInvite }: { copyInvite: () => void }) => {
   return (
-    <div className="flex flex-col text-center items-center my-6 h-[70%] justify-center mt-8 ">
-      <p className="text-[0.8rem]">You currently have zero referrals, Damn</p>
-      <div className="my-4">
-        <RefsIcon />
+    <div className="flex flex-col text-center items-center my-6 h-[70%] justify-center mt-8">
+    <p className="text-[0.8rem]">
+      You currently have zero referrals, Damn
+    </p>
+
+    <div className="my-4">
+      <div className="flex flex-col items-center">
+        <div className="relative overflow-hidden">
+          <Image
+            src="/img/shine.svg"
+            alt="shine"
+            width={240}
+            height={240}
+            priority
+          />
+
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[2.5]">
+          <Image
+                src="/egypt/Relics/sand_relics_treasure_chest_gold_01.png"
+                alt="referral icon"
+                width={50}
+                height={50}
+              />
+          </div>
+        </div>
       </div>
       <button
         onClick={copyInvite}
@@ -23,6 +42,7 @@ export const InviteComponent = ({ copyInvite }: { copyInvite: () => void }) => {
         Invite a Friend!
       </button>
     </div>
+  </div>
   );
 };
 
@@ -34,12 +54,6 @@ export const RefsScreen: React.FC = () => {
   const user = useAppStore(state => state.user);
 
   const [hapticFeedback, setHapticFeedback] = useState<HapticFeedback | null>(null);
-  /* 
-  useEffect(() => {
-    if (typeof window !== "undefined" && !isSSR()) {
-      setHapticFeedback(initHapticFeedback());
-    }
-  }, []); */
 
   const copyInvite = () => {
     navigator.clipboard.writeText(`https://t.me/touchswap_bot?start=r_${userId}`);
@@ -80,7 +94,7 @@ export const RefsScreen: React.FC = () => {
   const refsList = referredUsers.length > 0 ? referredUsers : [];
 
   return (
-    <section className="flex flex-col h-screen overflow-hidden">
+    <section className="flex flex-col overflow-hidden">
       <div className="container mx-auto px-4 my-4 pb-16">
         <div className="flex justify-between items-center">
           <div>
@@ -101,7 +115,7 @@ export const RefsScreen: React.FC = () => {
             {refsList.map(({ username, first, last }, index) => (
               <div
                 key={index}
-                className="bg-[#81DBE233] py-[14px] px-4 rounded text-[0.8rem] font-[500] flex items-center overflow-y-scroll h-full"
+                className="bg-[#81DBE233] py-3.5 px-4 rounded text-[0.8rem] font-[500] flex items-center overflow-y-scroll h-full"
               >
                 <span className="mr-3">{index + 1}.</span>
                 <Image src="/img/defaultImg.png" alt="default Profile Image" width={20} height={20} />

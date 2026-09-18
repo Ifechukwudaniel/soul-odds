@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { MenuBtn } from "./MenuBtn";
-import { BoostIcon } from "./assets/BoostIcon";
-import { CoinIcon } from "./assets/CoinIcon";
 import { SpeakerIcon } from "./assets/SpeakerIcon";
 import { StatsIcon } from "./assets/StatsIcon";
-import { TaskIcon } from "./assets/TaskIcon";
 import { TScreens, useAppStore } from "@/services/store/store";
 import { playClickSound } from "@/utils/playClickSound";
 import {Pyramid} from "./assets/Pyramid";
 import  { Hieroglyph } from "./assets/Hieroglyph";
 import  { Ankh } from "./assets/Ankh";
+import { Share } from "./assets/Share";
 /* import { isSSR , initHapticFeedback, HapticFeedback} from "@tma.js/sdk-react";
  */
 type MenuLink = {
@@ -27,8 +25,8 @@ export const menuLinks: MenuLink[] = [
   },
   {
     label: "refs",
-    icon: <SpeakerIcon active={false} />,
-    activeIcon: <SpeakerIcon active />,
+    icon: <Share active={false} />,
+    activeIcon: <Share active />,
   },
   {
     label: "home",

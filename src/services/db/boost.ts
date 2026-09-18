@@ -20,9 +20,9 @@ export async function createUserBoost(userId: number): Promise<void> {
   const boosts: Boost[] = [
     { type: "free", boostId: 1, totalPerDay: 3, left:3, lastUsed:getPreviousDay() ,userId },
     { type: "free", boostId: 2, totalPerDay: 3, left:3, lastUsed: getPreviousDay(), userId },
-    { type: "paid", boostId: 3, level: 0, cost: 250, maximumLevel:10, userId },
-    { type: "paid", boostId: 4, level: 0, cost: 1000, maximumLevel:10, userId },
-    { type: "paid", boostId: 5, level: 0, cost: 500, maximumLevel:5, userId },
+    { type: "paid", boostId: 3, level: 0, cost: 10000, maximumLevel:10, userId },
+    { type: "paid", boostId: 4, level: 0, cost: 10000, maximumLevel:10, userId },
+    { type: "paid", boostId: 5, level: 0, cost: 10000, maximumLevel:5, userId },
     { type: "paid-no-levels", boostId: 6 , cost: 200000, userId },
   ];
 
