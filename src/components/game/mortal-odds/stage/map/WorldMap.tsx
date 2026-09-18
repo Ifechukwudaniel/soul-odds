@@ -25,9 +25,9 @@ export const WorldMap = (props: { year: number; marker: { lat: number; lon: numb
     >
       <defs>
         <radialGradient id="mo-density">
-          <stop offset="0%" stopColor="#bcd8ff" stopOpacity="0.85" />
-          <stop offset="45%" stopColor="#7aa6ff" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#7aa6ff" stopOpacity="0" />
+          <stop offset="0%" stopColor="#a8e8d8" stopOpacity="0.85" />
+          <stop offset="45%" stopColor="#5fc9b8" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="#5fc9b8" stopOpacity="0" />
         </radialGradient>
         <radialGradient id="mo-pin">
           <stop offset="0%" stopColor="#F5B83D" stopOpacity="0.9" />
@@ -35,8 +35,8 @@ export const WorldMap = (props: { year: number; marker: { lat: number; lon: numb
         </radialGradient>
       </defs>
 
-      <rect width={VIEWPORT.width} height={VIEWPORT.height} fill="#070b16" />
-      <path d={LAND} fill="#27344f" />
+      <rect width={VIEWPORT.width} height={VIEWPORT.height} fill="#081514" />
+      <path d={LAND} fill="#1f3d3a" />
 
       <g style={{ mixBlendMode: "screen" }}>
         {blobs.map((blob) => (
@@ -51,7 +51,7 @@ export const WorldMap = (props: { year: number; marker: { lat: number; lon: numb
         ))}
       </g>
 
-      <g stroke="#8aa0c8" strokeWidth={0.5} opacity={0.14}>
+      <g stroke="#7fb0a8" strokeWidth={0.5} opacity={0.14}>
         {GRID.verticals.map((x) => (
           <line key={`v${x}`} x1={x} y1={0} x2={x} y2={VIEWPORT.height} />
         ))}
