@@ -8,6 +8,9 @@ import { StatsIcon } from "./assets/StatsIcon";
 import { TaskIcon } from "./assets/TaskIcon";
 import { TScreens, useAppStore } from "@/services/store/store";
 import { playClickSound } from "@/utils/playClickSound";
+import {Pyramid} from "./assets/Pyramid";
+import  { Hieroglyph } from "./assets/Hieroglyph";
+import  { Ankh } from "./assets/Ankh";
 /* import { isSSR , initHapticFeedback, HapticFeedback} from "@tma.js/sdk-react";
  */
 type MenuLink = {
@@ -29,18 +32,18 @@ export const menuLinks: MenuLink[] = [
   },
   {
     label: "home",
-    icon: <CoinIcon active={false} />,
-    activeIcon: <CoinIcon active />,
+    icon: <Pyramid active={false} />,
+    activeIcon: <Pyramid active />,
   },
   {
     label: "boost",
-    icon: <BoostIcon active={false} />,
-    activeIcon: <BoostIcon active />,
+    icon: <Ankh active={false} />,
+    activeIcon: <Ankh active />,
   },
   {
     label: "quests",
-    icon: <TaskIcon active={false} />,
-    activeIcon: <TaskIcon active />,
+    icon: <Hieroglyph active={false} />,
+    activeIcon: <Hieroglyph active />,
   },
 ];
 

@@ -77,7 +77,7 @@ export const BoostCard: React.FC<BoostCardProps> = ({ title, icon, desc, initial
 
   return (
     <div className="border-[0.5px] border-[#49485C] p-[4px] rounded-lg dark-blue-gradient h-full">
-      <div className="light-green-gradient py-7 px-4 rounded h-full relative pb-12" onClick={openModal}>
+      <div className="light-green-gradient py-4 px-4 rounded h-full relative pb-6" onClick={openModal}>
         <div className="mb-3">{icon}</div>
         <h3 className="text-[0.8rem] font-[500] mb-2 leading-[1.6]">{title}</h3>
         <Balance size="base" count={cost || initialCost} noCost={levelEnded} singleCost={noLevel} />

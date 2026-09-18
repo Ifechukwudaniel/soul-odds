@@ -13,7 +13,7 @@ import type { RevealResult } from "@/hooks/useMortalOddsDraw";
 import type { Place, RoundCharge } from "@/types";
 
 const FactCard = (props: { label: string; value: string }) => (
-  <div className="rounded-lg border border-white/10 bg-[#101a3d]/40 px-3 py-2 text-left">
+  <div className="rounded-lg border border-white/10 bg-[#000000]/30 px-3 py-2 text-left">
     <p className="text-[10px] text-white/40 uppercase tracking-[0.15em]">{props.label}</p>
     <p className="font-semibold text-sm text-white">{props.value}</p>
   </div>

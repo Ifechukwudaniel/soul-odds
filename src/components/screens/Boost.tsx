@@ -20,7 +20,7 @@ export const boostCardLists: BoostCardList[] = [
   {
     title: "Hieroglyphs",
     desc: "Increases the speed at which your energy regenerates by +1 every second.",
-    icon: <RelicIcon relic="scarab" size={40} />,
+    icon: <RelicIcon relic="sarcophagus"  width={70} height={80} />,
     initalCost: 250,
     id: 3,
     noLevel: true,
@@ -55,7 +55,7 @@ export const BoostScreen = () => {
   const balance = useAppStore(state => state.user!.balance);
 
   return (
-    <section className="flex flex-col h-screen">
+    <section className="flex flex-col lg:h-[80vh]">
       <motion.div
         initial={{ y: 25, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
