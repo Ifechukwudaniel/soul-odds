@@ -2,7 +2,6 @@ import React from "react";
 import { OpenQuestDetailScreen } from "./OpenQuestDetails";
 import { QuestList } from "@/types";
 import { calculateTotalReward } from "@/utils";
-import {TonConnectButton} from "@tonconnect/ui-react";
 import { useAppStore } from "@/services/store/store";
 
 
