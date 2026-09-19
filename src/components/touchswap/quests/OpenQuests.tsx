@@ -11,10 +11,6 @@ export const openQuestsLists: OpenQuestsList[] = [
     title: "Social Media Madness!",
     page: "social",
   },
-  {
-    title: "Wallet Connect Fun",
-    page: "wallet",
-  },
 ];
 
 export const OpenQuests = () => {
