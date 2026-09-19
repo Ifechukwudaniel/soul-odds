@@ -6,3 +6,4 @@ export * from "./Stats";
 export * from "./Quest";
 export * from "./SocialQuest";
 export * from "./ConnectQuest";
+export * from "./Rank"

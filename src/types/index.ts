@@ -87,3 +87,20 @@ export type BetResult = {
   bookieP: number;
   realP: number;
 };
+
+export interface LeaderboardUser {
+  id: string;
+  rank: number;
+  username: string;
+  handle: string;
+  avatarUrl: string;
+  followers: number;
+  points: number;
+  reward: number;
+}
+
+export interface PodiumUser extends LeaderboardUser {
+  prize: number;
+}
+
+export type PodiumEntry = [PodiumUser, PodiumUser, PodiumUser];

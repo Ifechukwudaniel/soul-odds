@@ -26,6 +26,9 @@ export const redirectToScreenFromCode = (
     case "refs":
        setScreen("refs")
        break;
+    case "ranks":
+        setScreen("ranks")
+        break;
     default:
       notification.error(`Unknown QR ${action}`);
   }

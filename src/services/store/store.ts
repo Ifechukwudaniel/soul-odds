@@ -2,7 +2,7 @@ import { Energy } from "../db/user";
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
-export type TScreens = "badges" | "boost" | "home" | "refs" | "stats" | "quests" | "social" | "wallet";
+export type TScreens = "badges" | "boost" | "home" | "refs" | "stats" | "quests" | "social" | "wallet" | "ranks";
 
 export type TBoost = {
   type: string;

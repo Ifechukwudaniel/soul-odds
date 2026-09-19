@@ -18,6 +18,8 @@ import {
   RefsScreen,
   SocialQuestScreen,
   StatsScreen,
+  RankScreen
+  
 } from "@/components/screens";
 import { ONE_SECOND } from "@/constants";
 import { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
@@ -71,6 +73,7 @@ export default function GamePage() {
     quests: <QuestScreen />,
     social: <SocialQuestScreen />,
     wallet: <ConnectQuestScreen />,
+    ranks:  <RankScreen/>
   };
 
   const screenRender = screens[screen];

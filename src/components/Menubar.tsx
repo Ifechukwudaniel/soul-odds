@@ -16,7 +16,7 @@ type MenuLink = {
 
 export const menuLinks: MenuLink[] = [
   {
-    label: "stats",
+    label: "ranks",
     icon: <StatsIcon active={false} />,
     activeIcon: <StatsIcon active />,
   },
