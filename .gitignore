@@ -1,26 +1,28 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.js
 .pnpm-store
+package-lock.json
 
 # testing
-/coverage
-/test-results
-/playwright-report
-/playwright/.cache
+coverage/
+test-results/
+playwright-report/
+playwright/.cache
 
 # next.js
-/.next/
-/out/
+.next/
+out/
 
 # production
-/build
+build/
+dist/
 
 # storybook
-/storybook-static
+storybook-static/
 
 # local database (PGlite)
 local.db
@@ -54,4 +56,7 @@ next-env.d.ts
 
 # turbo
 .turbo
-tsconfig.tsbuildinfo
+
+# project-specific
+local-verify-network/
+slot-engine/
