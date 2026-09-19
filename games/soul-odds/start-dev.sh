@@ -73,10 +73,6 @@ echo "Starting Socket.io..."
 pnpm run game:socket-server &
 PIDS+=("$!")
 
-echo "Starting Next.js..."
-pnpm run dev &
-PIDS+=("$!")
-
 echo ""
 echo "Development stack running."
 echo ""
