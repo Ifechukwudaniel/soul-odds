@@ -1,4 +1,5 @@
 import { Energy } from "../db/user";
+import { DEFAULT_AVATAR_ID } from "@/components/assets/characters/avatars";
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
@@ -36,6 +37,7 @@ export type TUser = {
   totalReferedCliamed: number;
   lastExtraTap: Date | null;
   lastRefillTap: Date | null;
+  avatarId: string;
 };
 
 export const STORE_NAME = "Touch_Swap_Store";
@@ -63,6 +65,7 @@ export const emptyUser: TUser = {
   totalReferedCliamed: 100,
   lastExtraTap: null,
   lastRefillTap: null,
+  avatarId: DEFAULT_AVATAR_ID,
 };
 
 type AutoClick = {

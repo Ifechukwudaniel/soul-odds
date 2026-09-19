@@ -1,7 +1,7 @@
 import type { RefObject } from "react";
 import {cn} from "@/utils"
 import type { LeaderboardUser } from "@/types";
-import { Slime } from "@/components/assets/characters/Slime";
+import { getRandomAvatarForUser } from "@/components/assets/characters/avatars";
 import { CurrencyCoinIcon } from "@/components/assets/CurrencyCoinIcon";
 import { SilverBadge } from "@/components/assets/SilverBadge";
 import { GoldBadge } from "@/components/assets/GoldBadge";
@@ -20,6 +20,12 @@ interface LeaderboardTableProps {
     1: GoldBadge,
     2: SilverBadge,
     3: BronzeBadge,
+  };
+
+  const RANK_AVATAR_RING: Record<number, string> = {
+    1: "ring-2 ring-amber-400/70",
+    2: "ring-2 ring-white/30",
+    3: "ring-2 ring-orange-400/40",
   };
    
   export function LeaderboardTable({
@@ -43,6 +49,7 @@ interface LeaderboardTableProps {
             {users.map((user) => {
               const isCurrentUser = user.id === currentUserId;
               const RankBadge = RANK_BADGES[user.rank];
+              const AvatarIcon = getRandomAvatarForUser(user.id).Icon;
               return (
                 <tr
                   key={user.id}
@@ -59,8 +66,15 @@ interface LeaderboardTableProps {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/5">
-                        <Slime className="h-9 w-9" />
+                      <div
+                        className={cn(
+                          "accent-gradient flex h-12 w-12 shrink-0 items-center justify-center rounded-full p-[2px] ring-offset-2 ring-offset-[#18131F]",
+                          RANK_AVATAR_RING[user.rank]
+                        )}
+                      >
+                        <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-black/70 bg-slate-950">
+                          <AvatarIcon className="h-[68%] w-[68%]" />
+                        </div>
                       </div>
                       <p className="font-[500] text-white">@{user.handle}</p>
                     </div>

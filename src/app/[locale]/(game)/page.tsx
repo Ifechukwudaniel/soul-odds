@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { SetStateAction } from "react";
 import toost from "react-hot-toast";
-import { Slime } from "@/components/assets/characters/Slime";
+import { getAvatarById } from "@/components/assets/characters/avatars";
 import { DevLogin } from "@/components/DevLogin";
 import { GameHeader } from "@/components/game/home/GameHeader";
 import { ProfileModal } from "@/components/game/home/profile/ProfileModal";
@@ -176,12 +176,14 @@ export default function GamePage() {
   }
   console.log(state)
 
+  const AvatarIcon = getAvatarById(user.avatarId).Icon;
+
   return (
     <div className="flex h-screen w-full flex-col">
       <GameHeader
         balance={user.balance}
         currency="deben"
-        avatar={<Slime width={24} height="24" />}
+        avatar={<AvatarIcon width={24} height="24" />}
         onOpenProfile={() => setIsProfileOpen(true)}
       />
 
@@ -197,7 +199,7 @@ export default function GamePage() {
         handle={user.username}
         rank={user.rank}
         leaderboardRank={42881}
-        onViewRankPage={() => setScreen("badges")}
+        onViewRankPage={() => setScreen("ranks")}
       />
     </div>
   );
