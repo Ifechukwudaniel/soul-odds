@@ -57,6 +57,3 @@ next-env.d.ts
 # turbo
 .turbo
 
-# project-specific
-local-verify-network/
-slot-engine/
