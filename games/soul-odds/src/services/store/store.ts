@@ -87,6 +87,7 @@ export type TAppStore = {
   walletCliamed:boolean;
   setScreen: (newValue: TScreens, payload?: TScreenPayload | null) => void;
   updateBalance: (newBalance: number) => void;
+  applyBalanceDelta: (delta: number) => void;
   updatePaidBoostLevel: (boostId: number, newLevel: number) => void;
   useEnergy: (amount: number) => void;
   updateUser: (updatedFields: Partial<TUser>) => void;
@@ -157,6 +158,15 @@ export const useAppStore = create<TAppStore>()(
               ...user,
               balance: newBalance,
               totalCoinsMined: user.totalCoinsMined + additionalCoinsMined,
+            },
+          }));
+        },
+        applyBalanceDelta: (delta: number): void => {
+          const { user } = get();
+          set(() => ({
+            user: {
+              ...user,
+              balance: Math.max(0, Math.round((user.balance + delta) * 100) / 100),
             },
           }));
         },
