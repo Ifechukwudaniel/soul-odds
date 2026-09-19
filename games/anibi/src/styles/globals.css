@@ -1,0 +1,396 @@
+@import './font.css';
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 255, 255, 255;
+  --background-end-rgb: 255, 255, 255;
+  touch-action: pan-x pan-y;
+  height: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: white;
+  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  font-family: "SF Mono", sans-serif;
+  background: #0b0a08;
+  overflow-y: hidden !important;
+  width: 100%;
+  -khtml-user-select: none;
+  -o-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* p,
+div,
+span {
+  -khtml-user-select: none;
+  -o-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+} */
+main {
+  height: 100vh;
+}
+
+.gold-gradient {
+  background: linear-gradient(
+    91.67deg,
+    #fde991 0.3%,
+    #b07464 11.58%,
+    #7b6a72 28.32%,
+    #565966 58.53%,
+    #fde991 83.87%,
+    #5f6166 96.47%,
+    #baaf7f 114.38%,
+    #fde991 127.64%
+  );
+}
+
+.purple-gradient {
+  background: radial-gradient(#9181f0, #6752ef);
+  background: radial-gradient(40.91% 67.55% at 28.81% 50%, #9181f0 0%, #6752ef 100%);
+}
+
+/* Anubis palette: Egyptian funerary art — gold leaf, faience turquoise, lapis, carnelian on obsidian. */
+:root {
+  --anubis-gold: #f5b83d;
+  --anubis-gold-leaf: #d4af37;
+  --anubis-faience: #3fb6a8;
+  --anubis-lapis: #1f3a93;
+  --anubis-lapis-deep: #101a3d;
+  --anubis-carnelian: #b7410e;
+  --anubis-papyrus: #e8dcc0;
+  --anubis-obsidian: #0b0a08;
+}
+
+/* Cartouche: the oval name-ring of Egyptian inscription — a pill with flat end bars. */
+.cartouche {
+  --bar: 3px;
+  position: relative;
+  border-radius: 9999px;
+  background: linear-gradient(91.67deg, #fde991 0%, #baaf7f 40%, #fde991 70%, #b07464 100%);
+  padding: 1px;
+}
+
+.cartouche::before,
+.cartouche::after {
+  content: "";
+  position: absolute;
+  top: 18%;
+  height: 64%;
+  width: var(--bar);
+  background: var(--anubis-gold-leaf);
+  border-radius: 1px;
+}
+
+.cartouche::before { left: -6px; }
+.cartouche::after { right: -6px; }
+
+.cartouche > * {
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #14224a 0%, var(--anubis-lapis-deep) 100%);
+}
+
+/* Faint hieroglyphic rule used between card sections. */
+.glyph-rule {
+  height: 1px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(232, 220, 192, 0.25) 0 6px,
+    transparent 6px 10px,
+    rgba(245, 184, 61, 0.3) 10px 13px,
+    transparent 13px 20px
+  );
+}
+
+/* Selected/active fill: gold leaf. Pairs with dark text. */
+.accent-gradient {
+  background: linear-gradient(180deg, #ffb359 0%, #fbbb3f 100%);
+}
+
+/*
+ * Chamfered (octagon-cut) button, used by the Mortal Odds "Draw a human" CTA.
+ * The border is a second, inset clip-path layer (not a CSS `border`), which stays crisp
+ * at the diagonal corners instead of mitring the way a real border would.
+ */
+.chamfer-btn {
+  --shape-offset: 10px;
+  --inset: 2px;
+  --octagon: polygon(
+    0 var(--shape-offset),
+    var(--shape-offset) 0,
+    calc(100% - var(--shape-offset)) 0,
+    100% var(--shape-offset),
+    100% calc(100% - var(--shape-offset)),
+    calc(100% - var(--shape-offset)) 100%,
+    var(--shape-offset) 100%,
+    0 calc(100% - var(--shape-offset))
+  );
+  position: relative;
+  clip-path: var(--octagon);
+  background: linear-gradient(91.67deg, #fde991 0%, #baaf7f 40%, #fde991 70%, #b07464 100%);
+}
+
+.chamfer-btn::before {
+  content: "";
+  position: absolute;
+  inset: var(--inset);
+  clip-path: var(--octagon);
+  background: linear-gradient(180deg, #0f332f 0%, #0d2a28 100%);
+  z-index: -1;
+}
+
+/* Same chamfered technique as .chamfer-btn, sized for the birth-year/region stat card. */
+.stat-card {
+  --shape-offset: 18px;
+  --inset: 2px;
+  --octagon: polygon(
+    0 var(--shape-offset),
+    var(--shape-offset) 0,
+    calc(100% - var(--shape-offset)) 0,
+    100% var(--shape-offset),
+    100% calc(100% - var(--shape-offset)),
+    calc(100% - var(--shape-offset)) 100%,
+    var(--shape-offset) 100%,
+    0 calc(100% - var(--shape-offset))
+  );
+  position: relative;
+  clip-path: var(--octagon);
+  background: linear-gradient(91.67deg, #fde991 0%, #baaf7f 40%, #fde991 70%, #b07464 100%);
+}
+
+.stat-card::before {
+  content: "";
+  position: absolute;
+  inset: var(--inset);
+  clip-path: var(--octagon);
+  background: #0d2a28;
+  z-index: -1;
+}
+
+.chamfer-btn-glow {
+  filter: drop-shadow(0 0 6px rgba(253, 233, 145, 0.75)) drop-shadow(0 0 16px rgba(251, 187, 63, 0.45));
+}
+
+.green-gradient {
+  background: linear-gradient(
+    0deg,
+    #657500 27.19%,
+    #b7d300 66.51%,
+    #bbd305 72.33%,
+    #b9d312 78.88%,
+    #bad329 85.44%,
+    #c0d348 92.72%,
+    #c8d372 100%
+  );
+  position: relative;
+}
+
+.green-gradient::after {
+  content: "";
+  width: 100%;
+  height: 80%;
+  position: absolute;
+  background: linear-gradient(90deg, #76821c 1.44%, #626a17 28.48%, #2c310b 94.38%, #0c0d03 143.39%, #000000 170.43%);
+  background-blend-mode: screen;
+  z-index: 10;
+  top: 0;
+  height: 0;
+}
+
+.dark-blue-gradient {
+  background: linear-gradient(51.63deg, rgba(8, 9, 44, 0.4) -0.44%, rgba(8, 13, 43, 0.4) 103.22%);
+}
+
+.light-green-gradient {
+  background: linear-gradient(51.99deg, rgba(34, 99, 105, 0.2) 8.22%, rgba(129, 219, 226, 0.2) 125.1%);
+}
+
+.dark-green-gradient {
+  background: linear-gradient(90deg, #151c06 0%, #25290d 71.83%, #3a420e 167.05%);
+}
+
+.green-gradient-shine {
+  background: linear-gradient(
+    51.99deg,
+    rgba(129, 219, 226, 0.2) 8.22%,
+    rgba(34, 99, 105, 0.2) 71.34%,
+    rgba(129, 219, 226, 0.2) 125.1%
+  );
+}
+
+.coin-glow {
+  color: #111;
+  filter: drop-shadow(0 0 40px #5130b5);
+}
+
+.silver-text {
+  background: linear-gradient(180deg, #cccccc 0%, #666666 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.energy-text {
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: #0a0b33;
+}
+
+.menu-shadow {
+  box-shadow: 0.88px 2.63px 1.32px 0px #ffffff47 inset;
+}
+
+/* Layered so Tailwind's utilities (in @layer utilities) can still override this default -
+   an unlayered rule here would always win over any Tailwind color class on a <p>, regardless
+   of specificity. */
+@layer base {
+  p {
+    line-height: 1.5;
+    color: #b0aeb5;
+  }
+}
+
+.tab-active {
+  position: relative;
+}
+
+.tab-active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: radial-gradient(40.91% 67.55% at 28.81% 50%, #9181f0 0%, #6752ef 100%);
+  border-radius: 4px;
+}
+
+.coin-img {
+  -khtml-user-select: none;
+  -o-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Loader */
+.loader {
+  display: block;
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #657500;
+  -webkit-animation: spin 1.7s linear infinite;
+  animation: spin 1.7s linear infinite;
+  z-index: 11;
+}
+.loader:before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #5130b5;
+  -webkit-animation: spin-reverse 0.6s linear infinite;
+  animation: spin-reverse 0.6s linear infinite;
+}
+
+.loader:after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #e69b00;
+  -webkit-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+}
+
+.button-animation {
+  animation: buttonAnimation 1s infinite ease-in-out;
+}
+/* 
+.coin-glow {
+  backdrop-filter: drop-shadow(100px -10px 200px pink);
+} */
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin-reverse {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(-360deg);
+  }
+}
+
+@keyframes spin-reverse {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes numberAnimation {
+  0% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-250px);
+  }
+}
+
+@keyframes buttonAnimation {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

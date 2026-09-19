@@ -1,0 +1,65 @@
+{
+  "ssa": [
+    { "name": "the West African Sahel", "continent": "Africa", "weight": 3, "lat": 15.0, "lon": 0.0 },
+    { "name": "the Guinea Coast", "continent": "Africa", "weight": 3, "lat": 6.0, "lon": -1.0 },
+    { "name": "the Congo Basin", "continent": "Africa", "weight": 2, "lat": -1.0, "lon": 22.0 },
+    { "name": "the Great Lakes", "continent": "Africa", "weight": 2, "lat": -2.0, "lon": 31.0 },
+    { "name": "the Ethiopian Highlands", "continent": "Africa", "weight": 2, "lat": 9.0, "lon": 39.0 },
+    { "name": "the Swahili Coast", "continent": "Africa", "weight": 1, "lat": -6.0, "lon": 39.0 },
+    { "name": "Southern Africa", "continent": "Africa", "weight": 1.5, "lat": -26.0, "lon": 26.0 }
+  ],
+  "mena": [
+    { "name": "the Nile Valley", "continent": "Africa", "weight": 3, "lat": 26.0, "lon": 32.0 },
+    { "name": "the Maghreb", "continent": "Africa", "weight": 2, "lat": 33.0, "lon": 3.0 },
+    { "name": "Mesopotamia", "continent": "Asia", "weight": 3, "lat": 33.0, "lon": 44.0 },
+    { "name": "the Levant", "continent": "Asia", "weight": 1.5, "lat": 33.0, "lon": 36.0 },
+    { "name": "Anatolia", "continent": "Asia", "weight": 2, "lat": 39.0, "lon": 33.0 },
+    { "name": "the Iranian Plateau", "continent": "Asia", "weight": 2, "lat": 33.0, "lon": 53.0 },
+    { "name": "the Arabian Peninsula", "continent": "Asia", "weight": 1, "lat": 23.0, "lon": 45.0 }
+  ],
+  "eur": [
+    { "name": "the Italian Peninsula", "continent": "Europe", "weight": 2, "lat": 42.0, "lon": 13.0 },
+    { "name": "Iberia", "continent": "Europe", "weight": 1.5, "lat": 40.0, "lon": -4.0 },
+    { "name": "the North European Plain", "continent": "Europe", "weight": 2, "lat": 52.0, "lon": 12.0 },
+    { "name": "the British Isles", "continent": "Europe", "weight": 1, "lat": 53.0, "lon": -2.0 },
+    { "name": "the Balkans", "continent": "Europe", "weight": 1.5, "lat": 43.0, "lon": 21.0 },
+    { "name": "the Danube Basin", "continent": "Europe", "weight": 1.5, "lat": 47.0, "lon": 19.0 },
+    { "name": "the East European Plain", "continent": "Europe", "weight": 2, "lat": 55.0, "lon": 38.0 },
+    { "name": "Scandinavia", "continent": "Europe", "weight": 0.6, "lat": 62.0, "lon": 15.0 }
+  ],
+  "sas": [
+    { "name": "the Ganges Plain", "continent": "Asia", "weight": 4, "lat": 26.0, "lon": 82.0 },
+    { "name": "the Indus Valley", "continent": "Asia", "weight": 2, "lat": 28.0, "lon": 69.0 },
+    { "name": "the Deccan Plateau", "continent": "Asia", "weight": 2.5, "lat": 17.0, "lon": 77.0 },
+    { "name": "Bengal", "continent": "Asia", "weight": 2, "lat": 23.0, "lon": 89.0 },
+    { "name": "the Tamil south", "continent": "Asia", "weight": 1.5, "lat": 11.0, "lon": 78.0 },
+    { "name": "Sri Lanka", "continent": "Asia", "weight": 0.4, "lat": 7.5, "lon": 80.7 }
+  ],
+  "eas": [
+    { "name": "the Yellow River Valley", "continent": "Asia", "weight": 3, "lat": 35.0, "lon": 113.0 },
+    { "name": "the Yangtze Valley", "continent": "Asia", "weight": 3, "lat": 30.0, "lon": 114.0 },
+    { "name": "the Sichuan Basin", "continent": "Asia", "weight": 1.2, "lat": 30.0, "lon": 105.0 },
+    { "name": "the Pearl River Delta", "continent": "Asia", "weight": 1, "lat": 23.0, "lon": 113.0 },
+    { "name": "the Korean Peninsula", "continent": "Asia", "weight": 0.6, "lat": 37.0, "lon": 127.5 },
+    { "name": "the Japanese islands", "continent": "Asia", "weight": 0.8, "lat": 36.0, "lon": 138.0 },
+    { "name": "the Mongolian Steppe", "continent": "Asia", "weight": 0.2, "lat": 47.0, "lon": 105.0 }
+  ],
+  "sea": [
+    { "name": "Java", "continent": "Asia", "weight": 2, "lat": -7.5, "lon": 110.0 },
+    { "name": "the Mekong Basin", "continent": "Asia", "weight": 1.5, "lat": 13.0, "lon": 105.0 },
+    { "name": "the Irrawaddy Valley", "continent": "Asia", "weight": 1, "lat": 21.0, "lon": 95.0 },
+    { "name": "the Philippine islands", "continent": "Asia", "weight": 1, "lat": 13.0, "lon": 122.0 },
+    { "name": "the Malay Peninsula", "continent": "Asia", "weight": 0.6, "lat": 4.0, "lon": 102.0 },
+    { "name": "New Guinea", "continent": "Oceania", "weight": 0.4, "lat": -5.0, "lon": 141.0 },
+    { "name": "Australia", "continent": "Oceania", "weight": 0.2, "lat": -25.0, "lon": 134.0 }
+  ],
+  "ame": [
+    { "name": "the Valley of Mexico", "continent": "North America", "weight": 2, "lat": 19.4, "lon": -99.1 },
+    { "name": "the Maya lowlands", "continent": "North America", "weight": 1, "lat": 18.0, "lon": -89.0 },
+    { "name": "the Mississippi Valley", "continent": "North America", "weight": 0.8, "lat": 35.0, "lon": -90.0 },
+    { "name": "the Caribbean", "continent": "North America", "weight": 0.5, "lat": 18.0, "lon": -75.0 },
+    { "name": "the Andes", "continent": "South America", "weight": 2, "lat": -13.0, "lon": -72.0 },
+    { "name": "the Amazon Basin", "continent": "South America", "weight": 1, "lat": -4.0, "lon": -62.0 },
+    { "name": "the Río de la Plata", "continent": "South America", "weight": 0.6, "lat": -34.5, "lon": -58.0 }
+  ]
+}
