@@ -2,6 +2,7 @@ import { PodiumCard } from "./PodiumCard";
 import { WeeklyCountdown } from "./WeeklyCountdown";
 import type { PodiumEntry } from "@/types";
 
+
 interface LeaderboardPodiumProps {
   /** [1st place, 2nd place, 3rd place] */
   podium: PodiumEntry;
