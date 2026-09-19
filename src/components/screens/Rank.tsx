@@ -1,6 +1,7 @@
 import { Leaderboard } from "@/components/game/leaderboard/Leaderboard";
 import type { LeaderboardUser, PodiumEntry } from "@/types";
 
+// Weekly cycle resets every Monday 00:00 UTC — swap for your real value.
 const RESET_AT = new Date("2026-09-28T00:00:00Z");
 
 const PODIUM: PodiumEntry = [
@@ -9,7 +10,6 @@ const PODIUM: PodiumEntry = [
     rank: 1,
     username: "Jolie Joie",
     handle: "joliejoie",
-    avatarUrl: "/avatars/jolie.png",
     followers: 40200,
     points: 2_500_000,
     reward: 2000,
@@ -20,7 +20,6 @@ const PODIUM: PodiumEntry = [
     rank: 2,
     username: "Brian Ngo",
     handle: "brianngo",
-    avatarUrl: "/avatars/brian.png",
     followers: 31000,
     points: 2_200_000,
     reward: 2000,
@@ -31,7 +30,6 @@ const PODIUM: PodiumEntry = [
     rank: 3,
     username: "David Do",
     handle: "davidgo",
-    avatarUrl: "/avatars/david.png",
     followers: 28500,
     points: 2_100_000,
     reward: 2000,
@@ -45,7 +43,6 @@ const REST: LeaderboardUser[] = [
     rank: 4,
     username: "Henrietta O'Connell",
     handle: "henrietta",
-    avatarUrl: "/avatars/henrietta.png",
     followers: 12241,
     points: 2_114_424,
     reward: 1000,
@@ -55,7 +52,6 @@ const REST: LeaderboardUser[] = [
     rank: 5,
     username: "Darrel Bins",
     handle: "darrel",
-    avatarUrl: "/avatars/darrel.png",
     followers: 12241,
     points: 2_114_424,
     reward: 1000,
@@ -68,7 +64,6 @@ const CURRENT_USER: LeaderboardUser = {
   rank: 47,
   username: "You",
   handle: "you",
-  avatarUrl: "/avatars/you.png",
   followers: 892,
   points: 154_200,
   reward: 250,

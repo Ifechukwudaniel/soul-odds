@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { LeaderboardPodium } from "./LeaderboardPodium";
 import { LeaderboardTable } from "./LeaderboardTable";
 import { CurrentUserJumpBar } from "./CurrentUserJumpBar";
-import type { LeaderboardUser, PodiumEntry } from "@/types";
+import type { LeaderboardUser, PodiumEntry } from "types";
 
 interface LeaderboardProps {
   /** [1st place, 2nd place, 3rd place] */
