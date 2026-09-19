@@ -2,9 +2,7 @@ import React from "react";
 import { Balance } from "../Balance";
 import { CloseIcon } from "../assets/CloseIcon";
 import { CongratsIcon } from "../assets/CongratsIcon";
-import { RefsIcon } from "../assets/RefsIcon";
 import { AnimatePresence, motion } from "framer-motion";
-import { BlockList } from "net";
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 
 type ModalProps = {
