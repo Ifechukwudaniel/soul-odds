@@ -270,6 +270,217 @@ importers:
         specifier: 4.1.10
         version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@25.9.5)(vite@7.3.6(@types/node@25.9.5)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.51.2)(tsx@4.23.13)(yaml@2.9.1))
 
+  games/soul-odds:
+    dependencies:
+      '@arcjet/next':
+        specifier: 1.10.0
+        version: 1.10.0(next@16.3.1(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(@types/node@25.9.5)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))
+      '@farcaster/frame-core':
+        specifier: ^0.5.0
+        version: 0.5.0(bufferutil@4.1.0)(typescript@7.0.2)(utf-8-validate@6.0.6)
+      '@farcaster/frame-sdk':
+        specifier: ^0.2.0
+        version: 0.2.0(bufferutil@4.1.0)(typescript@7.0.2)(utf-8-validate@6.0.6)(zod@4.4.3)
+      '@grammyjs/web-app':
+        specifier: ^1.3.0
+        version: 1.3.0
+      '@heroicons/react':
+        specifier: ^2.2.0
+        version: 2.2.0(react@19.2.8)
+      '@kenshi.io/node-ecvrf':
+        specifier: ^0.10.1
+        version: 0.10.1
+      '@logtape/logtape':
+        specifier: 2.3.1
+        version: 2.3.1
+      '@noble/curves':
+        specifier: ^1.9.1
+        version: 1.9.7
+      '@noble/hashes':
+        specifier: ^2.4.0
+        version: 2.4.0
+      '@sentry/nextjs':
+        specifier: 10.70.0
+        version: 10.70.0(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))(next@16.3.1(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(@types/node@25.9.5)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(webpack@5.111.1(lightningcss@1.32.0))
+      '@t3-oss/env-nextjs':
+        specifier: 0.13.11
+        version: 0.13.11(typescript@7.0.2)(valibot@1.5.0(typescript@7.0.2))(zod@4.4.3)
+      '@tma.js/sdk-react':
+        specifier: ^3.0.23
+        version: 3.0.23(@types/react@19.2.18)(react@19.2.8)(typescript@7.0.2)
+      '@tonconnect/ui-react':
+        specifier: ^3.0.2
+        version: 3.0.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@tronweb3/tronwallet-abstract-adapter':
+        specifier: ^1.3.0
+        version: 1.3.0(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      '@tronweb3/tronwallet-adapter-bitkeep':
+        specifier: ^1.1.0
+        version: 1.3.0(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      '@tronweb3/tronwallet-adapter-ledger':
+        specifier: ^1.1.15
+        version: 1.1.15(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      '@tronweb3/tronwallet-adapter-react-hooks':
+        specifier: ^1.1.14
+        version: 1.1.14(bufferutil@4.1.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(utf-8-validate@6.0.6)
+      '@tronweb3/tronwallet-adapter-react-ui':
+        specifier: ^1.2.2
+        version: 1.2.2(@tronweb3/tronwallet-abstract-adapter@1.3.0(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@tronweb3/tronwallet-adapter-react-hooks@1.1.14(bufferutil@4.1.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(utf-8-validate@6.0.6))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@tronweb3/tronwallet-adapter-tokenpocket':
+        specifier: ^1.2.0
+        version: 1.2.0(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      '@tronweb3/tronwallet-adapters':
+        specifier: ^1.3.3
+        version: 1.3.3(@types/react@19.2.18)(bufferutil@4.1.0)(immer@11.1.15)(react@19.2.8)(typescript@7.0.2)(use-sync-external-store@1.7.0(react@19.2.8))(utf-8-validate@6.0.6)(zod@4.4.3)
+      '@tronweb3/walletconnect-tron':
+        specifier: ^4.0.3
+        version: 4.0.3(@types/react@19.2.18)(bufferutil@4.1.0)(immer@11.1.15)(react@19.2.8)(typescript@7.0.2)(use-sync-external-store@1.7.0(react@19.2.8))(utf-8-validate@6.0.6)(zod@4.4.3)
+      axios:
+        specifier: ^1.20.0
+        version: 1.20.0
+      countdown:
+        specifier: ^2.6.0
+        version: 2.6.0
+      dotenv:
+        specifier: ^17.4.2
+        version: 17.4.2
+      drizzle-orm:
+        specifier: 0.45.2
+        version: 0.45.2(@electric-sql/pglite@0.5.5)(@opentelemetry/api@1.9.1)(@types/pg@8.21.0)(pg@8.23.0)
+      eruda:
+        specifier: ^3.4.3
+        version: 3.4.3
+      firebase:
+        specifier: ^12.19.0
+        version: 12.19.0
+      firebase-admin:
+        specifier: ^12.7.0
+        version: 12.7.0
+      framer-motion:
+        specifier: ^13.3.0
+        version: 13.4.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      next:
+        specifier: 16.3.1
+        version: 16.3.1(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(@types/node@25.9.5)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      next-intl:
+        specifier: 4.13.4
+        version: 4.13.4(@swc/helpers@0.5.23)(next@16.3.1(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(@types/node@25.9.5)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(typescript@7.0.2)
+      numeral:
+        specifier: ^2.0.6
+        version: 2.0.6
+      pg:
+        specifier: 8.23.0
+        version: 8.23.0
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-canvas-confetti:
+        specifier: ^2.0.7
+        version: 2.0.7(react@19.2.8)
+      react-countdown:
+        specifier: ^2.3.6
+        version: 2.3.6(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      react-device-detect:
+        specifier: ^2.2.3
+        version: 2.2.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+      react-hot-toast:
+        specifier: ^2.6.0
+        version: 2.6.1(@types/react-dom@19.3.0(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      react-icons:
+        specifier: ^5.7.0
+        version: 5.7.0(react@19.2.8)
+      react-use:
+        specifier: ^17.6.0
+        version: 17.6.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      socket.io:
+        specifier: ^4.8.3
+        version: 4.8.3(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      socket.io-client:
+        specifier: ^4.8.3
+        version: 4.8.3(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      telegram-webapps-types:
+        specifier: ^1.0.5
+        version: 1.0.5
+      translation-resilience:
+        specifier: ^0.4.0
+        version: 0.4.0
+      typesaurus:
+        specifier: ^10.7.0
+        version: 10.7.0
+      viem:
+        specifier: ^2.52.2
+        version: 2.56.8(bufferutil@4.1.0)(typescript@7.0.2)(utf-8-validate@6.0.6)(zod@4.4.3)
+      zod:
+        specifier: 4.4.3
+        version: 4.4.3
+      zustand:
+        specifier: ^4.5.7
+        version: 4.5.7(@types/react@19.2.18)(immer@11.1.15)(react@19.2.8)
+    devDependencies:
+      '@electric-sql/pglite':
+        specifier: 0.5.5
+        version: 0.5.5
+      '@electric-sql/pglite-socket':
+        specifier: 0.2.8
+        version: 0.2.8(@electric-sql/pglite-age@0.0.6(@electric-sql/pglite@0.5.5))(@electric-sql/pglite-pg_hashids@0.0.6(@electric-sql/pglite@0.5.5))(@electric-sql/pglite-pg_ivm@0.0.6(@electric-sql/pglite@0.5.5))(@electric-sql/pglite-pg_textsearch@0.0.7(@electric-sql/pglite@0.5.5))(@electric-sql/pglite-pg_uuidv7@0.0.6(@electric-sql/pglite@0.5.5))(@electric-sql/pglite-pgtap@0.0.6(@electric-sql/pglite@0.5.5))(@electric-sql/pglite-pgvector@0.0.6(@electric-sql/pglite@0.5.5))(@electric-sql/pglite@0.5.5)
+      '@faker-js/faker':
+        specifier: 10.6.0
+        version: 10.6.0
+      '@playwright/test':
+        specifier: 1.62.1
+        version: 1.62.1
+      '@spotlightjs/spotlight':
+        specifier: 4.11.8
+        version: 4.11.8(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(hono-rate-limiter@0.4.2(hono@4.13.8))
+      '@tailwindcss/postcss':
+        specifier: ^4.3.3
+        version: 4.3.3
+      '@types/node':
+        specifier: 25.9.5
+        version: 25.9.5
+      '@types/pg':
+        specifier: 8.21.0
+        version: 8.21.0
+      '@types/react':
+        specifier: 19.2.18
+        version: 19.2.18
+      dotenv-cli:
+        specifier: 11.0.0
+        version: 11.0.0
+      drizzle-kit:
+        specifier: 0.31.10
+        version: 0.31.10
+      firebase-tools:
+        specifier: ^15.30.1
+        version: 15.30.2(@types/node@25.9.5)(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      hardhat:
+        specifier: ^3.12.0
+        version: 3.17.0(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      npm-run-all:
+        specifier: 4.1.5
+        version: 4.1.5
+      rimraf:
+        specifier: 6.1.3
+        version: 6.1.3
+      solc:
+        specifier: ^0.8.30
+        version: 0.8.37
+      tsx:
+        specifier: ^4.23.13
+        version: 4.23.13
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      ultracite:
+        specifier: 7.10.5
+        version: 7.10.5
+      vitest:
+        specifier: 4.1.10
+        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@25.9.5)(vite@7.3.6(@types/node@25.9.5)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.51.2)(tsx@4.23.13)(yaml@2.9.1))
+
   local-verify-network:
     dependencies:
       '@noble/curves':
@@ -421,6 +632,10 @@ packages:
 
   '@adraffy/ens-normalize@1.11.1':
     resolution: {integrity: sha512-nhCBV3quEgesuf7c7KYfperqSS14T8bYuvJ8PcLJp6znkZpFc0AuW4qBtr8eKVyPPe/8RSr7sglCWPU5eaxwKQ==}
+
+  '@alloc/quick-lru@5.3.0':
+    resolution: {integrity: sha512-U4+70Pc5ZS9osnCBCE5Jha/ciHM+Yp+CNMNC/7HvYbNRk1Ldd+f7qO65W5qfhu/TCv+/ozljlXXe9Nj8419DMA==}
+    engines: {node: '>=10'}
 
   '@apidevtools/json-schema-ref-parser@9.1.2':
     resolution: {integrity: sha512-r1w81DpR+KyRWd3f+rk6TNqMgedmAxZP5v5KWlXQWlgMUUtyEJch0DKEci1SorPMiSeM8XPl7MZ3miJ60JIpQg==}
@@ -3621,6 +3836,9 @@ packages:
     resolution: {integrity: sha512-krXjAikiaFSPaK/FkAQT5UTx3VormQaiZ5hBFlJZ9UFQGB/rwg1MZIhHAG9smMQRTdyJxP6Qt5MwMtdyU5FWrA==}
     engines: {node: '>= 20'}
 
+  '@tailwindcss/postcss@4.3.3':
+    resolution: {integrity: sha512-JTSZZGQi1AyKirbLN3azmjVzef92tcX7h+iSqPdaeStyFpGpDlKvvpxeOE8njhbUanbRwr3z8DyzhICWnMtQeg==}
+
   '@tailwindcss/vite@4.3.3':
     resolution: {integrity: sha512-yYU8cogLeSh/ms2jh8Fj7jaba/EWa7Ja6GoUqYZaraEuCI5YS6ms6ObZgjjedm+jm6XZjdNRWBpPP6Z86oOxcw==}
     peerDependencies:
@@ -3828,6 +4046,9 @@ packages:
 
   '@types/babel__traverse@7.28.0':
     resolution: {integrity: sha512-8PvcXf70gTDZBgt9ptxJ8elBeBjcLOAcOtoO/mPJjtji1+CdGbHgm77om1GrsPxsiE+uXIpNSK64UYaIwQXd4Q==}
+
+  '@types/canvas-confetti@1.9.0':
+    resolution: {integrity: sha512-aBGj/dULrimR1XDZLtG9JwxX1b4HPRF6CX9Yfwh3NvstZEm1ZL7RBnel4keCPSqs1ANRu1u2Aoz9R+VmtjYuTg==}
 
   '@types/caseless@0.12.5':
     resolution: {integrity: sha512-hWtVTC2q7hc7xZ/RLbxapMvDMgUnDvKvMOpKal4DrMyfGBUfB1oKaZlIRr6mJL+If3bAP6sV/QneGzF6tJjZDg==}
@@ -4704,6 +4925,9 @@ packages:
   caniuse-lite@1.0.30001810:
     resolution: {integrity: sha512-TITQPUkaz+aVk5GL6NhOdwk1aEaNTSDPsGFWrTuhKGtjTF70jL/Oht2W4c6rXUe5fu7Ie19VIahAXHIIiWWNeg==}
 
+  canvas-confetti@1.9.4:
+    resolution: {integrity: sha512-yxQbJkAVrFXWNbTUjPqjF7G+g6pDotOUHGbkZq2NELZUMDpiJ85rIEazVb8GTaAptNW2miJAXbs1BtioA251Pw==}
+
   cbor2@2.3.0:
     resolution: {integrity: sha512-76WB3hq8BoaGkMkBVJ27fW5LJU+qqDLEpgRNCG/SYKhODWXpVPOTD4UcUto3IEzYLA52nsvbhb0wabhHDn3qXg==}
     engines: {node: '>=20'}
@@ -5383,6 +5607,9 @@ packages:
 
   error-stack-parser@2.1.4:
     resolution: {integrity: sha512-Sk5V6wVazPhq5MhpO+AUxJn5x7XSXGl1R93Vn7i+zS15KDVxQijejNCrz8340/2bgLBjR9GtEG8ZVKONDjcqGQ==}
+
+  eruda@3.4.3:
+    resolution: {integrity: sha512-J2TsF4dXSspOXev5bJ6mljv0dRrxj21wklrDzbvPmYaEmVoC+2psylyRi70nUPFh1mTQfIBsSusUtAMZtUN+/w==}
 
   es-abstract-get@1.0.0:
     resolution: {integrity: sha512-6PMWXpdhshVvFp+FoWYs1EvG1Nj0tvk0dZM+XcK0xMEM1czRVcP6ohqPWHy6qPagSpC8j4+p89WXlT+xXJs/fg==}
@@ -7646,6 +7873,11 @@ packages:
     resolution: {integrity: sha512-xLgQil4kIUCrAzVk9fRSkxkFNwmygLFjVxXrLc65aE1F0+Zsb8rxumFBy4XKyvgMCTL6kilDq3EZ0piE2dP/Dg==}
     engines: {node: '>=18.0.0'}
 
+  react-canvas-confetti@2.0.7:
+    resolution: {integrity: sha512-DIj44O35TPAwJkUSIZqWdVsgAMHtVf8h7YNmnr3jF3bn5mG+d7Rh9gEcRmdJfYgRzh6K+MAGujwUoIqQyLnMJw==}
+    peerDependencies:
+      react: '*'
+
   react-countdown@2.3.6:
     resolution: {integrity: sha512-ZfX6S08Hb6x6W6eCn1hMDvxPICI/T30fd+gaeVTCR/2cGZ2WJ3f26e4ImNIMX1fHkopJrUdnRpWXP13/D39+gg==}
     peerDependencies:
@@ -9225,6 +9457,8 @@ snapshots:
 
   '@adraffy/ens-normalize@1.11.1': {}
 
+  '@alloc/quick-lru@5.3.0': {}
+
   '@apidevtools/json-schema-ref-parser@9.1.2':
     dependencies:
       '@jsdevtools/ono': 7.1.3
@@ -10001,7 +10235,7 @@ snapshots:
       '@farcaster/miniapp-sdk': 0.3.0(bufferutil@4.1.0)(typescript@7.0.2)(utf-8-validate@6.0.6)(zod@4.4.3)
       '@farcaster/quick-auth': 0.0.8(typescript@7.0.2)
       comlink: 4.4.2
-      eventemitter3: 5.0.1
+      eventemitter3: 5.0.4
       ox: 0.14.45(typescript@7.0.2)(zod@4.4.3)
     transitivePeerDependencies:
       - bufferutil
@@ -10026,7 +10260,7 @@ snapshots:
       '@farcaster/miniapp-core': 0.6.0(bufferutil@4.1.0)(typescript@7.0.2)(utf-8-validate@6.0.6)
       '@farcaster/quick-auth': 0.0.6(typescript@7.0.2)
       comlink: 4.4.2
-      eventemitter3: 5.0.1
+      eventemitter3: 5.0.4
       ox: 0.14.45(typescript@7.0.2)(zod@4.4.3)
     transitivePeerDependencies:
       - bufferutil
@@ -10957,7 +11191,7 @@ snapshots:
     dependencies:
       '@ledgerhq/devices': 6.27.1
       '@ledgerhq/errors': 6.37.0
-      '@ledgerhq/hw-transport': 6.27.1
+      '@ledgerhq/hw-transport': 6.36.0
       '@ledgerhq/logs': 6.19.0
 
   '@ledgerhq/hw-transport@6.27.1':
@@ -12906,6 +13140,14 @@ snapshots:
       '@tailwindcss/oxide-win32-arm64-msvc': 4.3.3
       '@tailwindcss/oxide-win32-x64-msvc': 4.3.3
 
+  '@tailwindcss/postcss@4.3.3':
+    dependencies:
+      '@alloc/quick-lru': 5.3.0
+      '@tailwindcss/node': 4.3.3
+      '@tailwindcss/oxide': 4.3.3
+      postcss: 8.5.28
+      tailwindcss: 4.3.3
+
   '@tailwindcss/vite@4.3.3(vite@7.3.6(@types/node@24.12.4)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.51.2)(tsx@4.23.13)(yaml@2.9.1))':
     dependencies:
       '@tailwindcss/node': 4.3.3
@@ -13459,6 +13701,8 @@ snapshots:
   '@types/babel__traverse@7.28.0':
     dependencies:
       '@babel/types': 7.29.8
+
+  '@types/canvas-confetti@1.9.0': {}
 
   '@types/caseless@0.12.5':
     optional: true
@@ -14827,6 +15071,8 @@ snapshots:
 
   caniuse-lite@1.0.30001810: {}
 
+  canvas-confetti@1.9.4: {}
+
   cbor2@2.3.0:
     dependencies:
       '@cto.af/wtf8': 0.0.5
@@ -15419,6 +15665,8 @@ snapshots:
   error-stack-parser@2.1.4:
     dependencies:
       stackframe: 1.3.4
+
+  eruda@3.4.3: {}
 
   es-abstract-get@1.0.0:
     dependencies:
@@ -18268,6 +18516,12 @@ snapshots:
 
   re2js@2.8.6: {}
 
+  react-canvas-confetti@2.0.7(react@19.2.8):
+    dependencies:
+      '@types/canvas-confetti': 1.9.0
+      canvas-confetti: 1.9.4
+      react: 19.2.8
+
   react-countdown@2.3.6(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
       prop-types: 15.8.1
@@ -18540,7 +18794,7 @@ snapshots:
       '@types/uuid': 10.0.0
       '@types/ws': 8.18.1
       buffer: 6.0.3
-      eventemitter3: 5.0.1
+      eventemitter3: 5.0.4
       uuid: 14.0.2
       ws: 8.21.3(bufferutil@4.1.0)(utf-8-validate@6.0.6)
     optionalDependencies:
