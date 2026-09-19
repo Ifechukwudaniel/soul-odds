@@ -13,7 +13,6 @@ export const viewport: Viewport = {
 export default function GameLayout(props: { children: React.ReactNode }) {
   return (
     <>
-      <Script src="https://telegram.org/js/telegram-web-app.js" strategy="afterInteractive" />
       <Script id="prevent-pinch-zoom" strategy="afterInteractive">
         {`
           document.addEventListener('touchmove', function (event) {

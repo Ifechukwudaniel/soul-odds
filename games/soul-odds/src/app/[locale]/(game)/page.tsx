@@ -174,7 +174,6 @@ export default function GamePage() {
       </div>
     );
   }
-  console.log(state)
 
   const AvatarIcon = getAvatarById(user.avatarId).Icon;
 
