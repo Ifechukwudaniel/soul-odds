@@ -1,6 +1,7 @@
 import React, {  useEffect, useState } from "react";
 import Image from "next/image";
 import { Loader } from "../Loader";
+import { GameButton } from "@/components/game/GameButton";
 import {  RefeshInterval } from "@/constants";
 import { getUserRefers } from "@/services/data/refers";
 import { User } from "@/services/db/user";
@@ -36,12 +37,9 @@ export const InviteComponent = ({ copyInvite }: { copyInvite: () => void }) => {
           </div>
         </div>
       </div>
-      <button
-        onClick={copyInvite}
-        className="btn bg-white w-full text-black py-4 font-[500] rounded-lg align-baseline button-animation"
-      >
+      <GameButton variant="papyrus" onClick={copyInvite} className="w-full py-4 text-base">
         Invite a Friend!
-      </button>
+      </GameButton>
     </div>
   </div>
   );
@@ -103,9 +101,9 @@ export const RefsScreen: React.FC = () => {
             <p className="text-[0.8rem] text-white font-[500]">Refer a friend</p>
             <p className="text-[#AFAFAF] text-[0.8rem] my-3">{refsList.length} referrals</p>
           </div>
-          <button onClick={copyInvite} className="btn bg-white px-3 text-black py-3 font-[500] rounded text-[13px]">
+          <GameButton variant="papyrus" onClick={copyInvite} className="px-3 py-3 text-[13px]">
             Invite a Friend!
-          </button>
+          </GameButton>
         </div>
 
         <div className="bg-[#182334] h-[1px] w-full my-5" />

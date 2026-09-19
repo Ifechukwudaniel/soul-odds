@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from "react";
 import type { SetStateAction } from "react";
-import toost from "react-hot-toast";
+import { formatUnits } from "viem";
 import { getAvatarById } from "@/components/assets/characters/avatars";
-import { DevLogin } from "@/components/DevLogin";
 import { GameHeader } from "@/components/game/home/GameHeader";
 import { ProfileModal } from "@/components/game/home/profile/ProfileModal";
-import { Loader } from "@/components/Loader";
 import { Menubar } from "@/components/Menubar";
+import { useCasinoHostContext } from "@/components/provider/AppWalletProvider";
 import {
   BadgesScreen,
   BoostScreen,
@@ -19,29 +18,11 @@ import {
   SocialQuestScreen,
   StatsScreen,
   RankScreen
-  
 } from "@/components/screens";
 import { ONE_SECOND } from "@/constants";
 import { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
-import { getFreeBoost, getNoLevelBoost, getPayedBoost } from "@/services/data/boost";
-import type { Boost } from "@/services/db/boost";
-import { getUser } from "@/services/data/user";
 import { socketInstance } from "@/services/socket";
-import { type TBoost, type TUser, useAppStore } from "@/services/store/store";
-
-function normalizeBoost(boost: Boost): TBoost {
-  return {
-    type: boost.type,
-    boostId: boost.boostId,
-    userId: boost.userId,
-    cost: boost.cost ?? undefined,
-    lastUsed: boost.lastUsed ?? undefined,
-    left: boost.left ?? undefined,
-    level: boost.level ?? undefined,
-    maximumLevel: boost.maximumLevel ?? undefined,
-    totalPerDay: boost.totalPerDay ?? undefined,
-  };
-}
+import { useAppStore } from "@/services/store/store";
 import { checkIfMoreThanADay } from "@/utils";
 import { notification } from "@/utils/notifications";
 
@@ -51,18 +32,15 @@ export default function GamePage() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const screen = useAppStore((state) => state.screen);
   const setScreen = useAppStore((state) => state.setScreen);
-  const setUser = useAppStore((state) => state.updateUser);
-  const setPaidBoosts = useAppStore((state) => state.setPaidBoosts);
+  const updateUser = useAppStore((state) => state.updateUser);
   const setFreeBoosts = useAppStore((state) => state.setFreeBoosts);
   const updateEnergyByTime = useAppStore((state) => state.updateEnergyByTime);
-  const [foundState, setFoundState] = useState(false);
-  const [needsLogin, setNeedsLogin] = useState(false);
-  const [loginLoading, setLoginLoading] = useState(false);
-  const [loginError, setLoginError] = useState<string | null>(null);
-  const state = useAppStore((state) => state);
   const freeBoost = useAppStore((state) => state.freeBoosts);
-  const user = useAppStore((state) => state.user)
+  const user = useAppStore((state) => state.user);
   const player = useMortalOddsPlayer();
+  const { snapshot } = useCasinoHostContext();
+
+  console.log(snapshot, "snap")
 
   const screens = {
     badges: <BadgesScreen />,
@@ -73,41 +51,19 @@ export default function GamePage() {
     quests: <QuestScreen />,
     social: <SocialQuestScreen />,
     wallet: <ConnectQuestScreen />,
-    ranks:  <RankScreen/>
+    ranks: <RankScreen />,
   };
 
   const screenRender = screens[screen];
 
-  const setUpState = (id: number) => {
-    setLoginLoading(true);
-    setLoginError(null);
-    socketInstance.emit("login", id);
-    Promise.all([getUser(id), getFreeBoost(id), getPayedBoost(id), getNoLevelBoost(id)])
-      .then(([user, freeBoost, payedBoost, noLevelBoost]) => {
-        if (!user) {
-          setLoginLoading(false);
-          setLoginError("User not found. Try a different ID.");
-          setNeedsLogin(true);
-          return;
-        }
-        setUser({
-          ...user,
-          connectionId: user.connectionId ?? undefined,
-        });
-        setPaidBoosts([...payedBoost, ...noLevelBoost].map(normalizeBoost));
-        setFreeBoosts(freeBoost.map(normalizeBoost));
-        setNeedsLogin(false);
-        setLoginLoading(false);
-        localStorage.setItem("user_id", String(id));
-        setFoundState(true);
-      })
-      .catch(() => {
-        setLoginLoading(false);
-        setLoginError("Error occurred. Try again.");
-        setNeedsLogin(true);
-        toost.error("Error occurred");
-      });
-  };
+  const hostBalance = Number(
+    formatUnits(BigInt(snapshot.balances.smartVaultBalance ?? "0"), snapshot.token.decimals ?? 18),
+  );
+
+  /** Mirrors the host's real balance into the store; only reruns when the host's own number changes. */
+  useEffect(() => {
+    updateUser({ balance: hostBalance });
+  }, [hostBalance, updateUser]);
 
   useEffect(() => {
     if (freeBoost.length > 0) {
@@ -122,17 +78,6 @@ export default function GamePage() {
   }, []);
 
   useEffect(() => {
-    if (state.hasData) {
-      setFoundState(true);
-    } else {
-      const savedUserId = localStorage.getItem("user_id");
-      if (savedUserId) {
-        setUpState(Number(savedUserId));
-      } else {
-        setNeedsLogin(true);
-      }
-    }
-
     const handleConnect = () => {
       setIsConnected(true);
       setTransport(socketInstance.io.engine.transport.name);
@@ -163,26 +108,13 @@ export default function GamePage() {
     return () => clearInterval(interval);
   }, [updateEnergyByTime]);
 
-  if (needsLogin) {
-    return <DevLogin onSubmit={setUpState} loading={loginLoading} error={loginError} />;
-  }
-
-  if (!foundState) {
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <Loader />
-      </div>
-    );
-  }
-  console.log(state)
-
   const AvatarIcon = getAvatarById(user.avatarId).Icon;
 
   return (
     <div className="flex h-screen w-full flex-col">
       <GameHeader
         balance={user.balance}
-        currency="deben"
+        currency={snapshot.token.symbol ?? "deben"}
         avatar={<AvatarIcon width={24} height="24" />}
         onOpenProfile={() => setIsProfileOpen(true)}
       />

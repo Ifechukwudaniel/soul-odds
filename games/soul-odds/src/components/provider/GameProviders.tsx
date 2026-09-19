@@ -4,7 +4,7 @@ import { Suspense, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Loader } from "@/components/Loader";
-import AppWalletProvider from "@/components/provider/AppWalletProvider";
+import { AppWalletProvider } from "@/components/provider/AppWalletProvider";
 import { DesertHorizon } from "@/components/game/mortal-odds/DesertHorizon";
 
 const ErrorBoundaryError = (props: { error: unknown }) => (
@@ -42,7 +42,9 @@ export const GameProviders = (props: { children: React.ReactNode }) => {
               style={{ background: `url('/img/stars.svg') repeat` }}
             >
               <DesertHorizon />
-              <div className="relative z-10">{props.children}</div>
+              <div className="relative z-10">
+                <AppWalletProvider>{props.children}</AppWalletProvider>
+              </div>
             </main>
           <Toaster />
         </Suspense>

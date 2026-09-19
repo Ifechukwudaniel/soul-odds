@@ -138,7 +138,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   drawHuman: () => void;
   advance: () => void;
   retreat: () => void;
-  placeBets: (bets: Record<string, Bet>) => { net: number; skill: number } | null;
+  placeBets: (bets: Record<string, Bet>) => { net: number; skill: number; totalStake: number } | null;
 } {
   const [state, dispatch] = useReducer(reducer, initialState);
   const spin = useRef<ReturnType<typeof animate> | null>(null);
@@ -182,7 +182,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     return priceFromP({ p, config: PRICING_CONFIG });
   };
 
-  const placeBets = (bets: Record<string, Bet>): { net: number; skill: number } | null => {
+  const placeBets = (bets: Record<string, Bet>): { net: number; skill: number; totalStake: number } | null => {
     if (state.phase !== "confirming" || !state.draw || !state.prices || !state.samples) return null;
 
     const { draw, prices, samples: bookieSamples } = state;
@@ -191,6 +191,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     const truthSamples = simulateFull({ year: draw.year, region: draw.region, rng, config: fullModelConfig, sims: SIMS });
     const trueProbabilities = computeTrueProbabilities({ markets: marketsConfig, samples: truthSamples });
     const { results, net, skill } = resolveBets({ life, bets, prices, priceDeathYear, trueProbabilities, truthSamples });
+    const totalStake = Object.values(bets).reduce((sum, bet) => sum + bet.stake, 0);
     const childDeathShare = truthSamples.filter((s) => s.age < 5).length / truthSamples.length;
     const story = tellStory({ life, place: draw.place, currentYear: CURRENT_YEAR, childDeathShare, jobs: jobsConfig, rng });
     const lifespan = buildLifespanHistogram({ truthSamples, bookieSamples });
@@ -198,7 +199,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     const bookieMedianAge = medianAge(bookieSamples);
 
     dispatch({ type: "reveal", reveal: { life, results, net, skill, story, lifespan, realMedianAge, bookieMedianAge } });
-    return { net, skill };
+    return { net, skill, totalStake };
   };
 
   return {

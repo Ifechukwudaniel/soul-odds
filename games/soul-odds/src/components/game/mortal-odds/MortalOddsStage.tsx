@@ -22,12 +22,11 @@ export const MortalOddsStage = (props: {
   onPlaceBet: () => void;
   onRevealLocation: () => void;
   drawCost: number;
-  locationCost: number;
   canAffordDraw: boolean;
-  canAffordLocation: boolean;
   charges: RoundCharge[];
   quickAmounts: number[];
   onSelectChip: (amount: number) => void;
+  chipLocked: boolean;
   prices: MarketPrices | null;
   priceDeathYear: (guessYear: number) => Price;
   onRemoveBet: MortalOddsBets["remove"];
@@ -47,6 +46,7 @@ export const MortalOddsStage = (props: {
             chipSize={props.chipSize}
             quickAmounts={props.quickAmounts}
             onSelectChip={props.onSelectChip}
+            chipLocked={props.chipLocked}
             bets={props.bets}
             prices={props.prices}
             priceDeathYear={props.priceDeathYear}
@@ -81,9 +81,7 @@ export const MortalOddsStage = (props: {
               onRetreat={round.retreat}
               onRedraw={props.onDraw}
               drawCost={props.drawCost}
-              locationCost={props.locationCost}
               canAffordDraw={props.canAffordDraw}
-              canAffordLocation={props.canAffordLocation}
             />
           )}
 

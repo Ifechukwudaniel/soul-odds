@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { GameButton } from "@/components/game/GameButton";
 import { GameCard } from "@/components/game/home/GameCard";
 import { StageSlide } from "@/components/game/mortal-odds/stage/StageSlide";
 import { ChoiceMarket } from "@/components/game/mortal-odds/stage/markets/ChoiceMarket";
@@ -9,6 +10,9 @@ import { playClickSound } from "@/utils/playClickSound";
 import type { Bet, MarketPrices } from "@/types";
 
 const LAST_STEP = marketsConfig.length - 1;
+
+/** Every required market gets picked before a bet can be placed, so the locked chip size splits evenly across all of them. */
+const stakePerMarket = (chipSize: number) => chipSize / marketsConfig.length;
 
 export const PredictionsPanel = (props: {
   chipSize: number;
@@ -60,7 +64,7 @@ export const PredictionsPanel = (props: {
                 prices={props.prices[market.id] ?? {}}
                 selectedOptionId={bet?.kind === "choice" ? bet.optionId : undefined}
                 onSelect={(optionId) => {
-                  props.onSetChoice(market.id, optionId, props.chipSize);
+                  props.onSetChoice(market.id, optionId, stakePerMarket(props.chipSize));
                 }}
               />
             )}
@@ -96,17 +100,9 @@ export const PredictionsPanel = (props: {
               ))}
             </div>
 
-            <button
-              type="button"
-              disabled={step === LAST_STEP}
-              onClick={() => {
-                playClickSound();
-                goTo(step + 1);
-              }}
-              className="rounded-lg bg-white px-4 py-1.5 font-bold text-slate-950 text-sm hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-40"
-            >
+            <GameButton variant="papyrus" disabled={step === LAST_STEP} onClick={() => goTo(step + 1)} className="px-4 py-1.5 text-xs">
               Next
-            </button>
+            </GameButton>
           </div>
         </div>
       </div>

@@ -32,7 +32,7 @@ export const DrawHero = (props: { currentYear: number; onDraw: () => void; drawC
 >
   <ButtonDemo />
 </button>
-    <p className="text-white/40 text-xs">Costs {props.drawCost} deben</p>
+    <p className="text-white/40 text-xs">Locks in a {props.drawCost} deben stake for this soul</p>
     {!props.canAfford && <p className="text-[#B7410E] text-xs">Not enough chips</p>}
 
     <p className="mt-4 max-w-sm text-[#b0aeb5] text-xs leading-[1.5]">

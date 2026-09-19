@@ -24,11 +24,18 @@ export function useMortalOddsPlayer(): {
   stats: MortalOddsPlayerStats;
   canAfford: (amount: number) => boolean;
   spend: (amount: number) => boolean;
-  commitRound: (options: { net: number; skill: number }) => void;
+  commitRound: (options: { net: number; skill: number; totalStake: number }) => void;
   reset: () => void;
 } {
   const balance = useAppStore(state => state.user.balance);
-  const applyBalanceDelta = useAppStore(state => state.applyBalanceDelta);
+  /**
+   * TEMPORARY: rounds still settle synchronously on the client (no real on-chain
+   * session yet), so spend/commitRound optimistically mutate the store's balance
+   * directly. Once rounds settle via `hostApi.openSession`/`submitAction`, delete
+   * this local mutation path entirely and let the host's pushed snapshot drive
+   * `user.balance` instead (see the balance-sync effect in `page.tsx`).
+   */
+  const applyOptimisticBalanceDelta = useAppStore(state => state.applyBalanceDelta);
   const [roundStats, setRoundStats] = useState<RoundStats>(DEFAULT_ROUND_STATS);
 
   useEffect(() => {
@@ -51,12 +58,13 @@ export function useMortalOddsPlayer(): {
     if (!canAfford(amount)) {
       return false;
     }
-    applyBalanceDelta(-amount);
+    applyOptimisticBalanceDelta(-amount);
     return true;
   };
 
-  const commitRound = (options: { net: number; skill: number }) => {
-    applyBalanceDelta(options.net);
+  /** The stake was already spent up front via `spend`, so only the payout (stake + net) comes back; net itself still drives stats. */
+  const commitRound = (options: { net: number; skill: number; totalStake: number }) => {
+    applyOptimisticBalanceDelta(options.net + options.totalStake);
     persistRoundStats({
       rounds: roundStats.rounds + 1,
       bestRound: Math.max(roundStats.bestRound, options.net),

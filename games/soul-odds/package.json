@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@arcjet/next": "1.10.0",
+    "@chain/casino-sdk": "file:../..",
     "@heroicons/react": "^2.2.0",
     "@kenshi.io/node-ecvrf": "^0.10.1",
     "@logtape/logtape": "2.3.1",

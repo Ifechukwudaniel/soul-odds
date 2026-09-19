@@ -73,6 +73,9 @@ importers:
       '@arcjet/next':
         specifier: 1.10.0
         version: 1.10.0(next@16.3.1(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(@types/node@25.9.5)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))
+      '@chain/casino-sdk':
+        specifier: file:../..
+        version: 'file:'
       '@heroicons/react':
         specifier: ^2.2.0
         version: 2.2.0(react@19.2.8)

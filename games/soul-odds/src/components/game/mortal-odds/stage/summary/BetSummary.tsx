@@ -2,11 +2,11 @@
 
 import { motion } from "framer-motion";
 import { GiScales } from "react-icons/gi";
+import { GameButton } from "@/components/game/GameButton";
 import { GameCard } from "@/components/game/home/GameCard";
 import { betLabel, betOdds } from "@/lib/mortal-odds/bets";
 import { fmtYear } from "@/lib/mortal-odds/format";
 import { serifFont } from "@/styles/serif-font";
-import { playClickSound } from "@/utils/playClickSound";
 import type { Bet, Draw, MarketPrices, Price, RoundCharge } from "@/types";
 
 export const BetSummary = (props: {
@@ -25,22 +25,16 @@ export const BetSummary = (props: {
   });
   const totalStake = rows.reduce((sum, row) => sum + row.bet.stake, 0);
   const maxPayout = rows.reduce((sum, row) => sum + row.payout, 0);
-  const fees = props.charges.reduce((sum, charge) => sum + charge.amount, 0);
+  // The stake row below already accounts for the locked "stake" charge; only side fees (redraws) reduce the best case further.
+  const fees = props.charges.filter((charge) => charge.kind === "fee").reduce((sum, charge) => sum + charge.amount, 0);
   const bestCase = maxPayout - totalStake - fees;
 
   return (
     <GameCard className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto" containerClassName="flex h-full w-full flex-col">
       <div className="flex items-center justify-between">
-        <button
-          type="button"
-          onClick={() => {
-            playClickSound();
-            props.onBack();
-          }}
-          className="rounded-lg border border-white/10 px-3 py-1.5 text-sm text-white/70 hover:text-white"
-        >
+        <GameButton variant="secondary" onClick={props.onBack} className="px-3 py-1.5 text-sm">
           ← Change your reading
-        </button>
+        </GameButton>
         <span className="text-[11px] text-white/40 uppercase tracking-[0.2em]">Before the scales</span>
       </div>
 
@@ -82,16 +76,18 @@ export const BetSummary = (props: {
       </table>
 
       <dl className="flex flex-col gap-1 rounded-xl border border-white/10 bg-black/60 p-4 text-sm">
-        {props.charges.map((charge) => (
-          <div key={charge.id} className="flex justify-between">
-            <dt className="text-white/50">{charge.label}</dt>
-            <dd className="text-white/70">−{charge.amount.toFixed(2)}</dd>
-          </div>
-        ))}
         <div className="flex justify-between">
-          <dt className="text-white/50">Stakes</dt>
+          <dt className="text-white/50">Stake</dt>
           <dd className="text-white/70">−{totalStake.toFixed(2)}</dd>
         </div>
+        {props.charges
+          .filter((charge) => charge.kind === "fee")
+          .map((charge) => (
+            <div key={charge.id} className="flex justify-between">
+              <dt className="text-white/50">{charge.label}</dt>
+              <dd className="text-white/70">−{charge.amount.toFixed(2)}</dd>
+            </div>
+          ))}
         <div className="mt-2 flex justify-between border-white/10 border-t pt-2">
           <dt className="text-white">If the heart is light on every count</dt>
           <dd className="font-bold text-[#6BA84F]">
@@ -107,16 +103,9 @@ export const BetSummary = (props: {
         </div>
       </dl>
 
-      <button
-        type="button"
-        onClick={() => {
-          playClickSound();
-          props.onConfirm();
-        }}
-        className="accent-gradient mt-auto rounded-full px-6 py-3 font-bold text-slate-950"
-      >
+      <GameButton variant="papyrus" onClick={props.onConfirm} className="mt-auto px-6 py-3 text-base">
         Set the heart on the scale
-      </button>
+      </GameButton>
     </GameCard>
   );
 };

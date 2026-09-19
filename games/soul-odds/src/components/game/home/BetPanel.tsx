@@ -14,6 +14,7 @@ export const BetPanel = (props: {
   chipSize: number;
   quickAmounts: number[];
   onSelectChip: (amount: number) => void;
+  chipLocked: boolean;
   bets: Record<string, Bet>;
   prices: MarketPrices | null;
   priceDeathYear: (guessYear: number) => Price;
@@ -25,15 +26,14 @@ export const BetPanel = (props: {
   requiredBets: number;
 }) => {
   const bets = Object.values(props.bets);
-  const totalStaked = bets.reduce((sum, bet) => sum + bet.stake, 0);
   const potentialWins = bets.map((bet) => {
     if (!props.prices) return null;
     const odds = betOdds({ bet, prices: props.prices, priceDeathYear: props.priceDeathYear });
     return odds === null ? null : bet.stake * odds;
   });
   const totalPotentialWin = potentialWins.reduce((sum: number, win) => sum + (win ?? 0), 0);
-  const totalCharged = props.charges.reduce((sum, charge) => sum + charge.amount, 0);
-  const atRisk = totalCharged + totalStaked;
+  // Bet stakes are a breakdown of the "stake" charge already locked in at summon, not additional spend.
+  const atRisk = props.charges.reduce((sum, charge) => sum + charge.amount, 0);
   const unpicked = Math.max(0, props.requiredBets - bets.length);
 
   return (
@@ -51,11 +51,6 @@ export const BetPanel = (props: {
       {props.canPlaceBet && (
         <div className="flex flex-col gap-1">
           <PlaceBetButton label="Place Bet" disabled={unpicked > 0} onClick={props.onPlaceBet} />
-          {unpicked > 0 && (
-            <p className="text-center text-white/40 text-xs">
-              {unpicked} more {unpicked === 1 ? "prediction" : "predictions"} to pick
-            </p>
-          )}
         </div>
       )}
 
@@ -74,12 +69,11 @@ export const BetPanel = (props: {
             </span>
           </motion.div>
         ))}
-        {props.charges.length === 0 && <p className="text-sm text-white/40">Nothing on the scales yet. Summoning a soul costs deben.</p>}
+        {props.charges.length === 0 && <p className="text-sm text-white/40">Nothing on the scales yet. Pick your stake, then summon a soul.</p>}
       </div>
 
       <div>
-        <p className="mb-2 text-white/50 text-xs">Chip size</p>
-        <BetQuickAmounts amounts={props.quickAmounts} selected={props.chipSize} onSelect={props.onSelectChip} />
+        <BetQuickAmounts amounts={props.quickAmounts} selected={props.chipSize} onSelect={props.onSelectChip} disabled={props.chipLocked} />
       </div>
 
       <div className="flex flex-col gap-2">
@@ -88,7 +82,6 @@ export const BetPanel = (props: {
             key={bet.marketId}
             bet={bet}
             potentialWin={potentialWins[index] ?? null}
-            currency={props.currency}
             onRemove={props.isLocked ? undefined : () => props.onRemoveBet(bet.marketId)}
           />
         ))}

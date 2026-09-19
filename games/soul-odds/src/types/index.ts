@@ -46,8 +46,8 @@ export type ChanceTag = "Likely" | "Toss-up" | "Unlikely" | "Long shot";
 export type Price = { p: number; odds: number | null; tag: ChanceTag };
 export type MarketPrices = Record<string, Record<string, Price>>;
 
-/** A step of the round the player has already paid for, shown as a line on the bet panel. */
-export type RoundCharge = { id: string; label: string; amount: number };
+/** A step of the round the player has already paid for, shown as a line on the bet panel. "stake" is the locked round bet; "fee" is a side cost like a redraw. */
+export type RoundCharge = { id: string; label: string; amount: number; kind: "stake" | "fee" };
 
 export type Bet =
   | { marketId: string; kind: "choice"; optionId: string; stake: number }

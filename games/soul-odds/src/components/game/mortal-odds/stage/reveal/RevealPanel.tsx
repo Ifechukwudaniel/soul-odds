@@ -2,13 +2,14 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { CurrencyCoinIcon } from "@/components/assets/CurrencyCoinIcon";
+import { GameButton } from "@/components/game/GameButton";
 import { GameCard } from "@/components/game/home/GameCard";
 import { BetsBreakdown } from "@/components/game/mortal-odds/stage/reveal/BetsBreakdown";
 import { LifespanChart } from "@/components/game/mortal-odds/stage/reveal/LifespanChart";
 import { fmtYear } from "@/lib/mortal-odds/format";
 import { revealBeats, visibleBetCount } from "@/lib/mortal-odds/reveal-beats";
 import { serifFont } from "@/styles/serif-font";
-import { playClickSound } from "@/utils/playClickSound";
 import type { RevealResult } from "@/hooks/useMortalOddsDraw";
 import type { Place, RoundCharge } from "@/types";
 
@@ -28,12 +29,22 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
   const visibleBets = visibleBetCount({ beats, beat });
   const remainingBets = results.length - visibleBets;
 
-  const fees = props.charges.reduce((sum, charge) => sum + charge.amount, 0);
+  // The stake is already reflected inside net; only side fees (redraws) reduce the round's take further.
+  const fees = props.charges.filter((charge) => charge.kind === "fee").reduce((sum, charge) => sum + charge.amount, 0);
   const roundNet = net - fees;
 
   function nextLabel() {
     if (isFinished) {
-      return `Summon another soul · ${props.drawCost}`;
+      return (
+        <>
+          Summon another soul
+          <span className="flex items-center gap-1 text-slate-950/60">
+            <span className="h-3 w-px bg-slate-950/20" />
+            <CurrencyCoinIcon width={16} height="16" />
+            {props.drawCost}
+          </span>
+        </>
+      );
     }
     if (remainingBets > 0) {
       return `Reveal next bet (${remainingBets} left)`;
@@ -104,21 +115,20 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
           </motion.div>
         )}
 
-        <button
-          type="button"
+        <GameButton
+          variant="papyrus"
           disabled={isFinished && !props.canAffordDraw}
           onClick={() => {
-            playClickSound();
             if (isFinished) {
               props.onNext();
             } else {
               setBeat((current) => current + 1);
             }
           }}
-          className="rounded-full bg-[#F5B83D] px-6 py-3 font-bold text-slate-950 hover:bg-[#f0ad24] disabled:opacity-40"
+          className="px-6 py-3 text-base"
         >
           {nextLabel()}
-        </button>
+        </GameButton>
       </GameCard>
     </motion.div>
   );

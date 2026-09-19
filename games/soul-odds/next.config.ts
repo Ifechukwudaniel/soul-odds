@@ -10,6 +10,8 @@ const baseConfig: NextConfig = {
   },
   poweredByHeader: false,
   reactStrictMode: true,
+  // @chain/casino-sdk ships raw .ts source via its package exports.
+  transpilePackages: ['@chain/casino-sdk'],
   reactCompiler: process.env.NODE_ENV === 'production', // Keep the development environment fast
   experimental: {
     // Use the Rust version, instead of the OG Babel one

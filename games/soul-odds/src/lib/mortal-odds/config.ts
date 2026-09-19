@@ -12,8 +12,11 @@ import type { EraFilter, MarketConfig, RegionId } from "@/types";
 
 export const MODES: Record<EraFilter, number> = { all: -Infinity, ce: 1, modern: 1750 };
 
-/** What each step of a round costs the player, before any bet is placed. */
-export const STEP_COSTS = { draw: 5, redraw: 5, location: 10 };
+/** Chip sizes the player can lock in as their stake before summoning a soul. */
+export const CHIP_SIZES = [1, 5, 10, 25, 50];
+
+/** Flat fee to reroll the age/land once a stake is already locked in; the first reveal is free. */
+export const REDRAW_COST = 5;
 
 export const SIMS = 5000;
 export const DEATH_WINDOW = 5;
