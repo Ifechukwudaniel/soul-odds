@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 import * as z from 'zod';
 import { db } from '@/libs/DB';
 import { logger } from '@/libs/Logger';
-import { counterSchema } from '@/models/Schema';
+import { counterSchema } from '@/services/db/Schema';
 import { CounterValidation } from '@/validations/CounterValidation';
 
 export const PUT = async (request: Request) => {

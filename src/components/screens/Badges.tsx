@@ -10,7 +10,6 @@ import { PlanktonBadge } from "../assets/badges/PlanktonBadge";
 import { SharkBadge } from "../assets/badges/SharkBadge";
 import { WhaleBadge } from "../assets/badges/WhaleBadge";
 import { BadgeCard } from "../touchswap/BadgeCard";
-import { BoostCard } from "../touchswap/BoostCard";
 import { useAppStore } from "@/services/store/store";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 

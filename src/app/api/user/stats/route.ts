@@ -6,7 +6,7 @@ import {
   getDailyUsers,
   getOnlineUserCount,
 } from "@/services/db/user";
-import "@/services/firebase";
+
 
 export type Stat = {
   online: number,

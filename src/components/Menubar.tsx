@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import React, { useState } from "react";
 import { MenuBtn } from "./MenuBtn";
-import { SpeakerIcon } from "./assets/SpeakerIcon";
 import { StatsIcon } from "./assets/StatsIcon";
 import { TScreens, useAppStore } from "@/services/store/store";
 import { playClickSound } from "@/utils/playClickSound";
@@ -9,8 +7,7 @@ import {Pyramid} from "./assets/Pyramid";
 import  { Hieroglyph } from "./assets/Hieroglyph";
 import  { Ankh } from "./assets/Ankh";
 import { Share } from "./assets/Share";
-/* import { isSSR , initHapticFeedback, HapticFeedback} from "@tma.js/sdk-react";
- */
+
 type MenuLink = {
   label: string;
   icon?: React.ReactNode;
@@ -48,12 +45,6 @@ export const menuLinks: MenuLink[] = [
 export const Menubar = () => {
   const [hapticFeedback, setHapticFeedback] = useState<HapticFeedback | null>(null);
 
-  /*   useEffect(() => {
-    if (typeof window !== 'undefined' && !isSSR()) {
-      setHapticFeedback(initHapticFeedback());
-    }
-  }, []); */
-
   const screen = useAppStore(state => state.screen);
   const setScreen = useAppStore(state => state.setScreen);
 
@@ -65,7 +56,7 @@ export const Menubar = () => {
 
   return (
     <div
-      className="gold-gradient p-[1px] my-3 rounded-3xl mt-16 fixed bottom-4 left-[50%] translate-x-[-50%] md:max-w-md"
+      className="gold-gradient p-px my-3 rounded-3xl mt-16 fixed bottom-4 left-[50%] translate-x-[-50%] md:max-w-md"
       style={{
         width: "calc(100% - 2rem)",
       }}

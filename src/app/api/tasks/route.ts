@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAllTasks } from "@/services/db/task";
 import { findUser, updateTaskes } from "@/services/db/user";
-import "@/services/firebase";
+
 import { UserTask } from "@/types";
 
 export async function GET(request: NextRequest) {

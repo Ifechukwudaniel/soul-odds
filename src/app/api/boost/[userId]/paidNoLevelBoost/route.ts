@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import "@/services/firebase";
 import { getAllUserPaidNoLevelsBoosts } from "@/services/db/boost";
 
 export async function GET(_request: Request, props: { params: Promise<{ userId: string }> }) {

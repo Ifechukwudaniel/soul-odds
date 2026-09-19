@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getUserRefers } from "@/services/db/user";
-import "@/services/firebase";
+
 
 export async function GET(_request: Request, props: { params: Promise<{ id: string }> }) {
   try {

@@ -20,7 +20,7 @@ export const boostCardLists: BoostCardList[] = [
   {
     title: "Soul's Rest",
     desc: "Reduces the cost of drawing a soul by 1 chip per level.",
-    icon: <RelicIcon relic="sarcophagus" width={70} height={80} />,
+    icon: <RelicIcon relic="sarcophagus" size={40} />,
     initalCost: 10000,
     id: 3,
     noLevel: false,

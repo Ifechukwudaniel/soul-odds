@@ -30,7 +30,6 @@
     "storybook:test": "vitest run --config .storybook/vitest.config.ts",
     "build-storybook": "storybook build",
     "game:socket-server": "tsx src/server/index.ts",
-    "game:emulators": "firebase emulators:start --only firestore",
     "blockchain:node": "tsx blockchain/local-node/index.ts",
     "blockchain:verify-network": "tsx blockchain/verify-network/cli.ts",
     "blockchain:local": "run-s blockchain:node",
