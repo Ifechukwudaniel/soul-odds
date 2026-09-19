@@ -39,3 +39,4 @@ export async function seedDatabase() {
 
   console.log(`*** Seeded ${seedUsers.length} users.`);
 }
+seedDatabase()

@@ -22,9 +22,24 @@ import {
 import { ONE_SECOND } from "@/constants";
 import { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
 import { getFreeBoost, getNoLevelBoost, getPayedBoost } from "@/services/data/boost";
+import type { Boost } from "@/services/db/boost";
 import { getUser } from "@/services/data/user";
 import { socketInstance } from "@/services/socket";
-import { useAppStore } from "@/services/store/store";
+import { type TBoost, type TUser, useAppStore } from "@/services/store/store";
+
+function normalizeBoost(boost: Boost): TBoost {
+  return {
+    type: boost.type,
+    boostId: boost.boostId,
+    userId: boost.userId,
+    cost: boost.cost ?? undefined,
+    lastUsed: boost.lastUsed ?? undefined,
+    left: boost.left ?? undefined,
+    level: boost.level ?? undefined,
+    maximumLevel: boost.maximumLevel ?? undefined,
+    totalPerDay: boost.totalPerDay ?? undefined,
+  };
+}
 import { checkIfMoreThanADay } from "@/utils";
 import { notification } from "@/utils/notifications";
 
@@ -65,15 +80,18 @@ export default function GamePage() {
     socketInstance.emit("login", id);
     Promise.all([getUser(id), getFreeBoost(id), getPayedBoost(id), getNoLevelBoost(id)])
       .then(([user, freeBoost, payedBoost, noLevelBoost]) => {
-        if (!(user as { exist?: boolean })?.exist) {
+        if (!user) {
           setLoginLoading(false);
           setLoginError("User not found. Try a different ID.");
           setNeedsLogin(true);
           return;
         }
-        setUser(user);
-        setPaidBoosts([...payedBoost, ...noLevelBoost]);
-        setFreeBoosts(freeBoost);
+        setUser({
+          ...user,
+          connectionId: user.connectionId ?? undefined,
+        });
+        setPaidBoosts([...payedBoost, ...noLevelBoost].map(normalizeBoost));
+        setFreeBoosts(freeBoost.map(normalizeBoost));
         setNeedsLogin(false);
         setLoginLoading(false);
         localStorage.setItem("user_id", String(id));

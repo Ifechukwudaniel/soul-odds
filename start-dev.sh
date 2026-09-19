@@ -1,34 +1,65 @@
 #!/usr/bin/env bash
-# Starts the full local dev stack in one go:
-#   - pnpm dev            -> PGlite DB server + Next.js dev server + Spotlight
-#   - game:socket-server  -> Socket.io server for the TouchSwap game (port 3001)
-#   - game:emulators      -> Firebase Firestore emulator (port 8080)
-set -uo pipefail
+
+set -e
 
 cd "$(dirname "$0")"
 
 if [ ! -f .env ]; then
-  echo "No .env found — copying .env.example. Fill in any values it needs before continuing."
-  cp .env.example .env
+echo "No .env found. Copying .env.example to .env."
+cp .env.example .env
 fi
 
-pids=()
+PIDS=()
 
 cleanup() {
-  trap - INT TERM EXIT
-  echo "Stopping dev stack..."
-  kill "${pids[@]}" 2>/dev/null
-  wait "${pids[@]}" 2>/dev/null
+echo ""
+echo "Stopping development stack..."
+
+for PID in "${PIDS[@]}"; do
+kill "$PID" 2>/dev/null || true
+done
+
+wait 2>/dev/null || true
 }
-trap cleanup INT TERM EXIT
 
-pnpm run game:emulators &
-pids+=("$!")
+trap cleanup EXIT INT TERM
 
+echo "Removing existing PostgreSQL container..."
+
+docker rm -f app-db 2>/dev/null || true
+
+echo "Starting PostgreSQL..."
+
+docker run -d --name app-db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -p 5432:5432 postgres:16
+
+echo "Waiting for PostgreSQL..."
+
+until docker exec app-db pg_isready -U postgres -d postgres >/dev/null 2>&1; do
+sleep 1
+done
+
+echo "PostgreSQL is ready."
+
+echo "Running migrations..."
+pnpm run db:migrate
+
+echo "Seeding database..."
+pnpm run db:seed
+
+echo "Starting Socket.io..."
 pnpm run game:socket-server &
-pids+=("$!")
+PIDS+=("$!")
 
+echo "Starting Next.js..."
 pnpm run dev &
-pids+=("$!")
+PIDS+=("$!")
 
-wait "${pids[@]}"
+echo ""
+echo "Development stack running."
+echo ""
+echo "Next.js:    http://localhost:3000"
+echo "Socket.io:  http://localhost:3001"
+echo "PostgreSQL: localhost:5432"
+echo ""
+
+wait
