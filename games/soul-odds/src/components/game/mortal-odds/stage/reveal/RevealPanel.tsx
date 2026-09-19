@@ -61,12 +61,13 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
       <GameCard className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto" containerClassName="flex h-full w-full flex-col">
         <h3 className={`${serifFont.className} font-bold text-2xl text-white`}>{fate}</h3>
 
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-6">
           <FactCard label="Born" value={`${fmtYear(life.year)}, ${props.place.name}`} />
           <FactCard label={alive ? "Projected death" : "Died"} value={fmtYear(life.deathYear)} />
           <FactCard label="Cause" value={life.shock ? life.shock.label : "Ordinary life and death"} />
           <FactCard label="Literate" value={life.literate ? "Yes" : "No"} />
           <FactCard label="Lived in a city" value={life.city ? "Yes" : "No"} />
+          <FactCard label="Sin" value={life.sin ? life.sin.label : "Clean"} />
         </div>
 
         <p className={`${serifFont.className} text-base text-white/80 leading-relaxed`}>{story}</p>

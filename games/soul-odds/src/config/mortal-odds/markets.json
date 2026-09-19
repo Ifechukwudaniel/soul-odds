@@ -2,7 +2,7 @@
   {
     "id": "sex",
     "kind": "choice",
-    "title": "Girl or boy",
+    "title": "Gender",
     "note": "Close to a coin flip. A hedge, not an edge.",
     "options": [
       { "id": "girl", "label": "Girl" },
@@ -19,24 +19,6 @@
       { "id": "y", "label": "5 to 29" },
       { "id": "m", "label": "30 to 59" },
       { "id": "o", "label": "60 or older" }
-    ]
-  },
-  {
-    "id": "read",
-    "kind": "choice",
-    "title": "Learns to read",
-    "options": [
-      { "id": "yes", "label": "Yes" },
-      { "id": "no", "label": "No" }
-    ]
-  },
-  {
-    "id": "city",
-    "kind": "choice",
-    "title": "Lives in a city",
-    "options": [
-      { "id": "yes", "label": "Yes" },
-      { "id": "no", "label": "No" }
     ]
   }
 ]

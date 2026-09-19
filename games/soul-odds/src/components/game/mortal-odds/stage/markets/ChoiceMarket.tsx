@@ -1,13 +1,13 @@
 import type { IconType } from "react-icons";
-import { FaBookOpen, FaCity, FaHourglassHalf, FaRegQuestionCircle, FaVenusMars } from "react-icons/fa";
+import { FaHourglassHalf, FaRegQuestionCircle, FaVenusMars } from "react-icons/fa";
+import { GiFeather } from "react-icons/gi";
 import { playClickSound } from "@/utils/playClickSound";
 import type { MarketConfig, Price } from "@/types";
 
 const MARKET_ICONS: Record<string, IconType> = {
   sex: FaVenusMars,
   age: FaHourglassHalf,
-  read: FaBookOpen,
-  city: FaCity,
+  sins: GiFeather,
 };
 
 export const ChoiceMarket = (props: {
@@ -19,6 +19,7 @@ export const ChoiceMarket = (props: {
   const Icon = MARKET_ICONS[props.market.id] ?? FaRegQuestionCircle;
   const selectedPrice = props.selectedOptionId ? props.prices[props.selectedOptionId] : undefined;
   const selectedOdds = selectedPrice?.odds;
+  const options = props.market.options.filter((option) => option.id in props.prices);
 
   return (
     <div className="flex h-full flex-col items-center justify-center gap-5 text-center">
@@ -33,7 +34,7 @@ export const ChoiceMarket = (props: {
       </div>
 
       <div className="grid w-full max-w-xl grid-cols-2 gap-3">
-        {props.market.options.map((option) => {
+        {options.map((option) => {
           const price = props.prices[option.id];
           const isSelected = props.selectedOptionId === option.id;
           return (

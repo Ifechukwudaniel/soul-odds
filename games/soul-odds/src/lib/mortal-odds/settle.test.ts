@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { resolveBets } from "@/lib/mortal-odds/settle";
 import type { Bet, Life, MarketPrices, Price } from "@/types";
 
-const LIFE: Life = { year: 1900, region: "eur", sex: "boy", age: 40, deathYear: 1940, shock: null, literate: true, city: false };
+const LIFE: Life = { year: 1900, region: "eur", sex: "boy", age: 40, deathYear: 1940, shock: null, literate: true, city: false, sin: null };
 
 const PRICES: MarketPrices = {
   sex: {

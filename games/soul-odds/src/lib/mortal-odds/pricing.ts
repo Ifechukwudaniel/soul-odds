@@ -23,8 +23,7 @@ export function priceFromP(options: { p: number; config: PricingConfig }): Price
 
 const RESOLVERS: Record<string, (life: BookieLife) => string> = {
   age: (life) => (life.age < 5 ? "u5" : life.age < 30 ? "y" : life.age < 60 ? "m" : "o"),
-  read: (life) => (life.literate ? "yes" : "no"),
-  city: (life) => (life.city ? "yes" : "no"),
+  sins: (life) => life.sin ?? "none",
 };
 
 /** Prices every choice market's options from the bookie's year-only samples. */
@@ -80,8 +79,7 @@ export function medianDeathYear(samples: ReadonlyArray<{ deathYear: number }>): 
 export const LIFE_RESOLVERS: Record<string, (life: Life) => string> = {
   sex: (life) => life.sex,
   age: (life) => (life.age < 5 ? "u5" : life.age < 30 ? "y" : life.age < 60 ? "m" : "o"),
-  read: (life) => (life.literate ? "yes" : "no"),
-  city: (life) => (life.city ? "yes" : "no"),
+  sins: (life) => life.sin?.id ?? "none",
 };
 
 /** Real probabilities per market/option from the full model's truth samples (region, sex, catastrophes). */

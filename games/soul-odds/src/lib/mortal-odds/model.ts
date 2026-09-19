@@ -1,6 +1,7 @@
 import { interpolate } from "@/lib/mortal-odds/curves";
 import { applyShocks } from "@/lib/mortal-odds/shocks";
-import type { RegionModifiersConfig, ShockConfig } from "@/lib/mortal-odds/config";
+import { pickSin } from "@/lib/mortal-odds/sins";
+import type { RegionModifiersConfig, ShockConfig, SinConfig } from "@/lib/mortal-odds/config";
 import type { Rng } from "@/lib/mortal-odds/rng";
 import type { Life, RegionId, Sex, Shock } from "@/types";
 
@@ -12,7 +13,7 @@ export type BookieCurves = {
   urban: ReadonlyArray<readonly [number, number]>;
 };
 
-export type BookieLife = { age: number; deathYear: number; literate: boolean; city: boolean };
+export type BookieLife = { age: number; deathYear: number; literate: boolean; city: boolean; sin: string | null };
 
 function clamp(x: number, lo: number, hi: number): number {
   return Math.min(hi, Math.max(lo, x));
@@ -47,8 +48,8 @@ function adultAge(options: { mean: number; sd: number; rng: Rng }): number {
  * The bookie's year-only life model: no region, sex or catastrophes, matching what
  * the odds are priced on. This must stay simpler than the full model on purpose.
  */
-export function sampleLifeBookie(options: { year: number; rng: Rng; curves: BookieCurves }): BookieLife {
-  const { year, rng, curves } = options;
+export function sampleLifeBookie(options: { year: number; rng: Rng; curves: BookieCurves; sins: SinConfig[] }): BookieLife {
+  const { year, rng, curves, sins } = options;
   const q5 = Math.min(0.9, interpolate({ points: curves.q5, x: year }));
   const age =
     rng() < q5
@@ -58,19 +59,21 @@ export function sampleLifeBookie(options: { year: number; rng: Rng; curves: Book
           sd: interpolate({ points: curves.adultSd, x: year }),
           rng,
         });
+  const deathYear = year + age;
 
   return {
     age,
-    deathYear: year + age,
+    deathYear,
     literate: age >= 10 && rng() < Math.min(0.99, interpolate({ points: curves.literacy, x: year })),
     city: rng() < Math.min(0.95, interpolate({ points: curves.urban, x: year })),
+    sin: pickSin({ year, deathYear, region: null, rng, sins })?.id ?? null,
   };
 }
 
-export function simulateBookie(options: { year: number; rng: Rng; curves: BookieCurves; sims: number }): BookieLife[] {
-  const { year, rng, curves, sims } = options;
+export function simulateBookie(options: { year: number; rng: Rng; curves: BookieCurves; sins: SinConfig[]; sims: number }): BookieLife[] {
+  const { year, rng, curves, sins, sims } = options;
   const samples: BookieLife[] = new Array(sims);
-  for (let i = 0; i < sims; i++) samples[i] = sampleLifeBookie({ year, rng, curves });
+  for (let i = 0; i < sims; i++) samples[i] = sampleLifeBookie({ year, rng, curves, sins });
   return samples;
 }
 
@@ -117,6 +120,7 @@ export type FullModelConfig = {
   curves: BookieCurves;
   mods: RegionModifiersConfig;
   shocks: ShockConfig[];
+  sins: SinConfig[];
 };
 
 /** The full model: region, sex and catastrophes all shape the outcome, unlike the bookie's. */
@@ -151,15 +155,19 @@ export function sampleLife(options: {
     }
   }
 
+  const deathYear = year + age;
+  const sin = pickSin({ year, deathYear, region, rng, sins: config.sins });
+
   return {
     year,
     region,
     sex,
     age,
     shock,
-    deathYear: year + age,
+    deathYear,
     literate: age >= 10 && rng() < literacyP({ year, region, sex, curve: config.curves.literacy, mods: config.mods }),
     city: rng() < cityP({ year, region, curve: config.curves.urban, mods: config.mods }),
+    sin: sin ? { id: sin.id, label: sin.label, phrase: sin.phrase, from: sin.from, to: sin.to } : null,
   };
 }
 

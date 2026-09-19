@@ -38,6 +38,7 @@ export function tellStory(options: {
     parts.push(
       `${she} works as ${pickRandom(pool, rng)}, ${life.literate ? "can read" : "never learns to read"}, and ${life.city ? "spends years in a city" : "lives on the land"}.`,
     );
+    if (life.sin) parts.push(`Along the way, ${she.toLowerCase()} ${life.sin.phrase}.`);
   }
 
   if (alive) {

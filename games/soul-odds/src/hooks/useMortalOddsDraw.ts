@@ -11,6 +11,8 @@ import {
   regionModifiersConfig,
   shocksConfig,
   SIMS,
+  SINS_PER_ROUND,
+  sinsConfig,
   worldPopCurve,
 } from "@/lib/mortal-odds/config";
 import { drawBirth, pickPlace, placeContext as buildPlaceContext } from "@/lib/mortal-odds/draw";
@@ -20,16 +22,28 @@ import type { BookieLife, FullModelConfig } from "@/lib/mortal-odds/model";
 import { drawSex, sampleLife, simulateBookie, simulateFull } from "@/lib/mortal-odds/model";
 import { computeMarketPrices, computeTrueProbabilities, deathYearP, medianDeathYear, priceFromP } from "@/lib/mortal-odds/pricing";
 import { createRng } from "@/lib/mortal-odds/rng";
+import type { Rng } from "@/lib/mortal-odds/rng";
 import { resolveBets } from "@/lib/mortal-odds/settle";
+import { pickSinOptions } from "@/lib/mortal-odds/sins";
 import { tellStory } from "@/lib/mortal-odds/story";
 import { playClickSound } from "@/utils/playClickSound";
-import type { Bet, BetResult, Draw, EraFilter, Life, MarketPrices, PlaceContext, Price } from "@/types";
+import type { Bet, BetResult, Draw, EraFilter, Life, MarketConfig, MarketPrices, PlaceContext, Price } from "@/types";
+
+/**
+ * Narrows the "sins" market to a random hand of options for this soul (plus "Clean"), instead
+ * of pricing the whole catalog every round. A stand-in for the eventual backend-driven pick.
+ */
+function buildRoundMarkets(options: { year: number; rng: Rng }): MarketConfig[] {
+  const candidates = pickSinOptions({ sins: sinsConfig, year: options.year, rng: options.rng, count: SINS_PER_ROUND });
+  const sinsOptions = [{ id: "none", label: "Clean" }, ...candidates.map((sin) => ({ id: sin.id, label: sin.label }))];
+  return marketsConfig.map((market) => (market.id === "sins" ? { ...market, options: sinsOptions } : market));
+}
 
 const CURRENT_YEAR = new Date().getFullYear();
 const SPIN_DURATION_S = 0.75;
 const SPIN_YEAR_RANGE = CURRENT_YEAR + 12000;
 
-const fullModelConfig: FullModelConfig = { curves: bookieCurves, mods: regionModifiersConfig, shocks: shocksConfig };
+const fullModelConfig: FullModelConfig = { curves: bookieCurves, mods: regionModifiersConfig, shocks: shocksConfig, sins: sinsConfig };
 
 export type MortalOddsDrawPhase = "idle" | "drawing" | "when" | "where" | "predicting" | "confirming" | "revealed";
 
@@ -154,8 +168,8 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     const place = pickPlace({ region, rng, placesConfig });
     const draw: Draw = { year, region, place };
     const context = buildPlaceContext({ draw, erasConfig, worldPopCurve, currentYear: CURRENT_YEAR });
-    const samples = simulateBookie({ year, rng, curves: bookieCurves, sims: SIMS });
-    const prices = computeMarketPrices({ markets: marketsConfig, samples, config: PRICING_CONFIG });
+    const samples = simulateBookie({ year, rng, curves: bookieCurves, sins: sinsConfig, sims: SIMS });
+    const prices = computeMarketPrices({ markets: buildRoundMarkets({ year, rng }), samples, config: PRICING_CONFIG });
     const defaultDeathGuess = medianDeathYear(samples);
 
     dispatch({ type: "start-draw", draw, context, samples, prices, defaultDeathGuess });

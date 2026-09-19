@@ -6,9 +6,10 @@ import marketsJson from "@/config/mortal-odds/markets.json";
 import placesJson from "@/config/mortal-odds/places.json";
 import regionModifiersJson from "@/config/mortal-odds/region-modifiers.json";
 import shocksJson from "@/config/mortal-odds/shocks.json";
+import sinsJson from "@/config/mortal-odds/sins.json";
 import worldLandJson from "@/config/mortal-odds/world-land.json";
 import type { PricingConfig } from "@/lib/mortal-odds/pricing";
-import type { EraFilter, MarketConfig, RegionId } from "@/types";
+import type { EraFilter, MarketConfig, MarketOption, RegionId } from "@/types";
 
 export const MODES: Record<EraFilter, number> = { all: -Infinity, ce: 1, modern: 1750 };
 
@@ -20,6 +21,8 @@ export const REDRAW_COST = 5;
 
 export const SIMS = 5000;
 export const DEATH_WINDOW = 5;
+/** How many sins from the catalog are offered as bettable options each round (plus "Clean"). Matches the age market's option count. */
+export const SINS_PER_ROUND = 3;
 export const PRICING_CONFIG: PricingConfig = { houseEdge: 0.08, maxOdds: 60, minP: 0.003 };
 export const SEX_BOY_SHARE = 0.512;
 
@@ -121,6 +124,23 @@ const shockConfigSchema = z.object({
 
 const shocksConfigSchema = z.array(shockConfigSchema);
 
+/**
+ * The bettable sin catalog. Hand-edited: add an entry here and it becomes both a new option
+ * on the "sins" market and a possible outcome for every life, no other file to touch.
+ * `to: null` means the sin is still possible today; `rate` follows the same region-or-"all"
+ * shape as a shock's rate.
+ */
+const sinConfigSchema = z.object({
+  id: z.string(),
+  label: z.string(),
+  phrase: z.string(),
+  from: z.number(),
+  to: z.number().nullable(),
+  rate: shockRateSchema,
+});
+
+const sinsConfigSchema = z.array(sinConfigSchema).min(1);
+
 const jobPoolSchema = z.object({ land: z.array(z.string()), city: z.array(z.string()), lit: z.array(z.string()) });
 const jobsConfigSchema = z.object({
   forager: jobPoolSchema,
@@ -154,16 +174,28 @@ export type EraConfig = z.infer<typeof eraConfigSchema>;
 export type PlaceConfig = z.infer<typeof placeConfigSchema>;
 export type LandRing = z.infer<typeof worldLandSchema>[number];
 export type ShockConfig = z.infer<typeof shockConfigSchema>;
+export type SinConfig = z.infer<typeof sinConfigSchema>;
 export type JobsConfig = z.infer<typeof jobsConfigSchema>;
 export type RegionModifiersConfig = z.infer<typeof regionModifiersConfigSchema>;
 
 export const worldLand: LandRing[] = worldLandSchema.parse(worldLandJson);
 export const erasConfig: EraConfig[] = erasConfigSchema.parse(erasJson);
 export const placesConfig: Record<RegionId, PlaceConfig[]> = placesConfigSchema.parse(placesJson);
-export const marketsConfig: MarketConfig[] = marketsConfigSchema.parse(marketsJson);
 export const shocksConfig: ShockConfig[] = shocksConfigSchema.parse(shocksJson);
+export const sinsConfig: SinConfig[] = sinsConfigSchema.parse(sinsJson);
 export const jobsConfig: JobsConfig = jobsConfigSchema.parse(jobsJson);
 export const regionModifiersConfig: RegionModifiersConfig = regionModifiersConfigSchema.parse(regionModifiersJson);
+
+/** The "sins" market's options are generated from sins.json, plus a "Clean" outcome for no sin recorded. */
+const sinsMarket: MarketConfig = {
+  id: "sins",
+  kind: "choice",
+  title: "Sins committed",
+  note: "The list grows the longer they live, and with the times they live in.",
+  options: [{ id: "none", label: "Clean" }, ...sinsConfig.map((sin): MarketOption => ({ id: sin.id, label: sin.label }))],
+};
+
+export const marketsConfig: MarketConfig[] = [...marketsConfigSchema.parse(marketsJson), sinsMarket];
 
 const curves = curvesConfigSchema.parse(curvesJson);
 export const worldPopCurve: ReadonlyArray<readonly [number, number]> = curves.worldPop;

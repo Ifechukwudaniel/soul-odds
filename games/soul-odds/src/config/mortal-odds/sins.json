@@ -1,0 +1,16 @@
+[
+  { "id": "theft", "label": "Theft", "phrase": "stole to get by", "from": -50000, "to": null, "rate": { "all": 0.09 } },
+  { "id": "robbery", "label": "Robbery", "phrase": "held up a traveler on the road", "from": -50000, "to": null, "rate": { "all": 0.04 } },
+  { "id": "murder", "label": "Murder", "phrase": "took another's life in anger", "from": -50000, "to": null, "rate": { "all": 0.02 } },
+  { "id": "adultery", "label": "Adultery", "phrase": "broke a marriage vow", "from": -50000, "to": null, "rate": { "all": 0.07 } },
+  { "id": "grave-robbery", "label": "Grave robbery", "phrase": "robbed the dead from their tombs", "from": -50000, "to": 1900, "rate": { "all": 0.02 } },
+  { "id": "smuggling", "label": "Smuggling", "phrase": "smuggled goods past the tax collectors", "from": -3000, "to": null, "rate": { "all": 0.03 } },
+  { "id": "piracy", "label": "Piracy", "phrase": "turned pirate on the high seas", "from": -1200, "to": 1900, "rate": { "all": 0.015 } },
+  { "id": "bribery", "label": "Bribery", "phrase": "paid off an official to look away", "from": -3000, "to": null, "rate": { "all": 0.05 } },
+  { "id": "tax-evasion", "label": "Tax evasion", "phrase": "hid income from the tax man", "from": 1, "to": null, "rate": { "all": 0.05 } },
+  { "id": "forgery", "label": "Forgery", "phrase": "forged a document to get ahead", "from": -3000, "to": null, "rate": { "all": 0.02 } },
+  { "id": "fraud", "label": "Fraud", "phrase": "swindled someone out of their savings", "from": 1750, "to": null, "rate": { "all": 0.05 } },
+  { "id": "embezzlement", "label": "Embezzlement", "phrase": "quietly emptied accounts that weren't theirs", "from": 1, "to": null, "rate": { "all": 0.02 } },
+  { "id": "heresy", "label": "Heresy", "phrase": "spoke against the faith of their land", "from": -3000, "to": 1750, "rate": { "all": 0.02 } },
+  { "id": "perjury", "label": "Perjury", "phrase": "lied under oath", "from": -3000, "to": null, "rate": { "all": 0.02 } }
+]

@@ -64,6 +64,9 @@ export type Shock = {
   ages?: [number, number];
 };
 
+/** The one sin (of the sins.json catalog) this life is recorded as having committed, if any. */
+export type Sin = { id: string; label: string; phrase: string; from: number; to: number | null };
+
 export type Life = {
   year: number;
   region: RegionId;
@@ -73,6 +76,7 @@ export type Life = {
   shock: Shock | null;
   literate: boolean;
   city: boolean;
+  sin: Sin | null;
 };
 
 export type BetResult = {
