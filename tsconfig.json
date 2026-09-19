@@ -12,6 +12,6 @@
     "esModuleInterop": true,
     "resolveJsonModule": true
   },
-  "include": ["games/anibi/src/**/*", "scripts/**/*"],
+  "include": [ "scripts/**/*"],
   "exclude": ["node_modules"]
 }

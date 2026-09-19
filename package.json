@@ -19,7 +19,7 @@
   "scripts": {
     "check": "vp check",
     "check-types": "tsc --noEmit",
-    "start": "concurrently -k -n local-node,simulator,coinflip -c yellow,cyan,magenta \"tsx scripts/run-in.ts simulator local-node\" \"tsx scripts/run-in.ts simulator dev\" \"tsx scripts/run-in.ts examples/coinflip-public dev\"",
+    "start": "concurrently -k -n local-node,simulator,coinflip -c yellow,cyan,magenta \"tsx scripts/run-in.ts simulator local-node\" \"tsx scripts/run-in.ts simulator dev\" \"tsx scripts/run-in.ts games/coinflip-public dev\"",
     "start:slots": "tsx scripts/run-in.ts slot-engine start"
   },
   "dependencies": {
