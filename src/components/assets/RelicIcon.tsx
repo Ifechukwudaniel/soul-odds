@@ -64,6 +64,7 @@ export const RelicIcon = ({
         src={relic.src}
         alt={relic.alt}
         fill
+        unoptimized
         sizes={`${size}px`}
         className="object-contain"
         style={{

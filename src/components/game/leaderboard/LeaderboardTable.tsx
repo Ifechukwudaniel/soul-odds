@@ -3,6 +3,9 @@ import {cn} from "@/utils"
 import type { LeaderboardUser } from "@/types";
 import { Slime } from "@/components/assets/characters/Slime";
 import { CurrencyCoinIcon } from "@/components/assets/CurrencyCoinIcon";
+import { SilverBadge } from "@/components/assets/SilverBadge";
+import { GoldBadge } from "@/components/assets/GoldBadge";
+import { BronzeBadge } from "@/components/assets/BronzeBadge";
 import { GameCard } from "@/components/game/home/GameCard";
  
 interface LeaderboardTableProps {
@@ -12,6 +15,12 @@ interface LeaderboardTableProps {
   }
    
   const COLUMNS = ["Rank", "User name", "Point", "Profit"] as const;
+
+  const RANK_BADGES: Record<number, typeof GoldBadge> = {
+    1: GoldBadge,
+    2: SilverBadge,
+    3: BronzeBadge,
+  };
    
   export function LeaderboardTable({
     users,
@@ -33,6 +42,7 @@ interface LeaderboardTableProps {
           <tbody>
             {users.map((user) => {
               const isCurrentUser = user.id === currentUserId;
+              const RankBadge = RANK_BADGES[user.rank];
               return (
                 <tr
                   key={user.id}
@@ -44,7 +54,9 @@ interface LeaderboardTableProps {
                       : "bg-white/[0.02]"
                   )}
                 >
-                  <td className="px-6 py-4 font-[700] text-white">{user.rank}</td>
+                  <td className="px-6 py-4 font-[700] text-white">
+                    {RankBadge ? <RankBadge className="h-8 w-8" /> : user.rank}
+                  </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/5">
@@ -69,4 +81,3 @@ interface LeaderboardTableProps {
       </GameCard>
     );
   }
-   

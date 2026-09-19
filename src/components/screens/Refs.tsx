@@ -20,8 +20,8 @@ export const InviteComponent = ({ copyInvite }: { copyInvite: () => void }) => {
           <Image
             src="/img/shine.svg"
             alt="shine"
-            width={240}
-            height={240}
+            width={280}
+            height={280}
             priority
           />
 
@@ -31,6 +31,7 @@ export const InviteComponent = ({ copyInvite }: { copyInvite: () => void }) => {
                 alt="referral icon"
                 width={50}
                 height={50}
+                unoptimized
               />
           </div>
         </div>

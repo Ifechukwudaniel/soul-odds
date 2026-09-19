@@ -1,6 +1,6 @@
 import { IconProps } from "@/types/icontypes";
 
-export const Goldbadge = (props: IconProps)  => {
+export const GoldBadge = (props: IconProps)  => {
   return (
     <svg width="67" height="70" viewBox="0 0 67 70" fill="none" xmlns="http://www.w3.org/2000/svg" className={props.className} style={{ width: props.width, height: props.height }}>
     <mask id="mask0_25_1198"   style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="4" y="0" width="58" height="70">

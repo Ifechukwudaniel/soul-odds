@@ -1,7 +1,6 @@
 import { Leaderboard } from "@/components/game/leaderboard/Leaderboard";
 import type { LeaderboardUser, PodiumEntry } from "@/types";
 
-// Weekly cycle resets every Monday 00:00 UTC — swap for your real value.
 const RESET_AT = new Date("2026-09-28T00:00:00Z");
  
 const USERS: LeaderboardUser[] = [
@@ -50,7 +49,6 @@ const USERS: LeaderboardUser[] = [
     points: 2_114_424,
     reward: 1000,
   },
-  // ... ranks 6-100
 ];
  
 const CURRENT_USER: LeaderboardUser = {

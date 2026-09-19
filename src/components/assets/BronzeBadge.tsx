@@ -2,7 +2,7 @@ import { IconProps } from "@/types/icontypes";
 
 export const BronzeBadge = (props: IconProps)  => {
   return (
-    <svg width="67" height="70" viewBox="0 0 67 70" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: props.width, height: props.height }}>
+    <svg viewBox="0 0 67 70" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: props.width, height: props.height }} className={props.className}>
     <mask id="mask0_24_911" style={{ maskType: "alpha" }}maskUnits="userSpaceOnUse" x="4" y="0" width="58" height="70">
     <path d="M38.4051 40.1376L25.3317 66.3766C24.3092 68.4281 21.4714 68.6565 20.1339 66.7948L15.9904 61.0262C15.9818 61.0145 15.9681 61.0077 15.9536 61.0079L8.85304 61.1742C6.56122 61.2278 5.03457 58.8247 6.05658 56.7728L19.13 30.5339L38.4051 40.1376Z" fill="#045CCB" stroke="black" stroke-width="3"/>
     <path d="M27.4138 40.1376L40.4873 66.3766C41.5098 68.4281 44.3476 68.6565 45.6851 66.7948L49.8286 61.0262C49.8371 61.0145 49.8509 61.0077 49.8653 61.0079L56.9659 61.1742C59.2577 61.2278 60.7844 58.8247 59.7624 56.7728L46.689 30.5339L27.4138 40.1376Z" fill="#045CCB" stroke="black" stroke-width="3"/>
