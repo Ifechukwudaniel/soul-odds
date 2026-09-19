@@ -1,5 +1,6 @@
 import type { routing } from '@/libs/I18nRouting';
 import type messages from '@/locales/en.json';
+import {AppConfig} from "@/utils/AppConfig"
 
 declare module 'next-intl' {
   // oxlint-disable-next-line typescript/consistent-type-definitions

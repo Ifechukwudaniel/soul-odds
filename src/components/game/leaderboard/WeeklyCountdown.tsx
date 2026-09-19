@@ -1,5 +1,6 @@
 "use client";
 
+import { TimerIcon } from "@/components/assets/TimerIcon";
 import { useEffect, useState } from "react";
 
 interface WeeklyCountdownProps {
@@ -38,14 +39,11 @@ export function WeeklyCountdown({ resetAt }: WeeklyCountdownProps) {
   }, [resetAt]);
 
   return (
-    <div className="flex flex-col items-center gap-1 text-center">
-      <span className="text-xl" aria-hidden>
-        ⏰
-      </span>
-      <p className="text-sm text-[#AFAFAF]">Resets in</p>
-      <p className="text-base font-[700] text-white tabular-nums">
-        {time.days}d {pad(time.hours)}h {pad(time.minutes)}m {pad(time.seconds)}s
-      </p>
-    </div>
-  );
+<div className="flex flex-row items-center gap-1 text-left">
+  <TimerIcon className="w-[28px] h-[30px]"/>
+  <p className="text-[0.75rem] text-[#AFAFAF] mr-3 ml-1">Resets in:</p>
+  <p className="text-base font-[500] text-white tabular-nums">
+    {time.days}d {pad(time.hours)}h {pad(time.minutes)}m {pad(time.seconds)}s
+  </p>
+</div>  );
 }

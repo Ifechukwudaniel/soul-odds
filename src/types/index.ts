@@ -93,11 +93,11 @@ export interface LeaderboardUser {
   rank: number;
   username: string;
   handle: string;
-  avatarUrl: string;
   followers: number;
   points: number;
   reward: number;
 }
+ 
 
 export interface PodiumUser extends LeaderboardUser {
   prize: number;

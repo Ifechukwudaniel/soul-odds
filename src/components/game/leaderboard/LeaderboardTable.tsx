@@ -19,7 +19,7 @@ interface LeaderboardTableProps {
     currentUserRowRef,
   }: LeaderboardTableProps) {
     return (
-      <GameCard className="overflow-x-auto" containerClassName="w-full">
+      <GameCard className="overflow-x-auto" containerClassName="w-full max-h-[20rem] overflow-y-scroll">
         <table className="w-full text-left">
           <thead>
             <tr className="text-sm text-[#AFAFAF]">
@@ -47,13 +47,10 @@ interface LeaderboardTableProps {
                   <td className="px-6 py-4 font-[700] text-white">{user.rank}</td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/5">
-                        <Slime className="h-6 w-6" />
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/5">
+                        <Slime className="h-9 w-9" />
                       </div>
-                      <div>
-                        <p className="font-[600] text-white">{user.username}</p>
-                        <p className="text-sm text-[#AFAFAF]">@{user.handle}</p>
-                      </div>
+                      <p className="font-[500] text-white">@{user.handle}</p>
                     </div>
                   </td>
                   <td className="px-6 py-4 text-white">

@@ -1,8 +1,9 @@
-import React from "react";
+import { IconProps } from "@/types/icontypes";
 
-export const TimerIcon = () => {
+
+export const TimerIcon = (props: IconProps) => {
   return (
-    <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg"  className={props.className} style={{ width: props.width, height: props.height }}>
       <path
         d="M13.6106 3.23732L5.93114 0.123726C5.7626 0.0553934 5.57058 0.136626 5.50225 0.305164L5.23983 0.952379C5.1715 1.12092 5.25273 1.31294 5.42127 1.38127L13.1008 4.49487C13.2693 4.5632 13.4613 4.48197 13.5297 4.31343L13.7921 3.66622C13.8604 3.49768 13.7792 3.30566 13.6106 3.23732Z"
         fill="url(#paint0_linear_372_8153)"

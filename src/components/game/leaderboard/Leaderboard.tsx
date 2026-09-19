@@ -1,27 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { LeaderboardPodium } from "./LeaderboardPodium";
 import { LeaderboardTable } from "./LeaderboardTable";
 import { CurrentUserJumpBar } from "./CurrentUserJumpBar";
-import type { LeaderboardUser, PodiumEntry } from "types";
+import { WeeklyCountdown } from "./WeeklyCountdown";
+import type { LeaderboardUser } from "@/types";
 
 interface LeaderboardProps {
-  /** [1st place, 2nd place, 3rd place] */
-  podium: PodiumEntry;
-  /** Ranks 4-100 */
-  rest: LeaderboardUser[];
+  /** Full ranked list, rank 1-100 */
+  users: LeaderboardUser[];
   currentUser?: LeaderboardUser;
   resetAt: Date;
 }
 
-export function Leaderboard({ podium, rest, currentUser, resetAt }: LeaderboardProps) {
+export function Leaderboard({ users, currentUser, resetAt }: LeaderboardProps) {
   const currentUserRowRef = useRef<HTMLTableRowElement>(null);
   const [isRowVisible, setIsRowVisible] = useState(true);
-
-  const isOnPodium = currentUser
-    ? podium.some((entry) => entry.id === currentUser.id)
-    : false;
 
   useEffect(() => {
     const node = currentUserRowRef.current;
@@ -43,18 +37,25 @@ export function Leaderboard({ podium, rest, currentUser, resetAt }: LeaderboardP
   };
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10">
-      <LeaderboardPodium podium={podium} resetAt={resetAt} />
+    <div className="mx-auto container  px-4 py-4">
+      <h2 className="text-2xl font-[500] mb-3">Leaderboard</h2>
+      <p className="text-sm text-white leading-[1.7]">
+        See how you stack up against everyone else this week and climb the ranks.
+      </p>
 
-      <div className="mt-10">
+      <div className="mt-8">
+        <WeeklyCountdown resetAt={resetAt} />
+      </div>
+
+      <div className="mt-10  ">
         <LeaderboardTable
-          users={rest}
+          users={users}
           currentUserId={currentUser?.id}
           currentUserRowRef={currentUserRowRef}
         />
       </div>
 
-      {currentUser && !isOnPodium && (
+      {currentUser && (
         <CurrentUserJumpBar
           user={currentUser}
           visible={!isRowVisible}
