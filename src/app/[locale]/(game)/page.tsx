@@ -59,6 +59,7 @@ export default function GamePage() {
   const [loginError, setLoginError] = useState<string | null>(null);
   const state = useAppStore((state) => state);
   const freeBoost = useAppStore((state) => state.freeBoosts);
+  const user = useAppStore((state) => state.user)
   const player = useMortalOddsPlayer();
 
   const screens = {
@@ -170,18 +171,18 @@ export default function GamePage() {
       </div>
     );
   }
+  console.log(state)
 
   return (
     <div className="flex h-screen w-full flex-col">
       <GameHeader
-        balance={player.stats.bankroll}
+        balance={user.balance}
         currency="deben"
         avatar={<Slime width={24} height="24" />}
         onOpenProfile={() => setIsProfileOpen(true)}
       />
 
       <div className="min-h-0 flex-1 overflow-y-auto">{screenRender}</div>
-
       <div className="container mx-auto px-6">
         <Menubar />
       </div>
@@ -189,9 +190,9 @@ export default function GamePage() {
       <ProfileModal
         isOpen={isProfileOpen}
         onClose={() => setIsProfileOpen(false)}
-        username="ceeriil"
-        handle="ceeriil"
-        rank="Silver"
+        username={user.username}
+        handle={user.username}
+        rank={user.rank}
         leaderboardRank={42881}
         onViewRankPage={() => setScreen("badges")}
       />
