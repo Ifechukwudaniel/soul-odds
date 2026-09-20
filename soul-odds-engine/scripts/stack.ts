@@ -1,4 +1,4 @@
-// The local stack: simulator node + harness from the casino SDK, the Lucky Reels frontend and a
+// The local stack: simulator node + harness from the casino SDK, the Soul Odds frontend and a
 // one-shot title deployment. Works from the monorepo and from the standalone SDK download.
 import { packageManager } from '@chain/casino-sdk/scripts/run-in.ts';
 import concurrently from 'concurrently';

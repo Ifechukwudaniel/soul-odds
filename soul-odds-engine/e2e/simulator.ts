@@ -1,13 +1,13 @@
-// Deploys a slot title onto the running simulator chain and plays real sessions through the
-// VRF node, checking each settlement against the reference sampler. Needs `vp run start`.
-import { readFileSync } from 'node:fs';
+// Deploys a Soul Odds title onto the running simulator chain and plays real sessions through the
+// VRF node, checking each settlement against the reference TS mirror. Needs `vp run start`.
 import { parseArgs } from 'node:util';
-import { type Hex, hexToBigInt, parseAbi, parseEther, parseEventLogs } from 'viem';
+import { type Hex, parseAbi, parseEther, parseEventLogs } from 'viem';
 import {
-  formatPrize,
-  parseDisplayMapping,
-  pickDisplaySeed,
-  samplePrizeUnits,
+  encodePrediction,
+  generateSoul,
+  matchesPrediction,
+  predictionPayout,
+  type SoulPrediction,
 } from '../src/index.ts';
 import {
   deployTitleToSimulator,
@@ -28,6 +28,15 @@ const { values } = parseArgs({
   },
 });
 
+/** Cycles through a spread of valid predictions: both genders, every bucket, 0/1/2 crimes. */
+function predictionForRound(round: number): SoulPrediction {
+  const gender = round % 2;
+  const lifespanBucket = Math.floor(round / 2) % 4;
+  const crimeMasks = [0, 0b0001, 0b0011, 0b0110, 0b1000];
+  const crimeMask = crimeMasks[round % crimeMasks.length];
+  return { gender, lifespanBucket, sins: crimeMask !== 0, crimeMask };
+}
+
 async function main() {
   const deployment = readSimulatorDeployment(values.deployed);
   const { deployer, title, onChain, publicClient, walletClient } = await deployTitleToSimulator(
@@ -36,7 +45,7 @@ async function main() {
   );
   const base = title.betConfigurations[0];
   console.log(`deployer ${deployer}`);
-  console.log(`title    ${onChain.title}  RTP ${Number(onChain.titleRtpWad) / 1e16}%`);
+  console.log(`title    ${onChain.title}  RTP ${Number(base.configuration.rtpWad) / 1e16}%`);
 
   const write = async (hash: Hex) => publicClient.waitForTransactionReceipt({ hash });
   await write(
@@ -48,19 +57,13 @@ async function main() {
     }),
   );
 
-  const mapping =
-    base.displayMappingPath === undefined
-      ? undefined
-      : parseDisplayMapping(
-          JSON.parse(readFileSync(base.displayMappingPath, 'utf8')),
-          base.prizeDenominator,
-        );
-
   const wager = parseEther('1');
   let wagered = 0n;
   let paid = 0n;
   for (let i = 0; i < Number(values.sessions); i++) {
-    const receipt = await write(
+    const prediction = predictionForRound(i);
+
+    const openedReceipt = await write(
       await walletClient.writeContract({
         address: deployment.host,
         abi: localCasinoHostAbi,
@@ -71,36 +74,45 @@ async function main() {
     const [opened] = parseEventLogs({
       abi: localCasinoHostAbi,
       eventName: 'CasinoSessionOpened',
-      logs: receipt.logs,
+      logs: openedReceipt.logs,
     });
-    const settled = await waitForSettlement(opened.args.sessionId, receipt.blockNumber);
+    const [advanced] = parseEventLogs({
+      abi: localCasinoHostAbi,
+      eventName: 'CasinoSessionAdvanced',
+      logs: openedReceipt.logs,
+    });
 
-    const expectedUnits = samplePrizeUnits(base, settled.randomness);
-    const expectedPayout = (wager * expectedUnits) / base.prizeDenominator;
-    if (settled.payout !== expectedPayout || hexToBigInt(settled.gameState) !== expectedUnits) {
+    await write(
+      await walletClient.writeContract({
+        address: deployment.host,
+        abi: localCasinoHostAbi,
+        functionName: 'submitAction',
+        args: [advanced.args.session, encodePrediction(prediction)],
+      }),
+    );
+
+    const settled = await waitForSettlement(opened.args.sessionId, openedReceipt.blockNumber);
+
+    const expectedResult = generateSoul(base.configuration, settled.randomness);
+    const expectedWon = matchesPrediction(prediction, expectedResult);
+    const expectedPayout = expectedWon ? predictionPayout(base.configuration, wager, prediction) : 0n;
+    if (settled.payout !== expectedPayout) {
       throw new Error(
-        `session ${opened.args.sessionId}: chain paid ${settled.payout} for prize ${settled.gameState}, ` +
-          `reference expects ${expectedPayout} for ${expectedUnits}`,
-      );
-    }
-    const seed = mapping ? pickDisplaySeed(mapping, expectedUnits, settled.randomness) : undefined;
-    if (mapping && seed === undefined) {
-      throw new Error(
-        `session ${opened.args.sessionId}: no display seed for prize ${expectedUnits}`,
+        `session ${opened.args.sessionId}: chain paid ${settled.payout}, ` +
+          `reference expects ${expectedPayout} for age ${expectedResult.age}`,
       );
     }
     wagered += wager;
     paid += settled.payout;
     console.log(
-      `session ${opened.args.sessionId}  prize ${formatPrize(expectedUnits, base.prizeDenominator)}x` +
-        (seed === undefined ? '' : `  display seed ${JSON.stringify(seed)}`),
+      `session ${opened.args.sessionId}  ${expectedWon ? 'won' : 'lost'}  age ${expectedResult.age}`,
     );
   }
   if (wagered === 0n) return;
   console.log(
     `\n${values.sessions} sessions settled and matched the reference sampler. ` +
-      `Realized RTP ${((Number(paid) / Number(wagered)) * 100).toFixed(1)}% against a table RTP of ` +
-      `${Number(onChain.titleRtpWad) / 1e16}%.`,
+      `Realized RTP ${((Number(paid) / Number(wagered)) * 100).toFixed(1)}% against a title RTP of ` +
+      `${Number(base.configuration.rtpWad) / 1e16}%.`,
   );
 
   async function waitForSettlement(sessionId: bigint, fromBlock: bigint) {

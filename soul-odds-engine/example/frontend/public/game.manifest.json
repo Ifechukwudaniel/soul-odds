@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "gameId": "AncientSouls",
+  "apiVersion": 1,
+  "defaultLocale": "en",
+  "locales": {
+    "en": {
+      "name": "Ancient Souls",
+      "description": "Predict the gender, lifespan and crimes of a randomly generated soul."
+    }
+  },
+  "presentation": {
+    "mode": "full-iframe",
+    "hostPanels": {
+      "openSession": false,
+      "history": false,
+      "status": false
+    }
+  },
+  "capabilities": {
+    "openSession": true,
+    "submitAction": true,
+    "forfeitExpiredSession": false,
+    "cancelStuckRandomness": false,
+    "resize": true
+  }
+}

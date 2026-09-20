@@ -30,6 +30,9 @@ struct SoulConfiguration {
     uint32 lifespanTotalWeight;
     uint32 maleWeight;
     uint32 femaleWeight;
+    // Target RTP (WAD-scaled) the engine pays out for every prediction,
+    // regardless of its probability.
+    uint64 rtpWad;
     // Exactly four lifespan buckets:
     //
     // 0-5
@@ -59,9 +62,10 @@ library SoulOddsTitleArgs {
      * lifespanTotalWeight  4 bytes
      * maleWeight           4 bytes
      * femaleWeight         4 bytes
+     * rtpWad               8 bytes
      * crimeCount           1 byte
      *
-     * Header = 18 bytes
+     * Header = 26 bytes
      *
      * Each lifespan:
      * minYears             2 bytes
@@ -78,7 +82,7 @@ library SoulOddsTitleArgs {
      * Crime = 8 bytes
      */
 
-    uint256 internal constant RECORD_HEAD_BYTES = 18;
+    uint256 internal constant RECORD_HEAD_BYTES = 26;
     uint256 internal constant LIFESPAN_BYTES = 12;
     uint256 internal constant CRIME_BYTES = 8;
 
@@ -95,12 +99,8 @@ library SoulOddsTitleArgs {
     ) internal pure returns (bytes memory args) {
         uint256 count = configurations.length;
 
-        if (count != ERA_COUNT) {
+        if (count == 0 || count > type(uint8).max) {
             revert SoulOddsTitleArgs__InvalidConfigurationCount();
-        }
-
-        if (count > type(uint8).max) {
-            revert SoulOddsTitleArgs__TooLarge();
         }
 
         bytes memory offsets;
@@ -171,7 +171,9 @@ library SoulOddsTitleArgs {
 
         configuration.femaleWeight = uint32(_read(args, record + 13, 4));
 
-        uint256 crimeCount = _read(args, record + 17, 1);
+        configuration.rtpWad = uint64(_read(args, record + 17, 8));
+
+        uint256 crimeCount = _read(args, record + 25, 1);
 
         if (crimeCount != CRIME_COUNT) {
             revert SoulOddsTitleArgs__InvalidWeights();
@@ -262,6 +264,7 @@ library SoulOddsTitleArgs {
             configuration.lifespanTotalWeight,
             configuration.maleWeight,
             configuration.femaleWeight,
+            configuration.rtpWad,
             uint8(CRIME_COUNT)
         );
 

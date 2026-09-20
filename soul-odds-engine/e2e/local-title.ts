@@ -10,7 +10,7 @@ import {
   parseAbi,
 } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
-import { compileTitleFile, deployTitle } from '../src/index.ts';
+import { deployTitle, loadTitleFile } from '../src/index.ts';
 
 export const HARDHAT_ACCOUNT_0 =
   '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80' as Hex;
@@ -20,13 +20,13 @@ export const SIMULATOR_DIR = ['../../simulator', '../../casino-sdk/simulator']
   .find(existsSync)!;
 export const SIMULATOR_DEPLOYMENT_PATH = join(SIMULATOR_DIR, 'local-node/deployed.json');
 export const EXAMPLE_TITLE_PATH = resolve(import.meta.dirname, '../example/title.json');
-const MIN_RTP_WAD = 850_000_000_000_000_000n;
-const MAX_RTP_WAD = 980_000_000_000_000_000n;
 
 export const localCasinoHostAbi = parseAbi([
   'function registerGame(address game, string gameName)',
   'function openSession(address game, address vault, uint256 wager, bytes gameData) returns (uint256 sessionId, bytes32 requestId)',
+  'function submitAction(bytes encodedSession, bytes actionData) returns (bytes32 requestId)',
   'event CasinoSessionOpened(uint256 indexed sessionId, address indexed game, address indexed player, address vault, uint256 wager)',
+  'event CasinoSessionAdvanced(uint256 indexed sessionId, uint32 indexed step, bytes32 requestId, bytes32 randomness, bytes session)',
   'event CasinoSessionSettled(uint256 indexed sessionId, address indexed game, address indexed player, uint8 phase, uint256 payout, bytes32 randomness, bytes gameState)',
 ]);
 
@@ -57,14 +57,14 @@ export function createSimulatorClients(deployment: SimulatorDeployment) {
   };
 }
 
-/** Deploys a fresh SlotTitleDeployer and the title onto the simulator chain, then registers it. */
+/** Deploys a fresh SoulOddsTitleDeployer and the title onto the simulator chain, then registers it. */
 export async function deployTitleToSimulator(deployment: SimulatorDeployment, titlePath: string) {
   const { account, publicClient, walletClient } = createSimulatorClients(deployment);
   const artifact = JSON.parse(
     readFileSync(
       resolve(
         import.meta.dirname,
-        '../artifacts/contracts/SlotTitleDeployer.sol/SlotTitleDeployer.json',
+        '../artifacts/contracts/SoulOddsTitleDeployer.sol/SoulOddsTitleDeployer.json',
       ),
       'utf8',
     ),
@@ -72,19 +72,19 @@ export async function deployTitleToSimulator(deployment: SimulatorDeployment, ti
   const deployHash = await walletClient.deployContract({
     abi: artifact.abi,
     bytecode: artifact.bytecode,
-    args: [account.address, MIN_RTP_WAD, MAX_RTP_WAD],
+    args: [account.address],
   });
   const { contractAddress: deployer } = await publicClient.waitForTransactionReceipt({
     hash: deployHash,
   });
-  if (!deployer) throw new Error('SlotTitleDeployer deployment failed');
+  if (!deployer) throw new Error('SoulOddsTitleDeployer deployment failed');
 
-  const title = compileTitleFile(titlePath);
+  const title = loadTitleFile(titlePath);
   const onChain = await deployTitle({
     publicClient,
     walletClient,
     deployer,
-    configurations: title.betConfigurations,
+    configuration: title.betConfigurations[0].input,
   });
   const registerHash = await walletClient.writeContract({
     address: deployment.host,

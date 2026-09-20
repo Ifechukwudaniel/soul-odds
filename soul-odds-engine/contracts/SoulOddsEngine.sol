@@ -15,6 +15,8 @@ contract SoulOddsEngine is ICasinoGameV2 {
 
     uint256 internal constant CRIME_COUNT = 4;
     uint256 internal constant LIFESPAN_COUNT = 4;
+    // A soul can commit 0, 1, or 2 of the 4 anonymous crimes: 1 + 4 + C(4,2).
+    uint256 internal constant VALID_CRIME_STATE_COUNT = 11;
 
     address private immutable ENGINE = address(this);
 
@@ -84,7 +86,7 @@ contract SoulOddsEngine is ICasinoGameV2 {
     ) external view returns (StepResult memory stepResult) {
         _configuration(ctx.gameData);
 
-        stepResult.nextPhase = SessionPhase.WAITING_RANDOMNESS;
+        stepResult.nextPhase = SessionPhase.WAITING_PLAYER_ACTION;
 
         stepResult.requestRandomnessNow = false;
 
@@ -402,20 +404,99 @@ contract SoulOddsEngine is ICasinoGameV2 {
         return true;
     }
 
-    function _rtpWad(SoulConfiguration memory) private pure returns (uint256) {
-        return 98e16;
+    function _rtpWad(
+        SoulConfiguration memory configuration
+    ) private pure returns (uint256) {
+        return configuration.rtpWad;
     }
 
+    /// @dev Smallest probability across every valid (gender, lifespan
+    ///      bucket, crime state) prediction, i.e. the rarest bet this
+    ///      configuration allows. Structurally impossible states (e.g. a
+    ///      crime state in a bucket with a 100% no-crime weight) are
+    ///      skipped since they can never actually pay out.
     function _minimumPredictionProbability(
-        SoulConfiguration memory
-    ) private pure returns (uint256) {
-        return 1e16;
+        SoulConfiguration memory configuration
+    ) private pure returns (uint256 minProbabilityWad) {
+        minProbabilityWad = WAD;
+
+        uint8[VALID_CRIME_STATE_COUNT] memory crimeMasks = _validCrimeMasks();
+
+        for (uint8 gender; gender < 2; ++gender) {
+            for (uint8 bucket; bucket < LIFESPAN_COUNT; ++bucket) {
+                for (uint256 i; i < crimeMasks.length; ++i) {
+                    uint8 mask = crimeMasks[i];
+
+                    SoulPrediction memory prediction = SoulPrediction({
+                        gender: gender,
+                        lifespanBucket: bucket,
+                        sins: mask != 0,
+                        crimeMask: mask
+                    });
+
+                    uint256 probabilityWad = _predictionProbabilityWad(
+                        configuration,
+                        prediction
+                    );
+
+                    if (
+                        probabilityWad > 0 && probabilityWad < minProbabilityWad
+                    ) {
+                        minProbabilityWad = probabilityWad;
+                    }
+                }
+            }
+        }
     }
 
+    function _validCrimeMasks()
+        private
+        pure
+        returns (uint8[VALID_CRIME_STATE_COUNT] memory masks)
+    {
+        masks[0] = 0;
+
+        uint256 cursor = 1;
+
+        for (uint8 i; i < CRIME_COUNT; ++i) {
+            masks[cursor++] = uint8(1 << i);
+        }
+
+        for (uint8 a; a < CRIME_COUNT; ++a) {
+            for (uint8 b = a + 1; b < CRIME_COUNT; ++b) {
+                masks[cursor++] = uint8((1 << a) | (1 << b));
+            }
+        }
+    }
+
+    /// @dev Variance per unit wager^2 of a Bernoulli bet (win `maxPayout`
+    ///      with probability p, else 0) at the rarest, and therefore
+    ///      riskiest, prediction this configuration allows.
     function _varianceWad(
-        SoulConfiguration memory
+        SoulConfiguration memory configuration
     ) private pure returns (uint256) {
-        return 1e18;
+        uint256 minProbabilityWad = _minimumPredictionProbability(
+            configuration
+        );
+
+        uint256 rtp = _rtpWad(configuration);
+
+        uint256 rtpSquaredWad = Math.mulDiv(
+            rtp,
+            rtp,
+            WAD,
+            Math.Rounding.Ceil
+        );
+
+        uint256 oneMinusProbabilityWad = WAD - minProbabilityWad;
+
+        return
+            Math.mulDiv(
+                oneMinusProbabilityWad,
+                rtpSquaredWad,
+                minProbabilityWad,
+                Math.Rounding.Ceil
+            );
     }
 
     function _predictionMaxPayout(
@@ -432,7 +513,13 @@ contract SoulOddsEngine is ICasinoGameV2 {
             return 0;
         }
 
-        return Math.mulDiv(wager, 98e16, probability);
+        return
+            Math.mulDiv(
+                wager,
+                _rtpWad(configuration),
+                probability,
+                Math.Rounding.Ceil
+            );
     }
 
     function _predictionPayout(
@@ -450,25 +537,179 @@ contract SoulOddsEngine is ICasinoGameV2 {
         return
             Math.mulDiv(
                 wager,
-                98e16,
-                _minimumPredictionProbability(configuration)
+                _rtpWad(configuration),
+                _minimumPredictionProbability(configuration),
+                Math.Rounding.Ceil
             );
     }
 
+    /// @dev Exact probability that a randomly generated soul matches
+    ///      `prediction`, mirroring `_generateSoul` state by state:
+    ///      gender and lifespan bucket are independent weighted picks, and
+    ///      the crime state depends on the bucket's no-crime weight and the
+    ///      anonymous crime slot distribution.
     function _predictionProbabilityWad(
-        SoulConfiguration memory,
-        SoulPrediction memory
+        SoulConfiguration memory configuration,
+        SoulPrediction memory prediction
     ) private pure returns (uint256) {
-        // TODO:
-        // derive exact probability from:
-        //
-        // gender
-        // lifespan bucket
-        // no-crime probability
-        // anonymous crime slot distribution
-        //
-        // This must be completed before production deployment.
+        uint256 genderWeight = prediction.gender == 0
+            ? configuration.maleWeight
+            : configuration.femaleWeight;
 
-        return 1e16;
+        uint256 genderTotal = uint256(configuration.maleWeight) +
+            configuration.femaleWeight;
+
+        uint256 genderProbabilityWad = Math.mulDiv(
+            genderWeight,
+            WAD,
+            genderTotal
+        );
+
+        SoulLifespan memory lifespan = configuration.lifespans[
+            prediction.lifespanBucket
+        ];
+
+        uint256 lifespanProbabilityWad = Math.mulDiv(
+            lifespan.weight,
+            WAD,
+            configuration.lifespanTotalWeight
+        );
+
+        uint256 crimeStateProbabilityWad = _crimeStateProbabilityWad(
+            configuration,
+            lifespan,
+            prediction.crimeMask
+        );
+
+        return
+            Math.mulDiv(
+                Math.mulDiv(genderProbabilityWad, lifespanProbabilityWad, WAD),
+                crimeStateProbabilityWad,
+                WAD
+            );
+    }
+
+    /// @dev Probability of an exact crime state within `lifespan`, mirroring
+    ///      `_sampleNoCrime` and `_sampleCrimes`.
+    function _crimeStateProbabilityWad(
+        SoulConfiguration memory configuration,
+        SoulLifespan memory lifespan,
+        uint8 crimeMask
+    ) private pure returns (uint256) {
+        if (crimeMask == 0) {
+            return Math.mulDiv(lifespan.noCrimeWeight, WAD, BPS);
+        }
+
+        uint256 hasCrimeProbabilityWad = WAD -
+            Math.mulDiv(lifespan.noCrimeWeight, WAD, BPS);
+
+        uint256 selectionTotal;
+
+        for (uint256 i; i < CRIME_COUNT; ++i) {
+            selectionTotal += configuration.crimes[i].selectionWeight;
+        }
+
+        uint256 maskProbabilityWad = _crimeMaskProbabilityWad(
+            configuration,
+            selectionTotal,
+            crimeMask
+        );
+
+        return Math.mulDiv(hasCrimeProbabilityWad, maskProbabilityWad, WAD);
+    }
+
+    /// @dev Probability of an exact crime mask, conditional on a crime
+    ///      having occurred. `_sampleCrimes` always draws a first crime,
+    ///      then 25% of the time draws a second, weighted the same way; if
+    ///      that second draw collides with the first it shifts forward to
+    ///      the next unset slot instead of rerolling.
+    function _crimeMaskProbabilityWad(
+        SoulConfiguration memory configuration,
+        uint256 selectionTotal,
+        uint8 crimeMask
+    ) private pure returns (uint256) {
+        uint256 first = CRIME_COUNT;
+        uint256 second = CRIME_COUNT;
+
+        for (uint256 i; i < CRIME_COUNT; ++i) {
+            if ((crimeMask & (1 << i)) != 0) {
+                if (first == CRIME_COUNT) {
+                    first = i;
+                } else {
+                    second = i;
+                }
+            }
+        }
+
+        if (second == CRIME_COUNT) {
+            return
+                _singleCrimeProbabilityWad(configuration, selectionTotal, first);
+        }
+
+        return
+            _pairCrimeProbabilityWad(
+                configuration,
+                selectionTotal,
+                first,
+                second
+            );
+    }
+
+    function _singleCrimeProbabilityWad(
+        SoulConfiguration memory configuration,
+        uint256 selectionTotal,
+        uint256 index
+    ) private pure returns (uint256) {
+        uint256 probabilityWad = Math.mulDiv(
+            configuration.crimes[index].selectionWeight,
+            WAD,
+            selectionTotal
+        );
+
+        // No second draw happens 75% of the time. The remaining 25% also
+        // stays single when the second draw lands back on this slot and it
+        // is the last one, since there is no next slot to shift into.
+        uint256 stayedSingleWad = Math.mulDiv(probabilityWad, 3, 4);
+
+        if (index == CRIME_COUNT - 1) {
+            stayedSingleWad += Math.mulDiv(
+                Math.mulDiv(probabilityWad, probabilityWad, WAD),
+                1,
+                4
+            );
+        }
+
+        return stayedSingleWad;
+    }
+
+    function _pairCrimeProbabilityWad(
+        SoulConfiguration memory configuration,
+        uint256 selectionTotal,
+        uint256 first,
+        uint256 second
+    ) private pure returns (uint256) {
+        uint256 probabilityA = Math.mulDiv(
+            configuration.crimes[first].selectionWeight,
+            WAD,
+            selectionTotal
+        );
+
+        uint256 probabilityB = Math.mulDiv(
+            configuration.crimes[second].selectionWeight,
+            WAD,
+            selectionTotal
+        );
+
+        // Either slot can be drawn first, with the other added second. A
+        // second draw that collides with the first shifts forward one slot,
+        // so it also lands on `second` whenever second == first + 1.
+        uint256 numeratorWad = Math.mulDiv(probabilityA, probabilityB, WAD) *
+            2;
+
+        if (second == first + 1) {
+            numeratorWad += Math.mulDiv(probabilityA, probabilityA, WAD);
+        }
+
+        return numeratorWad / 4;
     }
 }

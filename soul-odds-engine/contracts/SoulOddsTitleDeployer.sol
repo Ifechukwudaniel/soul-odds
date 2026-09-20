@@ -59,8 +59,6 @@ contract SoulOddsTitleDeployer is Ownable {
 
     error SoulOddsTitleDeployer__InvalidNoCrimeWeight(uint256 index);
 
-    error SoulOddsTitleDeployer__LifespanWeightsOverflow();
-
     error SoulOddsTitleDeployer__InvalidCrime(uint256 index);
 
     error SoulOddsTitleDeployer__InvalidCrimeWeight(uint256 index);
@@ -85,6 +83,7 @@ contract SoulOddsTitleDeployer is Ownable {
         int16 maxBirthYear;
         uint32 maleWeight;
         uint32 femaleWeight;
+        uint64 rtpWad;
         SoulLifespan[4] lifespans;
         SoulCrime[4] crimes;
     }
@@ -98,11 +97,11 @@ contract SoulOddsTitleDeployer is Ownable {
     ) external onlyOwner returns (address title) {
         SoulConfiguration memory configuration = _buildConfiguration(input);
 
-        uint256 rtpWad = _deriveRtpWad(configuration);
+        SoulConfiguration[] memory configurations = new SoulConfiguration[](1);
 
-        _validateRtp(rtpWad);
+        configurations[0] = configuration;
 
-        bytes memory args = SoulOddsTitleArgs.encode(configuration);
+        bytes memory args = SoulOddsTitleArgs.encode(configurations);
 
         title = Clones.cloneWithImmutableArgs(engine, args);
 
@@ -111,30 +110,14 @@ contract SoulOddsTitleDeployer is Ownable {
             configuration.era,
             configuration.minBirthYear,
             configuration.maxBirthYear,
-            rtpWad
+            configuration.rtpWad
         );
     }
 
     function validateConfiguration(
         SoulConfigurationInput calldata input
-    )
-        external
-        pure
-        returns (SoulConfiguration memory configuration, uint256 rtpWad)
-    {
+    ) external pure returns (SoulConfiguration memory configuration) {
         configuration = _buildConfiguration(input);
-
-        rtpWad = _deriveRtpWad(configuration);
-
-        _validateRtp(rtpWad);
-    }
-
-    function deriveRtpWad(
-        SoulConfigurationInput calldata input
-    ) external pure returns (uint256) {
-        SoulConfiguration memory configuration = _buildConfiguration(input);
-
-        return _deriveRtpWad(configuration);
     }
 
     function _buildConfiguration(
@@ -146,6 +129,8 @@ contract SoulOddsTitleDeployer is Ownable {
 
         _validateGenderWeights(input.maleWeight, input.femaleWeight);
 
+        _validateRtp(input.rtpWad);
+
         configuration.era = input.era;
 
         configuration.minBirthYear = input.minBirthYear;
@@ -155,6 +140,8 @@ contract SoulOddsTitleDeployer is Ownable {
         configuration.maleWeight = input.maleWeight;
 
         configuration.femaleWeight = input.femaleWeight;
+
+        configuration.rtpWad = input.rtpWad;
 
         uint256 lifespanTotalWeight;
 
@@ -168,11 +155,7 @@ contract SoulOddsTitleDeployer is Ownable {
             lifespanTotalWeight += lifespan.weight;
         }
 
-        if (lifespanTotalWeight > type(uint32).max) {
-            revert SoulOddsTitleDeployer__LifespanWeightsOverflow();
-        }
-
-        configuration.lifespanTotalWeight = uint32(lifespanTotalWeight);
+        configuration.lifespanTotalWeight = lifespanTotalWeight.toUint32();
 
         for (uint256 i; i < CRIME_COUNT; ++i) {
             SoulCrime calldata crime = input.crimes[i];
@@ -245,56 +228,9 @@ contract SoulOddsTitleDeployer is Ownable {
         }
     }
 
-    /// @dev Derives the theoretical RTP from the same configuration
-    ///      consumed by SoulOddsEngine.
-    ///
-    ///      This function is intentionally kept behind one function so the
-    ///      exact Soul Odds probability model can be replaced without
-    ///      changing deployment flow.
-    function _deriveRtpWad(
-        SoulConfiguration memory configuration
-    ) private pure returns (uint256) {
-        configuration;
-
-        /*
-         * Soul Odds payout model:
-         *
-         * probability(prediction)
-         *     ↓
-         * payout = wager * RTP / probability
-         *
-         * The exact RTP calculation must enumerate every possible
-         * generated soul state and every player prediction that can
-         * actually be placed.
-         *
-         * For the current game this includes:
-         *
-         *   gender
-         *   lifespan bucket
-         *   crime state
-         *
-         * There are 11 valid crime states because a soul can have
-         * zero, one, or two committed crimes:
-         *
-         *   0000
-         *   0001
-         *   0010
-         *   0100
-         *   1000
-         *   0011
-         *   0101
-         *   1001
-         *   0110
-         *   1010
-         *   1100
-         *
-         * This should be replaced by the exact enumerated probability
-         * calculation before production deployment.
-         */
-
-        return 95e16;
-    }
-
+    /// @dev The payout model pays `wager * RTP / probability(prediction)` for
+    ///      every prediction, so RTP is a fixed design input chosen by the
+    ///      deployer, not a value derivable from the weight distribution.
     function _validateRtp(uint256 rtpWad) private pure {
         if (rtpWad == 0) {
             revert SoulOddsTitleDeployer__InvalidRtp();

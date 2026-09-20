@@ -1,45 +1,74 @@
 #!/usr/bin/env tsx
-import { readFileSync, writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
 import { type Address, createPublicClient, createWalletClient, type Hex, http } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
-import type { ConfigurationStats } from './compile.ts';
-import { readTitle, statsMismatches } from './decode.ts';
+import { soulOddsTitleAbi } from './abi.ts';
 import { deployTitle } from './deploy.ts';
-import { checkDisplayCoverage, parseDisplayMapping } from './display.ts';
-import { importStakeLibrary } from './stake.ts';
-import { formatPrize, formatTierList } from './tier-list.ts';
-import { compileTitleFile } from './title.ts';
+import {
+  maxPayout,
+  minimumPredictionProbabilityWad,
+  predictionPayout,
+  predictionProbabilityWad,
+  type SoulConfiguration,
+  validCrimeMasks,
+} from './soul.ts';
+import type { CompiledSoulConfiguration } from './configuration.ts';
+import { loadTitleFile } from './title.ts';
 
-const USAGE = `slot-engine <command>
+const USAGE = `soul-odds-engine <command>
 
-  compile <title.json>                          print each bet configuration's exact figures
-  check-mapping <title.json>                    check the display mapping covers every prize
+  compile <title.json>                          print the base configuration's exact odds
   deploy <title.json> --rpc <url> --deployer <address>
-                                                needs SLOT_ENGINE_PRIVATE_KEY
-  decode <title address> --rpc <url> [--out <dir>]
-                                                rebuild tier lists and RTP from chain bytes
-  import-stake <publish_files dir> --out <dir> [--name <title>] [--seeds-per-prize <n>]
-                                                convert a Stake Engine math export into a title`;
+                                                needs SOUL_ODDS_ENGINE_PRIVATE_KEY
+  decode <title address> --rpc <url>            print the on-chain base configuration`;
 
 function percent(wad: bigint): string {
-  return `${(Number(wad) / 1e16).toFixed(6)}%`;
+  return `${(Number(wad) / 1e16).toFixed(4)}%`;
 }
 
-function describe(
-  name: string,
-  prizeDenominator: bigint,
-  tierCount: number,
-  stats: ConfigurationStats,
-) {
-  return [
-    `${name}`,
-    `  RTP            ${percent(stats.rtpWad)}  (${stats.rtp.numerator}/${stats.rtp.denominator})`,
-    `  hit rate       ${((Number(stats.hitRate.numerator) / Number(stats.hitRate.denominator)) * 100).toFixed(4)}%`,
-    `  top prize      ${formatPrize(stats.topPrizeUnits, prizeDenominator)}x, weight ${stats.topPrizeWeight} of ${stats.totalWeight}`,
-    `  body sigma     ${Math.sqrt(Number(stats.bodyVarianceWad) / 1e18).toFixed(4)}x per unit wager`,
-    `  prizes         ${tierCount}, denominator ${prizeDenominator}`,
-  ].join('\n');
+function crimeLabel(names: readonly string[], mask: number): string {
+  if (mask === 0) return 'no crime';
+  const picked = names.filter((_, index) => (mask & (1 << index)) !== 0);
+  return picked.join(' + ');
+}
+
+function describe(compiled: CompiledSoulConfiguration): string {
+  const { definition, configuration } = compiled;
+  const crimeNames = definition.crimes.map(crime => crime.name);
+  const genderTotal = configuration.maleWeight + configuration.femaleWeight;
+  const lines = [
+    `${definition.name} (${definition.era}, ${definition.minBirthYear}..${definition.maxBirthYear})`,
+    `  RTP            ${percent(configuration.rtpWad)}`,
+    `  gender         male ${percent((configuration.maleWeight * 10n ** 18n) / genderTotal)}, ` +
+      `female ${percent((configuration.femaleWeight * 10n ** 18n) / genderTotal)}`,
+  ];
+  configuration.lifespans.forEach((lifespan, index) => {
+    const probabilityWad = (lifespan.weight * 10n ** 18n) / configuration.lifespanTotalWeight;
+    lines.push(
+      `  lifespan ${index}      ${lifespan.minYears}-${lifespan.maxYears}y  ` +
+        `${percent(probabilityWad)}  no-crime ${(Number(lifespan.noCrimeWeight) / 100).toFixed(2)}%`,
+    );
+  });
+  lines.push('  predictions (gender × lifespan × crimes):');
+  for (let gender = 0; gender < 2; gender++) {
+    for (let bucket = 0; bucket < 4; bucket++) {
+      for (const mask of validCrimeMasks()) {
+        const prediction = { gender, lifespanBucket: bucket, sins: mask !== 0, crimeMask: mask };
+        const probabilityWad = predictionProbabilityWad(configuration, prediction);
+        if (probabilityWad === 0n) continue;
+        const payout = predictionPayout(configuration, 10n ** 18n, prediction);
+        lines.push(
+          `    ${gender === 0 ? 'male' : 'female'}, bucket ${bucket}, ${crimeLabel(crimeNames, mask)}` +
+            `  odds ${percent(probabilityWad)}  pays ${(Number(payout) / 1e18).toFixed(4)}x`,
+        );
+      }
+    }
+  }
+  const rarest = minimumPredictionProbabilityWad(configuration);
+  lines.push(
+    `  rarest prediction odds ${percent(rarest)}, max payout ${(Number(maxPayout(configuration, 10n ** 18n)) / 1e18).toFixed(4)}x`,
+  );
+  return lines.join('\n');
 }
 
 function requireOption(value: string | undefined, name: string): string {
@@ -47,62 +76,41 @@ function requireOption(value: string | undefined, name: string): string {
   return value;
 }
 
+function describeOnChain(configuration: SoulConfiguration): string {
+  return [
+    `era ${configuration.era}, birth years ${configuration.minBirthYear}..${configuration.maxBirthYear}`,
+    `RTP ${percent(configuration.rtpWad)}`,
+    `gender weights male ${configuration.maleWeight}, female ${configuration.femaleWeight}`,
+    ...configuration.lifespans.map(
+      (lifespan, index) =>
+        `lifespan ${index}: ${lifespan.minYears}-${lifespan.maxYears}y weight ${lifespan.weight} no-crime ${lifespan.noCrimeWeight}bps`,
+    ),
+    ...configuration.crimes.map(
+      (crime, index) =>
+        `crime slot ${index}: selection weight ${crime.selectionWeight}, commit weight ${crime.commitWeight}bps`,
+    ),
+  ].join('\n');
+}
+
 async function main() {
   const { positionals, values } = parseArgs({
     allowPositionals: true,
-    options: {
-      rpc: { type: 'string' },
-      deployer: { type: 'string' },
-      out: { type: 'string' },
-      name: { type: 'string' },
-      'seeds-per-prize': { type: 'string' },
-    },
+    options: { rpc: { type: 'string' }, deployer: { type: 'string' } },
   });
   const [command, target] = positionals;
   if (command === undefined || target === undefined) throw new Error(USAGE);
 
-  if (command === 'compile' || command === 'check-mapping' || command === 'deploy') {
-    const title = compileTitleFile(target);
+  if (command === 'compile' || command === 'deploy') {
+    const title = loadTitleFile(target);
     console.log(`${title.name}\n`);
     for (const configuration of title.betConfigurations) {
-      console.log(
-        describe(
-          configuration.name,
-          configuration.prizeDenominator,
-          configuration.tiers.length,
-          configuration.stats,
-        ),
-      );
-      console.log(`  chunks         ${configuration.chunks.length}\n`);
-    }
-
-    if (command === 'check-mapping') {
-      let checked = 0;
-      let uncovered = 0;
-      for (const configuration of title.betConfigurations) {
-        if (configuration.displayMappingPath === undefined) {
-          console.log(`${configuration.name}: no display mapping`);
-          continue;
-        }
-        const mapping = parseDisplayMapping(
-          JSON.parse(readFileSync(configuration.displayMappingPath, 'utf8')),
-          configuration.prizeDenominator,
-        );
-        const coverage = checkDisplayCoverage(mapping, configuration);
-        checked++;
-        uncovered += coverage.prizesWithoutSeeds.length;
-        console.log(
-          `${configuration.name}: ${coverage.prizesWithoutSeeds.length} prizes without seeds, ` +
-            `${coverage.seedsWithoutPrize.length} mapped prizes absent from the table`,
-        );
-      }
-      if (checked === 0) throw new Error('No bet configuration has a displayMapping');
-      if (uncovered > 0) process.exitCode = 1;
+      console.log(describe(configuration));
+      console.log();
     }
 
     if (command === 'deploy') {
-      const privateKey = process.env.SLOT_ENGINE_PRIVATE_KEY;
-      if (privateKey === undefined) throw new Error('Set SLOT_ENGINE_PRIVATE_KEY');
+      const privateKey = process.env.SOUL_ODDS_ENGINE_PRIVATE_KEY;
+      if (privateKey === undefined) throw new Error('Set SOUL_ODDS_ENGINE_PRIVATE_KEY');
       const transport = http(requireOption(values.rpc, 'rpc'));
       const publicClient = createPublicClient({ transport });
       const chain = { id: await publicClient.getChainId() } as never;
@@ -111,68 +119,25 @@ async function main() {
         walletClient: createWalletClient({
           transport,
           chain,
-          account: privateKeyToAccount(privateKey as Hex),
+          account: privateKeyToAccount(requireOption(privateKey, 'private key') as Hex),
         }),
         deployer: requireOption(values.deployer, 'deployer') as Address,
-        configurations: title.betConfigurations,
+        configuration: title.betConfigurations[0].input,
       });
-      console.log(`title ${deployed.title}  title RTP ${percent(deployed.titleRtpWad)}`);
+      console.log(`title ${deployed.title}`);
     }
     return;
   }
 
   if (command === 'decode') {
     const client = createPublicClient({ transport: http(requireOption(values.rpc, 'rpc')) });
-    const configurations = await readTitle(client, target as Address);
-    configurations.forEach((configuration, index) => {
-      console.log(
-        describe(
-          `bet configuration ${index}`,
-          configuration.prizeDenominator,
-          configuration.tiers.length,
-          configuration.stats,
-        ),
-      );
-      const mismatches = statsMismatches(configuration.quoted, configuration.stats);
-      console.log(
-        mismatches.length === 0
-          ? '  quoted figures match the table\n'
-          : `  MISMATCH ${mismatches.join('; ')}\n`,
-      );
-      if (mismatches.length > 0) process.exitCode = 1;
-      if (values.out !== undefined) {
-        writeFileSync(
-          `${values.out}/configuration-${index}.csv`,
-          formatTierList(configuration.tierList),
-        );
-      }
+    const onChain = await client.readContract({
+      address: target as Address,
+      abi: soulOddsTitleAbi,
+      functionName: 'betConfiguration',
+      args: [0],
     });
-    return;
-  }
-
-  if (command === 'import-stake') {
-    const outDir = requireOption(values.out, 'out');
-    const seedsPerPrize = Number(values['seeds-per-prize'] ?? 16);
-    if (!Number.isInteger(seedsPerPrize) || seedsPerPrize < 1) {
-      throw new Error('--seeds-per-prize must be a positive whole number');
-    }
-    const modes = await importStakeLibrary({
-      publishDir: target,
-      outDir,
-      name: values.name ?? 'Imported Stake title',
-      seedsPerPrize,
-    });
-    for (const mode of modes) {
-      console.log(
-        [
-          mode.name,
-          `  source RTP     ${percent(mode.sourceRtpWad)}`,
-          `  imported RTP   ${percent(mode.importedRtpWad)}${mode.rescaled ? '  (weights rescaled to 32 bits)' : ''}`,
-          `  books          ${mode.booksFile === undefined ? 'no books file found' : `${mode.booksWritten} written`}`,
-        ].join('\n'),
-      );
-    }
-    console.log(`\nwrote ${outDir}/title.json; next: compile and check-mapping it`);
+    console.log(describeOnChain(onChain as unknown as SoulConfiguration));
     return;
   }
 

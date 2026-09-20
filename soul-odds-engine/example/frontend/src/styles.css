@@ -1,0 +1,166 @@
+:root {
+  --bg: #0b0b10;
+  --surface: #15151d;
+  --ink: #f4f4f8;
+  --ink-dim: rgba(244, 244, 248, 0.6);
+  --accent: #9238ff;
+  --win: #08d42f;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.waiting {
+  display: grid;
+  place-items: center;
+  min-height: 320px;
+  color: var(--ink-dim);
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 16px;
+  padding: 16px;
+  min-height: 100vh;
+}
+
+@media (max-width: 720px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel,
+.stage {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.panel h1 {
+  margin: 0 0 4px;
+  font-size: 20px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: var(--ink-dim);
+}
+
+.field input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 16px;
+}
+
+.picker {
+  display: flex;
+  gap: 8px;
+}
+
+.picker--column {
+  flex-direction: column;
+}
+
+.chip {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.chip--active {
+  border-color: var(--accent);
+  background: rgba(146, 56, 255, 0.25);
+}
+
+.chip:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--ink-dim);
+  margin-bottom: 6px;
+}
+
+.spin {
+  width: 100%;
+  margin: 12px 0;
+  padding: 12px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.spin:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.reason {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #ffb4b4;
+}
+
+.lines {
+  font-size: 12px;
+  color: var(--ink-dim);
+  margin: 0 0 16px;
+}
+
+.stage {
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.result {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  opacity: 0.6;
+}
+
+.result--visible {
+  opacity: 1;
+}
+
+.result strong {
+  font-size: 20px;
+}
+
+.result span {
+  color: var(--win);
+  font-size: 14px;
+}

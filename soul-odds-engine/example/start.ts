@@ -27,5 +27,6 @@ const { onChain, title } = await deployTitleToSimulator(
   readSimulatorDeployment(),
   EXAMPLE_TITLE_PATH,
 );
-console.log(`${title.name} ${onChain.title}  title RTP ${Number(onChain.titleRtpWad) / 1e16}%`);
+const titleRtpWad = title.betConfigurations[0].configuration.rtpWad;
+console.log(`${title.name} ${onChain.title}  title RTP ${Number(titleRtpWad) / 1e16}%`);
 console.log(`open ${SIMULATOR_URL} and pick ${title.name} in the game list`);

@@ -1,11 +1,26 @@
 {
-  "name": "Lucky Reels",
+  "name": "Ancient Souls",
   "betConfigurations": [
     {
       "name": "base",
-      "tierList": "base.csv",
-      "prizeDenominator": 10,
-      "displayMapping": "display-mapping.json"
+      "era": "Ancient",
+      "minBirthYear": -3000,
+      "maxBirthYear": -500,
+      "maleWeight": 51,
+      "femaleWeight": 49,
+      "rtpWad": "0.95",
+      "lifespans": [
+        { "minYears": 0, "maxYears": 5, "weight": 2000, "noCrimeWeight": 10000 },
+        { "minYears": 5, "maxYears": 29, "weight": 3000, "noCrimeWeight": 7000 },
+        { "minYears": 29, "maxYears": 50, "weight": 3500, "noCrimeWeight": 6000 },
+        { "minYears": 50, "maxYears": 90, "weight": 1500, "noCrimeWeight": 8000 }
+      ],
+      "crimes": [
+        { "name": "Murder", "selectionWeight": 200, "commitWeight": 5000 },
+        { "name": "Fraud", "selectionWeight": 500, "commitWeight": 5000 },
+        { "name": "Theft", "selectionWeight": 900, "commitWeight": 5000 },
+        { "name": "Heresy", "selectionWeight": 200, "commitWeight": 5000 }
+      ]
     }
   ]
 }
