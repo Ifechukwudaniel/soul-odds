@@ -291,6 +291,39 @@ function categoryPayout(configuration: SoulConfiguration, wager: bigint, probabi
   return mulDivCeil(wager, configuration.rtpWad, probabilityWad * 3n);
 }
 
+export type CategoryOdds = { probabilityWad: bigint; payout: bigint };
+
+/** Standalone odds/payout for picking `gender`, independent of the lifespan or crime pick. */
+export function genderOdds(configuration: SoulConfiguration, wager: bigint, gender: number): CategoryOdds {
+  const genderWeight = gender === 0 ? configuration.maleWeight : configuration.femaleWeight;
+  const genderTotal = configuration.maleWeight + configuration.femaleWeight;
+  const probabilityWad = mulDivFloor(genderWeight, WAD, genderTotal);
+  return { probabilityWad, payout: categoryPayout(configuration, wager, probabilityWad) };
+}
+
+/** Standalone odds/payout for picking `lifespanBucket`, independent of the gender or crime pick. */
+export function lifespanOdds(
+  configuration: SoulConfiguration,
+  wager: bigint,
+  lifespanBucket: number,
+): CategoryOdds {
+  const lifespan = configuration.lifespans[lifespanBucket];
+  const probabilityWad = mulDivFloor(lifespan.weight, WAD, configuration.lifespanTotalWeight);
+  return { probabilityWad, payout: categoryPayout(configuration, wager, probabilityWad) };
+}
+
+/** Standalone odds/payout for `crimeMask` within `lifespanBucket` (crime odds depend on the bucket). */
+export function crimeOdds(
+  configuration: SoulConfiguration,
+  wager: bigint,
+  lifespanBucket: number,
+  crimeMask: number,
+): CategoryOdds {
+  const lifespan = configuration.lifespans[lifespanBucket];
+  const probabilityWad = crimeStateProbabilityWad(configuration, lifespan, crimeMask);
+  return { probabilityWad, payout: categoryPayout(configuration, wager, probabilityWad) };
+}
+
 /**
  * Mirrors `_worstCaseCategoryProbabilities`: the marginal triple maximizing the total payout if all
  * three hit. Evaluated directly over every valid prediction since the crime marginal depends on

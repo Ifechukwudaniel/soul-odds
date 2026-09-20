@@ -198,3 +198,71 @@ body {
 .match-no {
   color: #ffb4b4;
 }
+
+.progression {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.progression-pill {
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(146, 56, 255, 0.12);
+  border: 1px solid rgba(146, 56, 255, 0.3);
+}
+
+.progression-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-dim);
+}
+
+.progression-value {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.progression-odds {
+  font-size: 11px;
+  color: var(--ink-dim);
+}
+
+.option-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.option-card {
+  flex: 1 1 120px;
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--bg);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.option-card--active {
+  border-color: var(--accent);
+  background: rgba(146, 56, 255, 0.25);
+}
+
+.option-label {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.option-stat {
+  font-size: 11px;
+  color: var(--ink-dim);
+}

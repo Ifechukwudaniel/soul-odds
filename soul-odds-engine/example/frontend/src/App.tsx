@@ -6,7 +6,11 @@ import {
   toConfigurationInput,
 } from '../../../src/configuration.ts';
 import {
+  type CategoryOdds,
+  crimeOdds,
   encodePrediction,
+  genderOdds,
+  lifespanOdds,
   maxPayout,
   predictionMaxPayout,
   predictionProbabilityWad,
@@ -78,6 +82,15 @@ function toggleCrime(mask: number, slot: number): number {
   return popcount >= 2 ? mask : mask | bit;
 }
 
+function percentText(odds: CategoryOdds): string {
+  return `${(Number(odds.probabilityWad) / 1e16).toFixed(2)}%`;
+}
+
+function payoutText(odds: CategoryOdds, wager: bigint): string {
+  if (odds.probabilityWad === 0n) return 'never';
+  return `${(Number(odds.payout) / Number(wager)).toFixed(2)}x`;
+}
+
 type RevealedSoul = { gender: number; age: number; birthYear: number; lifespanBucket: number; crimeMask: number };
 type MatchBreakdown = { genderMatch: boolean; lifespanMatch: boolean; crimeMatch: boolean };
 
@@ -140,12 +153,33 @@ export function App() {
       return null;
     }
   }, [wagerInput, decimals]);
+  const previewWager = wager ?? WAD;
 
   // Odds/payout of the full-house event (all three categories). Getting only some right still pays
   // out partial credit per category, so this understates what a bet can actually win.
   const previewProbabilityWad = predictionProbabilityWad(configuration, prediction);
   const previewPayout = wager !== null ? predictionMaxPayout(configuration, wager, prediction) : 0n;
-  const previewMultiplier = Number(previewPayout) / Number(wager ?? WAD);
+  const previewMultiplier = Number(previewPayout) / Number(previewWager);
+
+  // Each already-committed pick's own odds, so the trail grows as the player moves through the
+  // wizard — not just a single number revealed at the end.
+  const progression: { label: string; value: string; odds: CategoryOdds }[] = [];
+  if (step !== 'gender') {
+    const odds = genderOdds(configuration, previewWager, gender);
+    progression.push({ label: 'Gender', value: gender === 0 ? 'Male' : 'Female', odds });
+  }
+  if (step === 'has-crime' || step === 'pick-crimes' || step === 'review') {
+    const odds = lifespanOdds(configuration, previewWager, lifespanBucket);
+    progression.push({
+      label: 'Lifespan',
+      value: `${definition.lifespans[lifespanBucket].minYears}–${definition.lifespans[lifespanBucket].maxYears}y`,
+      odds,
+    });
+  }
+  if (step === 'review') {
+    const odds = crimeOdds(configuration, previewWager, lifespanBucket, crimeMask);
+    progression.push({ label: 'Crime', value: crimeLabel(crimeMask), odds });
+  }
 
   // Once the opened session's row appears, submit the prediction as the player action.
   useEffect(() => {
@@ -259,6 +293,10 @@ export function App() {
     }
   };
 
+  const noCrimeOdds = crimeOdds(configuration, previewWager, lifespanBucket, 0);
+  const anyCrimeProbabilityWad = WAD - noCrimeOdds.probabilityWad;
+  const currentCrimeOdds = crimeOdds(configuration, previewWager, lifespanBucket, crimeMask);
+
   return (
     <div className="shell">
       <div className="panel">
@@ -267,37 +305,66 @@ export function App() {
           {definition.era}, {definition.minBirthYear}–{definition.maxBirthYear}
         </p>
 
+        {progression.length > 0 && (
+          <div className="progression">
+            {progression.map(entry => (
+              <div key={entry.label} className="progression-pill">
+                <span className="progression-label">{entry.label}</span>
+                <span className="progression-value">{entry.value}</span>
+                <span className="progression-odds">
+                  {percentText(entry.odds)} · {payoutText(entry.odds, previewWager)}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
         {step === 'gender' && (
           <div className="field">
-            <span>Step 1 — Gender</span>
-            <div className="picker picker--column">
-              <button className="chip" onClick={() => (setGender(0), goTo('age'))}>
-                Male
-              </button>
-              <button className="chip" onClick={() => (setGender(1), goTo('age'))}>
-                Female
-              </button>
+            <span>Step 1 — Gender: compare the odds, then pick</span>
+            <div className="option-grid">
+              {([0, 1] as const).map(candidate => {
+                const odds = genderOdds(configuration, previewWager, candidate);
+                return (
+                  <button
+                    key={candidate}
+                    className="option-card"
+                    onClick={() => (setGender(candidate), goTo('age'))}
+                  >
+                    <span className="option-label">{candidate === 0 ? 'Male' : 'Female'}</span>
+                    <span className="option-stat">{percentText(odds)} chance</span>
+                    <span className="option-stat">pays {payoutText(odds, previewWager)}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
 
         {step === 'age' && (
           <div className="field">
-            <span>Step 2 — Age at death</span>
-            <div className="picker picker--column">
-              {definition.lifespans.map((lifespan, index) => (
-                <button
-                  key={index}
-                  className="chip"
-                  onClick={() => {
-                    setLifespanBucket(index);
-                    const nowCrimesPossible = configuration.lifespans[index].noCrimeWeight < 10000n;
-                    goTo(nowCrimesPossible ? 'has-crime' : 'review');
-                  }}
-                >
-                  {lifespan.minYears}–{lifespan.maxYears}y
-                </button>
-              ))}
+            <span>Step 2 — Age at death: compare the odds, then pick</span>
+            <div className="option-grid">
+              {definition.lifespans.map((lifespan, index) => {
+                const odds = lifespanOdds(configuration, previewWager, index);
+                return (
+                  <button
+                    key={index}
+                    className="option-card"
+                    onClick={() => {
+                      setLifespanBucket(index);
+                      const nowCrimesPossible = configuration.lifespans[index].noCrimeWeight < 10000n;
+                      goTo(nowCrimesPossible ? 'has-crime' : 'review');
+                    }}
+                  >
+                    <span className="option-label">
+                      {lifespan.minYears}–{lifespan.maxYears}y
+                    </span>
+                    <span className="option-stat">{percentText(odds)} chance</span>
+                    <span className="option-stat">pays {payoutText(odds, previewWager)}</span>
+                  </button>
+                );
+              })}
             </div>
             <button className="back" onClick={goBack}>
               ← back
@@ -308,12 +375,16 @@ export function App() {
         {step === 'has-crime' && (
           <div className="field">
             <span>Step 3 — Did they commit a crime?</span>
-            <div className="picker">
-              <button className="chip" onClick={() => chooseHasCrime(false)}>
-                No
+            <div className="option-grid">
+              <button className="option-card" onClick={() => chooseHasCrime(false)}>
+                <span className="option-label">No crime</span>
+                <span className="option-stat">{percentText(noCrimeOdds)} chance</span>
+                <span className="option-stat">pays {payoutText(noCrimeOdds, previewWager)}</span>
               </button>
-              <button className="chip" onClick={() => chooseHasCrime(true)}>
-                Yes
+              <button className="option-card" onClick={() => chooseHasCrime(true)}>
+                <span className="option-label">Some crime</span>
+                <span className="option-stat">{(Number(anyCrimeProbabilityWad) / 1e16).toFixed(2)}% chance</span>
+                <span className="option-stat">payout depends on which</span>
               </button>
             </div>
             <button className="back" onClick={goBack}>
@@ -324,17 +395,32 @@ export function App() {
 
         {step === 'pick-crimes' && (
           <div className="field">
-            <span>Step 4 — Which crime(s)? (up to two)</span>
-            <div className="picker picker--column">
-              {CRIME_NAMES.map((name, index) => (
-                <button
-                  key={name}
-                  className={(crimeMask & (1 << index)) !== 0 ? 'chip chip--active' : 'chip'}
-                  onClick={() => setCrimeMask(current => toggleCrime(current, index))}
-                >
-                  {name}
-                </button>
-              ))}
+            <span>Step 4 — Which crime(s)? (up to two) — odds show what picking this does to your combo:</span>
+            <div className="option-grid">
+              {CRIME_NAMES.map((name, index) => {
+                const active = (crimeMask & (1 << index)) !== 0;
+                const resultingMask = toggleCrime(crimeMask, index);
+                const odds = crimeOdds(configuration, previewWager, lifespanBucket, resultingMask);
+                return (
+                  <button
+                    key={name}
+                    className={active ? 'option-card option-card--active' : 'option-card'}
+                    onClick={() => setCrimeMask(current => toggleCrime(current, index))}
+                  >
+                    <span className="option-label">{name}</span>
+                    <span className="option-stat">
+                      {active ? 'remove — leaves' : 'combined with your pick:'} {percentText(odds)} chance
+                    </span>
+                    <span className="option-stat">pays {payoutText(odds, previewWager)}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="meta">
+              <span>Your current pick ({crimeLabel(crimeMask)})</span>
+              <span>
+                {percentText(currentCrimeOdds)} · {payoutText(currentCrimeOdds, previewWager)}
+              </span>
             </div>
             <div className="picker">
               <button className="back" onClick={goBack}>
@@ -443,7 +529,9 @@ export function App() {
                 crimes {round.breakdown.crimeMatch ? '✓' : '✗'}
               </span>
             </div>
-            <span>payout {formatUnits(round.payout ?? 0n, decimals)} {symbol}</span>
+            <span>
+              payout {formatUnits(round.payout ?? 0n, decimals)} {symbol}
+            </span>
           </div>
         ) : (
           <div className="result">
