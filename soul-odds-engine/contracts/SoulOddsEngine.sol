@@ -49,6 +49,10 @@ contract SoulOddsEngine is ICasinoGameV2 {
         bool crimeMatch;
     }
 
+    /// @notice A title may bundle several era configurations; the engine
+    ///         picks one at random per session (revealed to the player
+    ///         before they predict), so pre-bet quotes must assume the
+    ///         worst era among all of them.
     function quoteCaps(
         uint256 wager,
         bytes calldata gameData
@@ -57,11 +61,13 @@ contract SoulOddsEngine is ICasinoGameV2 {
         view
         returns (uint256 maxEscrowStake, uint256 maxReservedProfit)
     {
-        SoulConfiguration memory configuration = _configuration(gameData);
+        _requireEmptyGameData(gameData);
+
+        SoulConfiguration memory worst = _worstCaseConfiguration();
 
         maxEscrowStake = wager;
 
-        uint256 maxPayout = _maxPayout(configuration, wager);
+        uint256 maxPayout = _maxPayout(worst, wager);
 
         maxReservedProfit = maxPayout > wager ? maxPayout - wager : 0;
     }
@@ -79,25 +85,29 @@ contract SoulOddsEngine is ICasinoGameV2 {
             uint256 bodyVarianceScaled
         )
     {
-        SoulConfiguration memory configuration = _configuration(gameData);
+        _requireEmptyGameData(gameData);
 
-        maxPayout = _maxPayout(configuration, wager);
+        SoulConfiguration memory worst = _worstCaseConfiguration();
 
-        probabilityWad = _minimumPredictionProbability(configuration);
+        maxPayout = _maxPayout(worst, wager);
 
-        expectedPayout = Math.mulDiv(wager, _rtpWad(configuration), WAD);
+        probabilityWad = _minimumPredictionProbability(worst);
 
-        bodyVarianceScaled = wager * wager * _varianceWad(configuration);
+        expectedPayout = Math.mulDiv(wager, _titleAverageRtpWad(), WAD);
+
+        bodyVarianceScaled = wager * wager * _varianceWad(worst);
     }
 
+    /// @dev Requests randomness immediately to pick the era; the player
+    ///      hasn't predicted anything yet, so nothing is reserved.
     function onSessionStart(
         SessionContext calldata ctx
-    ) external view returns (StepResult memory stepResult) {
-        _configuration(ctx.gameData);
+    ) external pure returns (StepResult memory stepResult) {
+        _requireEmptyGameData(ctx.gameData);
 
-        stepResult.nextPhase = SessionPhase.WAITING_PLAYER_ACTION;
+        stepResult.nextPhase = SessionPhase.WAITING_RANDOMNESS;
 
-        stepResult.requestRandomnessNow = false;
+        stepResult.requestRandomnessNow = true;
 
         stepResult.reservedProfitDelta = 0;
     }
@@ -106,13 +116,17 @@ contract SoulOddsEngine is ICasinoGameV2 {
         SessionContext calldata ctx,
         bytes calldata action
     ) external view returns (StepResult memory stepResult) {
-        SoulConfiguration memory configuration = _configuration(ctx.gameData);
+        uint256 configurationIndex = abi.decode(ctx.gameState, (uint256));
+
+        SoulConfiguration memory configuration = _configurationAt(
+            configurationIndex
+        );
 
         SoulPrediction memory prediction = _decodePrediction(action);
 
         _validatePrediction(configuration, prediction);
 
-        stepResult.newGameState = action;
+        stepResult.newGameState = abi.encode(configurationIndex, prediction);
 
         stepResult.nextPhase = SessionPhase.WAITING_RANDOMNESS;
 
@@ -129,13 +143,38 @@ contract SoulOddsEngine is ICasinoGameV2 {
         );
     }
 
+    /// @dev Called twice per session. The first call (empty `gameState`,
+    ///      right after `onSessionStart`) picks the era and hands control
+    ///      back to the player. The second call (`gameState` holding the
+    ///      chosen era index and the player's prediction, set by
+    ///      `onPlayerAction`) generates the soul and settles.
     function onRandomness(
         SessionContext calldata ctx,
         bytes32 randomness
     ) external view returns (StepResult memory stepResult) {
-        SoulConfiguration memory configuration = _configuration(ctx.gameData);
+        if (ctx.gameState.length == 0) {
+            uint256 configurationCount = SoulOddsTitleArgs.configurationCount(
+                _titleArgs()
+            );
 
-        SoulPrediction memory prediction = _decodePrediction(ctx.gameState);
+            uint256 pickedConfigurationIndex = uint256(randomness) %
+                configurationCount;
+
+            stepResult.newGameState = abi.encode(pickedConfigurationIndex);
+
+            stepResult.nextPhase = SessionPhase.WAITING_PLAYER_ACTION;
+
+            stepResult.requestRandomnessNow = false;
+
+            return stepResult;
+        }
+
+        (uint256 configurationIndex, SoulPrediction memory prediction) = abi
+            .decode(ctx.gameState, (uint256, SoulPrediction));
+
+        SoulConfiguration memory configuration = _configurationAt(
+            configurationIndex
+        );
 
         SoulResult memory result = _generateSoul(configuration, randomness);
 
@@ -185,8 +224,11 @@ contract SoulOddsEngine is ICasinoGameV2 {
         return _rtpWad(_configurationAt(index));
     }
 
+    /// @notice Average RTP across every era this title could randomly pick,
+    ///         assuming a uniform pick — informational only; the payout an
+    ///         individual session gets is always that session's own era.
     function titleRtpWad() external view returns (uint256) {
-        return _rtpWad(_configurationAt(0));
+        return _titleAverageRtpWad();
     }
 
     function _titleArgs() private view returns (bytes memory) {
@@ -197,16 +239,53 @@ contract SoulOddsEngine is ICasinoGameV2 {
         return Clones.fetchCloneArgs(address(this));
     }
 
-    function _configuration(
-        bytes calldata gameData
-    ) private view returns (SoulConfiguration memory) {
-        if (gameData.length > 1) {
+    function _requireEmptyGameData(bytes calldata gameData) private pure {
+        if (gameData.length != 0) {
             revert SoulOddsEngine__InvalidGameData();
         }
+    }
 
-        uint256 index = gameData.length == 0 ? 0 : uint8(gameData[0]);
+    /// @dev The era configuration among all of the title's that maximizes
+    ///      the worst-case payout, used to size pre-bet caps/risk before
+    ///      the session's actual era has been randomly picked.
+    function _worstCaseConfiguration()
+        private
+        view
+        returns (SoulConfiguration memory worst)
+    {
+        bytes memory args = _titleArgs();
 
-        return _configurationAt(index);
+        uint256 count = SoulOddsTitleArgs.configurationCount(args);
+
+        uint256 bestPayoutAtRefWager;
+
+        for (uint256 i; i < count; ++i) {
+            SoulConfiguration memory candidate = SoulOddsTitleArgs.decode(
+                args,
+                i
+            );
+
+            uint256 payoutAtRefWager = _maxPayout(candidate, WAD);
+
+            if (payoutAtRefWager >= bestPayoutAtRefWager) {
+                bestPayoutAtRefWager = payoutAtRefWager;
+                worst = candidate;
+            }
+        }
+    }
+
+    function _titleAverageRtpWad() private view returns (uint256) {
+        bytes memory args = _titleArgs();
+
+        uint256 count = SoulOddsTitleArgs.configurationCount(args);
+
+        uint256 sum;
+
+        for (uint256 i; i < count; ++i) {
+            sum += SoulOddsTitleArgs.decode(args, i).rtpWad;
+        }
+
+        return sum / count;
     }
 
     function _configurationAt(

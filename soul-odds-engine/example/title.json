@@ -21,6 +21,27 @@
         { "name": "Theft", "selectionWeight": 900, "commitWeight": 5000 },
         { "name": "Heresy", "selectionWeight": 200, "commitWeight": 5000 }
       ]
+    },
+    {
+      "name": "plague-years",
+      "era": "Medieval",
+      "minBirthYear": 1000,
+      "maxBirthYear": 1400,
+      "maleWeight": 55,
+      "femaleWeight": 45,
+      "rtpWad": "0.96",
+      "lifespans": [
+        { "minYears": 0, "maxYears": 5, "weight": 3000, "noCrimeWeight": 9500 },
+        { "minYears": 5, "maxYears": 29, "weight": 3500, "noCrimeWeight": 6500 },
+        { "minYears": 29, "maxYears": 50, "weight": 2500, "noCrimeWeight": 5500 },
+        { "minYears": 50, "maxYears": 90, "weight": 1000, "noCrimeWeight": 7500 }
+      ],
+      "crimes": [
+        { "name": "Murder", "selectionWeight": 300, "commitWeight": 5000 },
+        { "name": "Heresy", "selectionWeight": 700, "commitWeight": 5000 },
+        { "name": "Theft", "selectionWeight": 800, "commitWeight": 5000 },
+        { "name": "Witchcraft", "selectionWeight": 200, "commitWeight": 5000 }
+      ]
     }
   ]
 }

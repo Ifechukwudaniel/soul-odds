@@ -69,12 +69,17 @@ contract SoulOddsTitleDeployer is Ownable {
 
     error SoulOddsTitleDeployer__RtpTooLow(uint256 rtpWad);
 
+    error SoulOddsTitleDeployer__NoConfigurations();
+
+    error SoulOddsTitleDeployer__TooManyConfigurations(uint256 count);
+
+    /// @notice `eras[i]`/`rtpWads[i]` describe the era config the engine can
+    ///         randomly pick at index `i`; a session reveals which one it
+    ///         landed on before the player predicts.
     event SoulOddsTitleDeployed(
         address indexed title,
-        SoulEra era,
-        int16 minBirthYear,
-        int16 maxBirthYear,
-        uint256 rtpWad
+        SoulEra[] eras,
+        uint256[] rtpWads
     );
 
     struct SoulConfigurationInput {
@@ -92,26 +97,48 @@ contract SoulOddsTitleDeployer is Ownable {
         engine = address(new SoulOddsEngine());
     }
 
+    /// @notice Deploys a title covering one or more eras. The engine picks
+    ///         one of `inputs` at random per session (revealed to the
+    ///         player before they predict), so every included era needs
+    ///         its own complete, independently valid configuration.
     function deployTitle(
-        SoulConfigurationInput calldata input
+        SoulConfigurationInput[] calldata inputs
     ) external onlyOwner returns (address title) {
-        SoulConfiguration memory configuration = _buildConfiguration(input);
+        uint256 count = inputs.length;
 
-        SoulConfiguration[] memory configurations = new SoulConfiguration[](1);
+        if (count == 0) {
+            revert SoulOddsTitleDeployer__NoConfigurations();
+        }
 
-        configurations[0] = configuration;
+        if (count > SoulOddsTitleArgs.ERA_COUNT) {
+            revert SoulOddsTitleDeployer__TooManyConfigurations(count);
+        }
+
+        SoulConfiguration[] memory configurations = new SoulConfiguration[](
+            count
+        );
+
+        SoulEra[] memory eras = new SoulEra[](count);
+
+        uint256[] memory rtpWads = new uint256[](count);
+
+        for (uint256 i; i < count; ++i) {
+            SoulConfiguration memory configuration = _buildConfiguration(
+                inputs[i]
+            );
+
+            configurations[i] = configuration;
+
+            eras[i] = configuration.era;
+
+            rtpWads[i] = configuration.rtpWad;
+        }
 
         bytes memory args = SoulOddsTitleArgs.encode(configurations);
 
         title = Clones.cloneWithImmutableArgs(engine, args);
 
-        emit SoulOddsTitleDeployed(
-            title,
-            configuration.era,
-            configuration.minBirthYear,
-            configuration.maxBirthYear,
-            configuration.rtpWad
-        );
+        emit SoulOddsTitleDeployed(title, eras, rtpWads);
     }
 
     function validateConfiguration(

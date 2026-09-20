@@ -432,3 +432,31 @@ export function varianceWad(configuration: SoulConfiguration): bigint {
     categoryVarianceTermWad(configuration, crimeProbabilityWad)
   );
 }
+
+/**
+ * Mirrors `_worstCaseConfiguration`: the era configuration among `configurations` that maximizes the
+ * worst-case payout, used to size pre-bet caps/risk before a session's era has been randomly picked.
+ */
+export function worstCaseConfiguration(configurations: SoulConfiguration[]): SoulConfiguration {
+  let bestPayoutAtRefWager = -1n;
+  let worst = configurations[0];
+  for (const configuration of configurations) {
+    const payoutAtRefWager = maxPayout(configuration, WAD);
+    if (payoutAtRefWager >= bestPayoutAtRefWager) {
+      bestPayoutAtRefWager = payoutAtRefWager;
+      worst = configuration;
+    }
+  }
+  return worst;
+}
+
+/** Mirrors `_titleAverageRtpWad`: the average RTP across every era a title could randomly pick. */
+export function titleAverageRtpWad(configurations: SoulConfiguration[]): bigint {
+  const sum = configurations.reduce((total, configuration) => total + configuration.rtpWad, 0n);
+  return sum / BigInt(configurations.length);
+}
+
+/** Mirrors the first `onRandomness` call: which era index a session's randomness picks. */
+export function pickConfigurationIndex(randomness: Hex, configurationCount: number): number {
+  return Number(hexToBigInt(randomness) % BigInt(configurationCount));
+}

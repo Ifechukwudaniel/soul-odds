@@ -1,7 +1,7 @@
 // Deploys a Soul Odds title onto the running simulator chain and plays real sessions through the
 // VRF node, checking each settlement against the reference TS mirror. Needs `vp run start`.
 import { parseArgs } from 'node:util';
-import { type Hex, parseAbi, parseEther, parseEventLogs } from 'viem';
+import { decodeAbiParameters, type Hex, parseAbi, parseEther, parseEventLogs } from 'viem';
 import {
   encodePrediction,
   generateSoul,
@@ -43,9 +43,8 @@ async function main() {
     deployment,
     values.title,
   );
-  const base = title.betConfigurations[0];
   console.log(`deployer ${deployer}`);
-  console.log(`title    ${onChain.title}  RTP ${Number(base.configuration.rtpWad) / 1e16}%`);
+  console.log(`title    ${onChain.title}  ${title.betConfigurations.length} era(s)`);
 
   const write = async (hash: Hex) => publicClient.waitForTransactionReceipt({ hash });
   await write(
@@ -76,25 +75,35 @@ async function main() {
       eventName: 'CasinoSessionOpened',
       logs: openedReceipt.logs,
     });
-    const [advanced] = parseEventLogs({
+
+    // Session start only requests randomness for the era reveal — wait for the VRF node to fulfill
+    // it and hand control back to WAITING_PLAYER_ACTION (step 2) before predicting.
+    const eraRevealed = await waitForAdvancedStep(opened.args.sessionId, openedReceipt.blockNumber, 2);
+    const revealedSession = await publicClient.readContract({
+      address: deployment.host,
       abi: localCasinoHostAbi,
-      eventName: 'CasinoSessionAdvanced',
-      logs: openedReceipt.logs,
+      functionName: 'decodeSession',
+      args: [eraRevealed.session],
     });
+    const [configurationIndex] = decodeAbiParameters(
+      [{ type: 'uint256' }],
+      revealedSession.gameState,
+    );
+    const era = title.betConfigurations[Number(configurationIndex)];
 
     await write(
       await walletClient.writeContract({
         address: deployment.host,
         abi: localCasinoHostAbi,
         functionName: 'submitAction',
-        args: [advanced.args.session, encodePrediction(prediction)],
+        args: [eraRevealed.session, encodePrediction(prediction)],
       }),
     );
 
     const settled = await waitForSettlement(opened.args.sessionId, openedReceipt.blockNumber);
 
-    const expectedResult = generateSoul(base.configuration, settled.randomness);
-    const expectedPayout = predictionPayout(base.configuration, wager, prediction, expectedResult);
+    const expectedResult = generateSoul(era.configuration, settled.randomness);
+    const expectedPayout = predictionPayout(era.configuration, wager, prediction, expectedResult);
     const expectedWon = expectedPayout > 0n;
     if (settled.payout !== expectedPayout) {
       throw new Error(
@@ -106,12 +115,12 @@ async function main() {
     paid += settled.payout;
 
     const breakdown = matchBreakdown(prediction, expectedResult);
-    const crimeNames = base.definition.crimes.map(crime => crime.name);
+    const crimeNames = era.definition.crimes.map(crime => crime.name);
     const crimeLabel = (mask: number) =>
       mask === 0 ? 'no crime' : crimeNames.filter((_, index) => (mask & (1 << index)) !== 0).join(' + ');
 
     console.log(
-      `session ${opened.args.sessionId}  ${expectedWon ? 'won' : 'lost'}  payout ${settled.payout}\n` +
+      `session ${opened.args.sessionId}  era ${era.definition.era}  ${expectedWon ? 'won' : 'lost'}  payout ${settled.payout}\n` +
         `  bet:  ${prediction.gender === 0 ? 'male' : 'female'}, bucket ${prediction.lifespanBucket}, ${crimeLabel(prediction.crimeMask)}\n` +
         `  soul: ${expectedResult.gender === 0 ? 'male' : 'female'}, born ${expectedResult.birthYear}, ` +
         `died at ${expectedResult.age}, bucket ${expectedResult.lifespanBucket}, ${crimeLabel(expectedResult.crimeMask)}\n` +
@@ -121,9 +130,25 @@ async function main() {
   if (wagered === 0n) return;
   console.log(
     `\n${values.sessions} sessions settled and matched the reference sampler. ` +
-      `Realized RTP ${((Number(paid) / Number(wagered)) * 100).toFixed(1)}% against a title RTP of ` +
-      `${Number(base.configuration.rtpWad) / 1e16}%.`,
+      `Realized RTP ${((Number(paid) / Number(wagered)) * 100).toFixed(1)}% across the title's ` +
+      `${title.betConfigurations.length} era(s).`,
   );
+
+  async function waitForAdvancedStep(sessionId: bigint, fromBlock: bigint, step: number) {
+    const deadline = Date.now() + SETTLEMENT_TIMEOUT_MS;
+    while (Date.now() < deadline) {
+      const logs = await publicClient.getContractEvents({
+        address: deployment.host,
+        abi: localCasinoHostAbi,
+        eventName: 'CasinoSessionAdvanced',
+        args: { sessionId, step },
+        fromBlock,
+      });
+      if (logs.length > 0) return logs[0].args as Required<(typeof logs)[0]['args']>;
+      await new Promise(resolve => setTimeout(resolve, 250));
+    }
+    throw new Error(`session ${sessionId} did not advance to step ${step} within ${SETTLEMENT_TIMEOUT_MS} ms`);
+  }
 
   async function waitForSettlement(sessionId: bigint, fromBlock: bigint) {
     const deadline = Date.now() + SETTLEMENT_TIMEOUT_MS;

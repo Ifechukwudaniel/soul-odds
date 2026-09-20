@@ -6,26 +6,26 @@ export type DeployTitleParams = {
   publicClient: PublicClient;
   walletClient: WalletClient;
   deployer: Address;
-  configuration: SoulConfigurationInput;
+  configurations: SoulConfigurationInput[];
 };
 
 export type DeployedTitle = { title: Address };
 
 /**
- * Deploys one bet configuration as a title clone, then reads it back to confirm the chain stored
- * exactly what was sent. `SoulOddsTitleDeployer.deployTitle` takes a single configuration — unlike
- * slot titles, a Soul Odds title has no concept of multiple bet configurations.
+ * Deploys a title covering one or more era configurations, then reads each one back to confirm the
+ * chain stored exactly what was sent. The engine picks one era at random per session.
  */
 export async function deployTitle(params: DeployTitleParams): Promise<DeployedTitle> {
-  const { publicClient, walletClient, deployer, configuration } = params;
+  const { publicClient, walletClient, deployer, configurations } = params;
   const account = walletClient.account;
   if (account === undefined) throw new Error('walletClient needs an account');
+  if (configurations.length === 0) throw new Error('deployTitle needs at least one configuration');
 
   const hash = await walletClient.writeContract({
     address: deployer,
     abi: soulOddsTitleDeployerAbi,
     functionName: 'deployTitle',
-    args: [configuration],
+    args: [configurations],
     account,
     chain: walletClient.chain,
   });
@@ -37,15 +37,17 @@ export async function deployTitle(params: DeployTitleParams): Promise<DeployedTi
   });
   const title = deployed.args.title;
 
-  const onChain = await publicClient.readContract({
-    address: title,
-    abi: soulOddsTitleAbi,
-    functionName: 'betConfiguration',
-    args: [0],
-  });
-  const mismatches = configurationMismatches(configuration, onChain);
-  if (mismatches.length > 0) {
-    throw new Error(`Deployed title differs from the input: ${mismatches.join('; ')}`);
+  for (let index = 0; index < configurations.length; index++) {
+    const onChain = await publicClient.readContract({
+      address: title,
+      abi: soulOddsTitleAbi,
+      functionName: 'betConfiguration',
+      args: [index],
+    });
+    const mismatches = configurationMismatches(configurations[index], onChain);
+    if (mismatches.length > 0) {
+      throw new Error(`Deployed title configuration ${index} differs from the input: ${mismatches.join('; ')}`);
+    }
   }
 
   return { title };

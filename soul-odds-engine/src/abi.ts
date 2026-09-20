@@ -25,9 +25,9 @@ export const soulOddsTitleAbi = parseAbi([
 export const soulOddsTitleDeployerAbi = parseAbi([
   ...structs,
   'function engine() view returns (address)',
-  'function deployTitle(SoulConfigurationInput input) returns (address title)',
+  'function deployTitle(SoulConfigurationInput[] inputs) returns (address title)',
   'function validateConfiguration(SoulConfigurationInput input) pure returns (SoulConfiguration configuration)',
-  'event SoulOddsTitleDeployed(address indexed title, uint8 era, int16 minBirthYear, int16 maxBirthYear, uint256 rtpWad)',
+  'event SoulOddsTitleDeployed(address indexed title, uint8[] eras, uint256[] rtpWads)',
   'error SoulOddsTitleDeployer__InvalidEra()',
   'error SoulOddsTitleDeployer__InvalidBirthRange()',
   'error SoulOddsTitleDeployer__BirthYearTooEarly()',
@@ -41,4 +41,6 @@ export const soulOddsTitleDeployerAbi = parseAbi([
   'error SoulOddsTitleDeployer__InvalidRtp()',
   'error SoulOddsTitleDeployer__RtpTooHigh(uint256 rtpWad)',
   'error SoulOddsTitleDeployer__RtpTooLow(uint256 rtpWad)',
+  'error SoulOddsTitleDeployer__NoConfigurations()',
+  'error SoulOddsTitleDeployer__TooManyConfigurations(uint256 count)',
 ]);

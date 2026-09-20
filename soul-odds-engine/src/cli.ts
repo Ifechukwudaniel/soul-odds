@@ -141,7 +141,7 @@ async function main() {
           account: privateKeyToAccount(requireOption(privateKey, 'private key') as Hex),
         }),
         deployer: requireOption(values.deployer, 'deployer') as Address,
-        configuration: title.betConfigurations[0].input,
+        configurations: title.betConfigurations.map(betConfiguration => betConfiguration.input),
       });
       console.log(`title ${deployed.title}`);
     }

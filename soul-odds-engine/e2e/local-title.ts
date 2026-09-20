@@ -22,9 +22,11 @@ export const SIMULATOR_DEPLOYMENT_PATH = join(SIMULATOR_DIR, 'local-node/deploye
 export const EXAMPLE_TITLE_PATH = resolve(import.meta.dirname, '../example/title.json');
 
 export const localCasinoHostAbi = parseAbi([
+  'struct CasinoSession { uint256 sessionId; address player; address vault; address game; address token; uint256 wagerBase; uint256 escrowedStake; uint256 reservedProfit; uint256 maxEscrowStake; uint256 maxReservedProfit; uint256 deadlineBlock; uint32 step; uint8 phase; uint256 riskMaxPayout; uint256 riskProbabilityWad; uint256 riskSubVarianceScaled; bool riskHeavyTail; bool riskHighMultiplierFloor; address operator; bytes gameData; bytes gameState; }',
   'function registerGame(address game, string gameName)',
   'function openSession(address game, address vault, uint256 wager, bytes gameData) returns (uint256 sessionId, bytes32 requestId)',
   'function submitAction(bytes encodedSession, bytes actionData) returns (bytes32 requestId)',
+  'function decodeSession(bytes encodedSession) pure returns (CasinoSession session)',
   'event CasinoSessionOpened(uint256 indexed sessionId, address indexed game, address indexed player, address vault, uint256 wager)',
   'event CasinoSessionAdvanced(uint256 indexed sessionId, uint32 indexed step, bytes32 requestId, bytes32 randomness, bytes session)',
   'event CasinoSessionSettled(uint256 indexed sessionId, address indexed game, address indexed player, uint8 phase, uint256 payout, bytes32 randomness, bytes gameState)',
@@ -84,7 +86,7 @@ export async function deployTitleToSimulator(deployment: SimulatorDeployment, ti
     publicClient,
     walletClient,
     deployer,
-    configuration: title.betConfigurations[0].input,
+    configurations: title.betConfigurations.map(betConfiguration => betConfiguration.input),
   });
   const registerHash = await walletClient.writeContract({
     address: deployment.host,
