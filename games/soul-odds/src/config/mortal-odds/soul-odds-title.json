@@ -1,0 +1,26 @@
+{
+  "name": "Mortal Odds",
+  "betConfigurations": [
+    {
+      "name": "all-time",
+      "era": "Contemporary",
+      "minBirthYear": -6000,
+      "maxBirthYear": 2026,
+      "maleWeight": 512,
+      "femaleWeight": 488,
+      "rtpWad": "0.95",
+      "lifespans": [
+        { "minYears": 0, "maxYears": 4, "weight": 2500, "noCrimeWeight": 9900 },
+        { "minYears": 5, "maxYears": 29, "weight": 3000, "noCrimeWeight": 6000 },
+        { "minYears": 30, "maxYears": 59, "weight": 3000, "noCrimeWeight": 5000 },
+        { "minYears": 60, "maxYears": 105, "weight": 1500, "noCrimeWeight": 7500 }
+      ],
+      "crimes": [
+        { "name": "Violence", "selectionWeight": 75, "commitWeight": 5000 },
+        { "name": "Deceit", "selectionWeight": 210, "commitWeight": 5000 },
+        { "name": "Greed", "selectionWeight": 210, "commitWeight": 5000 },
+        { "name": "Heresy", "selectionWeight": 20, "commitWeight": 5000 }
+      ]
+    }
+  ]
+}

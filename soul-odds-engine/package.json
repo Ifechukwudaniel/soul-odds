@@ -7,7 +7,9 @@
   },
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./soul": "./src/soul.ts",
+    "./configuration": "./src/configuration.ts"
   },
   "scripts": {
     "build": "hardhat compile",
@@ -16,7 +18,8 @@
     "cli": "tsx src/cli.ts",
     "clean": "hardhat clean",
     "start": "hardhat compile && tsx scripts/stack.ts",
-    "e2e:simulator": "hardhat compile && tsx e2e/simulator.ts"
+    "e2e:simulator": "hardhat compile && tsx e2e/simulator.ts",
+    "deploy-mortal-odds-title": "hardhat compile && tsx scripts/deploy-mortal-odds-title.ts"
   },
   "dependencies": {
     "viem": "^2.52.2"

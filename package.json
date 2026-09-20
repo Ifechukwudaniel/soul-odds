@@ -20,7 +20,7 @@
   "scripts": {
     "check": "vp check",
     "check-types": "tsc --noEmit",
-    "start": "concurrently -k -n local-node,simulator,coinflip,mortal-odds -c yellow,cyan,magenta,green \"tsx scripts/run-in.ts simulator local-node\" \"tsx scripts/run-in.ts simulator dev\" \"tsx scripts/run-in.ts games/coinflip-public dev\"  \"tsx scripts/run-in.ts games/soul-odds start\"",
+    "start": "concurrently --kill-others-on-fail -n local-node,simulator,coinflip,mortal-odds,mortal-odds-title -c yellow,cyan,magenta,green,blue \"tsx scripts/run-in.ts simulator local-node\" \"tsx scripts/run-in.ts simulator dev\" \"tsx scripts/run-in.ts games/coinflip-public dev\"  \"tsx scripts/run-in.ts games/soul-odds start\" \"tsx scripts/run-in.ts soul-odds-engine deploy-mortal-odds-title\"",
     "start:slots": "tsx scripts/run-in.ts slot-engine start"
   },
   "dependencies": {

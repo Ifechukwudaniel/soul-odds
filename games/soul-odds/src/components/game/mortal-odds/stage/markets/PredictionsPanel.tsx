@@ -5,6 +5,7 @@ import { GameButton } from "@/components/game/GameButton";
 import { GameCard } from "@/components/game/home/GameCard";
 import { StageSlide } from "@/components/game/mortal-odds/stage/StageSlide";
 import { ChoiceMarket } from "@/components/game/mortal-odds/stage/markets/ChoiceMarket";
+import { SinsMarket } from "@/components/game/mortal-odds/stage/markets/SinsMarket";
 import { marketsConfig } from "@/lib/mortal-odds/config";
 import { playClickSound } from "@/utils/playClickSound";
 import type { Bet, MarketPrices } from "@/types";
@@ -58,16 +59,26 @@ export const PredictionsPanel = (props: {
           </div>
 
           <StageSlide slideKey={step} direction={direction} onSwipe={(delta) => goTo(step + delta)}>
-            {market && (
-              <ChoiceMarket
-                market={market}
-                prices={props.prices[market.id] ?? {}}
-                selectedOptionId={bet?.kind === "choice" ? bet.optionId : undefined}
-                onSelect={(optionId) => {
-                  props.onSetChoice(market.id, optionId, stakePerMarket(props.chipSize));
-                }}
-              />
-            )}
+            {market &&
+              (market.id === "sins" ? (
+                <SinsMarket
+                  market={market}
+                  prices={props.prices[market.id] ?? {}}
+                  selectedOptionId={bet?.kind === "choice" ? bet.optionId : undefined}
+                  onSelect={(optionId) => {
+                    props.onSetChoice(market.id, optionId, stakePerMarket(props.chipSize));
+                  }}
+                />
+              ) : (
+                <ChoiceMarket
+                  market={market}
+                  prices={props.prices[market.id] ?? {}}
+                  selectedOptionId={bet?.kind === "choice" ? bet.optionId : undefined}
+                  onSelect={(optionId) => {
+                    props.onSetChoice(market.id, optionId, stakePerMarket(props.chipSize));
+                  }}
+                />
+              ))}
           </StageSlide>
 
           <div className="flex items-center justify-between gap-3">

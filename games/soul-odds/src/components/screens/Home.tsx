@@ -1,13 +1,15 @@
 "use client";
 
 import { useReducedMotion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MortalOddsStage } from "@/components/game/mortal-odds/MortalOddsStage";
 import { useMortalOddsBets } from "@/hooks/useMortalOddsBets";
 import { useMortalOddsDraw } from "@/hooks/useMortalOddsDraw";
 import type { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
 import { CHIP_SIZES, REDRAW_COST } from "@/lib/mortal-odds/config";
-import type { RoundCharge } from "@/types";
+import { ageBucketIndex } from "@/lib/mortal-odds/soul-odds-contract";
+import { notification } from "@/utils/notifications";
+import type { MarketPrices, RoundCharge } from "@/types";
 
 const CURRENCY = "deben";
 
@@ -25,17 +27,19 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
   const isRedraw = round.phase === "when" || round.phase === "where";
   const drawCost = isRedraw ? REDRAW_COST : chipSize;
 
+  // A redraw is a local, chain-unaware fee (spent up front); the round's stake instead moves
+  // for real once `round.drawHuman` escrows it into the on-chain session — only affordability
+  // is checked here, the debit itself comes from the host's own pushed balance afterwards.
   const onDraw = () => {
-    if (!player.spend(drawCost)) {
-      return;
-    }
     if (isRedraw) {
+      if (!player.spend(REDRAW_COST)) return;
       setCharges([...charges, { id: `redraw-${charges.length}`, label: "Redraw", amount: REDRAW_COST, kind: "fee" }]);
     } else {
+      if (!player.canAfford(chipSize)) return;
       setCharges([{ id: "stake", label: "Stake", amount: chipSize, kind: "stake" }]);
+      slip.reset();
     }
-    slip.reset();
-    round.drawHuman();
+    round.drawHuman(chipSize);
   };
 
   const onRevealLocation = () => {
@@ -43,10 +47,31 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
   };
 
   const onPlaceBet = () => {
-    const result = round.placeBets(slip.bets);
-    if (result) player.commitRound(result);
-    slip.reset();
+    round.placeBets(slip.bets);
   };
+
+  // Crime-category odds depend on which age bucket the player paired them with (a child is far
+  // likelier to be "Clean" than an adult), so the draw-time preview — priced against a
+  // placeholder bucket, since no age is picked yet at draw time — gets replaced everywhere it's
+  // displayed (the picker and the confirm screen) once the real age bet is known.
+  const ageBet = slip.bets.age;
+  const prices: MarketPrices | null =
+    round.prices && ageBet?.kind === "choice"
+      ? { ...round.prices, sins: round.priceSins(ageBucketIndex(ageBet.optionId)) }
+      : round.prices;
+
+  // The round settles asynchronously on-chain; commit the local skill/streak stats once its
+  // outcome comes back instead of synchronously from onPlaceBet.
+  useEffect(() => {
+    if (!round.reveal) return;
+    player.commitRound({ net: round.reveal.net, skill: round.reveal.skill });
+    slip.reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round.reveal]);
+
+  useEffect(() => {
+    if (round.error) notification.error(round.error);
+  }, [round.error]);
 
   return (
     <div className="flex h-full w-full flex-col">
@@ -66,7 +91,7 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
           quickAmounts={CHIP_SIZES}
           onSelectChip={setChipSize}
           chipLocked={chipLocked}
-          prices={round.prices}
+          prices={prices}
           priceDeathYear={round.priceDeathYear}
           onRemoveBet={slip.remove}
         />

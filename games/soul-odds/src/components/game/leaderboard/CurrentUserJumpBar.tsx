@@ -18,7 +18,7 @@ export function CurrentUserJumpBar({
     <button
       type="button"
       onClick={onJump}
-      className="fixed bottom-6 left-1/2 z-30 flex -translate-x-1/2 items-center gap-3 rounded-full bg-[#0B0F1A] px-5 py-3 shadow-lg ring-1 ring-white/10"
+      className="fixed bottom-6 left-1/2 z-30 flex -translate-x-1/2 items-center gap-3 rounded-full bg-[#0B0F1A] px-5 py-3 shadow-lg ring-1 ring-white/10 hidden"
     >
       <span className="text-sm text-[#AFAFAF]">Your rank</span>
       <span className="font-[700] text-white">#{user.rank}</span>

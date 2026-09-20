@@ -1,17 +1,18 @@
+"use client";
+
 import { animate } from "framer-motion";
-import { useEffect, useReducer, useRef } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
+import { parseUnits } from "viem";
 import {
   bookieCurves,
   DEATH_WINDOW,
   erasConfig,
   jobsConfig,
-  marketsConfig,
   placesConfig,
   PRICING_CONFIG,
   regionModifiersConfig,
   shocksConfig,
   SIMS,
-  SINS_PER_ROUND,
   sinsConfig,
   worldPopCurve,
 } from "@/lib/mortal-odds/config";
@@ -19,25 +20,25 @@ import { drawBirth, pickPlace, placeContext as buildPlaceContext } from "@/lib/m
 import { buildLifespanHistogram, medianAge } from "@/lib/mortal-odds/lifespan";
 import type { LifespanHistogram } from "@/lib/mortal-odds/lifespan";
 import type { BookieLife, FullModelConfig } from "@/lib/mortal-odds/model";
-import { drawSex, sampleLife, simulateBookie, simulateFull } from "@/lib/mortal-odds/model";
-import { computeMarketPrices, computeTrueProbabilities, deathYearP, medianDeathYear, priceFromP } from "@/lib/mortal-odds/pricing";
+import { sampleLife, simulateBookie, simulateFull } from "@/lib/mortal-odds/model";
+import { deathYearP, medianDeathYear, priceFromP } from "@/lib/mortal-odds/pricing";
 import { createRng } from "@/lib/mortal-odds/rng";
-import type { Rng } from "@/lib/mortal-odds/rng";
 import { resolveBets } from "@/lib/mortal-odds/settle";
-import { pickSinOptions } from "@/lib/mortal-odds/sins";
+import { buildFlavorSin } from "@/lib/mortal-odds/sins";
+import {
+  ageBucketIndex,
+  categoryFromCrimeMask,
+  decodeSettledSoul,
+  encodeMortalOddsPrediction,
+  isTerminalPhase,
+  previewCategoryPrices,
+  previewSinsPrices,
+  toTrueProbabilities,
+} from "@/lib/mortal-odds/soul-odds-contract";
 import { tellStory } from "@/lib/mortal-odds/story";
+import { useCasinoHost } from "@/hooks/useCasinoHost";
 import { playClickSound } from "@/utils/playClickSound";
-import type { Bet, BetResult, Draw, EraFilter, Life, MarketConfig, MarketPrices, PlaceContext, Price } from "@/types";
-
-/**
- * Narrows the "sins" market to a random hand of options for this soul (plus "Clean"), instead
- * of pricing the whole catalog every round. A stand-in for the eventual backend-driven pick.
- */
-function buildRoundMarkets(options: { year: number; rng: Rng }): MarketConfig[] {
-  const candidates = pickSinOptions({ sins: sinsConfig, year: options.year, rng: options.rng, count: SINS_PER_ROUND });
-  const sinsOptions = [{ id: "none", label: "Clean" }, ...candidates.map((sin) => ({ id: sin.id, label: sin.label }))];
-  return marketsConfig.map((market) => (market.id === "sins" ? { ...market, options: sinsOptions } : market));
-}
+import type { Bet, BetResult, Draw, EraFilter, Life, MarketPrices, PlaceContext, Price, Sex } from "@/types";
 
 const CURRENT_YEAR = new Date().getFullYear();
 const SPIN_DURATION_S = 0.75;
@@ -45,7 +46,7 @@ const SPIN_YEAR_RANGE = CURRENT_YEAR + 12000;
 
 const fullModelConfig: FullModelConfig = { curves: bookieCurves, mods: regionModifiersConfig, shocks: shocksConfig, sins: sinsConfig };
 
-export type MortalOddsDrawPhase = "idle" | "drawing" | "when" | "where" | "predicting" | "confirming" | "revealed";
+export type MortalOddsDrawPhase = "idle" | "drawing" | "when" | "where" | "predicting" | "confirming" | "settling" | "revealed";
 
 /** The beats a player steps through after the year lands, in order. Add a beat here and the nav follows. */
 const SEQUENCE: MortalOddsDrawPhase[] = ["when", "where", "predicting", "confirming"];
@@ -77,6 +78,7 @@ type State = {
   prices: MarketPrices | null;
   defaultDeathGuess: number | null;
   reveal: RevealResult | null;
+  error: string | null;
 };
 
 type Action =
@@ -93,7 +95,9 @@ type Action =
   | { type: "finish" }
   | { type: "advance" }
   | { type: "retreat" }
-  | { type: "reveal"; reveal: RevealResult };
+  | { type: "await-settlement" }
+  | { type: "reveal"; reveal: RevealResult }
+  | { type: "fail"; error: string };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -110,6 +114,7 @@ function reducer(state: State, action: Action): State {
         defaultDeathGuess: action.defaultDeathGuess,
         displayYear: null,
         reveal: null,
+        error: null,
       };
     case "tick":
       return { ...state, displayYear: action.year };
@@ -119,8 +124,12 @@ function reducer(state: State, action: Action): State {
       return { ...state, phase: stepSequence(state.phase, 1) };
     case "retreat":
       return { ...state, phase: stepSequence(state.phase, -1) };
+    case "await-settlement":
+      return { ...state, phase: "settling", error: null };
     case "reveal":
       return { ...state, phase: "revealed", reveal: action.reveal };
+    case "fail":
+      return { ...state, phase: "idle", error: action.error };
   }
 }
 
@@ -134,9 +143,19 @@ const initialState: State = {
   prices: null,
   defaultDeathGuess: null,
   reveal: null,
+  error: null,
 };
 
-/** Drives the idle -> drawing -> when -> where -> predicting -> confirming -> revealed round: picks a human, prices every market, then settles bets against a real simulated life. */
+type Session = { key: string; id?: string; wagerWei: bigint };
+
+/**
+ * Drives the idle -> drawing -> when -> where -> predicting -> confirming -> settling -> revealed
+ * round. Opening a fresh round escrows the whole chip stake as one casino-host session; the
+ * player's sex/age/sins picks become a single on-chain prediction submitted at "confirming", and
+ * the soul the deployed SoulOddsEngine title returns is the actual settlement truth. Everything
+ * else about the soul (year, region, place, job, story) stays a local flavor draw the chain never
+ * sees — the on-chain soul only decides who won, and how much.
+ */
 export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   phase: MortalOddsDrawPhase;
   era: EraFilter;
@@ -146,30 +165,35 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   currentYear: number;
   prices: MarketPrices | null;
   priceDeathYear: (guessYear: number) => Price;
+  priceSins: (lifespanBucket: number) => Record<string, Price>;
   defaultDeathGuess: number | null;
   reveal: RevealResult | null;
+  error: string | null;
   setEra: (era: EraFilter) => void;
-  drawHuman: () => void;
+  drawHuman: (chipSize: number) => void;
   advance: () => void;
   retreat: () => void;
-  placeBets: (bets: Record<string, Bet>) => { net: number; skill: number; totalStake: number } | null;
+  placeBets: (bets: Record<string, Bet>) => void;
 } {
   const [state, dispatch] = useReducer(reducer, initialState);
   const spin = useRef<ReturnType<typeof animate> | null>(null);
+  const { hostApi, snapshot } = useCasinoHost();
+  const [session, setSession] = useState<Session | null>(null);
+  const pendingBets = useRef<Record<string, Bet> | null>(null);
+  const submittedFor = useRef<string | null>(null);
+  const decimals = snapshot?.token.decimals ?? 18;
 
   useEffect(() => () => spin.current?.stop(), []);
 
-  const drawHuman = () => {
-    if (state.phase === "drawing") return;
+  const startDrawSequence = (wagerWei: bigint) => {
     playClickSound();
-
     const rng = createRng();
     const { year, region } = drawBirth({ era: state.era, rng, erasConfig, currentYear: CURRENT_YEAR });
     const place = pickPlace({ region, rng, placesConfig });
     const draw: Draw = { year, region, place };
     const context = buildPlaceContext({ draw, erasConfig, worldPopCurve, currentYear: CURRENT_YEAR });
     const samples = simulateBookie({ year, rng, curves: bookieCurves, sins: sinsConfig, sims: SIMS });
-    const prices = computeMarketPrices({ markets: buildRoundMarkets({ year, rng }), samples, config: PRICING_CONFIG });
+    const prices = previewCategoryPrices(wagerWei);
     const defaultDeathGuess = medianDeathYear(samples);
 
     dispatch({ type: "start-draw", draw, context, samples, prices, defaultDeathGuess });
@@ -190,31 +214,107 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     });
   };
 
+  const drawHuman = (chipSize: number) => {
+    if (state.phase === "drawing") return;
+
+    // A redraw only rerolls the local flavor (year/region/place) — the round's session and its
+    // already-escrowed wager, opened on the first draw, stay exactly as they are.
+    const isRedraw = state.phase === "when" || state.phase === "where";
+    if (isRedraw && session) {
+      startDrawSequence(session.wagerWei);
+      return;
+    }
+
+    if (!hostApi) return;
+    const wagerWei = parseUnits(String(chipSize), decimals);
+    void hostApi
+      .openSession({ wager: wagerWei.toString(), gameData: "0x" })
+      .then(({ sessionKey }) => {
+        setSession({ key: sessionKey, wagerWei });
+        startDrawSequence(wagerWei);
+      })
+      .catch((cause) => {
+        dispatch({ type: "fail", error: cause instanceof Error ? cause.message : "Failed to open the round." });
+      });
+  };
+
+  // Once the opened session's row appears, capture its sessionId for the later submitAction.
+  useEffect(() => {
+    if (!session || session.id || !snapshot) return;
+    const row = snapshot.sessions.items.find((item) => item.sessionKey === session.key);
+    if (!row) return;
+    setSession((current) => (current && current.key === session.key ? { ...current, id: row.sessionId } : current));
+  }, [session, snapshot]);
+
+  const placeBets = (bets: Record<string, Bet>) => {
+    if (state.phase !== "confirming" || !hostApi || !session?.id || submittedFor.current === session.key) return;
+    submittedFor.current = session.key;
+    pendingBets.current = bets;
+    dispatch({ type: "await-settlement" });
+    void hostApi.submitAction({ sessionId: session.id, actionData: encodeMortalOddsPrediction(bets) }).catch((cause) => {
+      submittedFor.current = null;
+      dispatch({ type: "fail", error: cause instanceof Error ? cause.message : "Failed to submit the prediction." });
+    });
+  };
+
+  // Settle the active round once the host's session list shows it terminal.
+  useEffect(() => {
+    if (state.phase !== "settling" || !session?.id || !snapshot || !state.draw || !state.samples) return;
+    const row = snapshot.sessions.items.find((item) => item.sessionKey === session.key);
+    if (!row || !(row.isSettled || isTerminalPhase(row.phase)) || !row.raw.gameState) return;
+
+    const bets = pendingBets.current;
+    if (!bets) return;
+
+    try {
+      const { draw, samples: bookieSamples } = state;
+      const { result } = decodeSettledSoul(row.raw.gameState);
+      const sex: Sex = result.gender === 1 ? "girl" : "boy";
+      const deathYear = draw.year + result.age;
+      const category = categoryFromCrimeMask(result.crimeMask);
+
+      const rng = createRng();
+      // The chain settles sex/age/crime-category; region, literacy, city and cause-of-death stay
+      // a locally-drawn flavor conditioned on the same year/region/sex, purely for narrative color.
+      const flavor = sampleLife({ year: draw.year, region: draw.region, sex, withHistory: true, rng, config: fullModelConfig });
+      const sin = category ? buildFlavorSin({ category, year: draw.year, deathYear, rng, sins: sinsConfig }) : null;
+      const life: Life = { ...flavor, sex, age: result.age, deathYear, sin };
+
+      // Crime-category odds are conditioned on the bucket the player's own prediction paired
+      // them with, not the soul's actual result bucket — see `previewSinsPrices`.
+      const ageBet = bets.age;
+      const predictedBucket = ageBet?.kind === "choice" ? ageBucketIndex(ageBet.optionId) : 0;
+      const prices = previewCategoryPrices(session.wagerWei, predictedBucket);
+      const trueProbabilities = toTrueProbabilities(prices);
+      const { results, net, skill } = resolveBets({ life, bets, prices, priceDeathYear, trueProbabilities, truthSamples: [] });
+
+      const truthSamples = simulateFull({ year: draw.year, region: draw.region, rng, config: fullModelConfig, sims: SIMS });
+      const childDeathShare = truthSamples.filter((s) => s.age < 5).length / truthSamples.length;
+      const story = tellStory({ life, place: draw.place, currentYear: CURRENT_YEAR, childDeathShare, jobs: jobsConfig, rng });
+      const lifespan = buildLifespanHistogram({ truthSamples, bookieSamples });
+      const realMedianAge = medianAge(truthSamples);
+      const bookieMedianAge = medianAge(bookieSamples);
+
+      pendingBets.current = null;
+      dispatch({ type: "reveal", reveal: { life, results, net, skill, story, lifespan, realMedianAge, bookieMedianAge } });
+    } catch {
+      // The deployed title's bytecode doesn't match this app's expected game-state shape (e.g. a
+      // stale local chain still running an older SoulOddsEngine) — surface it, don't crash.
+      pendingBets.current = null;
+      dispatch({ type: "fail", error: "Could not read the settled soul — redeploy the title against the current contract." });
+    }
+  }, [snapshot, state.phase, session, state.draw, state.samples]);
+
   const priceDeathYear = (guessYear: number): Price => {
     if (!state.samples) return { p: 0, odds: null, tag: "Long shot" };
     const p = deathYearP({ samples: state.samples, guess: guessYear, window: DEATH_WINDOW });
     return priceFromP({ p, config: PRICING_CONFIG });
   };
 
-  const placeBets = (bets: Record<string, Bet>): { net: number; skill: number; totalStake: number } | null => {
-    if (state.phase !== "confirming" || !state.draw || !state.prices || !state.samples) return null;
-
-    const { draw, prices, samples: bookieSamples } = state;
-    const rng = createRng();
-    const life = sampleLife({ year: draw.year, region: draw.region, sex: drawSex(rng), withHistory: true, rng, config: fullModelConfig });
-    const truthSamples = simulateFull({ year: draw.year, region: draw.region, rng, config: fullModelConfig, sims: SIMS });
-    const trueProbabilities = computeTrueProbabilities({ markets: marketsConfig, samples: truthSamples });
-    const { results, net, skill } = resolveBets({ life, bets, prices, priceDeathYear, trueProbabilities, truthSamples });
-    const totalStake = Object.values(bets).reduce((sum, bet) => sum + bet.stake, 0);
-    const childDeathShare = truthSamples.filter((s) => s.age < 5).length / truthSamples.length;
-    const story = tellStory({ life, place: draw.place, currentYear: CURRENT_YEAR, childDeathShare, jobs: jobsConfig, rng });
-    const lifespan = buildLifespanHistogram({ truthSamples, bookieSamples });
-    const realMedianAge = medianAge(truthSamples);
-    const bookieMedianAge = medianAge(bookieSamples);
-
-    dispatch({ type: "reveal", reveal: { life, results, net, skill, story, lifespan, realMedianAge, bookieMedianAge } });
-    return { net, skill, totalStake };
-  };
+  // Crime-category odds depend on which age bucket the player paired them with (see
+  // `previewSinsPrices`), so the "sins" step re-prices live once the age bet is known instead of
+  // reusing the draw-time preview, which only ever reflected the placeholder bucket 0.
+  const priceSins = (lifespanBucket: number): Record<string, Price> => previewSinsPrices(session?.wagerWei ?? 0n, lifespanBucket);
 
   return {
     phase: state.phase,
@@ -225,8 +325,10 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     currentYear: CURRENT_YEAR,
     prices: state.prices,
     priceDeathYear,
+    priceSins,
     defaultDeathGuess: state.defaultDeathGuess,
     reveal: state.reveal,
+    error: state.error,
     setEra: (era) => dispatch({ type: "set-era", era }),
     drawHuman,
     advance: () => dispatch({ type: "advance" }),

@@ -2,6 +2,7 @@
 
 import { MotionConfig } from "framer-motion";
 import { BetPanel } from "@/components/game/home/BetPanel";
+import { GameCard } from "@/components/game/home/GameCard";
 import { DrawHero } from "@/components/game/mortal-odds/stage/DrawHero";
 import { DrawSequence } from "@/components/game/mortal-odds/stage/draw/DrawSequence";
 import { PredictionsPanel } from "@/components/game/mortal-odds/stage/markets/PredictionsPanel";
@@ -54,7 +55,7 @@ export const MortalOddsStage = (props: {
             charges={props.charges}
             onPlaceBet={round.advance}
             canPlaceBet={round.phase === "predicting"}
-            isLocked={round.phase === "confirming"}
+            isLocked={round.phase === "confirming" || round.phase === "settling"}
             requiredBets={marketsConfig.length}
           />
         </div>
@@ -107,6 +108,12 @@ export const MortalOddsStage = (props: {
               onBack={round.retreat}
               onConfirm={props.onPlaceBet}
             />
+          )}
+
+          {round.phase === "settling" && (
+            <GameCard className="flex min-h-0 flex-1 items-center justify-center" containerClassName="flex h-full w-full flex-col">
+              <p className="animate-pulse text-sm text-white/60">Reading the omens…</p>
+            </GameCard>
           )}
 
           {round.phase === "revealed" && round.reveal && round.draw && (

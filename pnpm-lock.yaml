@@ -76,6 +76,9 @@ importers:
       '@chain/casino-sdk':
         specifier: file:../..
         version: 'file:'
+      '@chain/soul-odds-engine':
+        specifier: file:../../soul-odds-engine
+        version: file:soul-odds-engine(bufferutil@4.1.0)(typescript@7.0.2)(utf-8-validate@6.0.6)(zod@4.4.3)
       '@heroicons/react':
         specifier: ^2.2.0
         version: 2.2.0(react@19.2.8)
@@ -611,6 +614,10 @@ packages:
   '@chain/casino-sdk@file:':
     resolution: {directory: '', type: directory}
     engines: {bun: '>=1.4.0', node: '>=24.12.4'}
+
+  '@chain/soul-odds-engine@file:soul-odds-engine':
+    resolution: {directory: soul-odds-engine, type: directory}
+    hasBin: true
 
   '@clack/core@1.5.1':
     resolution: {integrity: sha512-iHTrHA8MtVuLl2TfZySmcKv1qO2PoyC9Z7pfSDozEuV5vtY3/wcOPKJXlqJ5Oq2Cx5DDGQGAMVx6HZfRRoVEbQ==}
@@ -7893,6 +7900,15 @@ snapshots:
     dependencies:
       penpal: 7.0.6
       zod: 4.4.3
+
+  '@chain/soul-odds-engine@file:soul-odds-engine(bufferutil@4.1.0)(typescript@7.0.2)(utf-8-validate@6.0.6)(zod@4.4.3)':
+    dependencies:
+      viem: 2.56.8(bufferutil@4.1.0)(typescript@7.0.2)(utf-8-validate@6.0.6)(zod@4.4.3)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
 
   '@clack/core@1.5.1':
     dependencies:

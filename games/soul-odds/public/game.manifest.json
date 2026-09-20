@@ -19,7 +19,7 @@
   },
   "capabilities": {
     "openSession": true,
-    "submitAction": false,
+    "submitAction": true,
     "forfeitExpiredSession": false,
     "cancelStuckRandomness": false,
     "resize": true

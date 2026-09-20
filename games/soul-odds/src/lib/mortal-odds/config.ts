@@ -125,10 +125,24 @@ const shockConfigSchema = z.object({
 const shocksConfigSchema = z.array(shockConfigSchema);
 
 /**
- * The bettable sin catalog. Hand-edited: add an entry here and it becomes both a new option
- * on the "sins" market and a possible outcome for every life, no other file to touch.
- * `to: null` means the sin is still possible today; `rate` follows the same region-or-"all"
- * shape as a shock's rate.
+ * The four crime categories the deployed SoulOddsEngine title actually predicts on-chain
+ * (index-aligned with the title's `crimes` slots — see `config/mortal-odds/soul-odds-title.json`).
+ * Adding, removing or reweighting a `sins.json` entry never touches this list or the contract;
+ * only changing the categories themselves would require a new title deployment.
+ */
+export const SIN_CATEGORIES = [
+  { id: "violence", label: "Violence" },
+  { id: "deceit", label: "Deceit" },
+  { id: "greed", label: "Greed" },
+  { id: "heresy", label: "Heresy" },
+] as const;
+export type SinCategoryId = (typeof SIN_CATEGORIES)[number]["id"];
+
+/**
+ * The bettable sin catalog. Hand-edited: add an entry here and it becomes a possible outcome
+ * for every life whose crime category matches, no other file to touch. `to: null` means the sin
+ * is still possible today; `rate` follows the same region-or-"all" shape as a shock's rate.
+ * `category` is flavor-only bucketing into one of the four on-chain `SIN_CATEGORIES` slots.
  */
 const sinConfigSchema = z.object({
   id: z.string(),
@@ -137,6 +151,7 @@ const sinConfigSchema = z.object({
   from: z.number(),
   to: z.number().nullable(),
   rate: shockRateSchema,
+  category: z.enum(SIN_CATEGORIES.map((category) => category.id) as [SinCategoryId, ...SinCategoryId[]]),
 });
 
 const sinsConfigSchema = z.array(sinConfigSchema).min(1);
@@ -186,13 +201,20 @@ export const sinsConfig: SinConfig[] = sinsConfigSchema.parse(sinsJson);
 export const jobsConfig: JobsConfig = jobsConfigSchema.parse(jobsJson);
 export const regionModifiersConfig: RegionModifiersConfig = regionModifiersConfigSchema.parse(regionModifiersJson);
 
-/** The "sins" market's options are generated from sins.json, plus a "Clean" outcome for no sin recorded. */
+/**
+ * The "sins" market's options are the four on-chain crime categories, plus "Clean" for none
+ * recorded. Predicting a category is what settles on-chain; the specific sin revealed within it
+ * (drawn from `sins.json`) is flavor only — see `pickSin`.
+ */
 const sinsMarket: MarketConfig = {
   id: "sins",
   kind: "choice",
-  title: "Sins committed",
-  note: "The list grows the longer they live, and with the times they live in.",
-  options: [{ id: "none", label: "Clean" }, ...sinsConfig.map((sin): MarketOption => ({ id: sin.id, label: sin.label }))],
+  title: "The Weighing of the Heart",
+  note: "Anubis weighs every heart against Ma'at's feather before he lets a soul pass.",
+  options: [
+    { id: "none", label: "Clean" },
+    ...SIN_CATEGORIES.map((category): MarketOption => ({ id: category.id, label: category.label })),
+  ],
 };
 
 export const marketsConfig: MarketConfig[] = [...marketsConfigSchema.parse(marketsJson), sinsMarket];

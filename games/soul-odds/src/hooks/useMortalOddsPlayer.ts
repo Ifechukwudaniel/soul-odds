@@ -31,13 +31,11 @@ export function useMortalOddsPlayer(): {
   const balance = useAppStore(state => state.user.balance);
   const skill = useAppStore(state => state.user.skill);
   /**
-   * TEMPORARY: rounds still settle synchronously on the client (no real on-chain
-   * session yet), so spend/commitRound optimistically mutate the store's balance
-   * directly. Once rounds settle via `hostApi.openSession`/`submitAction`, delete
-   * this local mutation path entirely and let the host's pushed snapshot drive
-   * `user.balance` instead (see the balance-sync effect in `page.tsx`).
+   * A round's stake and payout now move for real through `hostApi.openSession`/`submitAction`,
+   * so `user.balance` is driven entirely by the host's pushed snapshot (see the balance-sync
+   * effect in `page.tsx`) — this delta is only for the local, chain-unaware redraw fee.
    */
-  const applyOptimisticBalanceDelta = useAppStore(state => state.applyBalanceDelta);
+  const applyRedrawFeeDelta = useAppStore(state => state.applyBalanceDelta);
   const updateUser = useAppStore(state => state.updateUser);
   const [roundStats, setRoundStats] = useState<RoundStats>(DEFAULT_ROUND_STATS);
 
@@ -56,20 +54,21 @@ export function useMortalOddsPlayer(): {
 
   const canAfford = (amount: number) => balance >= amount;
 
-  /** Charges a step of the round. Returns false and leaves the balance alone when the player is short. */
+  /** Charges a local, chain-unaware fee (a redraw). Returns false and leaves the balance alone when the player is short. */
   const spend = (amount: number) => {
     if (!canAfford(amount)) {
       return false;
     }
-    applyOptimisticBalanceDelta(-amount);
+    applyRedrawFeeDelta(-amount);
     return true;
   };
 
-  /** The stake was already spent up front via `spend`, so only the payout (stake + net) comes back; net itself still drives stats. */
-  const commitRound = (options: { net: number; skill: number; totalStake: number }) => {
-    applyOptimisticBalanceDelta(options.net + options.totalStake);
-    // TEMPORARY: same local-mutation caveat as balance above — once rounds settle
-    // server-side, skill should accumulate there so it can't be spoofed client-side.
+  /**
+   * The round's stake/payout already moved on-chain, so this only accumulates the stats that have
+   * no chain equivalent: skill and streaks. Skill is still spoofable client-side until it moves
+   * server-side, but the balance itself is no longer at risk from that.
+   */
+  const commitRound = (options: { net: number; skill: number }) => {
     updateUser({ skill: accumulateSkill(skill, options.skill) });
     persistRoundStats({
       rounds: roundStats.rounds + 1,
