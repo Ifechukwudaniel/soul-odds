@@ -43,6 +43,7 @@ export function resolveBets(options: {
         outcomeLabel,
         bookieP: price.p,
         realP,
+        odds: price.odds,
       });
     } else {
       const price = priceDeathYear(bet.guessYear);
@@ -62,6 +63,7 @@ export function resolveBets(options: {
         outcomeLabel: fmtYear(life.deathYear),
         bookieP: price.p,
         realP,
+        odds: price.odds,
       });
     }
   }

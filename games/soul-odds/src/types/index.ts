@@ -90,6 +90,8 @@ export type BetResult = {
   outcomeLabel: string;
   bookieP: number;
   realP: number;
+  /** The payout multiplier that was locked in at bet time, for display on the reveal stamp. */
+  odds: number;
 };
 
 export interface LeaderboardUser {

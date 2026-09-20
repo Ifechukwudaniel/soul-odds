@@ -1,17 +1,21 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { CurrencyCoinIcon } from "@/components/assets/CurrencyCoinIcon";
 import { GameButton } from "@/components/game/GameButton";
 import { GameCard } from "@/components/game/home/GameCard";
+import { BetResultStamp } from "@/components/game/mortal-odds/stage/reveal/BetResultStamp";
 import { BetsBreakdown } from "@/components/game/mortal-odds/stage/reveal/BetsBreakdown";
 import { LifespanChart } from "@/components/game/mortal-odds/stage/reveal/LifespanChart";
+import { RevealStamp } from "@/components/game/mortal-odds/stage/reveal/RevealStamp";
 import { fmtYear } from "@/lib/mortal-odds/format";
-import { revealBeats, visibleBetCount } from "@/lib/mortal-odds/reveal-beats";
 import { serifFont } from "@/styles/serif-font";
+import { playClickSound } from "@/utils/playClickSound";
 import type { RevealResult } from "@/hooks/useMortalOddsDraw";
 import type { Place, RoundCharge } from "@/types";
+
+const STAMP_DELAY_MS = 1500;
 
 const FactCard = (props: { label: string; value: string }) => (
   <div className="rounded-lg border border-white/10 bg-[#000000]/30 px-3 py-2 text-left">
@@ -22,35 +26,22 @@ const FactCard = (props: { label: string; value: string }) => (
 
 export const RevealPanel = (props: { reveal: RevealResult; place: Place; currentYear: number; currency: string; charges: RoundCharge[]; onNext: () => void; drawCost: number; canAffordDraw: boolean }) => {
   const { life, results, net, skill, story, lifespan, realMedianAge, bookieMedianAge } = props.reveal;
-  const [beat, setBeat] = useState(0);
+  const [stampReady, setStampReady] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
 
-  const beats = revealBeats(results);
-  const isFinished = beat >= beats.length - 1;
-  const visibleBets = visibleBetCount({ beats, beat });
-  const remainingBets = results.length - visibleBets;
+  useEffect(() => {
+    const timer = setTimeout(() => setStampReady(true), STAMP_DELAY_MS);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleDismiss = () => {
+    playClickSound();
+    setDismissed(true);
+  };
 
   // The stake is already reflected inside net; only side fees (redraws) reduce the round's take further.
   const fees = props.charges.filter((charge) => charge.kind === "fee").reduce((sum, charge) => sum + charge.amount, 0);
   const roundNet = net - fees;
-
-  function nextLabel() {
-    if (isFinished) {
-      return (
-        <>
-          Summon another soul
-          <span className="flex items-center gap-1 text-slate-950/60">
-            <span className="h-3 w-px bg-slate-950/20" />
-            <CurrencyCoinIcon width={16} height="16" />
-            {props.drawCost}
-          </span>
-        </>
-      );
-    }
-    if (remainingBets > 0) {
-      return `Reveal next bet (${remainingBets} left)`;
-    }
-    return "Let Anubis speak";
-  }
 
   const alive = life.deathYear >= props.currentYear;
   const sexLabel = life.sex === "girl" ? "A girl" : "A boy";
@@ -82,21 +73,24 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
           <LifespanChart histogram={lifespan} deathAge={life.age} realMedianAge={realMedianAge} bookieMedianAge={bookieMedianAge} />
         </div>
 
-        {results.length === 0 ? (
-          <p className="text-white/50 text-sm">No bets this round. Just watching.</p>
-        ) : (
-          <BetsBreakdown results={results} currency={props.currency} visibleCount={visibleBets} />
+        {results.length === 0 && <p className="text-white/50 text-sm">No bets this round. Just watching.</p>}
+
+        {dismissed && results.length > 0 && <BetsBreakdown results={results} currency={props.currency} visibleCount={results.length} />}
+
+        {dismissed && results.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2">
+            <RevealStamp tone="neutral" rotate={-2}>
+              Skill {skill >= 0 ? "+" : "−"}
+              {Math.abs(Math.round(skill))} pts
+            </RevealStamp>
+            <p className="text-white/50 text-xs">
+              What your bets were worth at the real odds, so a smart bet that lost still scores and a lucky one does not.
+            </p>
+          </div>
         )}
 
-        {isFinished && (
-          <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="flex flex-col gap-2">
-            {results.length > 0 && (
-              <p className="text-white/50 text-xs">
-                Skill {skill >= 0 ? "+" : "−"}
-                {Math.abs(Math.round(skill))} pts. Skill is what your bets were worth at the real odds, so a smart bet that lost still
-                scores and a lucky one does not.
-              </p>
-            )}
+        {dismissed && (
+          <div className="flex flex-col gap-2">
             <dl className="flex flex-col gap-1 text-sm">
               <div className="flex justify-between">
                 <dt className="text-white/50">Bets</dt>
@@ -110,27 +104,34 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
                 <dd className="text-[#F5B83D]">−{fees.toFixed(2)}</dd>
               </div>
             </dl>
-            <p className={`font-bold text-lg ${roundNet >= 0 ? "text-[#6BA84F]" : "text-[#B7410E]"}`}>
-              {roundNet >= 0 ? "Up" : "Down"} {Math.abs(roundNet).toFixed(2)} {props.currency} this round
-            </p>
-          </motion.div>
+            <div className="flex items-center gap-2">
+              <RevealStamp tone={roundNet >= 0 ? "win" : "loss"} rotate={-3} className="text-sm">
+                {roundNet >= 0 ? "Up" : "Down"}
+              </RevealStamp>
+              <p className={`font-bold text-lg ${roundNet >= 0 ? "text-[#6BA84F]" : "text-[#B7410E]"}`}>
+                {Math.abs(roundNet).toFixed(2)} {props.currency} this round
+              </p>
+            </div>
+          </div>
         )}
 
-        <GameButton
-          variant="papyrus"
-          disabled={isFinished && !props.canAffordDraw}
-          onClick={() => {
-            if (isFinished) {
-              props.onNext();
-            } else {
-              setBeat((current) => current + 1);
-            }
-          }}
-          className="px-6 py-3 text-base"
-        >
-          {nextLabel()}
-        </GameButton>
+        {dismissed && (
+          <GameButton variant="papyrus" disabled={!props.canAffordDraw} onClick={props.onNext} className="px-6 py-3 text-base">
+            Summon another soul
+            <span className="flex items-center gap-1 text-slate-950/60">
+              <span className="h-3 w-px bg-slate-950/20" />
+              <CurrencyCoinIcon width={16} height="16" />
+              {props.drawCost}
+            </span>
+          </GameButton>
+        )}
       </GameCard>
+
+      <AnimatePresence>
+        {stampReady && !dismissed && (
+          <BetResultStamp results={results} skill={skill} roundNet={roundNet} currency={props.currency} onDismiss={handleDismiss} />
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };
