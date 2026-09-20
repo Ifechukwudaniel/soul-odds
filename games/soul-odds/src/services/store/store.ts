@@ -30,6 +30,7 @@ export type TUser = {
   tapValue: number;
   balance: number;
   rank: number;
+  skill: number;
   energy: Energy;
   connectionId: string;
   totalCoinsMined: number;
@@ -54,6 +55,7 @@ export const emptyUser: TUser = {
   touches: 0,
   balance: 1000,
   rank: 0,
+  skill: 0,
   tapValue: 1,
   energy: {
     maxEnergy: 500,

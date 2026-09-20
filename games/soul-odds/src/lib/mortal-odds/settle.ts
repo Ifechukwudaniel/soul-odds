@@ -2,13 +2,10 @@ import { betLabel } from "@/lib/mortal-odds/bets";
 import { DEATH_WINDOW, marketsConfig } from "@/lib/mortal-odds/config";
 import { fmtYear } from "@/lib/mortal-odds/format";
 import { deathYearP, LIFE_RESOLVERS } from "@/lib/mortal-odds/pricing";
+import { computeBetSkill } from "@/lib/mortal-odds/skill";
 import type { Bet, BetResult, Life, MarketPrices, Price } from "@/types";
 
-/**
- * Settles every bet against the life that actually happened. A losing bet's net is
- * just its stake; skill is the bet's expected value at the real odds (stake * (realP * odds - 1)),
- * so a smart bet that lost still scores and a lucky one does not.
- */
+/** Settles every bet against the life that actually happened. A losing bet's net is just its stake. */
 export function resolveBets(options: {
   life: Life;
   bets: Record<string, Bet>;
@@ -38,7 +35,7 @@ export function resolveBets(options: {
         won,
         stake: bet.stake,
         net: won ? bet.stake * (price.odds - 1) : -bet.stake,
-        skill: bet.stake * (realP * price.odds - 1),
+        skill: computeBetSkill({ stake: bet.stake, realP, odds: price.odds }),
         pickLabel: betLabel(bet).pick,
         outcomeLabel,
         bookieP: price.p,
@@ -58,7 +55,7 @@ export function resolveBets(options: {
         won,
         stake: bet.stake,
         net: won ? bet.stake * (price.odds - 1) : -bet.stake,
-        skill: bet.stake * (realP * price.odds - 1),
+        skill: computeBetSkill({ stake: bet.stake, realP, odds: price.odds }),
         pickLabel: betLabel(bet).pick,
         outcomeLabel: fmtYear(life.deathYear),
         bookieP: price.p,

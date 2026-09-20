@@ -1,14 +1,6 @@
-import type { IconType } from "react-icons";
-import { FaHourglassHalf, FaRegQuestionCircle, FaVenusMars } from "react-icons/fa";
-import { GiFeather } from "react-icons/gi";
+import { getMarketIcon } from "@/lib/mortal-odds/market-icons";
 import { playClickSound } from "@/utils/playClickSound";
 import type { MarketConfig, Price } from "@/types";
-
-const MARKET_ICONS: Record<string, IconType> = {
-  sex: FaVenusMars,
-  age: FaHourglassHalf,
-  sins: GiFeather,
-};
 
 export const ChoiceMarket = (props: {
   market: MarketConfig;
@@ -16,7 +8,7 @@ export const ChoiceMarket = (props: {
   selectedOptionId: string | undefined;
   onSelect: (optionId: string) => void;
 }) => {
-  const Icon = MARKET_ICONS[props.market.id] ?? FaRegQuestionCircle;
+  const Icon = getMarketIcon(props.market.id);
   const selectedPrice = props.selectedOptionId ? props.prices[props.selectedOptionId] : undefined;
   const selectedOdds = selectedPrice?.odds;
   const options = props.market.options.filter((option) => option.id in props.prices);

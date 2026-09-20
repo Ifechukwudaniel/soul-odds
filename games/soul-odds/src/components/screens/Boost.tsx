@@ -14,23 +14,17 @@ type BoostCardList = {
   level?: number;
   maxLevel?: number;
   noLevel: boolean;
+  /** Not shown on the Boost screen yet — keeps a boost in the lineup without committing to it publicly. */
+  hidden?: boolean;
 };
 
 export const boostCardLists: BoostCardList[] = [
   {
     title: "Soul's Rest",
-    desc: "Reduces the cost of drawing a soul by 1 chip per level.",
+    desc: "Redraws cost less the more you level this up, down to a floor that never quite reaches free.",
     icon: <RelicIcon relic="sarcophagus" size={40} />,
     initalCost: 10000,
     id: 3,
-    noLevel: false,
-  },
-  {
-    title: "Mask of Truth",
-    desc: "Reduces the cost of drawing a soul's location by 1 chip per level.",
-    icon: <RelicIcon relic="mask" size={40} />,
-    initalCost: 10000,
-    id: 4,
     noLevel: false,
   },
   {
@@ -43,11 +37,20 @@ export const boostCardLists: BoostCardList[] = [
   },
   {
     title: "Pharaoh's Fortune",
-    desc: "Doubles your payout when you get the entire round right.",
+    desc: "Activate a blessing: for a limited time, landing a perfect round pays double.",
     icon: <RelicIcon relic="chest" size={40} />,
     initalCost: 200000,
     id: 6,
     noLevel: true,
+  },
+  {
+    title: "Oracle's Whisper",
+    desc: "Reveals a hint about the soul's true fate before you lock in your bets.",
+    icon: <RelicIcon relic="scarab" size={40} />,
+    initalCost: 50000,
+    id: 7,
+    noLevel: true,
+    hidden: false,
   },
 ];
 
@@ -72,7 +75,7 @@ export const BoostScreen = () => {
         <div className="bg-[#182334] h-[1px] w-full my-4" />
         <div className="mt-1">
           <div className="grid grid-cols-2 gap-4 gap-x-[10px] my-6 overflow-y-scroll pb-32 max-h-full h-[100%]">
-            {boostCardLists.map(({ id, title, icon, desc, initalCost, noLevel }, index) => (
+            {boostCardLists.filter(({ hidden }) => !hidden).map(({ id, title, icon, desc, initalCost, noLevel }, index) => (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

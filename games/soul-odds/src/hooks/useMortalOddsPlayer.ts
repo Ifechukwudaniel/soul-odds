@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { accumulateSkill } from "@/lib/mortal-odds/skill";
 import { useAppStore } from "@/services/store/store";
 
 export type MortalOddsPlayerStats = { bankroll: number; rounds: number; bestRound: number; streak: number; skill: number };
 
-type RoundStats = Omit<MortalOddsPlayerStats, "bankroll">;
+type RoundStats = Omit<MortalOddsPlayerStats, "bankroll" | "skill">;
 
 const STORAGE_KEY = "mortal-odds-player:v1";
-const DEFAULT_ROUND_STATS: RoundStats = { rounds: 0, bestRound: 0, streak: 0, skill: 0 };
+const DEFAULT_ROUND_STATS: RoundStats = { rounds: 0, bestRound: 0, streak: 0 };
 
 function readRoundStats(): RoundStats {
   try {
@@ -28,6 +29,7 @@ export function useMortalOddsPlayer(): {
   reset: () => void;
 } {
   const balance = useAppStore(state => state.user.balance);
+  const skill = useAppStore(state => state.user.skill);
   /**
    * TEMPORARY: rounds still settle synchronously on the client (no real on-chain
    * session yet), so spend/commitRound optimistically mutate the store's balance
@@ -36,6 +38,7 @@ export function useMortalOddsPlayer(): {
    * `user.balance` instead (see the balance-sync effect in `page.tsx`).
    */
   const applyOptimisticBalanceDelta = useAppStore(state => state.applyBalanceDelta);
+  const updateUser = useAppStore(state => state.updateUser);
   const [roundStats, setRoundStats] = useState<RoundStats>(DEFAULT_ROUND_STATS);
 
   useEffect(() => {
@@ -65,16 +68,18 @@ export function useMortalOddsPlayer(): {
   /** The stake was already spent up front via `spend`, so only the payout (stake + net) comes back; net itself still drives stats. */
   const commitRound = (options: { net: number; skill: number; totalStake: number }) => {
     applyOptimisticBalanceDelta(options.net + options.totalStake);
+    // TEMPORARY: same local-mutation caveat as balance above — once rounds settle
+    // server-side, skill should accumulate there so it can't be spoofed client-side.
+    updateUser({ skill: accumulateSkill(skill, options.skill) });
     persistRoundStats({
       rounds: roundStats.rounds + 1,
       bestRound: Math.max(roundStats.bestRound, options.net),
       streak: options.net > 0 ? roundStats.streak + 1 : options.net < 0 ? 0 : roundStats.streak,
-      skill: roundStats.skill + options.skill,
     });
   };
 
   return {
-    stats: { bankroll: balance, ...roundStats },
+    stats: { bankroll: balance, skill, ...roundStats },
     canAfford,
     spend,
     commitRound,
