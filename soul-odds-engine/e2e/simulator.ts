@@ -5,7 +5,7 @@ import { type Hex, parseAbi, parseEther, parseEventLogs } from 'viem';
 import {
   encodePrediction,
   generateSoul,
-  matchesPrediction,
+  matchBreakdown,
   predictionPayout,
   type SoulPrediction,
 } from '../src/index.ts';
@@ -94,8 +94,8 @@ async function main() {
     const settled = await waitForSettlement(opened.args.sessionId, openedReceipt.blockNumber);
 
     const expectedResult = generateSoul(base.configuration, settled.randomness);
-    const expectedWon = matchesPrediction(prediction, expectedResult);
-    const expectedPayout = expectedWon ? predictionPayout(base.configuration, wager, prediction) : 0n;
+    const expectedPayout = predictionPayout(base.configuration, wager, prediction, expectedResult);
+    const expectedWon = expectedPayout > 0n;
     if (settled.payout !== expectedPayout) {
       throw new Error(
         `session ${opened.args.sessionId}: chain paid ${settled.payout}, ` +
@@ -104,8 +104,18 @@ async function main() {
     }
     wagered += wager;
     paid += settled.payout;
+
+    const breakdown = matchBreakdown(prediction, expectedResult);
+    const crimeNames = base.definition.crimes.map(crime => crime.name);
+    const crimeLabel = (mask: number) =>
+      mask === 0 ? 'no crime' : crimeNames.filter((_, index) => (mask & (1 << index)) !== 0).join(' + ');
+
     console.log(
-      `session ${opened.args.sessionId}  ${expectedWon ? 'won' : 'lost'}  age ${expectedResult.age}`,
+      `session ${opened.args.sessionId}  ${expectedWon ? 'won' : 'lost'}  payout ${settled.payout}\n` +
+        `  bet:  ${prediction.gender === 0 ? 'male' : 'female'}, bucket ${prediction.lifespanBucket}, ${crimeLabel(prediction.crimeMask)}\n` +
+        `  soul: ${expectedResult.gender === 0 ? 'male' : 'female'}, born ${expectedResult.birthYear}, ` +
+        `died at ${expectedResult.age}, bucket ${expectedResult.lifespanBucket}, ${crimeLabel(expectedResult.crimeMask)}\n` +
+        `  matched: gender ${breakdown.genderMatch ? '✓' : '✗'}  lifespan ${breakdown.lifespanMatch ? '✓' : '✗'}  crimes ${breakdown.crimeMatch ? '✓' : '✗'}`,
     );
   }
   if (wagered === 0n) return;

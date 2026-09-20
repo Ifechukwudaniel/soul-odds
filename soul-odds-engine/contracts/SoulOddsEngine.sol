@@ -36,8 +36,17 @@ contract SoulOddsEngine is ICasinoGameV2 {
     struct SoulResult {
         uint8 gender;
         uint16 age;
+        int16 birthYear;
         uint8 lifespanBucket;
         uint8 crimeMask;
+    }
+
+    /// @notice Per-field breakdown of a prediction against the generated
+    ///         soul, so a losing player can see exactly what they missed.
+    struct SoulMatchBreakdown {
+        bool genderMatch;
+        bool lifespanMatch;
+        bool crimeMatch;
     }
 
     function quoteCaps(
@@ -130,19 +139,26 @@ contract SoulOddsEngine is ICasinoGameV2 {
 
         SoulResult memory result = _generateSoul(configuration, randomness);
 
-        bool won = _matches(prediction, result);
+        SoulMatchBreakdown memory breakdown = _matchBreakdown(
+            prediction,
+            result
+        );
 
-        uint256 payout;
+        uint256 payout = _predictionPayout(
+            configuration,
+            ctx.escrowedStake,
+            prediction,
+            breakdown
+        );
 
-        if (won) {
-            payout = _predictionPayout(
-                configuration,
-                ctx.escrowedStake,
-                prediction
-            );
-        }
+        bool won = payout > 0;
 
-        stepResult.newGameState = abi.encode(prediction, result, won);
+        stepResult.newGameState = abi.encode(
+            prediction,
+            result,
+            won,
+            breakdown
+        );
 
         stepResult.nextPhase = SessionPhase.SETTLED;
 
@@ -285,6 +301,31 @@ contract SoulOddsEngine is ICasinoGameV2 {
         } else {
             result.crimeMask = _sampleCrimes(configuration, random >> 128);
         }
+
+        // Flavor only: birth year never affects a prediction's odds or
+        // payout, so it is drawn from independent, domain-separated
+        // entropy rather than another slice of `random`.
+        uint256 birthYearRandom = uint256(
+            keccak256(abi.encode(randomness, uint256(1)))
+        );
+
+        result.birthYear = _sampleBirthYear(configuration, birthYearRandom);
+    }
+
+    function _sampleBirthYear(
+        SoulConfiguration memory configuration,
+        uint256 random
+    ) private pure returns (int16) {
+        int256 minYear = configuration.minBirthYear;
+        int256 maxYear = configuration.maxBirthYear;
+
+        if (maxYear == minYear) {
+            return int16(minYear);
+        }
+
+        uint256 span = uint256(maxYear - minYear + 1);
+
+        return int16(minYear + int256(random % span));
     }
 
     function _sampleGender(
@@ -381,72 +422,27 @@ contract SoulOddsEngine is ICasinoGameV2 {
         }
     }
 
-    function _matches(
+    /// @dev A crime prediction only counts as a match on the exact mask, but
+    ///      a losing player still learns whether they at least called
+    ///      "committed a crime or not" correctly via `prediction.sins`.
+    function _matchBreakdown(
         SoulPrediction memory prediction,
         SoulResult memory result
-    ) private pure returns (bool) {
-        if (prediction.gender != result.gender) {
-            return false;
-        }
+    ) private pure returns (SoulMatchBreakdown memory breakdown) {
+        breakdown.genderMatch = prediction.gender == result.gender;
 
-        if (prediction.lifespanBucket != result.lifespanBucket) {
-            return false;
-        }
+        breakdown.lifespanMatch =
+            prediction.lifespanBucket == result.lifespanBucket;
 
-        if (prediction.sins != (result.crimeMask != 0)) {
-            return false;
-        }
-
-        if (prediction.crimeMask != result.crimeMask) {
-            return false;
-        }
-
-        return true;
+        breakdown.crimeMatch =
+            prediction.sins == (result.crimeMask != 0) &&
+            prediction.crimeMask == result.crimeMask;
     }
 
     function _rtpWad(
         SoulConfiguration memory configuration
     ) private pure returns (uint256) {
         return configuration.rtpWad;
-    }
-
-    /// @dev Smallest probability across every valid (gender, lifespan
-    ///      bucket, crime state) prediction, i.e. the rarest bet this
-    ///      configuration allows. Structurally impossible states (e.g. a
-    ///      crime state in a bucket with a 100% no-crime weight) are
-    ///      skipped since they can never actually pay out.
-    function _minimumPredictionProbability(
-        SoulConfiguration memory configuration
-    ) private pure returns (uint256 minProbabilityWad) {
-        minProbabilityWad = WAD;
-
-        uint8[VALID_CRIME_STATE_COUNT] memory crimeMasks = _validCrimeMasks();
-
-        for (uint8 gender; gender < 2; ++gender) {
-            for (uint8 bucket; bucket < LIFESPAN_COUNT; ++bucket) {
-                for (uint256 i; i < crimeMasks.length; ++i) {
-                    uint8 mask = crimeMasks[i];
-
-                    SoulPrediction memory prediction = SoulPrediction({
-                        gender: gender,
-                        lifespanBucket: bucket,
-                        sins: mask != 0,
-                        crimeMask: mask
-                    });
-
-                    uint256 probabilityWad = _predictionProbabilityWad(
-                        configuration,
-                        prediction
-                    );
-
-                    if (
-                        probabilityWad > 0 && probabilityWad < minProbabilityWad
-                    ) {
-                        minProbabilityWad = probabilityWad;
-                    }
-                }
-            }
-        }
     }
 
     function _validCrimeMasks()
@@ -469,89 +465,22 @@ contract SoulOddsEngine is ICasinoGameV2 {
         }
     }
 
-    /// @dev Variance per unit wager^2 of a Bernoulli bet (win `maxPayout`
-    ///      with probability p, else 0) at the rarest, and therefore
-    ///      riskiest, prediction this configuration allows.
-    function _varianceWad(
-        SoulConfiguration memory configuration
-    ) private pure returns (uint256) {
-        uint256 minProbabilityWad = _minimumPredictionProbability(
-            configuration
-        );
-
-        uint256 rtp = _rtpWad(configuration);
-
-        uint256 rtpSquaredWad = Math.mulDiv(
-            rtp,
-            rtp,
-            WAD,
-            Math.Rounding.Ceil
-        );
-
-        uint256 oneMinusProbabilityWad = WAD - minProbabilityWad;
-
-        return
-            Math.mulDiv(
-                oneMinusProbabilityWad,
-                rtpSquaredWad,
-                minProbabilityWad,
-                Math.Rounding.Ceil
-            );
-    }
-
-    function _predictionMaxPayout(
-        SoulConfiguration memory configuration,
-        uint256 wager,
-        SoulPrediction memory prediction
-    ) private pure returns (uint256) {
-        uint256 probability = _predictionProbabilityWad(
-            configuration,
-            prediction
-        );
-
-        if (probability == 0) {
-            return 0;
-        }
-
-        return
-            Math.mulDiv(
-                wager,
-                _rtpWad(configuration),
-                probability,
-                Math.Rounding.Ceil
-            );
-    }
-
-    function _predictionPayout(
-        SoulConfiguration memory configuration,
-        uint256 wager,
-        SoulPrediction memory prediction
-    ) private pure returns (uint256) {
-        return _predictionMaxPayout(configuration, wager, prediction);
-    }
-
-    function _maxPayout(
-        SoulConfiguration memory configuration,
-        uint256 wager
-    ) private pure returns (uint256) {
-        return
-            Math.mulDiv(
-                wager,
-                _rtpWad(configuration),
-                _minimumPredictionProbability(configuration),
-                Math.Rounding.Ceil
-            );
-    }
-
-    /// @dev Exact probability that a randomly generated soul matches
-    ///      `prediction`, mirroring `_generateSoul` state by state:
-    ///      gender and lifespan bucket are independent weighted picks, and
+    /// @dev The three independent marginal probabilities `_generateSoul`
+    ///      draws from: gender and lifespan bucket are weighted picks, and
     ///      the crime state depends on the bucket's no-crime weight and the
     ///      anonymous crime slot distribution.
-    function _predictionProbabilityWad(
+    function _categoryProbabilities(
         SoulConfiguration memory configuration,
         SoulPrediction memory prediction
-    ) private pure returns (uint256) {
+    )
+        private
+        pure
+        returns (
+            uint256 genderProbabilityWad,
+            uint256 lifespanProbabilityWad,
+            uint256 crimeProbabilityWad
+        )
+    {
         uint256 genderWeight = prediction.gender == 0
             ? configuration.maleWeight
             : configuration.femaleWeight;
@@ -559,34 +488,283 @@ contract SoulOddsEngine is ICasinoGameV2 {
         uint256 genderTotal = uint256(configuration.maleWeight) +
             configuration.femaleWeight;
 
-        uint256 genderProbabilityWad = Math.mulDiv(
-            genderWeight,
-            WAD,
-            genderTotal
-        );
+        genderProbabilityWad = Math.mulDiv(genderWeight, WAD, genderTotal);
 
         SoulLifespan memory lifespan = configuration.lifespans[
             prediction.lifespanBucket
         ];
 
-        uint256 lifespanProbabilityWad = Math.mulDiv(
+        lifespanProbabilityWad = Math.mulDiv(
             lifespan.weight,
             WAD,
             configuration.lifespanTotalWeight
         );
 
-        uint256 crimeStateProbabilityWad = _crimeStateProbabilityWad(
+        crimeProbabilityWad = _crimeStateProbabilityWad(
             configuration,
             lifespan,
             prediction.crimeMask
         );
+    }
+
+    /// @dev Exact probability that a randomly generated soul matches
+    ///      `prediction` on all three categories at once (the full-house
+    ///      event), i.e. the product of the three marginals.
+    function _predictionProbabilityWad(
+        SoulConfiguration memory configuration,
+        SoulPrediction memory prediction
+    ) private pure returns (uint256) {
+        (
+            uint256 genderProbabilityWad,
+            uint256 lifespanProbabilityWad,
+            uint256 crimeProbabilityWad
+        ) = _categoryProbabilities(configuration, prediction);
 
         return
             Math.mulDiv(
                 Math.mulDiv(genderProbabilityWad, lifespanProbabilityWad, WAD),
-                crimeStateProbabilityWad,
+                crimeProbabilityWad,
                 WAD
             );
+    }
+
+    /// @dev Each category gets an equal third of `wager` and pays out at
+    ///      its OWN odds: `(wager/3) * RTP / p_i`. Unlike splitting stake by
+    ///      probability, this makes a common category (e.g. gender, near a
+    ///      coin flip) pay a small amount and a rare category (e.g. an
+    ///      exact crime state) pay a large one — each category's own
+    ///      rarity sets its own price. Every category's expected value is
+    ///      still exactly `(wager/3) * RTP`, so the split stays fair
+    ///      regardless of what was predicted.
+    function _categoryPayout(
+        uint256 wager,
+        uint256 rtpWadValue,
+        uint256 probabilityWad
+    ) private pure returns (uint256) {
+        // A category with 0 probability (e.g. a crime state impossible in
+        // this bucket) can never be matched, so it never pays.
+        if (probabilityWad == 0) {
+            return 0;
+        }
+
+        return
+            Math.mulDiv(
+                wager,
+                rtpWadValue,
+                probabilityWad * 3,
+                Math.Rounding.Ceil
+            );
+    }
+
+    /// @dev The (gender, lifespan, crime) marginal triple that maximizes
+    ///      the total payout if all three hit, i.e. the riskiest bet this
+    ///      configuration allows under the per-category payout model above.
+    ///      Found by evaluating every valid prediction directly (rather
+    ///      than trying to combine three separately-minimized marginals),
+    ///      since the crime marginal depends on which bucket was paired
+    ///      with it.
+    function _worstCaseCategoryProbabilities(
+        SoulConfiguration memory configuration
+    )
+        private
+        pure
+        returns (
+            uint256 genderProbabilityWad,
+            uint256 lifespanProbabilityWad,
+            uint256 crimeProbabilityWad
+        )
+    {
+        uint256 rtp = _rtpWad(configuration);
+
+        uint256 maxPayoutAtRefWager;
+
+        uint8[VALID_CRIME_STATE_COUNT] memory crimeMasks = _validCrimeMasks();
+
+        for (uint8 gender; gender < 2; ++gender) {
+            for (uint8 bucket; bucket < LIFESPAN_COUNT; ++bucket) {
+                for (uint256 i; i < crimeMasks.length; ++i) {
+                    uint8 mask = crimeMasks[i];
+
+                    SoulPrediction memory prediction = SoulPrediction({
+                        gender: gender,
+                        lifespanBucket: bucket,
+                        sins: mask != 0,
+                        crimeMask: mask
+                    });
+
+                    (
+                        uint256 g,
+                        uint256 l,
+                        uint256 c
+                    ) = _categoryProbabilities(configuration, prediction);
+
+                    // Payout scales linearly with wager, so ranking combos
+                    // by their payout at any fixed reference wager (here
+                    // WAD) picks the same combo as at the real wager.
+                    uint256 payoutAtRefWager = _categoryPayout(
+                        WAD,
+                        rtp,
+                        g
+                    ) +
+                        _categoryPayout(WAD, rtp, l) +
+                        _categoryPayout(WAD, rtp, c);
+
+                    if (payoutAtRefWager > maxPayoutAtRefWager) {
+                        maxPayoutAtRefWager = payoutAtRefWager;
+                        genderProbabilityWad = g;
+                        lifespanProbabilityWad = l;
+                        crimeProbabilityWad = c;
+                    }
+                }
+            }
+        }
+    }
+
+    /// @dev Variance per unit wager^2 of the total payout (the sum of three
+    ///      independent Bernoulli categories, each with its own payout) at
+    ///      the riskiest prediction this configuration allows.
+    function _varianceWad(
+        SoulConfiguration memory configuration
+    ) private pure returns (uint256) {
+        (
+            uint256 g,
+            uint256 l,
+            uint256 c
+        ) = _worstCaseCategoryProbabilities(configuration);
+
+        uint256 rtp = _rtpWad(configuration);
+
+        return
+            _categoryVarianceTermWad(rtp, g) +
+            _categoryVarianceTermWad(rtp, l) +
+            _categoryVarianceTermWad(rtp, c);
+    }
+
+    /// @dev Var(X_i * payout_i)/wager^2 for one Bernoulli(p_i) category
+    ///      worth `payout_i = RTP/(3 p_i)` per unit wager.
+    function _categoryVarianceTermWad(
+        uint256 rtpWadValue,
+        uint256 probabilityWad
+    ) private pure returns (uint256) {
+        // A category that never happens (Bernoulli(0)) contributes no
+        // variance, and would otherwise divide by zero below.
+        if (probabilityWad == 0) {
+            return 0;
+        }
+
+        uint256 ratioWad = Math.mulDiv(
+            rtpWadValue,
+            WAD,
+            probabilityWad * 3,
+            Math.Rounding.Ceil
+        );
+
+        uint256 ratioSquaredWad = Math.mulDiv(
+            ratioWad,
+            ratioWad,
+            WAD,
+            Math.Rounding.Ceil
+        );
+
+        uint256 bernoulliVarianceWad = Math.mulDiv(
+            probabilityWad,
+            WAD - probabilityWad,
+            WAD
+        );
+
+        return
+            Math.mulDiv(
+                ratioSquaredWad,
+                bernoulliVarianceWad,
+                WAD,
+                Math.Rounding.Ceil
+            );
+    }
+
+    /// @dev Worst case for `prediction`: every category hits.
+    function _predictionMaxPayout(
+        SoulConfiguration memory configuration,
+        uint256 wager,
+        SoulPrediction memory prediction
+    ) private pure returns (uint256) {
+        (
+            uint256 g,
+            uint256 l,
+            uint256 c
+        ) = _categoryProbabilities(configuration, prediction);
+
+        uint256 rtp = _rtpWad(configuration);
+
+        return
+            _categoryPayout(wager, rtp, g) +
+            _categoryPayout(wager, rtp, l) +
+            _categoryPayout(wager, rtp, c);
+    }
+
+    function _predictionPayout(
+        SoulConfiguration memory configuration,
+        uint256 wager,
+        SoulPrediction memory prediction,
+        SoulMatchBreakdown memory breakdown
+    ) private pure returns (uint256) {
+        (
+            uint256 g,
+            uint256 l,
+            uint256 c
+        ) = _categoryProbabilities(configuration, prediction);
+
+        uint256 rtp = _rtpWad(configuration);
+
+        uint256 payout;
+
+        if (breakdown.genderMatch) {
+            payout += _categoryPayout(wager, rtp, g);
+        }
+
+        if (breakdown.lifespanMatch) {
+            payout += _categoryPayout(wager, rtp, l);
+        }
+
+        if (breakdown.crimeMatch) {
+            payout += _categoryPayout(wager, rtp, c);
+        }
+
+        return payout;
+    }
+
+    /// @dev Worst case across every valid prediction: the riskiest category
+    ///      triple, with every category hitting.
+    function _maxPayout(
+        SoulConfiguration memory configuration,
+        uint256 wager
+    ) private pure returns (uint256) {
+        (
+            uint256 g,
+            uint256 l,
+            uint256 c
+        ) = _worstCaseCategoryProbabilities(configuration);
+
+        uint256 rtp = _rtpWad(configuration);
+
+        return
+            _categoryPayout(wager, rtp, g) +
+            _categoryPayout(wager, rtp, l) +
+            _categoryPayout(wager, rtp, c);
+    }
+
+    /// @dev Probability of the full-house event (all three categories hit)
+    ///      at the riskiest prediction, i.e. the event that realizes
+    ///      `_maxPayout`.
+    function _minimumPredictionProbability(
+        SoulConfiguration memory configuration
+    ) private pure returns (uint256) {
+        (
+            uint256 g,
+            uint256 l,
+            uint256 c
+        ) = _worstCaseCategoryProbabilities(configuration);
+
+        return Math.mulDiv(Math.mulDiv(g, l, WAD), c, WAD);
     }
 
     /// @dev Probability of an exact crime state within `lifespan`, mirroring

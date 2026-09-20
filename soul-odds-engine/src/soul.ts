@@ -25,7 +25,14 @@ export type SoulConfiguration = {
 };
 
 export type SoulPrediction = { gender: number; lifespanBucket: number; sins: boolean; crimeMask: number };
-export type SoulResult = { gender: number; age: number; lifespanBucket: number; crimeMask: number };
+export type SoulResult = {
+  gender: number;
+  age: number;
+  birthYear: number;
+  lifespanBucket: number;
+  crimeMask: number;
+};
+export type SoulMatchBreakdown = { genderMatch: boolean; lifespanMatch: boolean; crimeMatch: boolean };
 
 const WAD = 10n ** 18n;
 const BPS = 10_000n;
@@ -111,6 +118,13 @@ function sampleNoCrime(lifespan: SoulLifespan, random: bigint): boolean {
   return random % BPS < lifespan.noCrimeWeight;
 }
 
+function sampleBirthYear(configuration: SoulConfiguration, random: bigint): number {
+  const { minBirthYear, maxBirthYear } = configuration;
+  if (maxBirthYear === minBirthYear) return minBirthYear;
+  const span = BigInt(maxBirthYear - minBirthYear + 1);
+  return minBirthYear + Number(random % span);
+}
+
 function sampleCrimes(configuration: SoulConfiguration, random: bigint): number {
   let selectionTotal = 0n;
   for (let i = 0; i < CRIME_COUNT; i++) selectionTotal += configuration.crimes[i].selectionWeight;
@@ -151,14 +165,29 @@ export function generateSoul(configuration: SoulConfiguration, randomness: Hex):
   const age = sampleAge(lifespan, random >> 64n);
   const noCrime = sampleNoCrime(lifespan, random >> 96n);
   const crimeMask = noCrime ? 0 : sampleCrimes(configuration, random >> 128n);
-  return { gender, age, lifespanBucket, crimeMask };
+
+  // Flavor only, drawn from independent entropy — mirrors the `keccak256(abi.encode(randomness, 1))` salt.
+  const birthYearRandom = hexToBigInt(
+    keccak256(encodeAbiParameters([{ type: 'bytes32' }, { type: 'uint256' }], [randomness, 1n])),
+  );
+  const birthYear = sampleBirthYear(configuration, birthYearRandom);
+
+  return { gender, age, birthYear, lifespanBucket, crimeMask };
+}
+
+/** Mirrors `_matchBreakdown`: which parts of `prediction` the generated soul actually matched. */
+export function matchBreakdown(prediction: SoulPrediction, result: SoulResult): SoulMatchBreakdown {
+  return {
+    genderMatch: prediction.gender === result.gender,
+    lifespanMatch: prediction.lifespanBucket === result.lifespanBucket,
+    crimeMatch:
+      prediction.sins === (result.crimeMask !== 0) && prediction.crimeMask === result.crimeMask,
+  };
 }
 
 export function matchesPrediction(prediction: SoulPrediction, result: SoulResult): boolean {
-  if (prediction.gender !== result.gender) return false;
-  if (prediction.lifespanBucket !== result.lifespanBucket) return false;
-  if (prediction.sins !== (result.crimeMask !== 0)) return false;
-  return prediction.crimeMask === result.crimeMask;
+  const breakdown = matchBreakdown(prediction, result);
+  return breakdown.genderMatch && breakdown.lifespanMatch && breakdown.crimeMatch;
 }
 
 function crimeMaskIndices(crimeMask: number): number[] {
@@ -217,11 +246,17 @@ function crimeStateProbabilityWad(
   return mulDivFloor(hasCrimeProbabilityWad, maskProbabilityWad, WAD);
 }
 
-/** Mirrors `_predictionProbabilityWad`: exact chance a random soul matches `prediction`. */
-export function predictionProbabilityWad(
+type CategoryProbabilities = {
+  genderProbabilityWad: bigint;
+  lifespanProbabilityWad: bigint;
+  crimeProbabilityWad: bigint;
+};
+
+/** Mirrors `_categoryProbabilities`: the three independent marginals `generateSoul` draws from. */
+function categoryProbabilities(
   configuration: SoulConfiguration,
   prediction: SoulPrediction,
-): bigint {
+): CategoryProbabilities {
   const genderWeight = prediction.gender === 0 ? configuration.maleWeight : configuration.femaleWeight;
   const genderTotal = configuration.maleWeight + configuration.femaleWeight;
   const genderProbabilityWad = mulDivFloor(genderWeight, WAD, genderTotal);
@@ -231,53 +266,136 @@ export function predictionProbabilityWad(
 
   const crimeProbabilityWad = crimeStateProbabilityWad(configuration, lifespan, prediction.crimeMask);
 
-  return mulDivFloor(
-    mulDivFloor(genderProbabilityWad, lifespanProbabilityWad, WAD),
-    crimeProbabilityWad,
-    WAD,
-  );
+  return { genderProbabilityWad, lifespanProbabilityWad, crimeProbabilityWad };
 }
 
-/** Smallest probability across every valid prediction — mirrors `_minimumPredictionProbability`. */
-export function minimumPredictionProbabilityWad(configuration: SoulConfiguration): bigint {
-  let minProbabilityWad = WAD;
-  const masks = validCrimeMasks();
+/** Mirrors `_predictionProbabilityWad`: exact chance a random soul matches `prediction` on all three categories. */
+export function predictionProbabilityWad(
+  configuration: SoulConfiguration,
+  prediction: SoulPrediction,
+): bigint {
+  const { genderProbabilityWad, lifespanProbabilityWad, crimeProbabilityWad } = categoryProbabilities(
+    configuration,
+    prediction,
+  );
+  return mulDivFloor(mulDivFloor(genderProbabilityWad, lifespanProbabilityWad, WAD), crimeProbabilityWad, WAD);
+}
+
+/**
+ * Mirrors `_categoryPayout`: each category gets an equal third of `wager` and pays out at its OWN
+ * odds, `(wager/3) * RTP / p_i`. A common category (e.g. gender) pays a small amount; a rare one
+ * (e.g. an exact crime state) pays a large one.
+ */
+function categoryPayout(configuration: SoulConfiguration, wager: bigint, probabilityWad: bigint): bigint {
+  if (probabilityWad === 0n) return 0n;
+  return mulDivCeil(wager, configuration.rtpWad, probabilityWad * 3n);
+}
+
+/**
+ * Mirrors `_worstCaseCategoryProbabilities`: the marginal triple maximizing the total payout if all
+ * three hit. Evaluated directly over every valid prediction since the crime marginal depends on
+ * which bucket it's paired with.
+ */
+function worstCaseCategoryProbabilities(configuration: SoulConfiguration): CategoryProbabilities {
+  let maxPayoutAtRefWager = -1n;
+  let worst: CategoryProbabilities = {
+    genderProbabilityWad: 0n,
+    lifespanProbabilityWad: 0n,
+    crimeProbabilityWad: 0n,
+  };
   for (let gender = 0; gender < 2; gender++) {
     for (let bucket = 0; bucket < LIFESPAN_COUNT; bucket++) {
-      for (const mask of masks) {
-        const probabilityWad = predictionProbabilityWad(configuration, {
+      for (const mask of validCrimeMasks()) {
+        const probabilities = categoryProbabilities(configuration, {
           gender,
           lifespanBucket: bucket,
           sins: mask !== 0,
           crimeMask: mask,
         });
-        if (probabilityWad > 0n && probabilityWad < minProbabilityWad) minProbabilityWad = probabilityWad;
+        const payoutAtRefWager =
+          categoryPayout(configuration, WAD, probabilities.genderProbabilityWad) +
+          categoryPayout(configuration, WAD, probabilities.lifespanProbabilityWad) +
+          categoryPayout(configuration, WAD, probabilities.crimeProbabilityWad);
+        if (payoutAtRefWager > maxPayoutAtRefWager) {
+          maxPayoutAtRefWager = payoutAtRefWager;
+          worst = probabilities;
+        }
       }
     }
   }
-  return minProbabilityWad;
+  return worst;
 }
 
-/** Mirrors `_predictionMaxPayout`/`_predictionPayout`: what `wager` pays if `prediction` hits. */
-export function predictionPayout(
+/** Mirrors `_predictionMaxPayout`: what `wager` pays if `prediction` hits on all three categories. */
+export function predictionMaxPayout(
   configuration: SoulConfiguration,
   wager: bigint,
   prediction: SoulPrediction,
 ): bigint {
-  const probability = predictionProbabilityWad(configuration, prediction);
-  if (probability === 0n) return 0n;
-  return mulDivCeil(wager, configuration.rtpWad, probability);
+  const { genderProbabilityWad, lifespanProbabilityWad, crimeProbabilityWad } = categoryProbabilities(
+    configuration,
+    prediction,
+  );
+  return (
+    categoryPayout(configuration, wager, genderProbabilityWad) +
+    categoryPayout(configuration, wager, lifespanProbabilityWad) +
+    categoryPayout(configuration, wager, crimeProbabilityWad)
+  );
+}
+
+/** Mirrors `_predictionPayout`: the actual partial-credit payout given the real generated soul. */
+export function predictionPayout(
+  configuration: SoulConfiguration,
+  wager: bigint,
+  prediction: SoulPrediction,
+  result: SoulResult,
+): bigint {
+  const breakdown = matchBreakdown(prediction, result);
+  const { genderProbabilityWad, lifespanProbabilityWad, crimeProbabilityWad } = categoryProbabilities(
+    configuration,
+    prediction,
+  );
+  let payout = 0n;
+  if (breakdown.genderMatch) payout += categoryPayout(configuration, wager, genderProbabilityWad);
+  if (breakdown.lifespanMatch) payout += categoryPayout(configuration, wager, lifespanProbabilityWad);
+  if (breakdown.crimeMatch) payout += categoryPayout(configuration, wager, crimeProbabilityWad);
+  return payout;
+}
+
+/** Probability of the full-house event at the riskiest prediction — mirrors `_minimumPredictionProbability`. */
+export function minimumPredictionProbabilityWad(configuration: SoulConfiguration): bigint {
+  const { genderProbabilityWad, lifespanProbabilityWad, crimeProbabilityWad } =
+    worstCaseCategoryProbabilities(configuration);
+  return mulDivFloor(mulDivFloor(genderProbabilityWad, lifespanProbabilityWad, WAD), crimeProbabilityWad, WAD);
 }
 
 /** Mirrors `_maxPayout`: the largest payout any prediction on this configuration could ever owe. */
 export function maxPayout(configuration: SoulConfiguration, wager: bigint): bigint {
-  return mulDivCeil(wager, configuration.rtpWad, minimumPredictionProbabilityWad(configuration));
+  const { genderProbabilityWad, lifespanProbabilityWad, crimeProbabilityWad } =
+    worstCaseCategoryProbabilities(configuration);
+  return (
+    categoryPayout(configuration, wager, genderProbabilityWad) +
+    categoryPayout(configuration, wager, lifespanProbabilityWad) +
+    categoryPayout(configuration, wager, crimeProbabilityWad)
+  );
 }
 
-/** Mirrors `_varianceWad`: per-wager-squared variance of the riskiest (rarest) prediction. */
+/** Var(X_i * payout_i)/wager^2 for one Bernoulli(p_i) category — mirrors `_categoryVarianceTermWad`. */
+function categoryVarianceTermWad(configuration: SoulConfiguration, probabilityWad: bigint): bigint {
+  if (probabilityWad === 0n) return 0n;
+  const ratioWad = mulDivCeil(configuration.rtpWad, WAD, probabilityWad * 3n);
+  const ratioSquaredWad = mulDivCeil(ratioWad, ratioWad, WAD);
+  const bernoulliVarianceWad = mulDivFloor(probabilityWad, WAD - probabilityWad, WAD);
+  return mulDivCeil(ratioSquaredWad, bernoulliVarianceWad, WAD);
+}
+
+/** Mirrors `_varianceWad`: per-wager-squared variance of the total payout at the riskiest prediction. */
 export function varianceWad(configuration: SoulConfiguration): bigint {
-  const minProbabilityWad = minimumPredictionProbabilityWad(configuration);
-  const rtpSquaredWad = mulDivCeil(configuration.rtpWad, configuration.rtpWad, WAD);
-  const oneMinusProbabilityWad = WAD - minProbabilityWad;
-  return mulDivCeil(oneMinusProbabilityWad, rtpSquaredWad, minProbabilityWad);
+  const { genderProbabilityWad, lifespanProbabilityWad, crimeProbabilityWad } =
+    worstCaseCategoryProbabilities(configuration);
+  return (
+    categoryVarianceTermWad(configuration, genderProbabilityWad) +
+    categoryVarianceTermWad(configuration, lifespanProbabilityWad) +
+    categoryVarianceTermWad(configuration, crimeProbabilityWad)
+  );
 }

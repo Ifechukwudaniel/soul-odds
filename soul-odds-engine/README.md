@@ -8,11 +8,11 @@ A round is a prediction, not a spin: the player picks a gender, a lifespan bucke
 of the four crime slots, then the engine generates a soul from the title's weights and pays
 `wager * titleRtp / probability(prediction)` if it matches.
 
-- `bun run start` runs the local stack (simulator node + the `example/` title + its reference
+- `pnpm run start` runs the local stack (simulator node + the `example/` title + its reference
   guest UI on Vite).
-- `bun run test` runs the contract tests, including a randomness sweep that cross-checks
+- `pnpm run test` runs the contract tests, including a randomness sweep that cross-checks
   `src/soul.ts`'s TS mirror against the live contract bit-for-bit.
-- `bun run cli compile example/title.json` prints every valid prediction's odds and payout
+- `pnpm run cli compile example/title.json` prints every valid prediction's odds and payout
   multiplier for a title definition.
 
 See `example/title.json` for the JSON schema a title definition follows, and

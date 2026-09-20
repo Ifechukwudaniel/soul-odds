@@ -8,7 +8,7 @@ import {
 import {
   encodePrediction,
   maxPayout,
-  predictionPayout,
+  predictionMaxPayout,
   predictionProbabilityWad,
   type SoulPrediction,
 } from '../../../src/soul.ts';
@@ -44,16 +44,25 @@ const settledGameStateAbi = [
     components: [
       { type: 'uint8', name: 'gender' },
       { type: 'uint16', name: 'age' },
+      { type: 'int16', name: 'birthYear' },
       { type: 'uint8', name: 'lifespanBucket' },
       { type: 'uint8', name: 'crimeMask' },
     ],
   },
   { type: 'bool' },
+  {
+    type: 'tuple',
+    components: [
+      { type: 'bool', name: 'genderMatch' },
+      { type: 'bool', name: 'lifespanMatch' },
+      { type: 'bool', name: 'crimeMatch' },
+    ],
+  },
 ] as const;
 
 function decodeSettledGameState(gameState: Hex) {
-  const [, result, won] = decodeAbiParameters(settledGameStateAbi, gameState);
-  return { result, won };
+  const [, result, won, breakdown] = decodeAbiParameters(settledGameStateAbi, gameState);
+  return { result, won, breakdown };
 }
 
 function crimeLabel(mask: number): string {
@@ -69,6 +78,9 @@ function toggleCrime(mask: number, slot: number): number {
   return popcount >= 2 ? mask : mask | bit;
 }
 
+type RevealedSoul = { gender: number; age: number; birthYear: number; lifespanBucket: number; crimeMask: number };
+type MatchBreakdown = { genderMatch: boolean; lifespanMatch: boolean; crimeMatch: boolean };
+
 type Round = {
   sessionKey: string;
   wager: bigint;
@@ -76,12 +88,19 @@ type Round = {
   status: 'opening' | 'awaiting-action' | 'waiting' | 'done';
   sessionId?: string;
   won?: boolean;
-  age?: number;
+  soul?: RevealedSoul;
+  breakdown?: MatchBreakdown;
   payout?: bigint;
 };
 
+/** The guided flow: gender, then age, then whether a crime happened, then which ones, then review. */
+type WizardStep = 'gender' | 'age' | 'has-crime' | 'pick-crimes' | 'review';
+
 export function App() {
   const { hostApi, snapshot } = useCasinoHost();
+
+  const [history, setHistory] = useState<WizardStep[]>(['gender']);
+  const step = history[history.length - 1];
 
   const [gender, setGender] = useState<0 | 1>(0);
   const [lifespanBucket, setLifespanBucket] = useState(0);
@@ -95,6 +114,15 @@ export function App() {
     () => ({ gender, lifespanBucket, sins: crimeMask !== 0, crimeMask }),
     [gender, lifespanBucket, crimeMask],
   );
+
+  const goTo = (next: WizardStep) => setHistory(current => [...current, next]);
+  const goBack = () => setHistory(current => (current.length > 1 ? current.slice(0, -1) : current));
+  const restart = () => {
+    setHistory(['gender']);
+    setCrimeMask(0);
+    setRound(null);
+    setError(null);
+  };
 
   const decimals = snapshot?.token.decimals ?? 18;
   const symbol = snapshot?.token.symbol ?? '';
@@ -113,9 +141,11 @@ export function App() {
     }
   }, [wagerInput, decimals]);
 
+  // Odds/payout of the full-house event (all three categories). Getting only some right still pays
+  // out partial credit per category, so this understates what a bet can actually win.
   const previewProbabilityWad = predictionProbabilityWad(configuration, prediction);
-  const previewPayout = wager !== null ? predictionPayout(configuration, wager, prediction) : 0n;
-  const previewMultiplier = previewProbabilityWad > 0n ? Number(previewPayout) / Number(wager ?? WAD) : 0;
+  const previewPayout = wager !== null ? predictionMaxPayout(configuration, wager, prediction) : 0n;
+  const previewMultiplier = Number(previewPayout) / Number(wager ?? WAD);
 
   // Once the opened session's row appears, submit the prediction as the player action.
   useEffect(() => {
@@ -145,13 +175,20 @@ export function App() {
     const row = snapshot.sessions.items.find(item => item.sessionKey === round.sessionKey);
     if (!row || !(row.isSettled || isTerminalPhase(row.phase)) || !row.raw.gameState) return;
 
-    const { result, won } = decodeSettledGameState(row.raw.gameState);
-    const payout = row.payout !== undefined ? BigInt(row.payout) : 0n;
-    setRound(current =>
-      current && current.sessionKey === round.sessionKey
-        ? { ...current, status: 'done', won, age: result.age, payout }
-        : current,
-    );
+    try {
+      const { result, won, breakdown } = decodeSettledGameState(row.raw.gameState);
+      const payout = row.payout !== undefined ? BigInt(row.payout) : 0n;
+      setRound(current =>
+        current && current.sessionKey === round.sessionKey
+          ? { ...current, status: 'done', won, soul: { ...result }, breakdown: { ...breakdown }, payout }
+          : current,
+      );
+    } catch {
+      // The deployed title's bytecode doesn't match this frontend's expected game-state shape
+      // (e.g. the local chain still has an older SoulOddsEngine) — surface it instead of crashing.
+      setError('Could not read the settled soul — redeploy the title against the current contract.');
+      setRound(null);
+    }
   }, [snapshot, round]);
 
   // A settled round is display-only on the host once revealed; settlement itself is already final.
@@ -197,6 +234,9 @@ export function App() {
     (round.status === 'opening' || round.status === 'awaiting-action' || round.status === 'waiting');
   const roundDone = round?.status === 'done';
   const insufficientBalance = wager !== null && balance !== undefined && wager > balance;
+  // The full-house combo can be unreachable (e.g. this lifespan bucket never has that exact crime
+  // state) while gender/lifespan/crimes still each pay out their own partial credit independently.
+  const impossibleFullHouse = previewProbabilityWad === 0n;
 
   const reason = !walletReady
     ? 'Connect your wallet in the host app to play.'
@@ -204,10 +244,20 @@ export function App() {
       ? error
       : insufficientBalance
         ? 'Insufficient balance.'
-        : null;
+        : impossibleFullHouse
+          ? 'This exact combination can never fully match, but gender/lifespan/crimes still pay partial credit independently.'
+          : null;
 
   const canBet = walletReady && !roundInFlight && wager !== null && !insufficientBalance;
-  const ctaLabel = roundInFlight ? 'Reading the omens…' : roundDone ? 'Read again' : 'Read the soul';
+
+  const chooseHasCrime = (next: boolean) => {
+    if (!next) {
+      setCrimeMask(0);
+      goTo('review');
+    } else {
+      goTo('pick-crimes');
+    }
+  };
 
   return (
     <div className="shell">
@@ -217,102 +267,183 @@ export function App() {
           {definition.era}, {definition.minBirthYear}–{definition.maxBirthYear}
         </p>
 
-        <div className="field">
-          <span>Gender</span>
-          <div className="picker">
-            <button
-              className={gender === 0 ? 'chip chip--active' : 'chip'}
-              onClick={() => setGender(0)}
-              disabled={roundInFlight}
-            >
-              Male
-            </button>
-            <button
-              className={gender === 1 ? 'chip chip--active' : 'chip'}
-              onClick={() => setGender(1)}
-              disabled={roundInFlight}
-            >
-              Female
-            </button>
-          </div>
-        </div>
-
-        <div className="field">
-          <span>Lifespan</span>
-          <div className="picker picker--column">
-            {definition.lifespans.map((lifespan, index) => (
-              <button
-                key={index}
-                className={lifespanBucket === index ? 'chip chip--active' : 'chip'}
-                onClick={() => setLifespanBucket(index)}
-                disabled={roundInFlight}
-              >
-                {lifespan.minYears}–{lifespan.maxYears}y
+        {step === 'gender' && (
+          <div className="field">
+            <span>Step 1 — Gender</span>
+            <div className="picker picker--column">
+              <button className="chip" onClick={() => (setGender(0), goTo('age'))}>
+                Male
               </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="field">
-          <span>Crimes (up to two)</span>
-          <div className="picker picker--column">
-            {CRIME_NAMES.map((name, index) => (
-              <button
-                key={name}
-                className={(crimeMask & (1 << index)) !== 0 ? 'chip chip--active' : 'chip'}
-                onClick={() => setCrimeMask(current => toggleCrime(current, index))}
-                disabled={roundInFlight}
-              >
-                {name}
+              <button className="chip" onClick={() => (setGender(1), goTo('age'))}>
+                Female
               </button>
-            ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className="field">
-          <span>Wager ({symbol})</span>
-          <input
-            value={wagerInput}
-            onChange={event => setWagerInput(event.target.value)}
-            disabled={roundInFlight}
-            inputMode="decimal"
-          />
-        </div>
+        {step === 'age' && (
+          <div className="field">
+            <span>Step 2 — Age at death</span>
+            <div className="picker picker--column">
+              {definition.lifespans.map((lifespan, index) => (
+                <button
+                  key={index}
+                  className="chip"
+                  onClick={() => {
+                    setLifespanBucket(index);
+                    const nowCrimesPossible = configuration.lifespans[index].noCrimeWeight < 10000n;
+                    goTo(nowCrimesPossible ? 'has-crime' : 'review');
+                  }}
+                >
+                  {lifespan.minYears}–{lifespan.maxYears}y
+                </button>
+              ))}
+            </div>
+            <button className="back" onClick={goBack}>
+              ← back
+            </button>
+          </div>
+        )}
 
-        <div className="meta">
-          <span>Predicting</span>
-          <span>{crimeLabel(crimeMask)}</span>
-        </div>
-        <div className="meta">
-          <span>Odds</span>
-          <span>{(Number(previewProbabilityWad) / 1e16).toFixed(4)}%</span>
-        </div>
-        <div className="meta">
-          <span>Pays</span>
-          <span>{previewMultiplier.toFixed(4)}x</span>
-        </div>
-        <div className="meta">
-          <span>Max payout on this title</span>
-          <span>{(Number(maxPayout(configuration, WAD)) / 1e18).toFixed(4)}x</span>
-        </div>
+        {step === 'has-crime' && (
+          <div className="field">
+            <span>Step 3 — Did they commit a crime?</span>
+            <div className="picker">
+              <button className="chip" onClick={() => chooseHasCrime(false)}>
+                No
+              </button>
+              <button className="chip" onClick={() => chooseHasCrime(true)}>
+                Yes
+              </button>
+            </div>
+            <button className="back" onClick={goBack}>
+              ← back
+            </button>
+          </div>
+        )}
 
-        {reason && <p className="reason">{reason}</p>}
-        <button
-          className="spin"
-          disabled={!canBet}
-          onClick={() => wager !== null && void openRound(prediction, wager)}
-        >
-          {ctaLabel}
-        </button>
+        {step === 'pick-crimes' && (
+          <div className="field">
+            <span>Step 4 — Which crime(s)? (up to two)</span>
+            <div className="picker picker--column">
+              {CRIME_NAMES.map((name, index) => (
+                <button
+                  key={name}
+                  className={(crimeMask & (1 << index)) !== 0 ? 'chip chip--active' : 'chip'}
+                  onClick={() => setCrimeMask(current => toggleCrime(current, index))}
+                >
+                  {name}
+                </button>
+              ))}
+            </div>
+            <div className="picker">
+              <button className="back" onClick={goBack}>
+                ← back
+              </button>
+              <button className="chip chip--active" disabled={crimeMask === 0} onClick={() => goTo('review')}>
+                Next →
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === 'review' && (
+          <>
+            <div className="field">
+              <span>Your reading</span>
+              <p className="lines">
+                {gender === 0 ? 'Male' : 'Female'}, died {definition.lifespans[lifespanBucket].minYears}–
+                {definition.lifespans[lifespanBucket].maxYears}y, {crimeLabel(crimeMask)}
+              </p>
+            </div>
+
+            <div className="field">
+              <span>Wager ({symbol})</span>
+              <input
+                value={wagerInput}
+                onChange={event => setWagerInput(event.target.value)}
+                disabled={roundInFlight}
+                inputMode="decimal"
+              />
+            </div>
+
+            <div className="meta">
+              <span>Full-house odds</span>
+              <span>{(Number(previewProbabilityWad) / 1e16).toFixed(4)}%</span>
+            </div>
+            <div className="meta">
+              <span>Full-house pays</span>
+              <span>{previewMultiplier.toFixed(4)}x</span>
+            </div>
+            <p className="lines">Get gender, lifespan or crimes right on their own and you still get partial credit.</p>
+            <div className="meta">
+              <span>Max payout on this title</span>
+              <span>{(Number(maxPayout(configuration, WAD)) / 1e18).toFixed(4)}x</span>
+            </div>
+
+            {reason && <p className="reason">{reason}</p>}
+
+            {roundDone ? (
+              <button className="spin" onClick={restart}>
+                Read again
+              </button>
+            ) : (
+              <>
+                <button
+                  className="spin"
+                  disabled={!canBet}
+                  onClick={() => wager !== null && void openRound(prediction, wager)}
+                >
+                  {roundInFlight ? 'Reading the omens…' : 'Read the soul'}
+                </button>
+                {!roundInFlight && (
+                  <button className="back" onClick={goBack}>
+                    ← back
+                  </button>
+                )}
+              </>
+            )}
+          </>
+        )}
       </div>
 
       <div className="stage">
-        {round?.status === 'done' ? (
+        {round?.status === 'done' && round.soul && round.breakdown ? (
           <div className="result result--visible">
             <strong>{round.won ? 'The soul matches your reading' : 'The soul slips away'}</strong>
-            <span>
-              age {round.age} — payout {formatUnits(round.payout ?? 0n, decimals)} {symbol}
-            </span>
+            <div className="reveal">
+              <div className="reveal-column">
+                <span className="reveal-label">Your reading</span>
+                <span>{round.prediction.gender === 0 ? 'Male' : 'Female'}</span>
+                <span>
+                  bucket {definition.lifespans[round.prediction.lifespanBucket].minYears}–
+                  {definition.lifespans[round.prediction.lifespanBucket].maxYears}y
+                </span>
+                <span>{crimeLabel(round.prediction.crimeMask)}</span>
+              </div>
+              <div className="reveal-column">
+                <span className="reveal-label">The soul</span>
+                <span>{round.soul.gender === 0 ? 'Male' : 'Female'}</span>
+                <span>
+                  bucket {definition.lifespans[round.soul.lifespanBucket].minYears}–
+                  {definition.lifespans[round.soul.lifespanBucket].maxYears}y (born {round.soul.birthYear}, died at{' '}
+                  {round.soul.age})
+                </span>
+                <span>{crimeLabel(round.soul.crimeMask)}</span>
+              </div>
+            </div>
+            <div className="reveal-matches">
+              <span className={round.breakdown.genderMatch ? 'match-yes' : 'match-no'}>
+                gender {round.breakdown.genderMatch ? '✓' : '✗'}
+              </span>
+              <span className={round.breakdown.lifespanMatch ? 'match-yes' : 'match-no'}>
+                lifespan {round.breakdown.lifespanMatch ? '✓' : '✗'}
+              </span>
+              <span className={round.breakdown.crimeMatch ? 'match-yes' : 'match-no'}>
+                crimes {round.breakdown.crimeMatch ? '✓' : '✗'}
+              </span>
+            </div>
+            <span>payout {formatUnits(round.payout ?? 0n, decimals)} {symbol}</span>
           </div>
         ) : (
           <div className="result">

@@ -1,13 +1,13 @@
 #!/usr/bin/env tsx
 import { parseArgs } from 'node:util';
-import { type Address, createPublicClient, createWalletClient, type Hex, http } from 'viem';
+import { type Address, createPublicClient, createWalletClient, formatUnits, type Hex, http } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { soulOddsTitleAbi } from './abi.ts';
 import { deployTitle } from './deploy.ts';
 import {
   maxPayout,
   minimumPredictionProbabilityWad,
-  predictionPayout,
+  predictionMaxPayout,
   predictionProbabilityWad,
   type SoulConfiguration,
   validCrimeMasks,
@@ -20,7 +20,26 @@ const USAGE = `soul-odds-engine <command>
   compile <title.json>                          print the base configuration's exact odds
   deploy <title.json> --rpc <url> --deployer <address>
                                                 needs SOUL_ODDS_ENGINE_PRIVATE_KEY
-  decode <title address> --rpc <url>            print the on-chain base configuration`;
+  decode <title address> --rpc <url>            print the on-chain base configuration
+  balance <account address> --rpc <url> --token <address>
+                                                print the account's token balance`;
+
+const ERC20_BALANCE_ABI = [
+  {
+    type: 'function',
+    name: 'balanceOf',
+    stateMutability: 'view',
+    inputs: [{ name: 'account', type: 'address' }],
+    outputs: [{ name: '', type: 'uint256' }],
+  },
+  {
+    type: 'function',
+    name: 'decimals',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ name: '', type: 'uint8' }],
+  },
+] as const;
 
 function percent(wad: bigint): string {
   return `${(Number(wad) / 1e16).toFixed(4)}%`;
@@ -56,7 +75,7 @@ function describe(compiled: CompiledSoulConfiguration): string {
         const prediction = { gender, lifespanBucket: bucket, sins: mask !== 0, crimeMask: mask };
         const probabilityWad = predictionProbabilityWad(configuration, prediction);
         if (probabilityWad === 0n) continue;
-        const payout = predictionPayout(configuration, 10n ** 18n, prediction);
+        const payout = predictionMaxPayout(configuration, 10n ** 18n, prediction);
         lines.push(
           `    ${gender === 0 ? 'male' : 'female'}, bucket ${bucket}, ${crimeLabel(crimeNames, mask)}` +
             `  odds ${percent(probabilityWad)}  pays ${(Number(payout) / 1e18).toFixed(4)}x`,
@@ -95,7 +114,7 @@ function describeOnChain(configuration: SoulConfiguration): string {
 async function main() {
   const { positionals, values } = parseArgs({
     allowPositionals: true,
-    options: { rpc: { type: 'string' }, deployer: { type: 'string' } },
+    options: { rpc: { type: 'string' }, deployer: { type: 'string' }, token: { type: 'string' } },
   });
   const [command, target] = positionals;
   if (command === undefined || target === undefined) throw new Error(USAGE);
@@ -138,6 +157,18 @@ async function main() {
       args: [0],
     });
     console.log(describeOnChain(onChain as unknown as SoulConfiguration));
+    return;
+  }
+
+  if (command === 'balance') {
+    const client = createPublicClient({ transport: http(requireOption(values.rpc, 'rpc')) });
+    const token = requireOption(values.token, 'token') as Address;
+    const account = target as Address;
+    const [raw, decimals] = await Promise.all([
+      client.readContract({ address: token, abi: ERC20_BALANCE_ABI, functionName: 'balanceOf', args: [account] }),
+      client.readContract({ address: token, abi: ERC20_BALANCE_ABI, functionName: 'decimals' }),
+    ]);
+    console.log(`${formatUnits(raw, decimals)} (${raw} base units)`);
     return;
   }
 

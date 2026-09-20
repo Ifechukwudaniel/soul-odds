@@ -6,9 +6,10 @@ import {
   encodePrediction,
   generateSoul,
   loadTitleFile,
-  matchesPrediction,
+  matchBreakdown,
   maxPayout,
   minimumPredictionProbabilityWad,
+  predictionMaxPayout,
   predictionPayout,
   predictionProbabilityWad,
   type SoulPrediction,
@@ -45,15 +46,21 @@ const settledGameStateAbi = [
   { type: 'tuple', components: [
     { type: 'uint8', name: 'gender' },
     { type: 'uint16', name: 'age' },
+    { type: 'int16', name: 'birthYear' },
     { type: 'uint8', name: 'lifespanBucket' },
     { type: 'uint8', name: 'crimeMask' },
   ] },
   { type: 'bool' },
+  { type: 'tuple', components: [
+    { type: 'bool', name: 'genderMatch' },
+    { type: 'bool', name: 'lifespanMatch' },
+    { type: 'bool', name: 'crimeMatch' },
+  ] },
 ] as const;
 
 function decodeSettledGameState(data: Hex) {
-  const [prediction, result, won] = decodeAbiParameters(settledGameStateAbi, data);
-  return { prediction, result, won };
+  const [prediction, result, won, breakdown] = decodeAbiParameters(settledGameStateAbi, data);
+  return { prediction, result, won, breakdown };
 }
 
 describe('SoulOddsEngine', async () => {
@@ -127,19 +134,22 @@ describe('SoulOddsEngine', async () => {
       for (let i = 0; i < 300; i++) {
         randomness = keccak256(randomness);
         const expectedResult = generateSoul(example.configuration, randomness);
-        const expectedWon = matchesPrediction(prediction, expectedResult);
-        const expectedPayout = expectedWon
-          ? predictionPayout(example.configuration, wager, prediction)
-          : 0n;
+        const expectedBreakdown = matchBreakdown(prediction, expectedResult);
+        const expectedPayout = predictionPayout(example.configuration, wager, prediction, expectedResult);
+        const expectedWon = expectedPayout > 0n;
 
         const settled = await title.read.onRandomness([context, randomness]);
-        const { result, won } = decodeSettledGameState(settled.newGameState);
+        const { result, won, breakdown } = decodeSettledGameState(settled.newGameState);
         assert.equal(settled.nextPhase, SETTLED);
         assert.equal(settled.payout, expectedPayout);
         assert.equal(won, expectedWon);
         assert.equal(result.gender, expectedResult.gender);
         assert.equal(result.lifespanBucket, expectedResult.lifespanBucket);
         assert.equal(result.crimeMask, expectedResult.crimeMask);
+        assert.equal(result.birthYear, expectedResult.birthYear);
+        assert.equal(breakdown.genderMatch, expectedBreakdown.genderMatch);
+        assert.equal(breakdown.lifespanMatch, expectedBreakdown.lifespanMatch);
+        assert.equal(breakdown.crimeMatch, expectedBreakdown.crimeMatch);
         if (expectedWon) hits++;
       }
       assert.ok(hits > 0, 'the fixed prediction should hit at least once in 300 draws');
@@ -160,7 +170,7 @@ describe('SoulOddsEngine', async () => {
       assert.equal(acted.newGameState, action);
       assert.equal(
         acted.reservedProfitDelta,
-        predictionPayout(example.configuration, wager, prediction) - wager,
+        predictionMaxPayout(example.configuration, wager, prediction) - wager,
       );
     });
 

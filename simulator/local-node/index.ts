@@ -50,6 +50,9 @@ const PLAYER_FUNDS = parseEther(process.env.PLAYER_TOKEN_FUNDS ?? '1000000');
 // ~1000 max bet for a 5000x game).
 const VAULT_LIQUIDITY = parseEther(process.env.VAULT_LIQUIDITY ?? '500000000');
 const VRF_CLIENT_DEPOSIT_ETH = parseEther(process.env.VRF_CLIENT_DEPOSIT_ETH ?? '1000');
+// A stack building its own game can turn this off so CoinflipGame never sits in the game list as
+// a same-named, easy-to-mispick default alongside the game actually being developed.
+const SEED_COINFLIP = process.env.LOCAL_NODE_SEED_COINFLIP !== 'false';
 
 // The sibling package resolves its own viem install, so its client types are
 // a different identity than ours; only those two fields are loosened.
@@ -213,7 +216,9 @@ async function main() {
   console.log(`[local-node] Verify Network router: ${routerAddress}`);
 
   const hostDeployedFromBlock = await publicClient.getBlockNumber();
-  console.log('[local-node] Deploying test token, casino host and the CoinflipGame…');
+  console.log(
+    `[local-node] Deploying test token and casino host${SEED_COINFLIP ? ' and the CoinflipGame' : ''}…`,
+  );
   const token = await deployContract(
     publicClient,
     deployer,
@@ -232,22 +237,20 @@ async function main() {
     abi: localCasinoHostAbi,
     functionName: 'vault',
   })) as Address;
-  const coinflip = await deployContract(
-    publicClient,
-    deployer,
-    coinflipGameAbi,
-    coinflipGameBytecode,
-  );
+  let coinflip: Address | undefined;
+  if (SEED_COINFLIP) {
+    coinflip = await deployContract(publicClient, deployer, coinflipGameAbi, coinflipGameBytecode);
 
-  const registerHash = await deployer.writeContract({
-    address: host,
-    abi: localCasinoHostAbi,
-    functionName: 'registerGame',
-    args: [coinflip, 'CoinflipGame'],
-    chain,
-    account: deployerAccount,
-  });
-  await publicClient.waitForTransactionReceipt({ hash: registerHash });
+    const registerHash = await deployer.writeContract({
+      address: host,
+      abi: localCasinoHostAbi,
+      functionName: 'registerGame',
+      args: [coinflip, 'CoinflipGame'],
+      chain,
+      account: deployerAccount,
+    });
+    await publicClient.waitForTransactionReceipt({ hash: registerHash });
+  }
 
   for (const [recipient, amount] of [
     [deployerAccount.address, PLAYER_FUNDS],
@@ -280,7 +283,7 @@ async function main() {
   let initialScanDone = false;
   const listGames = () => {
     const games = [
-      { name: 'CoinflipGame', address: coinflip },
+      ...(coinflip ? [{ name: 'CoinflipGame', address: coinflip }] : []),
       ...dynamicGames.map(({ name, address }) => ({ name, address })),
     ];
     const known = new Set(games.map(game => game.address.toLowerCase()));

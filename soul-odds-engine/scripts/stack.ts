@@ -18,7 +18,14 @@ frontend.printUrls();
 
 const { result } = concurrently(
   [
-    { name: 'node', command: `${pm} run local-node`, cwd: SIMULATOR_DIR, prefixColor: 'yellow' },
+    {
+      name: 'node',
+      command: `${pm} run local-node`,
+      cwd: SIMULATOR_DIR,
+      prefixColor: 'yellow',
+      // Keep the game list to just this title — no unrelated CoinflipGame demo to mispick.
+      env: { LOCAL_NODE_SEED_COINFLIP: 'false' },
+    },
     { name: 'simulator', command: `${pm} run dev`, cwd: SIMULATOR_DIR, prefixColor: 'cyan' },
     { name: 'title', command: 'tsx example/start.ts', cwd: packageRoot, prefixColor: 'green' },
   ],

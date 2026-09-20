@@ -164,3 +164,37 @@ body {
   color: var(--win);
   font-size: 14px;
 }
+
+.reveal {
+  display: flex;
+  gap: 24px;
+  margin: 4px 0;
+}
+
+.reveal-column {
+  display: grid;
+  gap: 2px;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.reveal-label {
+  color: var(--ink-dim);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.reveal-matches {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+}
+
+.match-yes {
+  color: var(--win);
+}
+
+.match-no {
+  color: #ffb4b4;
+}
