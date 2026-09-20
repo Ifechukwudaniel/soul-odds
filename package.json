@@ -6,6 +6,7 @@
     "simulator",
     "local-verify-network",
     "slot-engine",
+    "soul-odds-engine",
     "games/*"
   ],
   "type": "module",
