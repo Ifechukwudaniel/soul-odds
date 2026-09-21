@@ -6,7 +6,8 @@ import { ButtonDemo } from "@/components/assets/ButtonDemo";
 
 export const DrawHero = (props: { currentYear: number; onDraw: () => void; drawCost: number; canAfford: boolean }) => (
   <GameCard
-    className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 overflow-y-auto py-10 text-center"
+    scrollable
+    className="flex flex-col items-center justify-center gap-3 py-10 text-center"
     containerClassName="flex h-full w-full flex-col"
   >
     <GiAnubis size={104} className="text-[#F5B83D]" />

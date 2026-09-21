@@ -35,7 +35,7 @@ export const BetSummary = (props: {
   const truthsSubtitle = `${pickCountWord} truth${pickCount === 1 ? "" : "s"} ${pickCount === 1 ? "stands" : "stand"} before the scales.`;
 
   return (
-    <GameCard className="relative isolate flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto" containerClassName="flex h-full w-full flex-col">
+    <GameCard scrollable className="relative isolate flex flex-col gap-4" containerClassName="flex h-full w-full flex-col">
       <AnubisBackdrop />
 
       <div className="flex items-center justify-between">
@@ -48,9 +48,6 @@ export const BetSummary = (props: {
         <GiScales size={44} className="text-[#F5B83D]" />
         <h3 className={`${serifFont.className} mt-1 font-bold text-[#F3D38F] text-2xl`}>Your soul reading</h3>
         <p className="mt-1 text-[0.8rem] text-white/50">{truthsSubtitle}</p>
-       {/*  <p className="mt-1 text-white/40 text-xs">
-          Born {fmtYear(props.draw.year)} in {props.draw.place.name}, {props.draw.place.continent}
-        </p> */}
       </div>
 
       <div className="gold-gradient mt-auto rounded-2xl p-px">

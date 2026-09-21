@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { Scroller } from "@/components/Scroller";
 
 const SWIPE_THRESHOLD = 60;
 
@@ -45,9 +46,9 @@ export const StageSlide = (props: {
               onSwipe(-1);
             }
           }}
-          className="absolute inset-0 overflow-y-auto px-1"
+          className="absolute inset-0 px-1"
         >
-          {props.children}
+          <Scroller className="h-full">{props.children}</Scroller>
         </motion.div>
       </AnimatePresence>
     </div>

@@ -37,7 +37,8 @@ export const PredictionsPanel = (props: {
 
   return (
     <GameCard
-      className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto"
+      scrollable
+      className="flex flex-col gap-3"
       containerClassName="flex h-full w-full flex-col"
     >
       <div className="flex min-h-0 flex-1 flex-col gap-4">

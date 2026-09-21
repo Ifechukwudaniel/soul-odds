@@ -1,6 +1,7 @@
 import type { Viewport } from "next";
 import Script from "next/script";
 import { GameProviders } from "@/components/provider/GameProviders";
+import "overlayscrollbars/styles/overlayscrollbars.css";
 import "@/styles/globals.css";
 
 export const viewport: Viewport = {

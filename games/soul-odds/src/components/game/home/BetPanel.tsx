@@ -37,7 +37,7 @@ export const BetPanel = (props: {
   const unpicked = Math.max(0, props.requiredBets - bets.length);
 
   return (
-    <GameCard className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto" containerClassName="flex h-full w-full flex-col">
+    <GameCard scrollable className="flex flex-col gap-4" containerClassName="flex h-full w-full flex-col">
       <h2 className={`${serifFont.className} font-bold text-white"`}>Your wager</h2>
 
       <div className="mystic-glass flex items-center gap-2 rounded-xl px-4 py-3">

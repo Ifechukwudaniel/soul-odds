@@ -7,6 +7,7 @@ import { getAvatarById } from "@/components/assets/characters/avatars";
 import { GameHeader } from "@/components/game/home/GameHeader";
 import { ProfileModal } from "@/components/game/home/profile/ProfileModal";
 import { Menubar } from "@/components/Menubar";
+import { Scroller } from "@/components/Scroller";
 import { useCasinoHostContext } from "@/components/provider/AppWalletProvider";
 import {
   BadgesScreen,
@@ -119,7 +120,7 @@ export default function GamePage() {
         onOpenProfile={() => setIsProfileOpen(true)}
       />
 
-      <div className="min-h-0 flex-1 overflow-y-auto">{screenRender}</div>
+      <Scroller className="min-h-0 flex-1">{screenRender}</Scroller>
       <div className="container mx-auto px-6">
         <Menubar />
       </div>

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { MortalOddsStage } from "@/components/game/mortal-odds/MortalOddsStage";
 import { useMortalOddsBets } from "@/hooks/useMortalOddsBets";
 import { useMortalOddsDraw } from "@/hooks/useMortalOddsDraw";
+import { useRoundResume } from "@/hooks/useRoundResume";
 import type { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
 import { CHIP_SIZES, REDRAW_COST } from "@/lib/mortal-odds/config";
 import { ageBucketIndex } from "@/lib/mortal-odds/soul-odds-contract";
@@ -21,6 +22,7 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
   const round = useMortalOddsDraw({ reducedMotion });
   const slip = useMortalOddsBets();
   const { player } = props;
+  const { restoredReveal } = useRoundResume({ round, slip, charges, setCharges, chipSize, setChipSize });
 
   // Chip size is the round's whole stake: locked the moment a soul is summoned, freed up again once it's revealed.
   const chipLocked = round.phase !== "idle" && round.phase !== "revealed";
@@ -63,7 +65,7 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
   // The round settles asynchronously on-chain; commit the local skill/streak stats once its
   // outcome comes back instead of synchronously from onPlaceBet.
   useEffect(() => {
-    if (!round.reveal) return;
+    if (!round.reveal || round.reveal === restoredReveal) return;
     player.commitRound({ net: round.reveal.net, skill: round.reveal.skill });
     slip.reset();
     // eslint-disable-next-line react-hooks/exhaustive-deps

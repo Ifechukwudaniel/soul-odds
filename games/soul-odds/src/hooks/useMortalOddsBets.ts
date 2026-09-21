@@ -7,6 +7,7 @@ type Action =
   | { type: "set-choice"; marketId: string; optionId: string; stake: number }
   | { type: "set-death-year"; guessYear: number; stake: number }
   | { type: "remove"; marketId: string }
+  | { type: "replace"; bets: BetsState }
   | { type: "reset" };
 
 function reducer(state: BetsState, action: Action): BetsState {
@@ -20,6 +21,8 @@ function reducer(state: BetsState, action: Action): BetsState {
       delete next[action.marketId];
       return next;
     }
+    case "replace":
+      return action.bets;
     case "reset":
       return {};
   }
@@ -31,6 +34,7 @@ export function useMortalOddsBets(): {
   setChoice: (marketId: string, optionId: string, stake: number) => void;
   setDeathYear: (guessYear: number, stake: number) => void;
   remove: (marketId: string) => void;
+  replace: (bets: BetsState) => void;
   reset: () => void;
 } {
   const [bets, dispatch] = useReducer(reducer, {});
@@ -40,6 +44,7 @@ export function useMortalOddsBets(): {
     setChoice: (marketId, optionId, stake) => dispatch({ type: "set-choice", marketId, optionId, stake }),
     setDeathYear: (guessYear, stake) => dispatch({ type: "set-death-year", guessYear, stake }),
     remove: (marketId) => dispatch({ type: "remove", marketId }),
+    replace: (next) => dispatch({ type: "replace", bets: next }),
     reset: () => dispatch({ type: "reset" }),
   };
 }

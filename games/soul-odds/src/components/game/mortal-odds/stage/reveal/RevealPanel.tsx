@@ -46,7 +46,7 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
 
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: "easeOut" }} className="flex h-full w-full flex-col">
-      <GameCard className="relative isolate flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto" containerClassName="flex h-full w-full flex-col">
+      <GameCard scrollable className="relative isolate flex flex-col gap-4" containerClassName="flex h-full w-full flex-col">
         <AnubisBackdrop />
         <RevealHeader fate={fate} placeName={props.place.name} bornYear={life.year} deathYear={life.deathYear} epitaph={epitaph} alive={alive} />
 

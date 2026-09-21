@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
+import { Scroller } from "@/components/Scroller";
 import { RevealStamp } from "@/components/game/mortal-odds/stage/reveal/RevealStamp";
 import type { BetResult } from "@/types";
 
 export const BetsBreakdown = (props: { results: BetResult[]; currency: string; visibleCount: number }) => (
-  <div className="overflow-x-auto">
+  <Scroller horizontal>
     <table className="w-full min-w-[460px] text-sm">
       <thead>
         <tr className="text-left text-white/50 text-xs">
@@ -42,5 +43,5 @@ export const BetsBreakdown = (props: { results: BetResult[]; currency: string; v
         ))}
       </tbody>
     </table>
-  </div>
+  </Scroller>
 );

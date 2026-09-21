@@ -1,0 +1,67 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useCasinoHost } from "@/hooks/useCasinoHost";
+import type { MortalOddsBets } from "@/hooks/useMortalOddsBets";
+import type { MortalOddsRound, RevealResult } from "@/hooks/useMortalOddsDraw";
+import { clearRound, readRound, roundStorageKey, toResumablePhase, writeRound } from "@/lib/mortal-odds/round-storage";
+import type { RoundCharge } from "@/types";
+
+/**
+ * Saves the round as it changes and puts it back when the home screen mounts, so a refresh or a
+ * trip to another tab picks up where the player left off. The host's session is matched by key;
+ * only what the host can't give back (the flavor draw, picks, charges, the reveal) is stored here.
+ * `restoredReveal` is the reveal that came from storage, which was already scored and must not be again.
+ */
+export function useRoundResume(options: {
+  round: MortalOddsRound;
+  slip: MortalOddsBets;
+  charges: RoundCharge[];
+  setCharges: (charges: RoundCharge[]) => void;
+  chipSize: number;
+  setChipSize: (chipSize: number) => void;
+}): { restoredReveal: RevealResult | null } {
+  const { round, slip, charges, setCharges, chipSize, setChipSize } = options;
+  const { snapshot } = useCasinoHost();
+  const key = snapshot ? roundStorageKey(snapshot) : null;
+  const [checked, setChecked] = useState(false);
+  const [restoredReveal, setRestoredReveal] = useState<RevealResult | null>(null);
+
+  useEffect(() => {
+    if (!key || checked) return;
+    const stored = readRound(key);
+    if (stored) {
+      round.restore(stored);
+      slip.replace(stored.bets);
+      setCharges(stored.charges);
+      setChipSize(stored.chipSize);
+      setRestoredReveal(stored.reveal);
+    }
+    setChecked(true);
+  }, [key, checked]);
+
+  useEffect(() => {
+    if (!key || !checked) return;
+    const phase = toResumablePhase(round.phase);
+    if (!phase || !round.sessionKey || !round.wagerWei || !round.draw || !round.context || round.samplesSeed === null) {
+      clearRound(key);
+      return;
+    }
+    writeRound(key, {
+      version: 1,
+      sessionKey: round.sessionKey,
+      wagerWei: round.wagerWei,
+      phase,
+      era: round.era,
+      draw: round.draw,
+      story: round.context.story,
+      samplesSeed: round.samplesSeed,
+      bets: slip.bets,
+      charges,
+      chipSize,
+      reveal: round.reveal,
+    });
+  }, [key, checked, round.phase, round.sessionKey, round.wagerWei, round.draw, round.context, round.samplesSeed, round.era, round.reveal, slip.bets, charges, chipSize]);
+
+  return { restoredReveal };
+}

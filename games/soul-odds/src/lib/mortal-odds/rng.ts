@@ -12,12 +12,16 @@ export function mulberry32(seed: number): Rng {
   };
 }
 
-/** Entropy-seeded RNG for real play; pass a numeric seed instead for deterministic tests. */
-export function createRng(seed?: number): Rng {
-  if (seed !== undefined) return mulberry32(seed);
+/** A fresh entropy seed; store it to replay a `createRng(seed)` sequence later. */
+export function randomSeed(): number {
   const bytes = new Uint32Array(1);
   crypto.getRandomValues(bytes);
-  return mulberry32(bytes[0] ?? 0);
+  return bytes[0] ?? 0;
+}
+
+/** Entropy-seeded RNG for real play; pass a numeric seed instead for deterministic tests. */
+export function createRng(seed?: number): Rng {
+  return mulberry32(seed ?? randomSeed());
 }
 
 export function pickWeighted<T>(options: { items: T[]; weight: (item: T) => number; rng: Rng }): T {

@@ -19,6 +19,35 @@ const SETTLE_LATENCY_MS = 800;
 const DEMO_WALLET = "0x0000000000000000000000000000000000000001";
 const DEMO_GAME = "0x0000000000000000000000000000000000000002";
 
+const STORAGE_KEY = "soul-odds-demo-host:v1";
+const MAX_SAVED_SESSIONS = 20;
+
+type SavedDemoHost = { balance: string; nextSessionId: number; sessions: Session[] };
+
+const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null;
+
+function loadSaved(): SavedDemoHost | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed: unknown = JSON.parse(raw);
+    if (!isRecord(parsed)) return null;
+    const { balance, nextSessionId, sessions } = parsed;
+    const valid = typeof balance === "string" && /^\d+$/.test(balance) && typeof nextSessionId === "number" && Array.isArray(sessions);
+    return valid ? { balance, nextSessionId, sessions } : null;
+  } catch {
+    return null;
+  }
+}
+
+function save(state: SavedDemoHost): void {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    /* storage unavailable: the demo still plays, it just resets on refresh */
+  }
+}
+
 const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 const randomHex32 = (): Hex => toHex(crypto.getRandomValues(new Uint8Array(32)));
@@ -52,11 +81,13 @@ function buildSnapshot(balance: bigint, sessions: Session[]): HostSnapshotV1 {
  * contract uses, and pushes each change to `publish` the way the real host pushes snapshots.
  */
 export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Promise<HostApiV1> {
-  let balance = STARTING_BALANCE;
-  let nextSessionId = 1;
-  let sessions: Session[] = [];
+  const saved = loadSaved();
+  let balance = saved ? BigInt(saved.balance) : STARTING_BALANCE;
+  let nextSessionId = saved?.nextSessionId ?? 1;
+  let sessions: Session[] = saved?.sessions ?? [];
 
   const push = () => publish(buildSnapshot(balance, sessions));
+  const persist = () => save({ balance: balance.toString(), nextSessionId, sessions: sessions.slice(0, MAX_SAVED_SESSIONS) });
 
   const patchSession = (sessionId: string, patch: Partial<Session>) => {
     sessions = sessions.map((session) => (session.sessionId === sessionId ? { ...session, ...patch } : session));
@@ -88,6 +119,7 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
         },
         ...sessions,
       ];
+      persist();
       push();
       return { sessionKey, transactionHash: randomHex32() };
     },
@@ -101,7 +133,6 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
 
       patchSession(session.sessionId, { phase: SessionPhase.WAITING_RANDOMNESS, phaseName: "WAITING_RANDOMNESS" });
       push();
-      await delay(SETTLE_LATENCY_MS);
 
       const wager = BigInt(session.wager ?? "0");
       const result = generateSoul(soulOddsConfiguration, randomHex32());
@@ -125,6 +156,10 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
           gameState: encodeAbiParameters(settledGameStateAbi, [prediction, result, payout > 0n, breakdown]),
         },
       });
+      // Saved before the settle delay, so a refresh mid-wait comes back to an already-settled round.
+      persist();
+
+      await delay(SETTLE_LATENCY_MS);
       push();
       return { transactionHash: randomHex32() };
     },

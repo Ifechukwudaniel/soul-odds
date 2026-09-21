@@ -30,7 +30,7 @@ export type EraFilter = "all" | "ce" | "modern";
 
 export type Place = { name: string; continent: string; share: number; lat: number; lon: number };
 export type Draw = { year: number; region: RegionId; place: Place };
-export type PlaceContext = { where: string; local: string; when: string };
+export type PlaceContext = { where: string; local: string; when: string; story: string };
 
 export type MarketOption = { id: string; label: string };
 export type MarketConfig = {

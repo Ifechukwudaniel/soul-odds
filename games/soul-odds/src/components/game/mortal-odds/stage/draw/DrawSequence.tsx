@@ -50,7 +50,7 @@ export const DrawSequence = (props: {
             year={props.draw.year}
             displayYear={props.displayYear}
             isSpinning={props.isSpinning}
-            when={props.context.when}
+            story={props.context.story}
             currentYear={props.currentYear}
           />
         )}

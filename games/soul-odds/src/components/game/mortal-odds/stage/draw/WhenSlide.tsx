@@ -3,29 +3,25 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { PopulationChart } from "@/components/game/mortal-odds/stage/draw/PopulationChart";
-import { HUMANS_EVER, worldPopCurve } from "@/lib/mortal-odds/config";
-import { interpolate } from "@/lib/mortal-odds/curves";
-import { fmtNumber, fmtPeople, fmtYear, periodName } from "@/lib/mortal-odds/format";
+import { fmtNumber, fmtYear, periodName } from "@/lib/mortal-odds/format";
 import { serifFont } from "@/styles/serif-font";
 
 const INTRO =
-  "Almost everyone who ever lived was born recently, because population grew exponentially, so a random birth is far more likely to fall near the present.";
+  "Most births happened recently in history.";
 
 export const WhenSlide = (props: {
   year: number;
   displayYear: number | null;
   isSpinning: boolean;
-  when: string;
+  story: string;
   currentYear: number;
 }) => {
   const [displayYear, setDisplayYear] = useState<number | null>(props.displayYear);
-  const world = interpolate({ points: worldPopCurve, x: props.year });
-  const share = (world / HUMANS_EVER) * 100;
   const yearsAgo = props.currentYear - props.year;
   const spinningYear = displayYear ?? props.displayYear ?? 0;
 
   return (
-    <div className="flex h-full flex-col items-center  gap-5 overflow-y-auto text-center">
+    <div className="flex min-h-full flex-col items-center  gap-5 text-center">
       <h2 className={`${serifFont.className} font-bold text-3xl text-[#F1D6AE] sm:text-4xl leading-[0.55] pt-[0.5rem]`}>In which age?</h2>
       <p className="max-w-lg text-[0.8rem] text-[#f1f1f2c0]">{INTRO}</p>
 
@@ -79,9 +75,9 @@ export const WhenSlide = (props: {
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, delay: 0.15 }}
-          className="max-w-md text-[0.8rem] text-white/60"
+          className="max-w-md text-[0.85rem] text-white/75 italic leading-relaxed"
         >
-          when about <b className="text-white">{fmtPeople(world)}</b> people were alive ({share.toFixed(2)}% of all humans, ever)
+          {props.story}
         </motion.p>
       )}
     </div>

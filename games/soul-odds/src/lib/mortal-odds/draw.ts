@@ -45,7 +45,7 @@ export function placeContext(options: {
   erasConfig: EraConfig[];
   worldPopCurve: ReadonlyArray<readonly [number, number]>;
   currentYear: number;
-}): PlaceContext {
+}): Omit<PlaceContext, "story"> {
   const { draw, erasConfig, worldPopCurve, currentYear } = options;
   const world = interpolate({ points: worldPopCurve, x: draw.year });
   const share = regionShare({ year: draw.year, region: draw.region, erasConfig });

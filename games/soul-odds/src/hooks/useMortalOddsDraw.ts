@@ -2,6 +2,7 @@
 
 import { animate } from "framer-motion";
 import { useEffect, useReducer, useRef, useState } from "react";
+import { SessionPhase } from "@chain/casino-sdk/guest";
 import { parseUnits } from "viem";
 import {
   bookieCurves,
@@ -14,15 +15,16 @@ import {
   shocksConfig,
   SIMS,
   sinsConfig,
-  worldPopCurve,
 } from "@/lib/mortal-odds/config";
-import { drawBirth, pickPlace, placeContext as buildPlaceContext } from "@/lib/mortal-odds/draw";
+import { drawBirth, pickPlace } from "@/lib/mortal-odds/draw";
 import { buildLifespanHistogram, medianAge } from "@/lib/mortal-odds/lifespan";
 import type { LifespanHistogram } from "@/lib/mortal-odds/lifespan";
 import type { BookieLife, FullModelConfig } from "@/lib/mortal-odds/model";
-import { sampleLife, simulateBookie, simulateFull } from "@/lib/mortal-odds/model";
-import { deathYearP, medianDeathYear, priceFromP } from "@/lib/mortal-odds/pricing";
-import { createRng } from "@/lib/mortal-odds/rng";
+import { sampleLife, simulateFull } from "@/lib/mortal-odds/model";
+import { deathYearP, priceFromP } from "@/lib/mortal-odds/pricing";
+import { createRng, randomSeed } from "@/lib/mortal-odds/rng";
+import { deriveRoundData } from "@/lib/mortal-odds/round-data";
+import type { StoredRound } from "@/lib/mortal-odds/round-storage";
 import { resolveBets } from "@/lib/mortal-odds/settle";
 import { buildFlavorSin } from "@/lib/mortal-odds/sins";
 import {
@@ -37,6 +39,7 @@ import {
 } from "@/lib/mortal-odds/soul-odds-contract";
 import { pickEpitaph } from "@/lib/mortal-odds/epitaph";
 import { tellStory } from "@/lib/mortal-odds/story";
+import { pickTimeStory } from "@/lib/mortal-odds/time-story";
 import { useCasinoHost } from "@/hooks/useCasinoHost";
 import { playClickSound } from "@/utils/playClickSound";
 import type { Bet, BetResult, Draw, EraFilter, Life, MarketPrices, PlaceContext, Price, Sex } from "@/types";
@@ -44,6 +47,7 @@ import type { Bet, BetResult, Draw, EraFilter, Life, MarketPrices, PlaceContext,
 const CURRENT_YEAR = new Date().getFullYear();
 const SPIN_DURATION_S = 0.75;
 const RECENT_EPITAPHS_KEPT = 8;
+const RECENT_TIME_STORIES_KEPT = 6;
 const SPIN_YEAR_RANGE = CURRENT_YEAR + 12000;
 
 const fullModelConfig: FullModelConfig = { curves: bookieCurves, mods: regionModifiersConfig, shocks: shocksConfig, sins: sinsConfig };
@@ -80,6 +84,7 @@ type State = {
   samples: BookieLife[] | null;
   prices: MarketPrices | null;
   defaultDeathGuess: number | null;
+  samplesSeed: number | null;
   reveal: RevealResult | null;
   error: string | null;
 };
@@ -93,7 +98,9 @@ type Action =
       samples: BookieLife[];
       prices: MarketPrices;
       defaultDeathGuess: number;
+      samplesSeed: number;
     }
+  | { type: "restore"; stored: StoredRound; context: PlaceContext; samples: BookieLife[]; prices: MarketPrices; defaultDeathGuess: number }
   | { type: "tick"; year: number }
   | { type: "finish" }
   | { type: "advance" }
@@ -115,8 +122,24 @@ function reducer(state: State, action: Action): State {
         samples: action.samples,
         prices: action.prices,
         defaultDeathGuess: action.defaultDeathGuess,
+        samplesSeed: action.samplesSeed,
         displayYear: null,
         reveal: null,
+        error: null,
+      };
+    case "restore":
+      return {
+        ...state,
+        phase: action.stored.phase,
+        era: action.stored.era,
+        draw: action.stored.draw,
+        context: action.context,
+        samples: action.samples,
+        prices: action.prices,
+        defaultDeathGuess: action.defaultDeathGuess,
+        samplesSeed: action.stored.samplesSeed,
+        displayYear: null,
+        reveal: action.stored.reveal,
         error: null,
       };
     case "tick":
@@ -145,6 +168,7 @@ const initialState: State = {
   samples: null,
   prices: null,
   defaultDeathGuess: null,
+  samplesSeed: null,
   reveal: null,
   error: null,
 };
@@ -172,6 +196,10 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   defaultDeathGuess: number | null;
   reveal: RevealResult | null;
   error: string | null;
+  sessionKey: string | null;
+  wagerWei: string | null;
+  samplesSeed: number | null;
+  restore: (stored: StoredRound) => void;
   setEra: (era: EraFilter) => void;
   drawHuman: (chipSize: number) => void;
   advance: () => void;
@@ -185,6 +213,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   const pendingBets = useRef<Record<string, Bet> | null>(null);
   const submittedFor = useRef<string | null>(null);
   const recentEpitaphs = useRef<string[]>([]);
+  const recentTimeStories = useRef<string[]>([]);
   const decimals = snapshot?.token.decimals ?? 18;
 
   useEffect(() => () => spin.current?.stop(), []);
@@ -195,12 +224,12 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     const { year, region } = drawBirth({ era: state.era, rng, erasConfig, currentYear: CURRENT_YEAR });
     const place = pickPlace({ region, rng, placesConfig });
     const draw: Draw = { year, region, place };
-    const context = buildPlaceContext({ draw, erasConfig, worldPopCurve, currentYear: CURRENT_YEAR });
-    const samples = simulateBookie({ year, rng, curves: bookieCurves, sins: sinsConfig, sims: SIMS });
-    const prices = previewCategoryPrices(wagerWei);
-    const defaultDeathGuess = medianDeathYear(samples);
+    const timeStory = pickTimeStory({ year, rng, recent: recentTimeStories.current });
+    recentTimeStories.current = [timeStory.id, ...recentTimeStories.current].slice(0, RECENT_TIME_STORIES_KEPT);
+    const samplesSeed = randomSeed();
+    const { context, samples, prices, defaultDeathGuess } = deriveRoundData({ draw, wagerWei, samplesSeed, story: timeStory.text, currentYear: CURRENT_YEAR });
 
-    dispatch({ type: "start-draw", draw, context, samples, prices, defaultDeathGuess });
+    dispatch({ type: "start-draw", draw, context, samples, prices, defaultDeathGuess, samplesSeed });
 
     if (options.reducedMotion) {
       dispatch({ type: "finish" });
@@ -216,6 +245,16 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
       },
       onComplete: () => dispatch({ type: "finish" }),
     });
+  };
+
+  const restore = (stored: StoredRound) => {
+    const wagerWei = BigInt(stored.wagerWei);
+    const data = deriveRoundData({ draw: stored.draw, wagerWei, samplesSeed: stored.samplesSeed, story: stored.story, currentYear: CURRENT_YEAR });
+    const submitted = stored.phase === "settling" || stored.phase === "revealed";
+    setSession({ key: stored.sessionKey, wagerWei });
+    pendingBets.current = stored.phase === "settling" ? stored.bets : null;
+    submittedFor.current = submitted ? stored.sessionKey : null;
+    dispatch({ type: "restore", stored, ...data });
   };
 
   const drawHuman = (chipSize: number) => {
@@ -249,6 +288,15 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     if (!row) return;
     setSession((current) => (current && current.key === session.key ? { ...current, id: row.sessionId } : current));
   }, [session, snapshot]);
+
+  // A round the host cancelled or forfeited while the player was away can never settle; drop it instead of hanging.
+  useEffect(() => {
+    if (state.phase === "idle" || state.phase === "revealed" || !session || !snapshot) return;
+    const row = snapshot.sessions.items.find((item) => item.sessionKey === session.key);
+    if (row?.phase === SessionPhase.FORFEITED || row?.phase === SessionPhase.CANCELLED) {
+      dispatch({ type: "fail", error: "This round was cancelled." });
+    }
+  }, [snapshot, state.phase, session]);
 
   const placeBets = (bets: Record<string, Bet>) => {
     if (state.phase !== "confirming" || !hostApi || !session?.id || submittedFor.current === session.key) return;
@@ -335,6 +383,10 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     defaultDeathGuess: state.defaultDeathGuess,
     reveal: state.reveal,
     error: state.error,
+    sessionKey: session?.key ?? null,
+    wagerWei: session ? session.wagerWei.toString() : null,
+    samplesSeed: state.samplesSeed,
+    restore,
     setEra: (era) => dispatch({ type: "set-era", era }),
     drawHuman,
     advance: () => dispatch({ type: "advance" }),
