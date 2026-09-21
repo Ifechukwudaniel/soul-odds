@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Loader } from "../Loader";
 import { CrownIcon } from "../assets/CrownIcon";
 import { DoubleCoinIcon } from "../assets/DoubleCoinIcon";
-import { HeartIcon } from "../assets/Hearticon";
-import { TimerIcon } from "../assets/TimerIcon";
 import { StatsCard } from "../touchswap/StatsCard";
 import { RefeshInterval } from "@/constants";
 import { getStats } from "@/services/data/stats";
@@ -22,23 +20,8 @@ const initialStatsCardLists: StatsCardList[] = [
     count: "Loading...",
   },
   {
-    title: "Total Touches",
-    icon: <TimerIcon />,
-    count: "Loading...",
-  },
-  {
     title: "Total Players",
     icon: <CrownIcon />,
-    count: "Loading...",
-  },
-  {
-    title: "Daily Users",
-    icon: <HeartIcon />,
-    count: "Loading...",
-  },
-  {
-    title: "Online Players",
-    icon: <HeartIcon />,
     count: "Loading...",
   },
 ];
@@ -53,20 +36,10 @@ const fetchStats = async (): Promise<StatsCardList[]> => {
         count: numeral(stats.totalTokens).format("O.Oa"),
       },
       {
-        title: "Total Touches",
-        icon: <TimerIcon />,
-        count: stats.totalTouches.toLocaleString(),
-      },
-      {
         title: "Total Players",
         icon: <CrownIcon />,
         count: stats.totalUsers.toLocaleString(),
       },
-      {
-        title: "Daily Users",
-        icon: <HeartIcon />,
-        count: stats.totalDailyUsers.toLocaleString(),
-      }, 
     ];
   } catch {
     return initialStatsCardLists;

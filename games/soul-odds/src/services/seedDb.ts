@@ -6,12 +6,7 @@ import { userSchema } from '@/services/db/Schema';
 import { createUser } from '@/services/db/user';
 
 interface SeedUser {
-  id: number;
-  username: string;
-  first: string;
-  last: string;
-  lang: string;
-  referedBy?: number;
+  address: string;
 }
 
 export async function seedDatabase() {
@@ -26,15 +21,8 @@ export async function seedDatabase() {
   const USER_SEED_DATA = path.join(process.cwd(), 'src/local_database/users.json');
   const seedUsers = JSON.parse(fs.readFileSync(USER_SEED_DATA, 'utf8')) as SeedUser[];
 
-  // The original used `seedUsers.forEach(async (userData) => {...})`, which
-  // fires every createUser call concurrently and doesn't wait for any of
-  // them - seedDatabase() could resolve before a single user was actually
-  // inserted. Sequential for-of + await fixes that; switch to
-  // Promise.all(seedUsers.map(...)) instead if you want them created in
-  // parallel and don't need referedBy lookups to see earlier-seeded users.
-  for (const userData of seedUsers) {
-    const { id, username, first, last, lang, referedBy } = userData;
-    await createUser(id, referedBy, username, first, last, lang);
+  for (const { address } of seedUsers) {
+    await createUser(address);
   }
 
   console.log(`*** Seeded ${seedUsers.length} users.`);

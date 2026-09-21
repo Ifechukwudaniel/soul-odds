@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { getAllUserFreeBoosts } from "@/services/db/boost";
 
-export async function GET(_request: Request, props: { params: Promise<{ userId: string }> }) {
+export async function GET(_request: Request, props: { params: Promise<{ address: string }> }) {
   try {
-    const { userId } = await props.params;
-    const boosts = await getAllUserFreeBoosts(parseInt(userId));
+    const { address } = await props.params;
+    const boosts = await getAllUserFreeBoosts(address);
     return NextResponse.json(boosts);
   } catch (error) {
     return NextResponse.json({ message: "Method not allowed" }, { status: 500 });
