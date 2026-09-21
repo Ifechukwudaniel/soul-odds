@@ -12,6 +12,14 @@ export function fmtYear(year: number): string {
   return year < 1500 ? `${year} CE` : `${year}`;
 }
 
+/** Splits a year into a number and its era suffix for the reel; joined, they read exactly like `fmtYear`. */
+export function yearReelParts(year: number): { value: number; suffix: string } {
+  if (year <= 0) {
+    return { value: 1 - year, suffix: " BCE" };
+  }
+  return { value: year, suffix: year < 1500 ? " CE" : "" };
+}
+
 /** Formats a population count in plain language: billion / million / thousand. */
 export function fmtPeople(n: number): string {
   if (n >= 1e9) return `${(n / 1e9).toFixed(1)} billion`;

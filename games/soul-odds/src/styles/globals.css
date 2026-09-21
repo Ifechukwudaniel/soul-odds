@@ -80,6 +80,9 @@ main {
  * bevels in the Anubis gold ramp (heading #F1D6AE, era label #DEAE56), not sprites.
  */
 .soul-odds.os-scrollbar {
+  transition:
+    opacity 0.4s ease,
+    visibility 0.4s ease;
   --sb-frame: var(--anubis-gold-leaf);
   --sb-frame-inner: #f1d6ae;
   --sb-hi: #fde991;
@@ -100,9 +103,9 @@ main {
   --os-padding-axis: 22px;
   --os-padding-perpendicular: 3px;
   --os-handle-min-size: 44px;
-  top: 4px;
-  right: 4px;
-  bottom: 4px;
+  top: var(--os-inset-y, 4px);
+  right: var(--os-inset-x, 4px);
+  bottom: var(--os-inset-y, 4px);
 }
 
 .soul-odds.os-scrollbar-horizontal {
@@ -220,10 +223,16 @@ main {
 /*
  * Reserve a gutter for the bar only while it shows, so short content keeps its full width.
  * Scroller.tsx sets data-os-overflow-x/y on the host. OverlayScrollbars owns the viewport's padding
- * (inline), so the content element is padded instead. --os-gutter is its total right padding.
+ * (inline), so the content element is padded instead. --os-gutter is its total right padding, and
+ * --os-inset-x/-y (default 4px) set how far the bar sits from the scroll area's edges.
  */
 [data-os-overflow-y] > [data-overlayscrollbars-viewport] > * {
-  padding-right: var(--os-gutter, 32px);
+  padding-right: var(--os-gutter, 36px);
+}
+
+/* Reserved: the same gutter on both sides even with no overflow, so centred content stays put when the bar fades in. */
+[data-os-gutter="reserved"] > [data-overlayscrollbars-viewport] > * {
+  padding-inline: var(--os-gutter, 36px);
 }
 
 [data-os-overflow-x] > [data-overlayscrollbars-viewport] > * {
@@ -293,7 +302,6 @@ main {
  * Game cursors (public/cursors): Kenney Cursor Pack (CC0) shapes recolored to the Anubis gold. SVG masters
  * live in public/cursors/svg; the PNGs are 32px plus a 64px @2x. Each cursor is declared three ways so a
  * browser that lacks a newer form falls back to the previous one; the numbers are the click hotspot.
- * Text fields keep the native I-beam.
  */
 html {
   cursor: url("/cursors/default.png") 3 3, default;
@@ -317,6 +325,15 @@ input[type="radio"],
   cursor: url("/cursors/pointer.png") 9 5, pointer;
   cursor: -webkit-image-set(url("/cursors/pointer.png") 1x, url("/cursors/pointer@2x.png") 2x) 9 5, pointer;
   cursor: image-set(url("/cursors/pointer.png") 1x, url("/cursors/pointer@2x.png") 2x) 9 5, pointer;
+}
+
+input:not([type="button"], [type="submit"], [type="reset"], [type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="image"], :disabled),
+textarea:not(:disabled),
+[contenteditable]:not([contenteditable="false"]),
+.cursor-text {
+  cursor: url("/cursors/text.png") 16 16, text;
+  cursor: -webkit-image-set(url("/cursors/text.png") 1x, url("/cursors/text@2x.png") 2x) 16 16, text;
+  cursor: image-set(url("/cursors/text.png") 1x, url("/cursors/text@2x.png") 2x) 16 16, text;
 }
 
 /* After the pointer rule so a disabled control wins over a `cursor-pointer` class. */

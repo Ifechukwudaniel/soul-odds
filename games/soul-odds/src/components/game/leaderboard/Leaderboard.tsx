@@ -14,7 +14,7 @@ interface LeaderboardProps {
 }
 
 export function Leaderboard({ users, currentUser, resetAt }: LeaderboardProps) {
-  const currentUserRowRef = useRef<HTMLTableRowElement>(null);
+  const currentUserRowRef = useRef<HTMLDivElement>(null);
   const [isRowVisible, setIsRowVisible] = useState(true);
 
   useEffect(() => {

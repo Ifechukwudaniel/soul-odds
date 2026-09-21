@@ -1,9 +1,21 @@
 "use client";
 
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import { interpolate } from "@/lib/mortal-odds/curves";
 import { worldPopCurve } from "@/lib/mortal-odds/config";
+import { CHART_INTRO_MS, HOP_ROLL_MS, SETTLE_ROLL_MS } from "@/lib/mortal-odds/spin-timeline";
+
+gsap.registerPlugin(useGSAP, DrawSVGPlugin);
+
+// The intro is CHART_INTRO_MS long: the curve draws itself in, then the projection is revealed and the marker lands.
+const INTRO_S = CHART_INTRO_MS / 1000;
+const CURVE_DRAW_S = INTRO_S * 0.78;
+const PROJECTION_S = INTRO_S - CURVE_DRAW_S;
+const MARKER_RADIUS = 5.5;
 
 const WIDTH = 900;
 const HEIGHT = 240;
@@ -132,7 +144,7 @@ const TICK_CANDIDATES = [
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
 
-const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
+const easeOutExpo = (t: number) => (t === 1 ? 1 : 1 - 2 ** (-10 * t));
 
 const easeInOutCubic = (t: number) => {
   return t < 0.5
@@ -144,10 +156,18 @@ export const PopulationChart = (props: {
   year: number;
   currentYear: number;
   isSpinning: boolean;
-  onYearChange?: (year: number) => void;
+  displayYear: number | null;
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const animationFrameRef = useRef<number | null>(null);
+  const animatedYearRef = useRef(props.year);
+  const solidRef = useRef<SVGPathElement>(null);
+  const clipRectRef = useRef<SVGRectElement>(null);
+  const leadRef = useRef<SVGGElement>(null);
+  const ticksRef = useRef<SVGGElement>(null);
+  const nowLineRef = useRef<SVGLineElement>(null);
+  const markerRef = useRef<SVGGElement>(null);
+  const markerDotRef = useRef<SVGCircleElement>(null);
 
   const [hoverX, setHoverX] = useState<number | null>(null);
   const [animatedYear, setAnimatedYear] = useState(props.year);
@@ -166,11 +186,64 @@ export const PopulationChart = (props: {
     TOP + PLOT_HEIGHT * (1 - pop / maxPop);
 
   /*
-   * Animate the marker through history.
-   *
-   * The movement is deliberately NOT linear in year-space.
-   * We use a few random waypoints so it looks like the picker
-   * is searching through history before settling on the answer.
+   * Intro, only when the chart mounts during a draw (a restored round or a step back stays static): the curve
+   * draws itself in with DrawSVG while a lead dot rides its front (found with getPointAtLength) and the area fill
+   * wipes in right behind it; then the dashed projection is revealed and the marker lands on "now".
+   */
+  useGSAP(() => {
+    const solid = solidRef.current;
+    const clipRect = clipRectRef.current;
+    const lead = leadRef.current;
+    const ticks = ticksRef.current;
+    const nowLine = nowLineRef.current;
+    const marker = markerRef.current;
+    const markerDot = markerDotRef.current;
+    if (!props.isSpinning || !solid || !clipRect || !lead || !ticks || !nowLine || !marker || !markerDot) {
+      return;
+    }
+
+    const motion = gsap.matchMedia();
+    motion.add("(prefers-reduced-motion: no-preference)", () => {
+      const length = solid.getTotalLength();
+      const front = { progress: 0 };
+
+      gsap.set(clipRect, { attr: { width: 0 } });
+      gsap.set(solid, { drawSVG: "0%" });
+      gsap.set([marker, nowLine], { opacity: 0 });
+
+      gsap
+        .timeline({ onComplete: () => gsap.set(solid, { clearProps: "strokeDasharray,strokeDashoffset" }) })
+        .to(
+          front,
+          {
+            progress: 1,
+            duration: CURVE_DRAW_S,
+            ease: "power2.inOut",
+            onUpdate: () => {
+              const point = solid.getPointAtLength(front.progress * length);
+              gsap.set(solid, { drawSVG: `0% ${front.progress * 100}%` });
+              gsap.set(lead, { x: point.x, y: point.y });
+              gsap.set(clipRect, { attr: { width: point.x } });
+            },
+          },
+          0,
+        )
+        .fromTo(lead, { opacity: 0 }, { opacity: 1, duration: 0.15 }, 0)
+        .fromTo(ticks.querySelectorAll("text"), { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out", stagger: 0.07 }, 0.15)
+        .to(lead, { opacity: 0, duration: 0.2 }, CURVE_DRAW_S)
+        .to(clipRect, { attr: { width: WIDTH }, duration: PROJECTION_S, ease: "power1.out" }, CURVE_DRAW_S)
+        .to(nowLine, { opacity: 1, duration: 0.3 }, CURVE_DRAW_S - 0.1)
+        .to(marker, { opacity: 1, duration: 0.2 }, CURVE_DRAW_S)
+        .fromTo(markerDot, { attr: { r: 0 } }, { attr: { r: MARKER_RADIUS }, duration: 0.4, ease: "back.out(3)" }, CURVE_DRAW_S);
+    });
+
+    return () => motion.revert();
+  });
+
+  /*
+   * The marker follows the spin timeline: whenever it hops to a new year, the marker glides there along the
+   * log-scaled axis over the same time the year reel takes to roll, and the last glide (onto the answer) is
+   * the slow one. Outside a spin it just sits on the answer.
    */
   useEffect(() => {
     if (animationFrameRef.current !== null) {
@@ -178,98 +251,37 @@ export const PopulationChart = (props: {
       animationFrameRef.current = null;
     }
 
-    const reportYear = (nextYear: number) => {
-      setAnimatedYear(nextYear);
-      props.onYearChange?.(Math.round(nextYear));
+    const setYear = (year: number) => {
+      animatedYearRef.current = year;
+      setAnimatedYear(year);
     };
 
     if (!props.isSpinning) {
-      reportYear(props.year);
+      setYear(props.year);
       return;
     }
 
-    const startYear = scale.nowYear;
-    const targetYear = clamp(props.year, MIN_YEAR, MAX_YEAR);
-
-    const duration = 2600;
+    const target = clamp(props.displayYear ?? scale.nowYear, MIN_YEAR, MAX_YEAR);
+    const landing = target === clamp(props.year, MIN_YEAR, MAX_YEAR);
+    const rollMs = landing ? SETTLE_ROLL_MS : HOP_ROLL_MS;
+    const ease = landing ? easeOutExpo : easeInOutCubic;
+    const fromX = scale.toX(animatedYearRef.current);
+    const toX = scale.toX(target);
     const startTime = performance.now();
 
-    /*
-     * Random waypoints.
-     *
-     * Most are spread across history, with a few biased
-     * toward the target so the animation naturally converges.
-     */
-    const waypoints = Array.from({ length: 9 }, (_, index) => {
-      if (index >= 6) {
-        const t = (index - 6) / 3;
-
-        return startYear + (targetYear - startYear) * t;
-      }
-
-      const randomT = Math.random();
-
-      /*
-       * sqrt biases the random points toward the older part
-       * of history, which makes the movement visually interesting
-       * on your logarithmic timeline.
-       */
-      const biasedT = Math.sqrt(randomT);
-
-      return MIN_YEAR + (MAX_YEAR - MIN_YEAR) * biasedT;
-    });
-
-    waypoints.push(targetYear);
-
-    const points = [startYear, ...waypoints];
-
-    const segmentDuration = duration / (points.length - 1);
-
-    const animate = (now: number) => {
-      const elapsed = now - startTime;
-
-      if (elapsed >= duration) {
-        reportYear(targetYear);
-        animationFrameRef.current = null;
-        return;
-      }
-
-      const rawSegment = elapsed / segmentDuration;
-      const segmentIndex = Math.min(
-        Math.floor(rawSegment),
-        points.length - 2,
-      );
-
-      const segmentProgress = rawSegment - segmentIndex;
-
-      /*
-       * Slow slightly at each random point so it feels like
-       * the picker is actually considering different years.
-       */
-      const easedProgress =
-        segmentIndex >= points.length - 4
-          ? easeInOutCubic(segmentProgress)
-          : easeOutCubic(segmentProgress);
-
-      const from = points[segmentIndex]!;
-      const to = points[segmentIndex + 1]!;
-
-      const year = from + (to - from) * easedProgress;
-
-      reportYear(year);
-
-      animationFrameRef.current = requestAnimationFrame(animate);
+    const step = (now: number) => {
+      const progress = Math.min((now - startTime) / rollMs, 1);
+      setYear(progress === 1 ? target : scale.toYear(fromX + (toX - fromX) * ease(progress)));
+      animationFrameRef.current = progress === 1 ? null : requestAnimationFrame(step);
     };
-
-    reportYear(startYear);
-    animationFrameRef.current = requestAnimationFrame(animate);
+    animationFrameRef.current = requestAnimationFrame(step);
 
     return () => {
       if (animationFrameRef.current !== null) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [props.isSpinning, props.onYearChange, props.year, scale.nowYear]);
+  }, [props.displayYear, props.isSpinning, props.year, scale]);
 
   const pastPoints = worldPopCurve
     .filter(([year]) => year <= scale.nowYear)
@@ -382,6 +394,9 @@ export const PopulationChart = (props: {
         onPointerLeave={() => setHoverX(null)}
       >
         <defs>
+          <clipPath id="mo-reveal">
+            <rect ref={clipRectRef} x={0} y={0} width={WIDTH} height={HEIGHT} />
+          </clipPath>
           <linearGradient
             id="mo-pop-area"
             x1="0%"
@@ -414,9 +429,11 @@ export const PopulationChart = (props: {
         <path
           d={areaPath}
           fill="url(#mo-pop-area)"
+          clipPath="url(#mo-reveal)"
         />
 
         <path
+          ref={solidRef}
           d={solidPath}
           fill="none"
           stroke="#5fc9b8"
@@ -430,9 +447,16 @@ export const PopulationChart = (props: {
           strokeWidth={1.5}
           strokeDasharray="4 4"
           opacity={0.6}
+          clipPath="url(#mo-reveal)"
         />
 
+        <g ref={leadRef} opacity={0}>
+          <circle r={11} fill="#FDE991" opacity={0.25} />
+          <circle r={4} fill="#FDE991" />
+        </g>
+
         <line
+          ref={nowLineRef}
           x1={scale.nowX}
           x2={scale.nowX}
           y1={TOP}
@@ -442,6 +466,7 @@ export const PopulationChart = (props: {
           strokeDasharray="2 3"
         />
 
+        <g ref={ticksRef}>
         {ticks.map((year) => {
           const x = scale.toX(year);
 
@@ -469,23 +494,27 @@ export const PopulationChart = (props: {
             </g>
           );
         })}
+        </g>
 
         {/* Animated selection */}
-        <line
-          x1={markerX}
-          x2={markerX}
-          y1={TOP}
-          y2={TOP + PLOT_HEIGHT}
-          stroke="#F5B83D"
-          strokeWidth={1.5}
-        />
+        <g ref={markerRef}>
+          <line
+            x1={markerX}
+            x2={markerX}
+            y1={TOP}
+            y2={TOP + PLOT_HEIGHT}
+            stroke="#F5B83D"
+            strokeWidth={1.5}
+          />
 
-        <circle
-          cx={markerX}
-          cy={markerY}
-          r={props.isSpinning ? 5.5 : 5}
-          fill="#F5B83D"
-        />
+          <circle
+            ref={markerDotRef}
+            cx={markerX}
+            cy={markerY}
+            r={props.isSpinning ? MARKER_RADIUS : 5}
+            fill="#F5B83D"
+          />
+        </g>
 
         {hoverPointX !== null &&
           hoverPointY !== null && (

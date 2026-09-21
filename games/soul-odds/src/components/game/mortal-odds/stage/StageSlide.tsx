@@ -16,6 +16,8 @@ export const StageSlide = (props: {
   slideKey: string | number;
   direction?: number;
   onSwipe?: (step: number) => void;
+  /** Keep the scroll gutter reserved so centred content doesn't shift when the bar appears. */
+  reserveGutter?: boolean;
   children: React.ReactNode;
 }) => {
   const direction = props.direction ?? 0;
@@ -48,7 +50,7 @@ export const StageSlide = (props: {
           }}
           className="absolute inset-0 px-1"
         >
-          <Scroller className="h-full">{props.children}</Scroller>
+          <Scroller className="h-full" reserveGutter={props.reserveGutter}>{props.children}</Scroller>
         </motion.div>
       </AnimatePresence>
     </div>

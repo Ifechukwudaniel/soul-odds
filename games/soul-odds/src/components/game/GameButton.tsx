@@ -17,6 +17,8 @@ export const GameButton = (props: {
   variant: "primary" | "secondary" | "papyrus";
   onClick: () => void;
   disabled?: boolean;
+  /** Skips the click sound, for buttons whose action plays its own (e.g. spending money). */
+  silent?: boolean;
   className?: string;
   children: React.ReactNode;
 }) => (
@@ -24,7 +26,9 @@ export const GameButton = (props: {
     type="button"
     disabled={props.disabled}
     onClick={() => {
-      playClickSound();
+      if (!props.silent) {
+        playClickSound();
+      }
       props.onClick();
     }}
     className={`inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border font-bold transition-all duration-150 disabled:pointer-events-none disabled:translate-y-0 disabled:opacity-40 disabled:shadow-none ${VARIANT_CLASSES[props.variant]} ${props.className ?? ""}`}

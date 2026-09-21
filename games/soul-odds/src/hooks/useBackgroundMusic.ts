@@ -1,21 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { isSoundMuted, MUTED_STORAGE_KEY } from "@/utils/soundPreferences";
 
 const BG_MUSIC_SRC = "/sound/bg.mp3";
-const MUTED_STORAGE_KEY = "game-bg-music-muted:v1";
 const VOLUME_STORAGE_KEY = "game-bg-music-volume:v1";
 const DEFAULT_VOLUME = 0.5;
 
 let sharedAudio: HTMLAudioElement | null = null;
-
-function readMuted(): boolean {
-  try {
-    return localStorage.getItem(MUTED_STORAGE_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
 
 function readVolume(): number {
   try {
@@ -52,7 +44,7 @@ export function useBackgroundMusic(): {
   const [volumeValue, setVolumeValue] = useState(DEFAULT_VOLUME);
 
   useEffect(() => {
-    setIsMuted(readMuted());
+    setIsMuted(isSoundMuted());
     setVolumeValue(readVolume());
   }, []);
 

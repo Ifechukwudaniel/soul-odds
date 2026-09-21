@@ -5,6 +5,7 @@ import { GameCard } from "@/components/game/home/GameCard";
 import { PlaceBetButton } from "@/components/game/home/PlaceBetButton";
 import { PotentialWinSummary } from "@/components/game/home/PotentialWinSummary";
 import { SlipRow } from "@/components/game/home/SlipRow";
+import { Scroller } from "@/components/Scroller";
 import { betOdds } from "@/lib/mortal-odds/bets";
 import { serifFont } from "@/styles/serif-font";
 import type { Bet, MarketPrices, Price, RoundCharge } from "@/types";
@@ -37,7 +38,7 @@ export const BetPanel = (props: {
   const unpicked = Math.max(0, props.requiredBets - bets.length);
 
   return (
-    <GameCard scrollable className="flex flex-col gap-4" containerClassName="flex h-full w-full flex-col">
+    <GameCard className="flex min-h-0 flex-1 flex-col gap-4" containerClassName="flex h-full w-full flex-col">
       <h2 className={`${serifFont.className} font-bold text-white"`}>Your wager</h2>
 
       <div className="mystic-glass flex items-center gap-2 rounded-xl px-4 py-3">
@@ -58,39 +59,42 @@ export const BetPanel = (props: {
         </div>
       )}
 
-      <div className="flex flex-col gap-1">
-        {props.charges.map((charge) => (
-          <motion.div
-            key={charge.id}
-            initial={{ opacity: 0, x: -6 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="flex items-center justify-between text-sm"
-          >
-            <span className="text-white/60">{charge.label}</span>
-            <span className="font-semibold text-[#F5B83D]">
-              −{charge.amount.toFixed(2)} {props.currency}
-            </span>
-          </motion.div>
-        ))}
-        {props.charges.length === 0 && <p className="text-sm text-white/40">Nothing on the scales yet. Pick your stake, then summon a soul.</p>}
-      </div>
+      <Scroller className="min-h-32 flex-1">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
+            {props.charges.map((charge) => (
+              <motion.div
+                key={charge.id}
+                initial={{ opacity: 0, x: -6 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="flex items-center justify-between text-sm"
+              >
+                <span className="text-white/60">{charge.label}</span>
+                <span className="font-semibold text-[#F5B83D]">
+                  −{charge.amount.toFixed(2)} {props.currency}
+                </span>
+              </motion.div>
+            ))}
+            {props.charges.length === 0 && <p className="text-sm text-white/40">Nothing on the scales yet. Pick your stake, then summon a soul.</p>}
+          </div>
 
-      <div>
-        <BetQuickAmounts amounts={props.quickAmounts} selected={props.chipSize} onSelect={props.onSelectChip} disabled={props.chipLocked} />
-      </div>
+          <div>
+            <BetQuickAmounts amounts={props.quickAmounts} selected={props.chipSize} onSelect={props.onSelectChip} disabled={props.chipLocked} />
+          </div>
 
-      <div className="flex flex-col gap-2">
-        {bets.map((bet, index) => (
-          <SlipRow
-            key={bet.marketId}
-            bet={bet}
-            potentialWin={potentialWins[index] ?? null}
-            onRemove={props.isLocked ? undefined : () => props.onRemoveBet(bet.marketId)}
-          />
-        ))}
-      </div>
-
+          <div className="flex flex-col gap-2">
+            {bets.map((bet, index) => (
+              <SlipRow
+                key={bet.marketId}
+                bet={bet}
+                potentialWin={potentialWins[index] ?? null}
+                onRemove={props.isLocked ? undefined : () => props.onRemoveBet(bet.marketId)}
+              />
+            ))}
+          </div>
+        </div>
+      </Scroller>
     </GameCard>
   );
 };

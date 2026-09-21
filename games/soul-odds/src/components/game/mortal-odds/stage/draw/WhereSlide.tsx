@@ -9,7 +9,7 @@ import { serifFont } from "@/styles/serif-font";
 
 
 export const WhereSlide = (props: { year: number; place: Place; local: string }) => (
-  <div className="flex h-full flex-col items-center gap-3 text-center">
+  <div className="flex h-full flex-col items-center gap-3 overflow-hidden text-center">
     <div className="shrink-0">
       <h3 className={`${serifFont.className} font-bold text-3xl text-[#F1D6AE] sm:text-4xl leading-[0.75] pt-[0.5rem]`}>In which land?</h3>
       <p className="mt-1 max-w-lg text-sm text-[0.8rem] text-[#f1f1f2c0]">

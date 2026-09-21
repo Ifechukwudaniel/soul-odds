@@ -88,14 +88,17 @@ const horizontalOptions: PartialOptions = {
 
 /**
  * Themed overlay scrollbar container. Give it a definite size (e.g. `h-full` or `min-h-0 flex-1`).
- * While the bar shows, its content gets `--os-gutter` (default 32px) of right padding to stay clear of it.
+ * While the bar shows, its content gets `--os-gutter` (default 36px) of right padding to stay clear of it.
+ * With `reserveGutter` the gutter is kept on both sides all the time, so content never shifts when the bar
+ * appears (use it where content grows past the height mid-view, and is centred).
  */
-export const Scroller = (props: { children: React.ReactNode; className?: string; horizontal?: boolean }) => (
+export const Scroller = (props: { children: React.ReactNode; className?: string; horizontal?: boolean; reserveGutter?: boolean }) => (
   <OverlayScrollbarsComponent
     defer
     options={props.horizontal ? horizontalOptions : verticalOptions}
     events={props.horizontal ? horizontalEvents : verticalEvents}
     className={props.className}
+    data-os-gutter={props.reserveGutter ? "reserved" : undefined}
   >
     {props.children}
   </OverlayScrollbarsComponent>

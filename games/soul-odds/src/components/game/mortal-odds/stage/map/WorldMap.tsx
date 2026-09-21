@@ -4,6 +4,7 @@ import { motion, useMotionValue, animate as animateValue } from "framer-motion";
 import { useEffect, useState } from "react";
 import { erasConfig, placesConfig, worldLand } from "@/lib/mortal-odds/config";
 import { densityField, graticule, landPath, project } from "@/lib/mortal-odds/geo";
+import { playSound } from "@/utils/playSound";
 
 const VIEWPORT = { width: 1000, height: 500 };
 const GRATICULE_STEP = 30;
@@ -41,11 +42,17 @@ export const WorldMap = (props: { year: number; marker: { lat: number; lon: numb
 
     const cx = animateValue(pinX, xs, { duration: ROAM_DURATION, times, ease: "easeInOut" });
     const cy = animateValue(pinY, ys, { duration: ROAM_DURATION, times, ease: "easeInOut" });
-    const t = setTimeout(() => setSettled(true), ROAM_DURATION * 1000);
+    // A tock as the pin reaches each waypoint (the first and last stops are the start and the landing), then a chime as it lands.
+    const ticks = times.slice(1, -1).map((time, step) => setTimeout(() => playSound({ name: "search-tick", step }), time * ROAM_DURATION * 1000));
+    const t = setTimeout(() => {
+      setSettled(true);
+      playSound({ name: "search-lock" });
+    }, ROAM_DURATION * 1000);
 
     return () => {
       cx.stop();
       cy.stop();
+      ticks.forEach(clearTimeout);
       clearTimeout(t);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

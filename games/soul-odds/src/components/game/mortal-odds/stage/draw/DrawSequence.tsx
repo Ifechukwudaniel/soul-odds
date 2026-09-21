@@ -42,7 +42,7 @@ export const DrawSequence = (props: {
     >
       <StageStepper steps={STEPS.map((entry) => entry.label)} activeIndex={activeIndex} />
 
-      <StageSlide slideKey={props.step} direction={isWhere ? 1 : -1}>
+      <StageSlide slideKey={props.step} direction={isWhere ? 1 : -1} reserveGutter>
         {isWhere ? (
           <WhereSlide year={props.draw.year} place={props.draw.place} local={props.context.local} />
         ) : (
@@ -59,6 +59,7 @@ export const DrawSequence = (props: {
       <div className="flex items-center justify-between gap-3">
         <GameButton
           variant="secondary"
+          silent={!isWhere}
           disabled={props.isSpinning || (!isWhere && !props.canAffordDraw)}
           onClick={() => {
             if (isWhere) {

@@ -11,6 +11,7 @@ import {
   jobsConfig,
   placesConfig,
   PRICING_CONFIG,
+  REDRAW_COST,
   regionModifiersConfig,
   shocksConfig,
   SIMS,
@@ -38,17 +39,18 @@ import {
   toTrueProbabilities,
 } from "@/lib/mortal-odds/soul-odds-contract";
 import { pickEpitaph } from "@/lib/mortal-odds/epitaph";
+import { buildSpinTimeline, CHART_INTRO_MS } from "@/lib/mortal-odds/spin-timeline";
+import type { SpinEvent } from "@/lib/mortal-odds/spin-timeline";
 import { tellStory } from "@/lib/mortal-odds/story";
 import { pickTimeStory } from "@/lib/mortal-odds/time-story";
 import { useCasinoHost } from "@/hooks/useCasinoHost";
-import { playClickSound } from "@/utils/playClickSound";
+import { playSound } from "@/utils/playSound";
 import type { Bet, BetResult, Draw, EraFilter, Life, MarketPrices, PlaceContext, Price, Sex } from "@/types";
 
 const CURRENT_YEAR = new Date().getFullYear();
-const SPIN_DURATION_S = 0.75;
 const RECENT_EPITAPHS_KEPT = 8;
 const RECENT_TIME_STORIES_KEPT = 6;
-const SPIN_YEAR_RANGE = CURRENT_YEAR + 12000;
+const SPIN_MIN_YEAR = -12000;
 
 const fullModelConfig: FullModelConfig = { curves: bookieCurves, mods: regionModifiersConfig, shocks: shocksConfig, sins: sinsConfig };
 
@@ -219,7 +221,6 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   useEffect(() => () => spin.current?.stop(), []);
 
   const startDrawSequence = (wagerWei: bigint) => {
-    playClickSound();
     const rng = createRng();
     const { year, region } = drawBirth({ era: state.era, rng, erasConfig, currentYear: CURRENT_YEAR });
     const place = pickPlace({ region, rng, placesConfig });
@@ -236,12 +237,31 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
       return;
     }
 
-    spin.current = animate(0, 1, {
-      duration: SPIN_DURATION_S,
+    // One timeline drives the reel (year events), the tick sounds and the lock; the clock runs in milliseconds.
+    // The chart draws itself in only on a round's first draw (it mounts then); a redraw finds it already on screen.
+    const isRedraw = state.phase === "when" || state.phase === "where";
+    const timeline = buildSpinTimeline({ targetYear: year, minYear: SPIN_MIN_YEAR, maxYear: CURRENT_YEAR, rng, introMs: isRedraw ? 0 : CHART_INTRO_MS });
+    const playSpinEvent = (event: SpinEvent) => {
+      if (event.type === "year") {
+        dispatch({ type: "tick", year: event.year });
+      } else if (event.type === "tick") {
+        playSound({ name: "search-tick", step: event.step });
+      } else {
+        playSound({ name: "search-lock" });
+      }
+    };
+
+    let nextEvent = 0;
+    spin.current = animate(0, timeline.totalMs, {
+      duration: timeline.totalMs / 1000,
       ease: "linear",
-      onUpdate: () => {
-        const fakeYear = Math.floor(rng() * SPIN_YEAR_RANGE) - 12000;
-        dispatch({ type: "tick", year: fakeYear });
+      onUpdate: (elapsedMs) => {
+        let event = timeline.events[nextEvent];
+        while (event && event.atMs <= elapsedMs) {
+          playSpinEvent(event);
+          nextEvent += 1;
+          event = timeline.events[nextEvent];
+        }
       },
       onComplete: () => dispatch({ type: "finish" }),
     });
@@ -264,6 +284,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     // already-escrowed wager, opened on the first draw, stay exactly as they are.
     const isRedraw = state.phase === "when" || state.phase === "where";
     if (isRedraw && session) {
+      playSound({ name: "spend", amount: REDRAW_COST });
       startDrawSequence(session.wagerWei);
       return;
     }
@@ -274,6 +295,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
       .openSession({ wager: wagerWei.toString(), gameData: "0x" })
       .then(({ sessionKey }) => {
         setSession({ key: sessionKey, wagerWei });
+        playSound({ name: "spend", amount: chipSize });
         startDrawSequence(wagerWei);
       })
       .catch((cause) => {

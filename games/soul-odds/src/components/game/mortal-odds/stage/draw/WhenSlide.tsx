@@ -1,13 +1,19 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { motion } from "framer-motion";
 import { PopulationChart } from "@/components/game/mortal-odds/stage/draw/PopulationChart";
+import { YearReel } from "@/components/game/mortal-odds/stage/draw/YearReel";
 import { fmtNumber, fmtYear, periodName } from "@/lib/mortal-odds/format";
 import { serifFont } from "@/styles/serif-font";
 
 const INTRO =
   "Most births happened recently in history.";
+
+// The reel settles with a springy punch, so the answer lands with weight.
+const REEL_VARIANTS = {
+  spinning: { scale: 1 },
+  locked: { scale: [1.12, 1], transition: { type: "spring" as const, stiffness: 300, damping: 12 } },
+};
 
 export const WhenSlide = (props: {
   year: number;
@@ -16,9 +22,9 @@ export const WhenSlide = (props: {
   story: string;
   currentYear: number;
 }) => {
-  const [displayYear, setDisplayYear] = useState<number | null>(props.displayYear);
   const yearsAgo = props.currentYear - props.year;
-  const spinningYear = displayYear ?? props.displayYear ?? 0;
+  // While spinning the reel follows the spin timeline (starting from today); afterwards it holds the answer.
+  const reelYear = props.isSpinning ? (props.displayYear ?? props.currentYear) : props.year;
 
   return (
     <div className="flex min-h-full flex-col items-center  gap-5 text-center">
@@ -30,47 +36,40 @@ export const WhenSlide = (props: {
           year={props.year}
           currentYear={props.currentYear}
           isSpinning={props.isSpinning}
-          onYearChange={setDisplayYear}
+          displayYear={props.displayYear}
         />
       </div>
 
-      {props.isSpinning ? (
-        <div className="relative h-[1.3em] w-full overflow-hidden text-4xl sm:text-5xl">
-          <AnimatePresence mode="popLayout">
-            <motion.p
-              key={spinningYear}
-              initial={{ y: "-60%", opacity: 0, filter: "blur(4px)" }}
-              animate={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
-              exit={{ y: "60%", opacity: 0, filter: "blur(4px)" }}
-              transition={{ duration: 0.09, ease: "easeOut" }}
-              className={`${serifFont.className} absolute inset-0 flex items-center justify-center font-bold text-white/50 tabular-nums`}
-            >
-              {fmtYear(spinningYear)}
-            </motion.p>
-          </AnimatePresence>
-        </div>
-      ) : (
-        <motion.p
-        initial={{ scale: 1.15, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 220, damping: 18 }}
-        className={`${serifFont.className} flex flex-col items-center justify-center px-2 text-center font-bold text-xl text-white sm:text-xl `}
-      >
-        <span className="flex items-center justify-center gap-x-2">
-          <span>{fmtYear(props.year)}</span>
-          <span className="text-white/40">·</span>
-          <span >{fmtNumber(yearsAgo)} years ago</span>
-        </span>
-      
-        <span className="mt-1 text-[0.9rem] text-[#DEAE56] ">
-          the {periodName(props.year).toLowerCase()}
-        </span>
-      </motion.p>
-      )}
+      {/* Screen readers skip the rolling digits and hear the settled answer once, when the region updates. */}
+      <div aria-live="polite" className="flex flex-col items-center gap-5">
+        <motion.div
+          initial={false}
+          animate={props.isSpinning ? "spinning" : "locked"}
+          variants={REEL_VARIANTS}
+          role={props.isSpinning ? undefined : "img"}
+          aria-label={props.isSpinning ? undefined : fmtYear(props.year)}
+          aria-hidden={props.isSpinning || undefined}
+          className={`${serifFont.className} font-bold text-4xl tabular-nums transition-colors duration-500 sm:text-5xl ${props.isSpinning ? "text-white/50" : "text-white"}`}
+        >
+          <YearReel year={reelYear} landing={reelYear === props.year} />
+        </motion.div>
 
-      {props.isSpinning ? (
-        <p className="text-sm text-white/40">Reaching into history…</p>
-      ) : (
+        {props.isSpinning ? (
+          <p className="text-sm text-white/40">Reaching into history…</p>
+        ) : (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.35, delay: 0.1 }}
+            className={`${serifFont.className} flex flex-col items-center justify-center px-2 text-center font-bold text-xl text-white`}
+          >
+            <span>{fmtNumber(yearsAgo)} years ago</span>
+            <span className="mt-1 text-[0.9rem] text-[#DEAE56]">the {periodName(props.year).toLowerCase()}</span>
+          </motion.p>
+        )}
+      </div>
+
+      {props.isSpinning ? null : (
         <motion.p
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}

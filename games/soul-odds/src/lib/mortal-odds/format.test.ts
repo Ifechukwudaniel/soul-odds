@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fmtNumber, fmtPeople, fmtYear, periodName } from "@/lib/mortal-odds/format";
+import { fmtNumber, fmtPeople, fmtYear, periodName, yearReelParts } from "@/lib/mortal-odds/format";
 
 describe("fmtNumber", () => {
   it("adds thousands separators and rounds to 2 decimals", () => {
@@ -65,5 +65,15 @@ describe("periodName", () => {
     [1950, "Modern era"],
   ])("maps year %i to %s", (year, expected) => {
     expect(periodName(year)).toBe(expected);
+  });
+});
+
+describe("yearReelParts", () => {
+  it("reads like fmtYear once the number is grouped and joined to its suffix", () => {
+    for (const year of [-50000, -12000, -5712, -100, 0, 1, 383, 1000, 1499, 1500, 1800, 2026]) {
+      const { value, suffix } = yearReelParts(year);
+      const number = value >= 10000 ? fmtNumber(value) : String(value);
+      expect(`${number}${suffix}`).toBe(fmtYear(year));
+    }
   });
 });
