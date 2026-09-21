@@ -4,6 +4,7 @@ import { ClaimReward } from "../ClaimReward";
 import { ReferralQuestsList } from "./ReferralQuest";
 import { DoubleCoinIcon } from "@/components/assets/DoubleCoinIcon";
 import { useAppStore } from "@/services/store/store";
+import { playClickSound } from "@/utils/playClickSound";
 
 export const ReferralButton: React.FC<ReferralQuestsList> = ({ count, reward, completed, claimed }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -13,6 +14,7 @@ export const ReferralButton: React.FC<ReferralQuestsList> = ({ count, reward, co
 
   const openModal = () => {
     if (claimed) return;
+    playClickSound();
     setIsModalOpen(true);
     updateBalance(balance + reward);
     updateTotalReferedCliamed(count);

@@ -3,6 +3,7 @@ import { ClaimReward } from "../touchswap/ClaimReward";
 import { useAppStore } from "@/services/store/store";
 import { LinkTask, QuestList } from "@/types";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
+import { playClickSound } from "@/utils/playClickSound";
 
 type Props = {
   quest: QuestList;
@@ -58,6 +59,7 @@ const Tasks = ({
 
   const openModal = () => {
     if (claimed) return;
+    playClickSound();
     setIsModalOpen(true);
     updateBalance(balance + reward);
     onClaim();
@@ -74,7 +76,10 @@ const Tasks = ({
   
     return (
       <button
-        onClick={() => onTaskOpen(index)}
+        onClick={() => {
+          playClickSound();
+          onTaskOpen(index);
+        }}
         className="text-sm bg-white text-black py-2 px-2 rounded-lg font-medium"
       >
         Start
@@ -127,6 +132,7 @@ export const OpenQuestDetailScreen: React.FC<Props> = ({ quest, handleTaskOpen, 
   const setScreen = useAppStore(store => store.setScreen);
 
   const goBack = () => {
+    playClickSound();
     setScreen("quests");
   };
   return (

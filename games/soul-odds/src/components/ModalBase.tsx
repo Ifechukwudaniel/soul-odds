@@ -3,6 +3,7 @@ import Image from "next/image";
 import { CloseIcon } from "./assets/CloseIcon";
 import { DoubleCoin } from "./assets/DoubleCoin";
 import { useAppStore } from "@/services/store/store";
+import { playClickSound } from "@/utils/playClickSound";
 import { AnimatePresence, motion } from "framer-motion";
 
 type ModalProps = {
@@ -157,7 +158,13 @@ export const Modal: React.FC<ModalProps> = ({
               </button>
             )}
 
-            <button className="absolute top-3 right-3 py-2 px-4 mt-3 cursor-pointer" onClick={onClose}>
+            <button
+              className="absolute top-3 right-3 py-2 px-4 mt-3 cursor-pointer"
+              onClick={() => {
+                playClickSound();
+                onClose?.();
+              }}
+            >
               <CloseIcon />
             </button>
           </motion.div>

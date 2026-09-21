@@ -3,6 +3,7 @@ import { Balance } from "../Balance";
 import { Modal } from "../ModalBase";
 import { OpenBtnIcon } from "../assets/OpenBtnIcon";
 import { TBoost, useAppStore } from "@/services/store/store";
+import { playClickSound } from "@/utils/playClickSound";
 /* import { HapticFeedback, initHapticFeedback, isSSR } from "@tma.js/sdk-react";
  */
 type BoostCardProps = {
@@ -34,6 +35,7 @@ export const BoostCard: React.FC<BoostCardProps> = ({ title, icon, desc, initial
   }, [boosts, id]);
 
   const openModal = () => {
+    playClickSound();
     hapticFeedback?.impactOccurred("heavy");
     setIsModalOpen(true);
   };
@@ -43,6 +45,7 @@ export const BoostCard: React.FC<BoostCardProps> = ({ title, icon, desc, initial
   };
 
   const handleBuyBoost = () => {
+    playClickSound();
     if (currentBoost) {
       const { cost, level, maximumLevel, boostId } = currentBoost;
       const totalCost = cost!;

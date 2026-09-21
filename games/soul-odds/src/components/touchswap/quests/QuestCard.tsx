@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Balance } from "../../Balance";
 import { ArrowRight } from "@/components/assets/ArrowRight";
 import { TScreens, useAppStore } from "@/services/store/store";
+import { playClickSound } from "@/utils/playClickSound";
 
 type QuestCardProps = {
   title: string;
@@ -14,6 +15,7 @@ export const QuestCard: React.FC<QuestCardProps> = ({ title, page }) => {
   const setScreen = useAppStore(state => state.setScreen);
 
   const handleQuestSelect = () => {
+    playClickSound();
     setScreen(page as TScreens);
   };
 

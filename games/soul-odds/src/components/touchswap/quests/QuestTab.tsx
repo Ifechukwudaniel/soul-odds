@@ -1,3 +1,5 @@
+import { playClickSound } from "@/utils/playClickSound";
+
 type QuestTabProps = {
   activeTab: number;
   setActiveTab: (tab: number) => void;
@@ -9,14 +11,20 @@ export const QuestTab = ({ activeTab, setActiveTab }: QuestTabProps) => {
       <a
         role="tab"
         className={`${activeTab === 0 ? "tab-active text-white" : "text-[#AFAFAF]"}  pb-2`}
-        onClick={() => setActiveTab(0)}
+        onClick={() => {
+          playClickSound();
+          setActiveTab(0);
+        }}
       >
         <span>Open Quests</span>
       </a>
       <a
         role="tab"
         className={` ${activeTab === 1 ? "tab-active text-white" : "text-[#AFAFAF]"}`}
-        onClick={() => setActiveTab(1)}
+        onClick={() => {
+          playClickSound();
+          setActiveTab(1);
+        }}
       >
         <span>Referral Quests</span>
       </a>
