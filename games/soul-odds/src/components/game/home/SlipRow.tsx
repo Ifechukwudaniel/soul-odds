@@ -8,7 +8,7 @@ export const SlipRow = (props: { bet: Bet; potentialWin: number | null; onRemove
   const label = betLabel(props.bet);
 
   return (
-    <div className="flex items-center justify-between gap-2 rounded-lg border border-white/10 bg-black/60 px-3 py-2 shadow-[inset_0_1px_0_0_#ffffff0d]">
+    <div className="flex items-center justify-between gap-2 rounded-lg border mystic-glass border-white/10 bg-black/60 px-3 py-2 shadow-[inset_0_1px_0_0_#ffffff0d]">
       <div>
         <span className="block text-white/50 text-xs">{label.market}</span>
         <span className="font-semibold text-sm text-white">{label.pick}</span>

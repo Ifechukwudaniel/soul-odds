@@ -25,9 +25,9 @@ export const WhenSlide = (props: {
   const spinningYear = displayYear ?? props.displayYear ?? 0;
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-5 overflow-y-auto text-center">
-      <h2 className={`${serifFont.className} font-bold text-3xl text-white sm:text-4xl`}>In which age?</h2>
-      <p className="max-w-lg text-[0.8rem] text-white/50">{INTRO}</p>
+    <div className="flex h-full flex-col items-center  gap-5 overflow-y-auto text-center">
+      <h2 className={`${serifFont.className} font-bold text-3xl text-[#F1D6AE] sm:text-4xl leading-[0.55] pt-[0.5rem]`}>In which age?</h2>
+      <p className="max-w-lg text-[0.8rem] text-[#f1f1f2c0]">{INTRO}</p>
 
       <div className="w-full max-w-2xl">
         <PopulationChart
@@ -55,17 +55,21 @@ export const WhenSlide = (props: {
         </div>
       ) : (
         <motion.p
-          initial={{ scale: 1.15, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 220, damping: 18 }}
-          className={`${serifFont.className} flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-2 text-center font-bold text-xl text-white sm:text-xl`}
-        >
+        initial={{ scale: 1.15, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 220, damping: 18 }}
+        className={`${serifFont.className} flex flex-col items-center justify-center px-2 text-center font-bold text-xl text-white sm:text-xl `}
+      >
+        <span className="flex items-center justify-center gap-x-2">
           <span>{fmtYear(props.year)}</span>
           <span className="text-white/40">·</span>
-          <span>{fmtNumber(yearsAgo)} years ago</span>
-          <span className="text-white/40">·</span>
-          <span>the {periodName(props.year).toLowerCase()}</span>
-        </motion.p>
+          <span >{fmtNumber(yearsAgo)} years ago</span>
+        </span>
+      
+        <span className="mt-1 text-[0.9rem] text-[#DEAE56] ">
+          the {periodName(props.year).toLowerCase()}
+        </span>
+      </motion.p>
       )}
 
       {props.isSpinning ? (

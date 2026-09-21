@@ -40,11 +40,15 @@ export const BetPanel = (props: {
     <GameCard className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto" containerClassName="flex h-full w-full flex-col">
       <h2 className={`${serifFont.className} font-bold text-white"`}>Your wager</h2>
 
-      <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/60 px-4 py-3">
-        <CurrencyCoinIcon width={28} height="28" />
-        <span className="font-bold text-2xl text-white">{atRisk.toFixed(2)}</span>
-        <span className="text-white/50">{props.currency}</span>
-      </div>
+      <div className="mystic-glass flex items-center gap-2 rounded-xl px-4 py-3">
+  <CurrencyCoinIcon width={28} height={"28"} />
+
+  <span className="text-2xl font-bold text-white">
+    {atRisk.toFixed(2)}
+  </span>
+
+  <span className="text-white/50">{props.currency}</span>
+</div>
 
       <PotentialWinSummary amount={totalPotentialWin} currency={props.currency} betCount={bets.length} />
 

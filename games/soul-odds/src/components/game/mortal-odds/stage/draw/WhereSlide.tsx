@@ -5,12 +5,14 @@ import { ROAM_DURATION, WorldMap } from "@/components/game/mortal-odds/stage/map
 import { fmtYear } from "@/lib/mortal-odds/format";
 import type { Place } from "@/types";
 import { Frame } from "@/components/assets/Frame";
+import { serifFont } from "@/styles/serif-font";
+
 
 export const WhereSlide = (props: { year: number; place: Place; local: string }) => (
   <div className="flex h-full flex-col items-center gap-3 text-center">
     <div className="shrink-0">
-      <h3 className="font-bold text-white text-xl">In which land?</h3>
-      <p className="mt-1 max-w-lg text-sm text-white/50">
+      <h3 className={`${serifFont.className} font-bold text-3xl text-[#F1D6AE] sm:text-4xl leading-[0.75] pt-[0.5rem]`}>In which land?</h3>
+      <p className="mt-1 max-w-lg text-sm text-[0.8rem] text-[#f1f1f2c0]">
         Where people lived in {fmtYear(props.year)}. Brighter clusters held more people.
       </p>
     </div>
@@ -35,9 +37,9 @@ export const WhereSlide = (props: { year: number; place: Place; local: string })
     >
       <p className="font-bold text-white text-xl">
         {props.place.name}
-        <span className="font-medium text-sm text-white/40"> · {props.place.continent}</span>
+        <span className="font-medium text-sm text-[#DEAE56]"> · {props.place.continent}</span>
       </p>
-      <p className="mt-0.5 text-sm text-white/60">{props.local}</p>
+      <p className="mt-0.5 text-[0.8rem] text-[#f1f1f2c0]">{props.local}</p>
     </motion.div>
   </div>
 );

@@ -15,7 +15,7 @@ export const SoundToggleButton = () => {
         playClickSound();
         toggle();
       }}
-      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/60 text-white transition-colors hover:bg-white/10"
+      className="mystic-glass cursor-pointer flex h-9 w-9 items-center justify-center rounded-full border text-white transition-colors hover:bg-white/10 "
     >
       {isMuted ? <FaVolumeMute size={16} /> : <FaVolumeUp size={16} />}
     </button>

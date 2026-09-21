@@ -86,9 +86,9 @@ export const MortalOddsStage = (props: {
             />
           )}
 
-          {round.phase === "predicting" && round.draw && round.prices && (
+          {round.phase === "predicting" && round.draw && props.prices && (
             <PredictionsPanel
-              prices={round.prices}
+              prices={props.prices}
               chipSize={props.chipSize}
               bets={props.bets}
               onSetChoice={props.onSetChoice}
@@ -97,11 +97,11 @@ export const MortalOddsStage = (props: {
             />
           )}
 
-          {round.phase === "confirming" && round.draw && round.prices && (
+          {round.phase === "confirming" && round.draw && props.prices && (
             <BetSummary
               draw={round.draw}
               bets={props.bets}
-              prices={round.prices}
+              prices={props.prices}
               priceDeathYear={round.priceDeathYear}
               charges={props.charges}
               currency={props.currency}

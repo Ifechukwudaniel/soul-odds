@@ -107,14 +107,14 @@ export const BetSummary = (props: {
           )}
 
           <div className="grid grid-cols-2 gap-3">
-            <div className="flex items-center justify-between gap-2 rounded-xl border border-white/10 bg-black/60 px-4 py-2.5">
+            <div className="flex items-center justify-between gap-2 rounded-xl border mystic-glass  bg-black/80 px-4 py-2.5">
               <span className="text-[12px] text-white/50 tracking-[0.15em]">Total stake</span>
               <span className="flex items-center gap-1 font-bold text-sm text-white">
                 <CurrencyCoinIcon width={14} height="14" />
                 {totalStake.toFixed(2)}
               </span>
             </div>
-            <div className="flex items-center justify-between gap-2 rounded-xl border border-white/10 bg-black/60 px-4 py-2.5">
+            <div className="flex items-center justify-between gap-2 rounded-xl border mystic-glass bg-black/80 px-4 py-2.5">
               <span className="text-[12px] text-white/50 tracking-[0.15em]">Potential win</span>
               <span className="flex items-center gap-1 font-bold text-[#F5B83D] text-base">
                 <CurrencyCoinIcon width={18} height="18" />
