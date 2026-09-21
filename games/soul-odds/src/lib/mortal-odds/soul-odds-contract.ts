@@ -65,7 +65,7 @@ export function encodeMortalOddsPrediction(bets: Record<string, Bet>): Hex {
   return encodePrediction(buildPrediction(bets));
 }
 
-const settledGameStateAbi = [
+export const settledGameStateAbi = [
   {
     type: "tuple",
     components: [

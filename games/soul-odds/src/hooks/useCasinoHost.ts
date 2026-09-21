@@ -1,20 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  connectGameToHost,
-  observeGameContentSize,
-  type GuestBridgeConnection,
-  type HostApiV1,
-  type HostSnapshotV1,
-} from "@chain/casino-sdk/guest";
+import { connectGameToHost, observeGameContentSize, type HostApiV1, type HostSnapshotV1 } from "@chain/casino-sdk/guest";
+import { connectDemoHost, isStandalone } from "@/lib/demo-host";
 
 type SnapshotListener = (snapshot: HostSnapshotV1 | null) => void;
 
 type HostBridge = {
-  connection: GuestBridgeConnection;
+  promise: Promise<HostApiV1>;
   listeners: Set<SnapshotListener>;
-  latest: HostSnapshotV1 | null;
+  latest: () => HostSnapshotV1 | null;
 };
 
 let bridge: HostBridge | undefined;
@@ -22,23 +17,26 @@ let bridge: HostBridge | undefined;
 /**
  * One connection per page. The host binds its guest proxy to the first
  * handshake, so connecting again on a remount (StrictMode in dev) would leave
- * the host pushing into a destroyed connection.
+ * the host pushing into a destroyed connection. Opened outside the host iframe,
+ * the page talks to a local demo host instead, so the game is playable on its own.
  */
 function hostBridge(): HostBridge {
   if (bridge) return bridge;
   const listeners = new Set<SnapshotListener>();
-  const created: HostBridge = {
-    listeners,
-    latest: null,
-    connection: connectGameToHost({
-      async setState(snapshot) {
-        created.latest = snapshot;
-        listeners.forEach((listener) => listener(snapshot));
-      },
-    }),
+  let latest: HostSnapshotV1 | null = null;
+  const publish = (snapshot: HostSnapshotV1 | null) => {
+    latest = snapshot;
+    listeners.forEach((listener) => listener(snapshot));
   };
-  bridge = created;
-  return created;
+  const promise = isStandalone()
+    ? connectDemoHost(publish)
+    : connectGameToHost({
+        async setState(snapshot) {
+          publish(snapshot);
+        },
+      }).promise;
+  bridge = { promise, listeners, latest: () => latest };
+  return bridge;
 }
 
 /**
@@ -53,18 +51,17 @@ export function useCasinoHost(): {
   const [snapshot, setSnapshot] = useState<HostSnapshotV1 | null>(null);
 
   useEffect(() => {
-    const { connection, listeners, latest } = hostBridge();
+    const { promise, listeners, latest } = hostBridge();
     let mounted = true;
     listeners.add(setSnapshot);
-    setSnapshot(latest);
+    setSnapshot(latest());
 
-    void connection.promise
+    void promise
       .then((parent) => {
         if (mounted) setHostApi(parent);
       })
       .catch(() => {
-        // Handshake failed — the "waiting for host" screen stays up. Opening
-        // the game outside the host iframe never resolves, which is expected.
+        // Handshake with the host iframe failed — the "waiting for host" screen stays up.
       });
 
     return () => {
