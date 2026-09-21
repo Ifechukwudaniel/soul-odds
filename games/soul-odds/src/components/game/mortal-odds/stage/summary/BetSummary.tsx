@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { GiScales } from "react-icons/gi";
 import { CurrencyCoinIcon } from "@/components/assets/CurrencyCoinIcon";
+import { AnubisBackdrop } from "@/components/game/AnubisBackdrop";
 import { GameButton } from "@/components/game/GameButton";
 import { GameCard } from "@/components/game/home/GameCard";
 import { betLabel, betOdds } from "@/lib/mortal-odds/bets";
@@ -34,7 +35,9 @@ export const BetSummary = (props: {
   const truthsSubtitle = `${pickCountWord} truth${pickCount === 1 ? "" : "s"} ${pickCount === 1 ? "stands" : "stand"} before the scales.`;
 
   return (
-    <GameCard className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto" containerClassName="flex h-full w-full flex-col">
+    <GameCard className="relative isolate flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto" containerClassName="flex h-full w-full flex-col">
+      <AnubisBackdrop />
+
       <div className="flex items-center justify-between">
         <GameButton variant="secondary" onClick={props.onBack} className="px-3 py-1.5 text-sm">
           ← Change your reading

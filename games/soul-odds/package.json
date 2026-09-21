@@ -19,6 +19,7 @@
     "db:seed": "dotenv -e .env -- tsx src/services/seedDb.ts",
     "game:socket-server": "tsx src/server/index.ts",
     "check:types": "tsc --noEmit --pretty",
+    "test:unit": "vitest run --config vitest.unit.config.ts",
     "lint": "ultracite check --type-aware --type-check",
     "lint:fix": "ultracite fix --type-aware --type-check"
   },

@@ -2,30 +2,27 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { LuChartColumn } from "react-icons/lu";
 import { CurrencyCoinIcon } from "@/components/assets/CurrencyCoinIcon";
+import { AnubisBackdrop } from "@/components/game/AnubisBackdrop";
 import { GameButton } from "@/components/game/GameButton";
 import { GameCard } from "@/components/game/home/GameCard";
 import { BetResultStamp } from "@/components/game/mortal-odds/stage/reveal/BetResultStamp";
 import { BetsBreakdown } from "@/components/game/mortal-odds/stage/reveal/BetsBreakdown";
 import { LifespanChart } from "@/components/game/mortal-odds/stage/reveal/LifespanChart";
+import { RevealHeader } from "@/components/game/mortal-odds/stage/reveal/RevealHeader";
+import { RevealSection } from "@/components/game/mortal-odds/stage/reveal/RevealSection";
 import { RevealStamp } from "@/components/game/mortal-odds/stage/reveal/RevealStamp";
-import { fmtYear } from "@/lib/mortal-odds/format";
-import { serifFont } from "@/styles/serif-font";
+import { SoulRecord } from "@/components/game/mortal-odds/stage/reveal/SoulRecord";
+import { SoulStory } from "@/components/game/mortal-odds/stage/reveal/SoulStory";
 import { playClickSound } from "@/utils/playClickSound";
 import type { RevealResult } from "@/hooks/useMortalOddsDraw";
 import type { Place, RoundCharge } from "@/types";
 
 const STAMP_DELAY_MS = 1500;
 
-const FactCard = (props: { label: string; value: string }) => (
-  <div className="rounded-lg border border-white/10 bg-[#000000]/30 px-3 py-2 text-left">
-    <p className="text-[10px] text-white/40 uppercase tracking-[0.15em]">{props.label}</p>
-    <p className="font-semibold text-sm text-white">{props.value}</p>
-  </div>
-);
-
 export const RevealPanel = (props: { reveal: RevealResult; place: Place; currentYear: number; currency: string; charges: RoundCharge[]; onNext: () => void; drawCost: number; canAffordDraw: boolean }) => {
-  const { life, results, net, skill, story, lifespan, realMedianAge, bookieMedianAge } = props.reveal;
+  const { life, results, net, skill, story, epitaph, lifespan, realMedianAge, bookieMedianAge } = props.reveal;
   const [stampReady, setStampReady] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
@@ -49,29 +46,24 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
 
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: "easeOut" }} className="flex h-full w-full flex-col">
-      <GameCard className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto" containerClassName="flex h-full w-full flex-col">
-        <h3 className={`${serifFont.className} font-bold text-2xl text-white`}>{fate}</h3>
+      <GameCard className="relative isolate flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto" containerClassName="flex h-full w-full flex-col">
+        <AnubisBackdrop />
+        <RevealHeader fate={fate} placeName={props.place.name} bornYear={life.year} deathYear={life.deathYear} epitaph={epitaph} alive={alive} />
 
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-6">
-          <FactCard label="Born" value={`${fmtYear(life.year)}, ${props.place.name}`} />
-          <FactCard label={alive ? "Projected death" : "Died"} value={fmtYear(life.deathYear)} />
-          <FactCard label="Cause" value={life.shock ? life.shock.label : "Ordinary life and death"} />
-          <FactCard label="Literate" value={life.literate ? "Yes" : "No"} />
-          <FactCard label="Lived in a city" value={life.city ? "Yes" : "No"} />
-          <FactCard label="Sin" value={life.sin ? life.sin.label : "Clean"} />
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+          <SoulStory story={story} />
+          <SoulRecord life={life} placeName={props.place.name} alive={alive} />
         </div>
 
-        <p className={`${serifFont.className} text-base text-white/80 leading-relaxed`}>{story}</p>
-
-        <div>
-          <p className="mb-1 flex flex-wrap gap-x-3 gap-y-1 text-white/50 text-xs">
+        <RevealSection icon={LuChartColumn} title="Age at death">
+          <p className="flex flex-wrap gap-x-3 gap-y-1 text-white/50 text-xs">
             <span className="text-[#3FB6A8]">■ Real spread</span>
             <span className="text-[#F5B83D]">- - Bookie assumed</span>
             <span className="text-[#F5B83D]">○ Bookie's typical age</span>
             <span className="text-[#4C6FD1]">● Real typical age</span>
           </p>
           <LifespanChart histogram={lifespan} deathAge={life.age} realMedianAge={realMedianAge} bookieMedianAge={bookieMedianAge} />
-        </div>
+        </RevealSection>
 
         {results.length === 0 && <p className="text-white/50 text-sm">No bets this round. Just watching.</p>}
 

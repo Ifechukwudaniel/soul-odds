@@ -35,6 +35,7 @@ import {
   previewSinsPrices,
   toTrueProbabilities,
 } from "@/lib/mortal-odds/soul-odds-contract";
+import { pickEpitaph } from "@/lib/mortal-odds/epitaph";
 import { tellStory } from "@/lib/mortal-odds/story";
 import { useCasinoHost } from "@/hooks/useCasinoHost";
 import { playClickSound } from "@/utils/playClickSound";
@@ -42,6 +43,7 @@ import type { Bet, BetResult, Draw, EraFilter, Life, MarketPrices, PlaceContext,
 
 const CURRENT_YEAR = new Date().getFullYear();
 const SPIN_DURATION_S = 0.75;
+const RECENT_EPITAPHS_KEPT = 8;
 const SPIN_YEAR_RANGE = CURRENT_YEAR + 12000;
 
 const fullModelConfig: FullModelConfig = { curves: bookieCurves, mods: regionModifiersConfig, shocks: shocksConfig, sins: sinsConfig };
@@ -63,6 +65,7 @@ export type RevealResult = {
   net: number;
   skill: number;
   story: string;
+  epitaph: string;
   lifespan: LifespanHistogram;
   realMedianAge: number;
   bookieMedianAge: number;
@@ -181,6 +184,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   const [session, setSession] = useState<Session | null>(null);
   const pendingBets = useRef<Record<string, Bet> | null>(null);
   const submittedFor = useRef<string | null>(null);
+  const recentEpitaphs = useRef<string[]>([]);
   const decimals = snapshot?.token.decimals ?? 18;
 
   useEffect(() => () => spin.current?.stop(), []);
@@ -291,12 +295,14 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
       const truthSamples = simulateFull({ year: draw.year, region: draw.region, rng, config: fullModelConfig, sims: SIMS });
       const childDeathShare = truthSamples.filter((s) => s.age < 5).length / truthSamples.length;
       const story = tellStory({ life, place: draw.place, currentYear: CURRENT_YEAR, childDeathShare, jobs: jobsConfig, rng });
+      const epitaph = pickEpitaph({ life, currentYear: CURRENT_YEAR, placeName: draw.place.name, rng, recent: recentEpitaphs.current });
+      recentEpitaphs.current = [epitaph.id, ...recentEpitaphs.current].slice(0, RECENT_EPITAPHS_KEPT);
       const lifespan = buildLifespanHistogram({ truthSamples, bookieSamples });
       const realMedianAge = medianAge(truthSamples);
       const bookieMedianAge = medianAge(bookieSamples);
 
       pendingBets.current = null;
-      dispatch({ type: "reveal", reveal: { life, results, net, skill, story, lifespan, realMedianAge, bookieMedianAge } });
+      dispatch({ type: "reveal", reveal: { life, results, net, skill, story, epitaph: epitaph.text, lifespan, realMedianAge, bookieMedianAge } });
     } catch {
       // The deployed title's bytecode doesn't match this app's expected game-state shape (e.g. a
       // stale local chain still running an older SoulOddsEngine) — surface it, don't crash.
