@@ -57,6 +57,14 @@ export async function updateUser(user: Partial<User> & { address: string }): Pro
     .where(eq(userSchema.address, normalizeAddress(address)));
 }
 
+export async function updateTaskes(address: string, ids: number[]): Promise<void> {
+  const uniqueIds = Array.from(new Set(ids));
+  await db
+    .update(userSchema)
+    .set({ taskesCompleted: uniqueIds })
+    .where(eq(userSchema.address, normalizeAddress(address)));
+}
+
 export async function useTokens(address: string, amount: number): Promise<void> {
   const user = await findUser(address);
 

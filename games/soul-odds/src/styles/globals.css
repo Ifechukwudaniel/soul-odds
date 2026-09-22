@@ -754,6 +754,134 @@ a[href][aria-disabled="true"],
   box-shadow: 0.88px 2.63px 1.32px 0px #ffffff47 inset;
 }
 
+.mystic-glass-gold {
+  position: relative;
+  border: 1px solid transparent;
+
+  background:
+    linear-gradient(
+      rgba(11, 10, 8, 0.93),
+      rgba(7, 7, 6, 0.95)
+    ) padding-box,
+
+    linear-gradient(
+      135deg,
+      rgba(255, 244, 210, 0.42) 0%,
+      rgba(218, 183, 103, 0.34) 24%,
+      rgba(255, 255, 255, 0.08) 48%,
+      rgba(184, 143, 63, 0.28) 74%,
+      rgba(255, 222, 145, 0.2) 100%
+    ) border-box;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 239, 193, 0.06),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+    0 8px 22px rgba(0, 0, 0, 0.38);
+}
+
+.mystic-glass-gold::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+
+  background: linear-gradient(
+    115deg,
+    transparent 18%,
+    rgba(255, 246, 215, 0.38) 36%,
+    rgba(226, 189, 106, 0.3) 47%,
+    transparent 63%
+  );
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.mystic-glass-gold:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 239, 193, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+    0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.mystic-glass-gold-strong {
+  position: relative;
+  border: 1px solid transparent;
+
+  background:
+    linear-gradient(
+      rgba(12, 10, 7, 0.94),
+      rgba(7, 6, 5, 0.97)
+    ) padding-box,
+
+    linear-gradient(
+      135deg,
+      rgba(255, 246, 214, 0.72) 0%,
+      rgba(239, 204, 128, 0.58) 18%,
+      rgba(181, 138, 55, 0.42) 38%,
+      rgba(255, 255, 255, 0.12) 52%,
+      rgba(180, 136, 50, 0.48) 74%,
+      rgba(246, 212, 136, 0.6) 90%,
+      rgba(255, 241, 195, 0.38) 100%
+    ) border-box;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 242, 196, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.65),
+    0 8px 24px rgba(0, 0, 0, 0.45),
+    0 0 18px rgba(196, 151, 58, 0.08);
+}
+
+.mystic-glass-gold-strong::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+
+  background: linear-gradient(
+    115deg,
+    transparent 12%,
+    rgba(255, 248, 224, 0.7) 29%,
+    rgba(255, 224, 145, 0.55) 42%,
+    transparent 58%,
+    rgba(225, 187, 99, 0.35) 78%,
+    transparent 92%
+  );
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.mystic-glass-gold-strong:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 242, 196, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.65),
+    0 10px 28px rgba(0, 0, 0, 0.5),
+    0 0 22px rgba(214, 169, 73, 0.14);
+}
+
 /* Layered so Tailwind's utilities (in @layer utilities) can still override this default -
    an unlayered rule here would always win over any Tailwind color class on a <p>, regardless
    of specificity. */

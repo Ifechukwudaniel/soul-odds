@@ -41,6 +41,7 @@ export const userSchema = pgTable('user', {
   totalProfit: numeric('total_profit', { precision: 20, scale: 2, mode: 'number' })
     .default(0)
     .notNull(),
+  taskesCompleted: integer('taskes_completed').array().notNull().default([]),
   updatedAt: timestamp('updated_at', { mode: 'date' })
     .defaultNow()
     .$onUpdate(() => new Date())
