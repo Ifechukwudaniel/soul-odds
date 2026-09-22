@@ -55,7 +55,7 @@ export default function GamePage() {
   const screenRender = screens[screen];
 
   const hostBalance = Number(
-    formatUnits(BigInt(snapshot.balances.smartVaultBalance ?? "0"), snapshot.token.decimals ?? 18),
+    formatUnits(BigInt(snapshot?.balances.smartVaultBalance ?? "0"), snapshot?.token.decimals ?? 18),
   );
 
   /** Mirrors the host's real balance into the store; only reruns when the host's own number changes. */
@@ -98,7 +98,7 @@ export default function GamePage() {
     <div className="flex h-screen w-full flex-col">
       <GameHeader
         balance={user.balance}
-        currency={snapshot.token.symbol ?? "deben"}
+        currency={snapshot?.token.symbol ?? "deben"}
         avatar={<AvatarIcon width={24} height="24" />}
         onOpenProfile={() => setIsProfileOpen(true)}
       />

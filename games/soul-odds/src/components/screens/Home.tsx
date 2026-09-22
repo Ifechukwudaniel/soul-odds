@@ -66,9 +66,11 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
   // outcome comes back instead of synchronously from onPlaceBet.
   useEffect(() => {
     if (!round.reveal || round.reveal === restoredReveal) return;
-    player.commitRound({ net: round.reveal.net, skill: round.reveal.skill });
+    player.commitRound({
+      net: round.reveal.net, skill: round.reveal.skill,
+      totalStake: 0
+    });
     slip.reset();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round.reveal]);
 
   useEffect(() => {
