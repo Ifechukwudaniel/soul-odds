@@ -1,4 +1,5 @@
 @import './font.css';
+@import 'react-toastify/dist/ReactToastify.css';
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -72,6 +73,50 @@ main {
   --anubis-carnelian: #b7410e;
   --anubis-papyrus: #e8dcc0;
   --anubis-obsidian: #0b0a08;
+}
+
+/*
+ * react-toastify skin (utils/notifications.tsx): the papyrus-banner card, and the built-in
+ * progress bar recolored per status — no hand-rolled countdown. Selectors are double-classed to
+ * out-specificity the imported base stylesheet regardless of merge order, and colors are set as
+ * literal values rather than by overriding react-toastify's own CSS variables, since Tailwind's
+ * build can flatten those at build time before any runtime specificity would get a say.
+ */
+.Toastify__toast.Toastify__toast {
+  width: 24rem;
+  min-height: auto;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.55), 0 3px 0 0 #7a5a1f80, inset 0 1px 0 0 #fff8e8b3;
+  background: linear-gradient(to bottom, #f3ead2, var(--anubis-papyrus));
+  border: 2px solid var(--anubis-gold-leaf);
+  color: #33353d;
+  font-family: inherit;
+}
+
+.Toastify__progress-bar--wrp.Toastify__progress-bar--wrp {
+  height: 4px;
+  border-radius: 0 0 1rem 1rem;
+}
+
+.Toastify__progress-bar--bg.Toastify__progress-bar--bg {
+  opacity: 0.25;
+}
+
+.Toastify__progress-bar--success.Toastify__progress-bar--success {
+  background: #6ba84f;
+}
+
+.Toastify__progress-bar--info.Toastify__progress-bar--info {
+  background: var(--anubis-faience);
+}
+
+.Toastify__progress-bar--warning.Toastify__progress-bar--warning {
+  background: var(--anubis-gold);
+}
+
+.Toastify__progress-bar--error.Toastify__progress-bar--error {
+  background: var(--anubis-carnelian);
 }
 
 /*
@@ -419,6 +464,16 @@ a[href][aria-disabled="true"],
     inset 0 1px 0 rgba(255, 255, 255, 0.045),
     inset 0 -1px 0 rgba(0, 0, 0, 0.5),
     0 8px 22px rgba(0, 0, 0, 0.35);
+}
+
+/* Toast auto-dismiss countdown (utils/notifications.tsx): the gold bar shrinks left-to-right over the toast's duration. */
+@keyframes toast-countdown {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
 }
 
 /* Shared modal entrance (components/game/GameDialog.tsx): rises in over a fading backdrop. */

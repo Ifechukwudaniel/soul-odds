@@ -198,6 +198,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   defaultDeathGuess: number | null;
   reveal: RevealResult | null;
   error: string | null;
+  isOpeningSession: boolean;
   sessionKey: string | null;
   wagerWei: string | null;
   samplesSeed: number | null;
@@ -216,6 +217,8 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   const submittedFor = useRef<string | null>(null);
   const recentEpitaphs = useRef<string[]>([]);
   const recentTimeStories = useRef<string[]>([]);
+  const [isOpeningSession, setIsOpeningSession] = useState(false);
+  const openingSession = useRef(false);
   const decimals = snapshot?.token.decimals ?? 18;
 
   useEffect(() => () => spin.current?.stop(), []);
@@ -278,7 +281,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   };
 
   const drawHuman = (chipSize: number) => {
-    if (state.phase === "drawing") return;
+    if (state.phase === "drawing" || openingSession.current) return;
 
     // A redraw only rerolls the local flavor (year/region/place) — the round's session and its
     // already-escrowed wager, opened on the first draw, stay exactly as they are.
@@ -291,6 +294,8 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
 
     if (!hostApi) return;
     const wagerWei = parseUnits(String(chipSize), decimals);
+    openingSession.current = true;
+    setIsOpeningSession(true);
     void hostApi
       .openSession({ wager: wagerWei.toString(), gameData: "0x" })
       .then(({ sessionKey }) => {
@@ -300,6 +305,10 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
       })
       .catch((cause) => {
         dispatch({ type: "fail", error: cause instanceof Error ? cause.message : "Failed to open the round." });
+      })
+      .finally(() => {
+        openingSession.current = false;
+        setIsOpeningSession(false);
       });
   };
 
@@ -405,6 +414,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     defaultDeathGuess: state.defaultDeathGuess,
     reveal: state.reveal,
     error: state.error,
+    isOpeningSession,
     sessionKey: session?.key ?? null,
     wagerWei: session ? session.wagerWei.toString() : null,
     samplesSeed: state.samplesSeed,

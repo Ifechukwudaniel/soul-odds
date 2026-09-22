@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useEffect } from "react";
-import { Toaster } from "react-hot-toast";
+import { ToastContainer } from "react-toastify";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Loader } from "@/components/Loader";
 import { AppWalletProvider } from "@/components/provider/AppWalletProvider";
@@ -46,7 +46,7 @@ export const GameProviders = (props: { children: React.ReactNode }) => {
                 <AppWalletProvider>{props.children}</AppWalletProvider>
               </div>
             </main>
-          <Toaster />
+          <ToastContainer theme="light" />
         </Suspense>
     </ErrorBoundary>
   );
