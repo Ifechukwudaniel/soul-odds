@@ -31,12 +31,13 @@ export async function findAllUsers(): Promise<User[]> {
   return db.select().from(userSchema);
 }
 
-export async function createUser(address: string, referredBy?: string): Promise<User> {
+export async function createUser(address: string, referredBy?: string, balance?: number): Promise<User> {
   const [created] = await db
     .insert(userSchema)
     .values({
       address: normalizeAddress(address),
       referredBy: referredBy ? normalizeAddress(referredBy) : undefined,
+      ...(balance !== undefined && { balance }),
     })
     .returning();
 

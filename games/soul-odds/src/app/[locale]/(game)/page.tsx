@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { SetStateAction } from "react";
 import { formatUnits } from "viem";
 import { getAvatarById } from "@/components/assets/characters/avatars";
@@ -22,6 +22,7 @@ import {
 } from "@/components/screens";
 import { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
 import { badgesLists } from "@/services/data/badgeData";
+import { registerUser } from "@/services/data/user";
 import { socketInstance } from "@/services/socket";
 import { useAppStore } from "@/services/store/store";
 import { formatAddress } from "@/utils";
@@ -62,6 +63,24 @@ export default function GamePage() {
   useEffect(() => {
     updateUser({ balance: hostBalance });
   }, [hostBalance, updateUser]);
+
+  const walletAddress = snapshot?.wallet.address;
+  const syncedAddressRef = useRef<string | undefined>(undefined);
+
+  /**
+   * Registers the connected wallet as a user and mirrors its address into the
+   * store. Runs once per wallet address per app entry (not gated on the
+   * store's persisted address) so a returning user's balance is re-synced to
+   * their wallet on every login, not just on first-ever signup.
+   */
+  useEffect(() => {
+    if (!walletAddress || syncedAddressRef.current === walletAddress) return;
+    syncedAddressRef.current = walletAddress;
+    updateUser({ address: walletAddress });
+    registerUser(walletAddress, undefined, hostBalance).catch(() => {
+      // Already logged in registerUser; a failed registration here just leaves the row unwritten.
+    });
+  }, [walletAddress, hostBalance, updateUser]);
 
   useEffect(() => {
     const handleConnect = () => {

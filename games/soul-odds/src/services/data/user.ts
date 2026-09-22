@@ -11,3 +11,21 @@ export const getUser = async (address:string) :Promise<User>=> {
     throw new Error("Could not get user refers ");
   }
 };
+
+/**
+ * Registers a user for the given wallet address if one doesn't already exist,
+ * seeding or syncing their balance to the wallet's real balance either way.
+ * @param address The connected wallet address.
+ * @param referredBy The referring user's address, if any.
+ * @param balance The wallet's current balance, used as the starting balance on
+ * create and re-synced on every call so a returning user's balance never
+ * drifts from their wallet.
+ */
+export const registerUser = async (address: string, referredBy?: string, balance?: number): Promise<void> => {
+  try {
+    await axios.post("/api/user", { address, referredBy, balance });
+  } catch (error) {
+    console.error(error);
+    throw new Error("Could not register user");
+  }
+};
