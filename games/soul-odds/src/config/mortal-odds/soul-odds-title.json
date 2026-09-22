@@ -2,24 +2,171 @@
   "name": "Mortal Odds",
   "betConfigurations": [
     {
-      "name": "all-time",
+      "name": "paleolithic",
+      "era": "Paleolithic",
+      "minBirthYear": -32768,
+      "maxBirthYear": -8000,
+      "maleWeight": 512,
+      "femaleWeight": 488,
+      "rtpWad": "0.95",
+      "lifespans": [
+        { "minYears": 0, "maxYears": 4, "weight": 4446, "noCrimeWeight": 9900 },
+        { "minYears": 5, "maxYears": 29, "weight": 1714, "noCrimeWeight": 6000 },
+        { "minYears": 30, "maxYears": 59, "weight": 3300, "noCrimeWeight": 5000 },
+        { "minYears": 60, "maxYears": 105, "weight": 540, "noCrimeWeight": 7500 }
+      ],
+      "crimes": [
+        { "id": 1, "selectionWeight": 127, "commitWeight": 5000 },
+        { "id": 2, "selectionWeight": 141, "commitWeight": 5000 },
+        { "id": 3, "selectionWeight": 248, "commitWeight": 5000 },
+        { "id": 4, "selectionWeight": 1, "commitWeight": 5000 }
+      ]
+    },
+    {
+      "name": "agrarian",
+      "era": "Agrarian",
+      "minBirthYear": -8000,
+      "maxBirthYear": 1,
+      "maleWeight": 512,
+      "femaleWeight": 488,
+      "rtpWad": "0.95",
+      "lifespans": [
+        { "minYears": 0, "maxYears": 4, "weight": 4319, "noCrimeWeight": 9900 },
+        { "minYears": 5, "maxYears": 29, "weight": 1545, "noCrimeWeight": 6000 },
+        { "minYears": 30, "maxYears": 59, "weight": 3462, "noCrimeWeight": 5000 },
+        { "minYears": 60, "maxYears": 105, "weight": 673, "noCrimeWeight": 7500 }
+      ],
+      "crimes": [
+        { "id": 1, "selectionWeight": 110, "commitWeight": 5000 },
+        { "id": 2, "selectionWeight": 167, "commitWeight": 5000 },
+        { "id": 3, "selectionWeight": 227, "commitWeight": 5000 },
+        { "id": 4, "selectionWeight": 10, "commitWeight": 5000 }
+      ]
+    },
+    {
+      "name": "classical-medieval",
+      "era": "Medieval",
+      "minBirthYear": 1,
+      "maxBirthYear": 1200,
+      "maleWeight": 512,
+      "femaleWeight": 488,
+      "rtpWad": "0.95",
+      "lifespans": [
+        { "minYears": 0, "maxYears": 4, "weight": 4184, "noCrimeWeight": 9900 },
+        { "minYears": 5, "maxYears": 29, "weight": 1378, "noCrimeWeight": 6000 },
+        { "minYears": 30, "maxYears": 59, "weight": 3616, "noCrimeWeight": 5000 },
+        { "minYears": 60, "maxYears": 105, "weight": 822, "noCrimeWeight": 7500 }
+      ],
+      "crimes": [
+        { "id": 1, "selectionWeight": 88, "commitWeight": 5000 },
+        { "id": 2, "selectionWeight": 168, "commitWeight": 5000 },
+        { "id": 3, "selectionWeight": 241, "commitWeight": 5000 },
+        { "id": 4, "selectionWeight": 17, "commitWeight": 5000 }
+      ]
+    },
+    {
+      "name": "late-medieval-renaissance",
+      "era": "Renaissance",
+      "minBirthYear": 1200,
+      "maxBirthYear": 1650,
+      "maleWeight": 512,
+      "femaleWeight": 488,
+      "rtpWad": "0.95",
+      "lifespans": [
+        { "minYears": 0, "maxYears": 4, "weight": 4147, "noCrimeWeight": 9900 },
+        { "minYears": 5, "maxYears": 29, "weight": 1186, "noCrimeWeight": 6000 },
+        { "minYears": 30, "maxYears": 59, "weight": 3680, "noCrimeWeight": 5000 },
+        { "minYears": 60, "maxYears": 105, "weight": 987, "noCrimeWeight": 7500 }
+      ],
+      "crimes": [
+        { "id": 1, "selectionWeight": 87, "commitWeight": 5000 },
+        { "id": 2, "selectionWeight": 168, "commitWeight": 5000 },
+        { "id": 3, "selectionWeight": 241, "commitWeight": 5000 },
+        { "id": 4, "selectionWeight": 18, "commitWeight": 5000 }
+      ]
+    },
+    {
+      "name": "early-modern",
+      "era": "EarlyModern",
+      "minBirthYear": 1650,
+      "maxBirthYear": 1850,
+      "maleWeight": 512,
+      "femaleWeight": 488,
+      "rtpWad": "0.95",
+      "lifespans": [
+        { "minYears": 0, "maxYears": 4, "weight": 4001, "noCrimeWeight": 9900 },
+        { "minYears": 5, "maxYears": 29, "weight": 1038, "noCrimeWeight": 6000 },
+        { "minYears": 30, "maxYears": 59, "weight": 3773, "noCrimeWeight": 5000 },
+        { "minYears": 60, "maxYears": 105, "weight": 1187, "noCrimeWeight": 7500 }
+      ],
+      "crimes": [
+        { "id": 1, "selectionWeight": 85, "commitWeight": 5000 },
+        { "id": 2, "selectionWeight": 188, "commitWeight": 5000 },
+        { "id": 3, "selectionWeight": 233, "commitWeight": 5000 },
+        { "id": 4, "selectionWeight": 8, "commitWeight": 5000 }
+      ]
+    },
+    {
+      "name": "industrial",
+      "era": "Industrial",
+      "minBirthYear": 1850,
+      "maxBirthYear": 1950,
+      "maleWeight": 512,
+      "femaleWeight": 488,
+      "rtpWad": "0.95",
+      "lifespans": [
+        { "minYears": 0, "maxYears": 4, "weight": 3306, "noCrimeWeight": 9900 },
+        { "minYears": 5, "maxYears": 29, "weight": 624, "noCrimeWeight": 6000 },
+        { "minYears": 30, "maxYears": 59, "weight": 3909, "noCrimeWeight": 5000 },
+        { "minYears": 60, "maxYears": 105, "weight": 2161, "noCrimeWeight": 7500 }
+      ],
+      "crimes": [
+        { "id": 1, "selectionWeight": 80, "commitWeight": 5000 },
+        { "id": 2, "selectionWeight": 209, "commitWeight": 5000 },
+        { "id": 3, "selectionWeight": 226, "commitWeight": 5000 },
+        { "id": 4, "selectionWeight": 1, "commitWeight": 5000 }
+      ]
+    },
+    {
+      "name": "postwar",
+      "era": "Modern",
+      "minBirthYear": 1950,
+      "maxBirthYear": 1995,
+      "maleWeight": 512,
+      "femaleWeight": 488,
+      "rtpWad": "0.95",
+      "lifespans": [
+        { "minYears": 0, "maxYears": 4, "weight": 1448, "noCrimeWeight": 9900 },
+        { "minYears": 5, "maxYears": 29, "weight": 116, "noCrimeWeight": 6000 },
+        { "minYears": 30, "maxYears": 59, "weight": 3288, "noCrimeWeight": 5000 },
+        { "minYears": 60, "maxYears": 105, "weight": 5149, "noCrimeWeight": 7500 }
+      ],
+      "crimes": [
+        { "id": 1, "selectionWeight": 75, "commitWeight": 5000 },
+        { "id": 2, "selectionWeight": 218, "commitWeight": 5000 },
+        { "id": 3, "selectionWeight": 223, "commitWeight": 5000 },
+        { "id": 4, "selectionWeight": 1, "commitWeight": 5000 }
+      ]
+    },
+    {
+      "name": "contemporary",
       "era": "Contemporary",
-      "minBirthYear": -6000,
+      "minBirthYear": 1995,
       "maxBirthYear": 2026,
       "maleWeight": 512,
       "femaleWeight": 488,
       "rtpWad": "0.95",
       "lifespans": [
-        { "minYears": 0, "maxYears": 4, "weight": 2500, "noCrimeWeight": 9900 },
-        { "minYears": 5, "maxYears": 29, "weight": 3000, "noCrimeWeight": 6000 },
-        { "minYears": 30, "maxYears": 59, "weight": 3000, "noCrimeWeight": 5000 },
-        { "minYears": 60, "maxYears": 105, "weight": 1500, "noCrimeWeight": 7500 }
+        { "minYears": 0, "maxYears": 4, "weight": 551, "noCrimeWeight": 9900 },
+        { "minYears": 5, "maxYears": 29, "weight": 20, "noCrimeWeight": 6000 },
+        { "minYears": 30, "maxYears": 59, "weight": 2027, "noCrimeWeight": 5000 },
+        { "minYears": 60, "maxYears": 105, "weight": 7402, "noCrimeWeight": 7500 }
       ],
       "crimes": [
-        { "id": 1, "selectionWeight": 75, "commitWeight": 5000 },
-        { "id": 2, "selectionWeight": 210, "commitWeight": 5000 },
-        { "id": 3, "selectionWeight": 210, "commitWeight": 5000 },
-        { "id": 4, "selectionWeight": 20, "commitWeight": 5000 }
+        { "id": 1, "selectionWeight": 74, "commitWeight": 5000 },
+        { "id": 2, "selectionWeight": 217, "commitWeight": 5000 },
+        { "id": 3, "selectionWeight": 224, "commitWeight": 5000 },
+        { "id": 4, "selectionWeight": 1, "commitWeight": 5000 }
       ]
     }
   ]

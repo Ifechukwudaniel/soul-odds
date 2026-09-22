@@ -1,13 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.30;
 
+
 enum SoulEra {
-    Ancient,
-    Medieval,
-    EarlyModern,
-    Industrial,
-    Modern,
-    Contemporary
+  Paleolithic,
+  Agrarian,
+  Medieval,
+  Renaissance,
+  EarlyModern,
+  Industrial,
+  Modern,
+  Contemporary
 }
 
 struct SoulCrime {

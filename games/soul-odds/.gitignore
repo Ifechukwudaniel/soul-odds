@@ -23,6 +23,9 @@
 local.db
 *.db
 
+# large local-only dataset (~150MB); scripts/services fall back gracefully when it's absent
+/cliopatria.geojson/
+
 # misc
 .DS_Store
 *.pem

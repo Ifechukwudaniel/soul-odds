@@ -1,0 +1,1 @@
+ALTER TABLE "cliopatria_place" ADD COLUMN "wikidata" varchar(32);
