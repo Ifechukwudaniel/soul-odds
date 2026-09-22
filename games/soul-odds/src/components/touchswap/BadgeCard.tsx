@@ -10,8 +10,8 @@ type BadgeCardProps = {
   unlockedIcon?: React.ReactNode;
   lockedIcon?: React.ReactNode;
   tokenMinned: number;
-  cliamed: boolean;
-  onCliam: () => void;
+  claimed: boolean;
+  onClaim: () => void;
 };
 
 export const BadgeCard: React.FC<BadgeCardProps> = ({
@@ -22,14 +22,14 @@ export const BadgeCard: React.FC<BadgeCardProps> = ({
   unlockedIcon,
   requiredCoin,
   tokenMinned,
-  cliamed = false,
-  onCliam,
+  claimed = false,
+  onClaim,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const openModal = () => {
     setIsModalOpen(true);
-    onCliam();
+    onClaim();
   };
 
   const closeModal = () => {
@@ -40,7 +40,7 @@ export const BadgeCard: React.FC<BadgeCardProps> = ({
     <div key={title} className="flex flex-col items-center justify-center">
       <div className="w-[85px] h-[85px] mb-4 flex justify-center items-center relative">
         {isUnlocked ? unlockedIcon : lockedIcon}
-        {cliamed && (
+        {claimed && (
           <button
             className="text-[0.65rem] px-2 purple-gradient rounded-full  py-[2px] border border-black absolute bottom-0 font-[500]"
             onClick={openModal}
@@ -56,7 +56,7 @@ export const BadgeCard: React.FC<BadgeCardProps> = ({
       <h3 className="text-[0.8rem] sf-pro-medium"> {isUnlocked ? title : "???"}</h3>
 
       <p className="text-[0.72rem] text-center mt-1 text-[#B0AEB5] sf-pro-medium">
-        {isUnlocked || !cliamed
+        {isUnlocked || !claimed
           ? `${numeral(tokenMinned).format("Oa")} of ${numeral(requiredCoin).format("0a")} coins`
           : "??"}
       </p>

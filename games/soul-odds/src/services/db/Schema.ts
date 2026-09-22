@@ -32,7 +32,7 @@ import {
 // the lifetime net win/loss (can be negative). `referredBy` is the address
 // of whoever referred this user, set once at signup. `rank` is the highest
 // coin-tier badge they've claimed (Plankton, Minnow, ...), not a leaderboard
-// position - see `badgesLists` in Badges.tsx. `taskesCompleted` holds the ids
+// position - see `badgesLists` in Badges.tsx. `tasksCompleted` holds the ids
 // of the `task` rows below that this user has finished.
 
 export const userSchema = pgTable('user', {
@@ -45,7 +45,7 @@ export const userSchema = pgTable('user', {
   totalProfit: numeric('total_profit', { precision: 20, scale: 2, mode: 'number' })
     .default(0)
     .notNull(),
-  taskesCompleted: integer('taskes_completed').array().notNull().default([]),
+  tasksCompleted: integer('tasks_completed').array().notNull().default([]),
   updatedAt: timestamp('updated_at', { mode: 'date' })
     .defaultNow()
     .$onUpdate(() => new Date())

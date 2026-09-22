@@ -1,5 +1,4 @@
 import React from "react";
-import { Balance } from "../Balance";
 
 type StatsCardProps = {
   title: string;

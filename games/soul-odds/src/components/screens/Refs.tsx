@@ -54,11 +54,8 @@ export const RefsScreen: React.FC = () => {
 
   const user = useAppStore(state => state.user);
 
-  const [hapticFeedback, setHapticFeedback] = useState<HapticFeedback | null>(null);
-
   const copyInvite = () => {
     navigator.clipboard.writeText(`${getBaseUrl()}?ref=${address}`);
-    hapticFeedback?.impactOccurred("heavy");
     notification.success("link copied");
   };
 

@@ -5,7 +5,7 @@ import { createUserBoost } from './boost';
 
 export type { User };
 
-export interface TotalTokenInCirclation {
+export interface TotalTokenInCirculation {
   total: number;
 }
 
@@ -49,11 +49,11 @@ export async function getUserRefers(address: string): Promise<User[]> {
   return db.select().from(userSchema).where(eq(userSchema.referredBy, normalizeAddress(address)));
 }
 
-export async function updateTaskes(address: string, ids: number[]): Promise<void> {
+export async function updateTasks(address: string, ids: number[]): Promise<void> {
   const uniqueIds = Array.from(new Set(ids));
   await db
     .update(userSchema)
-    .set({ taskesCompleted: uniqueIds })
+    .set({ tasksCompleted: uniqueIds })
     .where(eq(userSchema.address, normalizeAddress(address)));
 }
 
@@ -121,7 +121,7 @@ export async function getLeaderboard(
   return [...users.slice(0, insertAt), currentUser, ...users.slice(insertAt)];
 }
 
-export async function getAllTokensInCircluation(): Promise<TotalTokenInCirclation> {
+export async function getAllTokensInCirculation(): Promise<TotalTokenInCirculation> {
   const [result] = await db
     .select({ total: sql<number>`coalesce(sum(${userSchema.balance}), 0)` })
     .from(userSchema);

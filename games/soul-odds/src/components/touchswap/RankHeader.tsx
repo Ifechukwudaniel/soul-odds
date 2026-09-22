@@ -1,19 +1,14 @@
-import  { useState } from "react";
 import Image from "next/image";
 import { badgesLists } from "@/services/data/badgeData";
 import { useAppStore } from "@/services/store/store";
-/* import { HapticFeedback, initHapticFeedback, isSSR } from "@tma.js/sdk-react";
- */
+
 export const RankHeader = () => {
   const setScreen = useAppStore(state => state.setScreen);
   const rank = useAppStore(state => state.user.rank);
   const rankTitle = badgesLists[rank]?.title ?? badgesLists[0]!.title;
 
-  const [hapticFeedback, setHapticFeedback] = useState<HapticFeedback | null>(null);
-
   const goToBadges = () => {
     setScreen("badges");
-    hapticFeedback?.impactOccurred("soft");
   };
 
   return (

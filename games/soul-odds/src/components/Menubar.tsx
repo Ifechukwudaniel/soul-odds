@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { MenuBtn } from "./MenuBtn";
 import { StatsIcon } from "./assets/StatsIcon";
 import { TScreens, useAppStore } from "@/services/store/store";
@@ -46,8 +46,6 @@ export const menuLinks: MenuLink[] = [
 const NAV_MOVE: Record<string, number> = { ArrowRight: 1, ArrowLeft: -1 };
 
 export const Menubar = () => {
-  const [hapticFeedback, setHapticFeedback] = useState<HapticFeedback | null>(null);
-
   const screen = useAppStore(state => state.screen);
   const setScreen = useAppStore(state => state.setScreen);
   const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -55,7 +53,6 @@ export const Menubar = () => {
   const handleMenuClick = (label: string) => {
     playClickSound();
     setScreen(label as TScreens);
-    hapticFeedback?.impactOccurred("light");
   };
 
   // Roving tabindex: only the active tab is a Tab stop, like a native tab list. Arrow keys move focus and
