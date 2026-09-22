@@ -46,6 +46,9 @@ trap cleanup EXIT INT TERM
 echo "Removing existing PostgreSQL container..."
 docker rm -f app-db 2>/dev/null || true
 
+echo "Correcting cliopatria.geojson against Wikidata (skips if already done)..."
+pnpm run correct:geojson || echo "Skipping: cliopatria.geojson correction failed (offline?)."
+
 echo "Starting PostgreSQL..."
 docker run -d \
   --name app-db \
@@ -68,6 +71,9 @@ pnpm run db:migrate
 
 echo "Seeding database..."
 pnpm run db:seed
+
+echo "Seeding Cliopatria places..."
+pnpm run db:seed:cliopatria || echo "Skipping: cliopatria.geojson/cliopatria_polities_only.geojson not found."
 
 echo "Starting Socket.io..."
 pnpm run game:socket-server &

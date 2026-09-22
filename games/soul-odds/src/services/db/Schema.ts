@@ -101,3 +101,27 @@ export const boostSchema = pgTable('boost', {
 
 export type Boost = InferSelectModel<typeof boostSchema>;
 export type NewBoost = typeof boostSchema.$inferInsert;
+
+// ---------------------------------------------------------------------------
+// Cliopatria places
+// ---------------------------------------------------------------------------
+// One row per Cliopatria polity (see `scripts/seed-cliopatria.ts` and the
+// gitignored `cliopatria.geojson/` dataset it reads from): the polity's name,
+// the year range it held that territory, and a representative point (its
+// outer ring's centroid) instead of the full polygon - a random-year lookup
+// only ever needs one point to place a soul, not the whole shape.
+
+export const cliopatriaPlaceSchema = pgTable('cliopatria_place', {
+  id: serial('id').primaryKey(),
+  name: varchar('name', { length: 255 }).notNull(),
+  fromYear: integer('from_year').notNull(),
+  toYear: integer('to_year').notNull(),
+  lat: numeric('lat', { precision: 9, scale: 6, mode: 'number' }).notNull(),
+  lon: numeric('lon', { precision: 9, scale: 6, mode: 'number' }).notNull(),
+  // Wikidata QID (e.g. "Q2345840"), when the source dataset has one - lets a correction script
+  // cross-check/fix `fromYear`/`toYear` against Wikidata without re-parsing the raw geojson.
+  wikidata: varchar('wikidata', { length: 32 }),
+});
+
+export type CliopatriaPlaceRow = InferSelectModel<typeof cliopatriaPlaceSchema>;
+export type NewCliopatriaPlaceRow = typeof cliopatriaPlaceSchema.$inferInsert;
