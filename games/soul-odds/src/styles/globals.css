@@ -882,6 +882,25 @@ a[href][aria-disabled="true"],
     0 0 22px rgba(214, 169, 73, 0.14);
 }
 
+.gold-text {
+  background: linear-gradient(
+    135deg,
+    #FFE7A3 0%,
+    #F5B83D 38%,
+    #D99224 68%,
+    #F7C95F 100%
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow:
+    0 0 14px rgba(245, 184, 61, 0.12);
+}
+
+.mystic-gold-record { position: relative; } .mystic-gold-record > .record-group { position: relative; } .mystic-gold-record > .record-group:not(:first-child)::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient( 90deg, transparent 0%, rgba(255, 240, 189, 0.18) 12%, rgba(245, 184, 61, 0.42) 35%, rgba(218, 157, 43, 0.3) 65%, rgba(248, 204, 103, 0.18) 88%, transparent 100% ); }
+
 /* Layered so Tailwind's utilities (in @layer utilities) can still override this default -
    an unlayered rule here would always win over any Tailwind color class on a <p>, regardless
    of specificity. */

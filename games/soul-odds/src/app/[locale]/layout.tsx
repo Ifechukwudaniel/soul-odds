@@ -1,34 +1,61 @@
 import type { Metadata, Viewport } from 'next';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
-import { setRequestLocale } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { Env } from '@/libs/Env';
 import { routing } from '@/libs/I18nRouting';
 import '@/styles/global.css';
 
-export const metadata: Metadata = {
-  icons: [
-    {
-      rel: 'apple-touch-icon',
-      url: '/apple-touch-icon.png',
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await props.params;
+  setRequestLocale(locale);
+
+  const t = await getTranslations({ locale, namespace: 'RootLayout' });
+  const title = t('meta_title');
+  const description = t('meta_description');
+  const ogImage = { url: '/img/screenshot-home.png', width: 1440, height: 900, alt: title };
+
+  return {
+    metadataBase: Env.NEXT_PUBLIC_APP_URL ? new URL(Env.NEXT_PUBLIC_APP_URL) : undefined,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [ogImage],
     },
-    {
-      rel: 'icon',
-      type: 'image/png',
-      sizes: '32x32',
-      url: '/favicon-32x32.png',
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [ogImage.url],
     },
-    {
-      rel: 'icon',
-      type: 'image/png',
-      sizes: '16x16',
-      url: '/favicon-16x16.png',
-    },
-    {
-      rel: 'icon',
-      url: '/favicon.ico',
-    },
-  ],
-};
+    icons: [
+      {
+        rel: 'apple-touch-icon',
+        url: '/apple-touch-icon.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        url: '/favicon-32x32.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        url: '/favicon-16x16.png',
+      },
+      {
+        rel: 'icon',
+        url: '/favicon.ico',
+      },
+    ],
+  };
+}
 
 export const viewport: Viewport = {
   width: 'device-width',
