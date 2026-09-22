@@ -163,7 +163,7 @@ describe('SoulOddsEngine', async () => {
       assert.equal(started.nextPhase, WAITING_RANDOMNESS);
       assert.equal(started.requestRandomnessNow, true);
 
-      // Deterministically reveal configuration index 0 (the example/Ancient era) for a stable cross-check.
+      // Deterministically reveal configuration index 0 (the example's "base" era) for a stable cross-check.
       const revealed = await title.read.onRandomness([sessionContext(wager, '0x', '0x'), ZERO_RANDOMNESS]);
       assert.equal(revealed.nextPhase, WAITING_PLAYER_ACTION);
       assert.equal(revealed.requestRandomnessNow, false);
@@ -302,9 +302,9 @@ describe('SoulOddsEngine', async () => {
 
     it('rejects an invalid era', async () => {
       // Solidity decodes the calldata `era` straight into the `SoulEra` enum, so an out-of-range
-      // value (6, past `Contemporary`) reverts as an enum-conversion panic before `_validateEra`'s
+      // value (8, past `Contemporary`) reverts as an enum-conversion panic before `_validateEra`'s
       // own check ever runs — the explicit check only guards internal/memory-struct call sites.
-      await assert.rejects(deployer.write.deployTitle([[{ ...example.input, era: 6 }]]));
+      await assert.rejects(deployer.write.deployTitle([[{ ...example.input, era: 8 }]]));
     });
 
     it('rejects an inverted or out-of-range birth year range', async () => {
@@ -313,11 +313,9 @@ describe('SoulOddsEngine', async () => {
         deployer,
         'SoulOddsTitleDeployer__InvalidBirthRange',
       );
-      await viem.assertions.revertWithCustomError(
-        deployer.write.deployTitle([[{ ...example.input, minBirthYear: -7000 }]]),
-        deployer,
-        'SoulOddsTitleDeployer__BirthYearTooEarly',
-      );
+      // BirthYearTooEarly is unreachable from any valid input: MIN_BIRTH_YEAR equals int16's own
+      // floor (to let the Paleolithic era reach it), so every int16 minBirthYear already satisfies
+      // the check. The revert path stays in place as defense-in-depth if that floor ever moves.
       await viem.assertions.revertWithCustomError(
         deployer.write.deployTitle([[{ ...example.input, maxBirthYear: 3000 }]]),
         deployer,

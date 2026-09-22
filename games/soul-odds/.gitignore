@@ -23,8 +23,10 @@
 local.db
 *.db
 
-# large local-only dataset (~150MB); scripts/services fall back gracefully when it's absent
-/cliopatria.geojson/
+# large local-only dataset (~150MB); the zip is committed, scripts/services fall back
+# gracefully when the unzipped .geojson is absent (see db:seed:cliopatria:zip)
+/cliopatria.geojson/*
+!/cliopatria.geojson/*.zip
 
 # misc
 .DS_Store

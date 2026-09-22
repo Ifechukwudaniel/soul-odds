@@ -3,7 +3,7 @@
   "betConfigurations": [
     {
       "name": "base",
-      "era": "Ancient",
+      "era": "Agrarian",
       "minBirthYear": -3000,
       "maxBirthYear": -500,
       "maleWeight": 51,

@@ -70,9 +70,8 @@ export type CliopatriaPlace = {
 
 /**
  * Reduces a raw feature to what `cliopatria_place` stores: its name, date range, a representative
- * point instead of the full polygon, and its Wikidata id (for later correction, see
- * `scripts/correct-empire.ts`). Picking is a SQL query against that table (see
- * `services/db/cliopatria.ts`) — this is only used to seed it, not at request time.
+ * point instead of the full polygon, and its Wikidata id. Picking is a SQL query against that
+ * table (see `services/db/cliopatria.ts`) — this is only used to seed it, not at request time.
  */
 export function toCliopatriaPlace(feature: CliopatriaFeature): CliopatriaPlace {
   const { lat, lon } = centroidOf(feature);
