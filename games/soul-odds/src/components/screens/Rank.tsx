@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Loader } from "../Loader";
 import { Leaderboard } from "@/components/game/leaderboard/Leaderboard";
 import { RefeshInterval } from "@/constants";
+import { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
 import { getLeaderboard } from "@/services/data/leaderboard";
 import type { User } from "@/services/db/user";
 import { useAppStore } from "@/services/store/store";
@@ -27,6 +28,7 @@ function toLeaderboardUser(user: User, rank: number): LeaderboardUser {
 
 export const RankScreen = () => {
   const address = useAppStore((state) => state.user.address);
+  const { stats } = useMortalOddsPlayer();
   const [users, setUsers] = useState<LeaderboardUser[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -55,7 +57,12 @@ export const RankScreen = () => {
     );
   }
 
-  const currentUser = users.find((entry) => entry.id === address);
+  // `reward` is the leaderboard's "Winnings" column - the server doesn't track it per
+  // user yet, so only the current user's row gets a real figure, from local round stats.
+  const rankedUsers = users.map((entry) =>
+    entry.id === address ? { ...entry, reward: Math.round(stats.totalWinnings) } : entry
+  );
+  const currentUser = rankedUsers.find((entry) => entry.id === address);
 
-  return <Leaderboard users={users} currentUser={currentUser} resetAt={RESET_AT} />;
+  return <Leaderboard users={rankedUsers} currentUser={currentUser} resetAt={RESET_AT} />;
 };

@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 import { accumulateSkill } from "@/lib/mortal-odds/skill";
 import { useAppStore } from "@/services/store/store";
 
-export type MortalOddsPlayerStats = { bankroll: number; rounds: number; bestRound: number; streak: number; skill: number };
+export type MortalOddsPlayerStats = { bankroll: number; rounds: number; bestRound: number; streak: number; skill: number; totalWinnings: number };
 
 type RoundStats = Omit<MortalOddsPlayerStats, "bankroll" | "skill">;
 
 const STORAGE_KEY = "mortal-odds-player:v1";
-const DEFAULT_ROUND_STATS: RoundStats = { rounds: 0, bestRound: 0, streak: 0 };
+const DEFAULT_ROUND_STATS: RoundStats = { rounds: 0, bestRound: 0, streak: 0, totalWinnings: 0 };
 
 function readRoundStats(): RoundStats {
   try {
@@ -74,6 +74,9 @@ export function useMortalOddsPlayer(): {
       rounds: roundStats.rounds + 1,
       bestRound: Math.max(roundStats.bestRound, options.net),
       streak: options.net > 0 ? roundStats.streak + 1 : options.net < 0 ? 0 : roundStats.streak,
+      // A losing round adds nothing here rather than subtracting — this is a lifetime "how much have
+      // you won" tally for the leaderboard, not a profit/loss running total (see LeaderboardTable.tsx).
+      totalWinnings: roundStats.totalWinnings + Math.max(0, options.net),
     });
   };
 

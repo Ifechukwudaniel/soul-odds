@@ -1,19 +1,26 @@
+/** Rank points per deben staked, earned whether the bet wins or loses — playing itself always counts for something. */
+const PARTICIPATION_RATE = 0.5;
+/** Extra rank points per deben won, on top of participation. Kept at 1 so the bonus equals the bet's own net win. */
+const WIN_BONUS_RATE = 1;
+
 /**
- * Skill is a bet's expected value at the *real* odds, not the bookie's: stake * (realP * odds - 1).
- * A smart bet that lost still scores (realP * odds > 1 even though this draw didn't land), and a
- * lucky longshot doesn't. Stake is already a linear factor, so a bigger bet earns or costs more.
- * The result is signed on purpose: a bad bet subtracts, it isn't just floored at zero.
+ * Rank points for one settled bet: participation credit on the stake alone (win or lose, so a player who
+ * keeps staking keeps climbing and never loses ground for losing), plus a win bonus on top scaled by the
+ * payout, so a win always counts for more than just playing. Never negative — losing costs nothing here,
+ * the stake itself was already the cost.
  */
-export function computeBetSkill(options: { stake: number; realP: number; odds: number }): number {
-  const { stake, realP, odds } = options;
-  return stake * (realP * odds - 1);
+export function computeBetSkill(options: { stake: number; won: boolean; odds: number }): number {
+  const { stake, won, odds } = options;
+  const participation = stake * PARTICIPATION_RATE;
+  const winBonus = won ? stake * (odds - 1) * WIN_BONUS_RATE : 0;
+  return participation + winBonus;
 }
 
 /**
- * Skill is a running total, not a one-way counter: a round's delta is added even when it's
- * negative, so the leaderboard number reflects genuine net skill (e.g. a player who reads bets
- * well nets up toward the tens of thousands over time; one who doesn't can sit low or negative).
+ * Skill/rank is a running total that only ever moves up: a round's points are added (computeBetSkill never
+ * returns a negative number, so there's nothing to subtract), and the result is floored at 0 so a player
+ * carrying an old negative balance climbs back to zero on their very next round instead of staying stuck.
  */
 export function accumulateSkill(currentTotal: number, delta: number): number {
-  return currentTotal + delta;
+  return Math.max(0, currentTotal + delta);
 }

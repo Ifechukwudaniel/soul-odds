@@ -2,16 +2,12 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { LuChartColumn } from "react-icons/lu";
 import { CurrencyCoinIcon } from "@/components/assets/CurrencyCoinIcon";
 import { AnubisBackdrop } from "@/components/game/AnubisBackdrop";
 import { GameButton } from "@/components/game/GameButton";
 import { GameCard } from "@/components/game/home/GameCard";
 import { BetResultStamp } from "@/components/game/mortal-odds/stage/reveal/BetResultStamp";
-import { BetsBreakdown } from "@/components/game/mortal-odds/stage/reveal/BetsBreakdown";
-import { LifespanChart } from "@/components/game/mortal-odds/stage/reveal/LifespanChart";
 import { RevealHeader } from "@/components/game/mortal-odds/stage/reveal/RevealHeader";
-import { RevealSection } from "@/components/game/mortal-odds/stage/reveal/RevealSection";
 import { RevealStamp } from "@/components/game/mortal-odds/stage/reveal/RevealStamp";
 import { SoulRecord } from "@/components/game/mortal-odds/stage/reveal/SoulRecord";
 import { SoulStory } from "@/components/game/mortal-odds/stage/reveal/SoulStory";
@@ -22,7 +18,7 @@ import type { Place, RoundCharge } from "@/types";
 const STAMP_DELAY_MS = 1500;
 
 export const RevealPanel = (props: { reveal: RevealResult; place: Place; currentYear: number; currency: string; charges: RoundCharge[]; onNext: () => void; drawCost: number; canAffordDraw: boolean }) => {
-  const { life, results, net, skill, story, epitaph, lifespan, realMedianAge, bookieMedianAge } = props.reveal;
+  const { life, results, net, skill, story, epitaph } = props.reveal;
   const [stampReady, setStampReady] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
@@ -55,19 +51,7 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
           <SoulRecord life={life} placeName={props.place.name} alive={alive} />
         </div>
 
-        <RevealSection icon={LuChartColumn} title="Age at death">
-          <p className="flex flex-wrap gap-x-3 gap-y-1 text-white/50 text-xs">
-            <span className="text-[#3FB6A8]">■ Real spread</span>
-            <span className="text-[#F5B83D]">- - Bookie assumed</span>
-            <span className="text-[#F5B83D]">○ Bookie's typical age</span>
-            <span className="text-[#4C6FD1]">● Real typical age</span>
-          </p>
-          <LifespanChart histogram={lifespan} deathAge={life.age} realMedianAge={realMedianAge} bookieMedianAge={bookieMedianAge} />
-        </RevealSection>
-
         {results.length === 0 && <p className="text-white/50 text-sm">No bets this round. Just watching.</p>}
-
-        {dismissed && results.length > 0 && <BetsBreakdown results={results} currency={props.currency} visibleCount={results.length} />}
 
         {dismissed && results.length > 0 && (
           <div className="flex flex-wrap items-center gap-2">
@@ -75,9 +59,7 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
               Skill {skill >= 0 ? "+" : "−"}
               {Math.abs(Math.round(skill))} pts
             </RevealStamp>
-            <p className="text-white/50 text-xs">
-              What your bets were worth at the real odds, so a smart bet that lost still scores and a lucky one does not.
-            </p>
+            <p className="text-white/50 text-xs">Every bet earns points just for playing — a win earns more.</p>
           </div>
         )}
 

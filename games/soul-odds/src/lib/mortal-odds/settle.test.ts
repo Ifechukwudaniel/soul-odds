@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { computeBetSkill } from "@/lib/mortal-odds/skill";
 import { resolveBets } from "@/lib/mortal-odds/settle";
 import type { Bet, Life, MarketPrices, Price } from "@/types";
 
@@ -35,7 +36,7 @@ describe("resolveBets", () => {
     const sexResult = results.find((r) => r.marketId === "sex");
     expect(sexResult?.won).toBe(true);
     expect(sexResult?.net).toBeCloseTo(10 * (1.84 - 1));
-    expect(sexResult?.skill).toBeCloseTo(10 * (0.512 * 1.84 - 1));
+    expect(sexResult?.skill).toBeCloseTo(computeBetSkill({ stake: 10, won: true, odds: 1.84 }));
   });
 
   it("a losing bet's net is exactly -stake, independent of odds", () => {
@@ -53,7 +54,7 @@ describe("resolveBets", () => {
     expect(net).toBe(-10);
   });
 
-  it("skill uses the real probability, not the bookie's, even for a losing bet", () => {
+  it("a losing bet still earns skill from participation alone, never the true probability", () => {
     const bets: Record<string, Bet> = { sex: { marketId: "sex", kind: "choice", optionId: "girl", stake: 10 } };
     const { results } = resolveBets({
       life: LIFE,
@@ -63,8 +64,10 @@ describe("resolveBets", () => {
       trueProbabilities: { sex: { boy: 0.512, girl: 0.488 } },
       truthSamples: [LIFE],
     });
-    // Lost the bet (life.sex is "boy"), but skill is stake * (realP_girl * odds - 1), computed regardless of outcome.
-    expect(results[0]?.skill).toBeCloseTo(10 * (0.488 * 1.84 - 1));
+    // Lost the bet (life.sex is "boy"); skill still comes out positive, from the stake alone.
+    expect(results[0]?.won).toBe(false);
+    expect(results[0]?.skill).toBeCloseTo(computeBetSkill({ stake: 10, won: false, odds: 1.84 }));
+    expect(results[0]?.skill).toBeGreaterThan(0);
   });
 
   it("settles a year-of-death (range) bet the same way", () => {
