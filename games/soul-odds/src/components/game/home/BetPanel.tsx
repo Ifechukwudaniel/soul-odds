@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { CurrencyCoinIcon } from "@/components/assets/CurrencyCoinIcon";
+import { GameTooltip } from "@/components/game/GameTooltip";
 import { BetQuickAmounts } from "@/components/game/home/BetQuickAmounts";
 import { GameCard } from "@/components/game/home/GameCard";
 import { PlaceBetButton } from "@/components/game/home/PlaceBetButton";
@@ -26,6 +28,25 @@ export const BetPanel = (props: {
   isLocked: boolean;
   requiredBets: number;
 }) => {
+  const minWager = Math.min(...props.quickAmounts);
+  // Buffered locally so the field can be cleared or mid-typed (e.g. "1." while entering "1.5") without a
+  // controlled value snapping back on every keystroke; it re-syncs whenever chipSize changes from elsewhere
+  // (a quick-amount chip, a restored round), and only pushes a value upstream once it's actually a valid number.
+  const [customWager, setCustomWager] = useState(() => String(props.chipSize));
+
+  useEffect(() => {
+    setCustomWager(String(props.chipSize));
+  }, [props.chipSize]);
+
+  const handleCustomWager = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = event.target.value;
+    setCustomWager(raw);
+    const parsed = event.target.valueAsNumber;
+    if (Number.isFinite(parsed) && parsed >= minWager) {
+      props.onSelectChip(parsed);
+    }
+  };
+
   const bets = Object.values(props.bets);
   const potentialWins = bets.map((bet) => {
     if (!props.prices) return null;
@@ -41,15 +62,30 @@ export const BetPanel = (props: {
     <GameCard className="flex min-h-0 flex-1 flex-col gap-4" containerClassName="flex h-full w-full flex-col">
       <h2 className={`${serifFont.className} font-bold text-white"`}>Your wager</h2>
 
-      <div className="mystic-glass flex items-center gap-2 rounded-xl px-4 py-3">
-  <CurrencyCoinIcon width={28} height={"28"} />
-
-  <span className="text-2xl font-bold text-white">
-    {atRisk.toFixed(2)}
-  </span>
-
-  <span className="text-white/50">{props.currency}</span>
-</div>
+      {props.chipLocked ? (
+        <GameTooltip text="Your stake is locked in for this round." className="w-full">
+          <div className="mystic-glass flex w-full items-center gap-2 rounded-xl px-4 py-3">
+            <CurrencyCoinIcon width={28} height={"28"} />
+            <span className="text-2xl font-bold text-white">{atRisk.toFixed(2)}</span>
+            <span className="text-white/50">{props.currency}</span>
+          </div>
+        </GameTooltip>
+      ) : (
+        <div className="mystic-glass flex items-center gap-2 rounded-xl px-4 py-3">
+          <CurrencyCoinIcon width={28} height={"28"} />
+          <input
+            type="number"
+            inputMode="decimal"
+            min={minWager}
+            step="0.01"
+            value={customWager}
+            onChange={handleCustomWager}
+            aria-label={`Custom wager, minimum ${minWager} ${props.currency}`}
+            className="w-full min-w-0 bg-transparent text-2xl font-bold text-white outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+          />
+          <span className="text-white/50">{props.currency}</span>
+        </div>
+      )}
 
       <PotentialWinSummary amount={totalPotentialWin} currency={props.currency} betCount={bets.length} />
 

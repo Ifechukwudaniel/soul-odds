@@ -1,6 +1,7 @@
 "use client";
 
 import { Leaderboard } from "@/components/game/leaderboard/Leaderboard";
+import { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
 import { useAppStore } from "@/services/store/store";
 import type { LeaderboardUser } from "@/types";
 
@@ -17,6 +18,7 @@ const MOCK_USERS: LeaderboardUser[] = [
 
 export const RankScreen = () => {
   const user = useAppStore((state) => state.user);
+  const { stats } = useMortalOddsPlayer();
 
   const currentUserId = String(user.id);
   const currentUserEntry: LeaderboardUser = {
@@ -26,7 +28,8 @@ export const RankScreen = () => {
     handle: (user.username || "you").toLowerCase(),
     followers: 0,
     points: Math.round(user.skill),
-    reward: 0,
+    // `reward` is the leaderboard's "Winnings" column — a lifetime total, not a profit/loss figure.
+    reward: Math.round(stats.totalWinnings),
   };
 
   // Rank is derived from sorted position, not stored, so the current user always lands where their real points put them.
