@@ -22,6 +22,7 @@ import {
 } from "@/components/screens";
 import { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
 import { badgesLists } from "@/services/data/badgeData";
+import { getNoLevelBoost, getPayedBoost, toTBoost } from "@/services/data/boost";
 import { registerUser } from "@/services/data/user";
 import { socketInstance } from "@/services/socket";
 import { useAppStore } from "@/services/store/store";
@@ -35,6 +36,7 @@ export default function GamePage() {
   const screen = useAppStore((state) => state.screen);
   const setScreen = useAppStore((state) => state.setScreen);
   const updateUser = useAppStore((state) => state.updateUser);
+  const setPaidBoosts = useAppStore((state) => state.setPaidBoosts);
   const user = useAppStore((state) => state.user);
   const player = useMortalOddsPlayer();
   const { snapshot } = useCasinoHostContext();
@@ -68,10 +70,11 @@ export default function GamePage() {
   const syncedAddressRef = useRef<string | undefined>(undefined);
 
   /**
-   * Registers the connected wallet as a user and mirrors its address into the
-   * store. Runs once per wallet address per app entry (not gated on the
-   * store's persisted address) so a returning user's balance is re-synced to
-   * their wallet on every login, not just on first-ever signup.
+   * Registers the connected wallet as a user, mirrors its address into the
+   * store, and loads their boosts. Runs once per wallet address per app entry
+   * (not gated on the store's persisted address) so a returning user's
+   * balance is re-synced to their wallet on every login, not just on
+   * first-ever signup.
    */
   useEffect(() => {
     if (!walletAddress || syncedAddressRef.current === walletAddress) return;
@@ -80,7 +83,20 @@ export default function GamePage() {
     registerUser(walletAddress, undefined, hostBalance).catch(() => {
       // Already logged in registerUser; a failed registration here just leaves the row unwritten.
     });
-  }, [walletAddress, hostBalance, updateUser]);
+
+    const loadBoosts = async () => {
+      try {
+        const [paidBoosts, noLevelBoosts] = await Promise.all([
+          getPayedBoost(walletAddress),
+          getNoLevelBoost(walletAddress),
+        ]);
+        setPaidBoosts([...paidBoosts, ...noLevelBoosts].map(toTBoost));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    loadBoosts();
+  }, [walletAddress, hostBalance, updateUser, setPaidBoosts]);
 
   useEffect(() => {
     const handleConnect = () => {

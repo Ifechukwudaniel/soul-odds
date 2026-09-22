@@ -16,10 +16,10 @@
         { "minYears": 50, "maxYears": 90, "weight": 1500, "noCrimeWeight": 8000 }
       ],
       "crimes": [
-        { "name": "Murder", "selectionWeight": 200, "commitWeight": 5000 },
-        { "name": "Fraud", "selectionWeight": 500, "commitWeight": 5000 },
-        { "name": "Theft", "selectionWeight": 900, "commitWeight": 5000 },
-        { "name": "Heresy", "selectionWeight": 200, "commitWeight": 5000 }
+        { "id": 1, "selectionWeight": 200, "commitWeight": 5000 },
+        { "id": 2, "selectionWeight": 500, "commitWeight": 5000 },
+        { "id": 3, "selectionWeight": 900, "commitWeight": 5000 },
+        { "id": 4, "selectionWeight": 200, "commitWeight": 5000 }
       ]
     },
     {
@@ -37,10 +37,10 @@
         { "minYears": 50, "maxYears": 90, "weight": 1000, "noCrimeWeight": 7500 }
       ],
       "crimes": [
-        { "name": "Murder", "selectionWeight": 300, "commitWeight": 5000 },
-        { "name": "Heresy", "selectionWeight": 700, "commitWeight": 5000 },
-        { "name": "Theft", "selectionWeight": 800, "commitWeight": 5000 },
-        { "name": "Witchcraft", "selectionWeight": 200, "commitWeight": 5000 }
+        { "id": 1, "selectionWeight": 300, "commitWeight": 5000 },
+        { "id": 2, "selectionWeight": 700, "commitWeight": 5000 },
+        { "id": 3, "selectionWeight": 800, "commitWeight": 5000 },
+        { "id": 4, "selectionWeight": 200, "commitWeight": 5000 }
       ]
     }
   ]
