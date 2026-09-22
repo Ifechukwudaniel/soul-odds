@@ -21,8 +21,10 @@ import {
   RankScreen
 } from "@/components/screens";
 import { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
+import { badgesLists } from "@/services/data/badgeData";
 import { socketInstance } from "@/services/socket";
 import { useAppStore } from "@/services/store/store";
+import { formatAddress } from "@/utils";
 import { notification } from "@/utils/notifications";
 
 export default function GamePage() {
@@ -88,6 +90,9 @@ export default function GamePage() {
   }, []);
 
   const AvatarIcon = getAvatarById(user.avatarId).Icon;
+  const displayName = user.username || formatAddress(user.address);
+  // `user.rank` is the index of the highest coin-tier badge claimed, not the display label.
+  const rankTitle = badgesLists[user.rank]?.title ?? badgesLists[0]!.title;
 
   return (
     <div className="flex h-screen w-full flex-col">
@@ -106,9 +111,9 @@ export default function GamePage() {
       <ProfileModal
         isOpen={isProfileOpen}
         onClose={() => setIsProfileOpen(false)}
-        username={user.username}
-        handle={user.username}
-        rank={user.rank}
+        username={displayName}
+        handle={displayName}
+        rank={rankTitle}
         leaderboardRank={42881}
         onViewRankPage={() => setScreen("ranks")}
       />

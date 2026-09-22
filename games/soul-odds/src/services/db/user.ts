@@ -49,6 +49,14 @@ export async function getUserRefers(address: string): Promise<User[]> {
   return db.select().from(userSchema).where(eq(userSchema.referredBy, normalizeAddress(address)));
 }
 
+export async function updateTaskes(address: string, ids: number[]): Promise<void> {
+  const uniqueIds = Array.from(new Set(ids));
+  await db
+    .update(userSchema)
+    .set({ taskesCompleted: uniqueIds })
+    .where(eq(userSchema.address, normalizeAddress(address)));
+}
+
 export async function updateUser(user: Partial<User> & { address: string }): Promise<void> {
   const { address, ...fields } = user;
   await db

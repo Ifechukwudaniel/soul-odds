@@ -10,7 +10,10 @@ export async function GET(request: NextRequest) {
     const user = await findUser(address as string);
     if (!user) return NextResponse.json({ message: "Invalid Parmeter" }, { status: 500 });
     const taskes = await getAllTasks();
-    const foundTaskObject = user.taskesCompleted.reduce((a, v) => ({ ...a, [v]: true }), {});
+    const foundTaskObject = user.taskesCompleted.reduce<Record<number, boolean>>(
+      (a, v) => ({ ...a, [v]: true }),
+      {},
+    );
     const parsedData: UserTask[] = taskes.map((task) => {
       if (foundTaskObject[task.id]) return { ...task, reward: task.reward, completed: true, button: null };
       return { ...task, completed: false, button: null };
