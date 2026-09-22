@@ -16,6 +16,7 @@ import {
   readSimulatorDeployment,
   SIMULATOR_DEPLOYMENT_PATH,
 } from './local-title.ts';
+import { crimeName } from '../example/crime-names.ts';
 
 const SETTLEMENT_TIMEOUT_MS = 60_000;
 const tokenAbi = parseAbi(['function approve(address spender, uint256 amount) returns (bool)']);
@@ -115,9 +116,14 @@ async function main() {
     paid += settled.payout;
 
     const breakdown = matchBreakdown(prediction, expectedResult);
-    const crimeNames = era.definition.crimes.map(crime => crime.name);
+    const crimeIds = era.definition.crimes.map(crime => crime.id);
     const crimeLabel = (mask: number) =>
-      mask === 0 ? 'no crime' : crimeNames.filter((_, index) => (mask & (1 << index)) !== 0).join(' + ');
+      mask === 0
+        ? 'no crime'
+        : crimeIds
+            .filter((_, index) => (mask & (1 << index)) !== 0)
+            .map(id => crimeName(era.definition.name, id))
+            .join(' + ');
 
     console.log(
       `session ${opened.args.sessionId}  era ${era.definition.era}  ${expectedWon ? 'won' : 'lost'}  payout ${settled.payout}\n` +

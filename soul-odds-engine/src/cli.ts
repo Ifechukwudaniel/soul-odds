@@ -45,15 +45,15 @@ function percent(wad: bigint): string {
   return `${(Number(wad) / 1e16).toFixed(4)}%`;
 }
 
-function crimeLabel(names: readonly string[], mask: number): string {
+function crimeLabel(ids: readonly number[], mask: number): string {
   if (mask === 0) return 'no crime';
-  const picked = names.filter((_, index) => (mask & (1 << index)) !== 0);
-  return picked.join(' + ');
+  const picked = ids.filter((_, index) => (mask & (1 << index)) !== 0);
+  return picked.map(id => `crime ${id}`).join(' + ');
 }
 
 function describe(compiled: CompiledSoulConfiguration): string {
   const { definition, configuration } = compiled;
-  const crimeNames = definition.crimes.map(crime => crime.name);
+  const crimeIds = definition.crimes.map(crime => crime.id);
   const genderTotal = configuration.maleWeight + configuration.femaleWeight;
   const lines = [
     `${definition.name} (${definition.era}, ${definition.minBirthYear}..${definition.maxBirthYear})`,
@@ -77,7 +77,7 @@ function describe(compiled: CompiledSoulConfiguration): string {
         if (probabilityWad === 0n) continue;
         const payout = predictionMaxPayout(configuration, 10n ** 18n, prediction);
         lines.push(
-          `    ${gender === 0 ? 'male' : 'female'}, bucket ${bucket}, ${crimeLabel(crimeNames, mask)}` +
+          `    ${gender === 0 ? 'male' : 'female'}, bucket ${bucket}, ${crimeLabel(crimeIds, mask)}` +
             `  odds ${percent(probabilityWad)}  pays ${(Number(payout) / 1e18).toFixed(4)}x`,
         );
       }

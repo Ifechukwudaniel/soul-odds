@@ -16,10 +16,10 @@
         { "minYears": 60, "maxYears": 105, "weight": 1500, "noCrimeWeight": 7500 }
       ],
       "crimes": [
-        { "name": "Violence", "selectionWeight": 75, "commitWeight": 5000 },
-        { "name": "Deceit", "selectionWeight": 210, "commitWeight": 5000 },
-        { "name": "Greed", "selectionWeight": 210, "commitWeight": 5000 },
-        { "name": "Heresy", "selectionWeight": 20, "commitWeight": 5000 }
+        { "id": 1, "selectionWeight": 75, "commitWeight": 5000 },
+        { "id": 2, "selectionWeight": 210, "commitWeight": 5000 },
+        { "id": 3, "selectionWeight": 210, "commitWeight": 5000 },
+        { "id": 4, "selectionWeight": 20, "commitWeight": 5000 }
       ]
     }
   ]

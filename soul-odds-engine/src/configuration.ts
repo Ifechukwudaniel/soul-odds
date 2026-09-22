@@ -9,8 +9,12 @@ export type SoulLifespanDefinition = {
 };
 
 export type SoulCrimeDefinition = {
-  /** Off-chain only, for the CLI/frontend; the contract knows crime slots only by index. */
-  name: string;
+  /**
+   * Off-chain only, for the CLI/frontend to key against; the contract knows crime slots only by
+   * index (0-3) and never sees this. A human-readable name is a title's own concern, resolved by
+   * whatever API/config serves that title (e.g. `SIN_CATEGORIES` in games/soul-odds), not stored here.
+   */
+  id: number;
   selectionWeight: number;
   commitWeight: number;
 };

@@ -17,11 +17,12 @@ import {
   type SoulPrediction,
 } from '../../../src/soul.ts';
 import titleFile from '../../title.json';
+import { crimeName } from '../../crime-names.ts';
 import { useCasinoHost } from './useCasinoHost.ts';
 
 const definition = titleFile.betConfigurations[0] as SoulConfigurationDefinition;
 const configuration = toConfiguration(toConfigurationInput(definition));
-const CRIME_NAMES = definition.crimes.map(crime => crime.name);
+const CRIME_NAMES = definition.crimes.map(crime => crimeName(definition.name, crime.id));
 
 const WAD = 10n ** 18n;
 // SessionPhase enum from ICasinoGameV2.sol
