@@ -29,4 +29,7 @@ export async function seedCliopatria() {
 
   console.log(`*** Seeded ${places.length} Cliopatria places.`);
 }
-seedCliopatria();
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  seedCliopatria();
+}

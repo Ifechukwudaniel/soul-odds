@@ -38,8 +38,8 @@ contract SoulOddsTitleDeployer is Ownable {
     uint256 internal constant LIFESPAN_COUNT = 4;
     uint256 internal constant CRIME_COUNT = 4;
 
-    int256 internal constant MIN_BIRTH_YEAR = -6000;
-    uint256 internal constant MAX_BIRTH_YEAR = 2026;
+    int256 internal constant MIN_BIRTH_YEAR = type(int16).min;
+    int256 internal constant MAX_BIRTH_YEAR = 2026;
 
     uint256 internal constant MIN_RTP_WAD = 93e16;
     uint256 internal constant MAX_RTP_WAD = 98e16;
@@ -211,7 +211,7 @@ contract SoulOddsTitleDeployer is Ownable {
             revert SoulOddsTitleDeployer__BirthYearTooEarly();
         }
 
-        if (int256(maxBirthYear) > int256(MAX_BIRTH_YEAR)) {
+        if (int256(maxBirthYear) > MAX_BIRTH_YEAR) {
             revert SoulOddsTitleDeployer__BirthYearTooLate();
         }
     }

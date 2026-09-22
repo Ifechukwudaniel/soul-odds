@@ -6,22 +6,21 @@ import { createRng, pickWeighted } from "@/lib/mortal-odds/rng";
 import { pickCliopatriaPlace } from "@/services/db/cliopatria";
 import type { RegionId } from "@/types";
 
-const RANDOM_YEAR_MIN = -3000;
+const MIN_SUPPORTED_YEAR = -10_000;
 
 export async function GET(request: NextRequest) {
   const yearParam = request.nextUrl.searchParams.get("year");
-  const rng = createRng();
+  const year = Number(yearParam);
 
-  let year: number;
-  if (yearParam === null) {
-    const currentYear = new Date().getFullYear();
-    year = RANDOM_YEAR_MIN + Math.floor(rng() * (currentYear - RANDOM_YEAR_MIN));
-  } else {
-    year = Number(yearParam);
-    if (!Number.isFinite(year)) {
-      return NextResponse.json({ message: 'Invalid "year" query parameter.' }, { status: 400 });
-    }
+  if (yearParam === null || !Number.isFinite(year)) {
+    return NextResponse.json({ message: 'Missing or invalid "year" query parameter.' }, { status: 400 });
   }
+
+  if (year < MIN_SUPPORTED_YEAR) {
+    return NextResponse.json({ message: `"year" must be no earlier than ${MIN_SUPPORTED_YEAR}.` }, { status: 400 });
+  }
+
+  const rng = createRng();
 
   const cliopatriaPlace = await pickCliopatriaPlace(year);
   if (cliopatriaPlace) {
