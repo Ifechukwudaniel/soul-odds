@@ -1,5 +1,7 @@
 {
   "RootLayout": {
+    "meta_title": "Soul Odds",
+    "meta_description": "Predict a soul's fate. Pick a gender, lifespan, and crimes, then let Anubis weigh the verdict — call it right and get paid.",
     "home_link": "Home",
     "about_link": "About",
     "counter_link": "Counter",
