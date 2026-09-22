@@ -8,12 +8,7 @@ import type { MortalOddsRound, RevealResult } from "@/hooks/useMortalOddsDraw";
 import { clearRound, readRound, roundStorageKey, toResumablePhase, writeRound } from "@/lib/mortal-odds/round-storage";
 import type { RoundCharge } from "@/types";
 
-/**
- * Saves the round as it changes and puts it back when the home screen mounts, so a refresh or a
- * trip to another tab picks up where the player left off. The host's session is matched by key;
- * only what the host can't give back (the flavor draw, picks, charges, the reveal) is stored here.
- * `restoredReveal` is the reveal that came from storage, which was already scored and must not be again.
- */
+
 export function useRoundResume(options: {
   round: MortalOddsRound;
   slip: MortalOddsBets;

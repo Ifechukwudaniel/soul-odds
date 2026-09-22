@@ -121,7 +121,7 @@ const Tasks = ({
         </button>
       ) : (
         <button disabled className="btn bg-[#A7A7A7] w-full text-black py-4 font-[500] rounded-lg align-baseline">
-           All Cliamed
+           All Claimed
         </button>
       )}
     </div>

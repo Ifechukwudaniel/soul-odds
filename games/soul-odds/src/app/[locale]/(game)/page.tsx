@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { SetStateAction } from "react";
 import { formatUnits } from "viem";
 import { getAvatarById } from "@/components/assets/characters/avatars";
@@ -21,8 +21,11 @@ import {
   RankScreen
 } from "@/components/screens";
 import { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
+import { badgesLists } from "@/services/data/badgeData";
+import { registerUser } from "@/services/data/user";
 import { socketInstance } from "@/services/socket";
 import { useAppStore } from "@/services/store/store";
+import { formatAddress } from "@/utils";
 import { notification } from "@/utils/notifications";
 
 export default function GamePage() {
@@ -53,13 +56,31 @@ export default function GamePage() {
   const screenRender = screens[screen];
 
   const hostBalance = Number(
-    formatUnits(BigInt(snapshot.balances.smartVaultBalance ?? "0"), snapshot.token.decimals ?? 18),
+    formatUnits(BigInt(snapshot?.balances.smartVaultBalance ?? "0"), snapshot?.token.decimals ?? 18),
   );
 
   /** Mirrors the host's real balance into the store; only reruns when the host's own number changes. */
   useEffect(() => {
     updateUser({ balance: hostBalance });
   }, [hostBalance, updateUser]);
+
+  const walletAddress = snapshot?.wallet.address;
+  const syncedAddressRef = useRef<string | undefined>(undefined);
+
+  /**
+   * Registers the connected wallet as a user and mirrors its address into the
+   * store. Runs once per wallet address per app entry (not gated on the
+   * store's persisted address) so a returning user's balance is re-synced to
+   * their wallet on every login, not just on first-ever signup.
+   */
+  useEffect(() => {
+    if (!walletAddress || syncedAddressRef.current === walletAddress) return;
+    syncedAddressRef.current = walletAddress;
+    updateUser({ address: walletAddress });
+    registerUser(walletAddress, undefined, hostBalance).catch(() => {
+      // Already logged in registerUser; a failed registration here just leaves the row unwritten.
+    });
+  }, [walletAddress, hostBalance, updateUser]);
 
   useEffect(() => {
     const handleConnect = () => {
@@ -88,12 +109,15 @@ export default function GamePage() {
   }, []);
 
   const AvatarIcon = getAvatarById(user.avatarId).Icon;
+  const displayName = user.username || formatAddress(user.address);
+  // `user.rank` is the index of the highest coin-tier badge claimed, not the display label.
+  const rankTitle = badgesLists[user.rank]?.title ?? badgesLists[0]!.title;
 
   return (
     <div className="flex h-screen w-full flex-col">
       <GameHeader
         balance={user.balance}
-        currency={snapshot.token.symbol ?? "deben"}
+        currency={snapshot?.token.symbol ?? "deben"}
         avatar={<AvatarIcon width={24} height="24" />}
         onOpenProfile={() => setIsProfileOpen(true)}
       />
@@ -106,9 +130,9 @@ export default function GamePage() {
       <ProfileModal
         isOpen={isProfileOpen}
         onClose={() => setIsProfileOpen(false)}
-        username={user.username}
-        handle={user.username}
-        rank={user.rank}
+        username={displayName}
+        handle={displayName}
+        rank={rankTitle}
         leaderboardRank={42881}
         onViewRankPage={() => setScreen("ranks")}
       />

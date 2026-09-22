@@ -4,8 +4,7 @@ import { Modal } from "../ModalBase";
 import { OpenBtnIcon } from "../assets/OpenBtnIcon";
 import { TBoost, useAppStore } from "@/services/store/store";
 import { playClickSound } from "@/utils/playClickSound";
-/* import { HapticFeedback, initHapticFeedback, isSSR } from "@tma.js/sdk-react";
- */
+
 type BoostCardProps = {
   title: string;
   desc: string;
@@ -24,8 +23,6 @@ export const BoostCard: React.FC<BoostCardProps> = ({ title, icon, desc, initial
   const updateBalance = useAppStore(state => state.updateBalance);
   const updateBoostLevel = useAppStore(state => state.updatePaidBoostLevel);
 
-  const [hapticFeedback, setHapticFeedback] = useState<HapticFeedback | null>(null);
-
   useEffect(() => {
     const foundBoost = boosts.find(boost => boost.boostId === id);
     setCurrentBoost(foundBoost || null);
@@ -33,7 +30,6 @@ export const BoostCard: React.FC<BoostCardProps> = ({ title, icon, desc, initial
 
   const openModal = () => {
     playClickSound();
-    hapticFeedback?.impactOccurred("heavy");
     setIsModalOpen(true);
   };
 
@@ -49,7 +45,6 @@ export const BoostCard: React.FC<BoostCardProps> = ({ title, icon, desc, initial
 
       if (boostId === 6) {
         updateBalance(balance - totalCost);
-        hapticFeedback?.impactOccurred("rigid");
         closeModal();
         return;
       }
@@ -58,7 +53,6 @@ export const BoostCard: React.FC<BoostCardProps> = ({ title, icon, desc, initial
         if (balance >= totalCost && level < maximumLevel) {
           updateBalance(balance - totalCost);
           updateBoostLevel(boostId, level + 1);
-          hapticFeedback?.impactOccurred("rigid");
           closeModal();
         }
       }

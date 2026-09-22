@@ -32,7 +32,12 @@
       "Bash(xargs -I{} cat {}/node_modules/drizzle-orm/package.json)",
       "Bash(git rm *)",
       "Bash(git pull *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(git add *)",
+      "Bash(awk -F: '{print $1}')",
+      "Bash(timeout 300 pnpm install)",
+      "Bash(find /home/daniel/casino-sdk -iname \"*.d.ts\" 2>/dev/null | xargs grep -l \"HostSnapshotV1\" 2>/dev/null | head -3)",
+      "Read(//home/daniel/casino-sdk/**)"
     ]
   }
 }

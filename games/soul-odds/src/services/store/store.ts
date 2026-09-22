@@ -20,12 +20,10 @@ export type TScreenPayload = {
 export type TUser = {
   address: string;
   username: string;
-  touches: number;
   balance: number;
   rank: number;
   skill: number;
   connectionId: string;
-  totalCoinsMined: number;
   avatarId: string;
 };
 
@@ -38,12 +36,10 @@ export const hasState = () => {
 export const emptyUser: TUser = {
   address: "",
   username: "",
-  touches: 0,
   balance: 1000,
   rank: 0,
   skill: 0,
   connectionId: "",
-  totalCoinsMined: 1000,
   avatarId: DEFAULT_AVATAR_ID,
 };
 
@@ -54,7 +50,7 @@ export type TAppStore = {
   screen: TScreens;
   user: TUser;
   wallet:string;
-  walletCliamed:boolean;
+  walletClaimed:boolean;
   setScreen: (newValue: TScreens, payload?: TScreenPayload | null) => void;
   updateBalance: (newBalance: number) => void;
   applyBalanceDelta: (delta: number) => void;
@@ -62,7 +58,7 @@ export type TAppStore = {
   updateUser: (updatedFields: Partial<TUser>) => void;
   setPaidBoosts: (boostFields: TBoost[]) => void;
   updateDefaultData: () => void;
-  cliamRank: (rankId: number) => void;
+  claimRank: (rankId: number) => void;
   resetState: () => void;
 };
 
@@ -73,7 +69,7 @@ export const initialState = {
   screen: "home" as TScreens,
   user: emptyUser,
   wallet:"",
-  walletCliamed:false
+  walletClaimed:false
 };
 
 export const useAppStore = create<TAppStore>()(
@@ -85,13 +81,10 @@ export const useAppStore = create<TAppStore>()(
           set(() => ({ screen: newValue, screenPayload: payload })),
         updateBalance: (newBalance: number): void => {
           const { user } = get();
-          const balanceDifference = newBalance - user.balance;
-          const additionalCoinsMined = balanceDifference > 0 ? balanceDifference : 0;
           set(() => ({
             user: {
               ...user,
               balance: newBalance,
-              totalCoinsMined: user.totalCoinsMined + additionalCoinsMined,
             },
           }));
         },
@@ -125,7 +118,7 @@ export const useAppStore = create<TAppStore>()(
         },
         setPaidBoosts: (boosts: TBoost[]): void => set(() => ({ paidBoosts: boosts })),
         updateDefaultData: (): void => set(() => ({ defaultData: false })),
-        cliamRank: (rankId: number) => {
+        claimRank: (rankId: number) => {
           const { user } = get();
           set(() => ({
             user: {
@@ -140,7 +133,7 @@ export const useAppStore = create<TAppStore>()(
           }));
         },
         setWallet:(wallet:string) => {
-           set(()=> ({wallet, walletCliamed:true}))
+           set(()=> ({wallet, walletClaimed:true}))
         }
       }),
       {

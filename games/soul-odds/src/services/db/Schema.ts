@@ -30,18 +30,22 @@ import {
 // chosen after signup (a fresh user has none yet), `points` is the
 // leaderboard score, `balance` is the spendable amount and `totalProfit` is
 // the lifetime net win/loss (can be negative). `referredBy` is the address
-// of whoever referred this user, set once at signup.
+// of whoever referred this user, set once at signup. `rank` is the highest
+// coin-tier badge they've claimed (Plankton, Minnow, ...), not a leaderboard
+// position - see `badgesLists` in Badges.tsx. `tasksCompleted` holds the ids
+// of the `task` rows below that this user has finished.
 
 export const userSchema = pgTable('user', {
   address: varchar('address', { length: 42 }).primaryKey(),
   username: varchar('username', { length: 255 }),
   referredBy: varchar('referred_by', { length: 42 }),
+  rank: integer('rank').default(0).notNull(),
   points: integer('points').default(0).notNull(),
   balance: numeric('balance', { precision: 20, scale: 2, mode: 'number' }).default(0).notNull(),
   totalProfit: numeric('total_profit', { precision: 20, scale: 2, mode: 'number' })
     .default(0)
     .notNull(),
-  taskesCompleted: integer('taskes_completed').array().notNull().default([]),
+  tasksCompleted: integer('tasks_completed').array().notNull().default([]),
   updatedAt: timestamp('updated_at', { mode: 'date' })
     .defaultNow()
     .$onUpdate(() => new Date())

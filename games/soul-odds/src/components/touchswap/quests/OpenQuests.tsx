@@ -1,4 +1,3 @@
-import React from "react";
 import { QuestCard } from "./QuestCard";
 
 type OpenQuestsList = {
