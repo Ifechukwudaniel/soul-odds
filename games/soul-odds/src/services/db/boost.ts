@@ -11,6 +11,7 @@ export async function createUserBoost(userAddress: string): Promise<void> {
     { type: 'paid', boostId: 4, level: 0, cost: 10000, maximumLevel: 10, userAddress },
     { type: 'paid', boostId: 5, level: 0, cost: 10000, maximumLevel: 5, userAddress },
     { type: 'paid-no-levels', boostId: 6, cost: 200000, userAddress },
+    { type: 'paid-no-levels', boostId: 7, cost: 50000, userAddress },
   ];
 
   await db.insert(boostSchema).values(boosts);

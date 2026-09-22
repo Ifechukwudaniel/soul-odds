@@ -1,6 +1,16 @@
 import axios from "axios";
 import { Boost } from "@/services/db/boost";
+import type { TBoost } from "@/services/store/store";
 
+/** Maps a DB boost row (nullable level/cost/maximumLevel) to the store's shape. */
+export const toTBoost = (boost: Boost): TBoost => ({
+  type: boost.type,
+  boostId: boost.boostId,
+  level: boost.level ?? undefined,
+  maximumLevel: boost.maximumLevel ?? undefined,
+  cost: boost.cost ?? undefined,
+  userAddress: boost.userAddress,
+});
 
 export const getPayedBoost = async (address:string) :Promise<Boost[]>=> {
     try {
