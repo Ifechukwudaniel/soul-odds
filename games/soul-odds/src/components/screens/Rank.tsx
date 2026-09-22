@@ -18,7 +18,7 @@ const MOCK_USERS: LeaderboardUser[] = [
 export const RankScreen = () => {
   const user = useAppStore((state) => state.user);
 
-  const currentUserId = String(user.id);
+  const currentUserId = user.address;
   const currentUserEntry: LeaderboardUser = {
     id: currentUserId,
     rank: 0,

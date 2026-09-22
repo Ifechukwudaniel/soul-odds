@@ -10,7 +10,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { address } = await request.json();
+    const { address, referredBy } = await request.json();
     if (!address) return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
     if (!isAddress(address, { strict: false })) {
       return NextResponse.json({ error: "Is Not An Address." }, { status: 400 });
@@ -22,7 +22,12 @@ export async function POST(request: NextRequest) {
       return new NextResponse(null, { status: 204 });
     }
 
-    const newUser = await createUser(address);
+    const validReferrer =
+      referredBy && isAddress(referredBy, { strict: false }) && referredBy.toLowerCase() !== address.toLowerCase()
+        ? referredBy
+        : undefined;
+
+    const newUser = await createUser(address, validReferrer);
     return NextResponse.json(newUser, { status: 201 });
   } catch (error) {
     console.error("Error creating  new  user:", error);

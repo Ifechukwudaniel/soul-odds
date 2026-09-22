@@ -6,8 +6,8 @@ import { UserTask } from "@/types";
 
 export async function GET(request: NextRequest) {
   try {
-    const userId = request.nextUrl.searchParams.get("userId");
-    const user = await findUser(userId as string);
+    const address = request.nextUrl.searchParams.get("address");
+    const user = await findUser(address as string);
     if (!user) return NextResponse.json({ message: "Invalid Parmeter" }, { status: 500 });
     const taskes = await getAllTasks();
     const foundTaskObject = user.taskesCompleted.reduce((a, v) => ({ ...a, [v]: true }), {});
@@ -24,12 +24,12 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId, taskId } = await request.json();
-    if (!userId || !taskId) return NextResponse.json({ message: "Invalid Parmeter" }, { status: 500 });
-    const user = await findUser(userId as string);
+    const { address, taskId } = await request.json();
+    if (!address || !taskId) return NextResponse.json({ message: "Invalid Parmeter" }, { status: 500 });
+    const user = await findUser(address as string);
     if (!user) return NextResponse.json({ message: "Invalid Parmeter" }, { status: 500 });
     const taskes = user.taskesCompleted.concat(taskId);
-    await updateTaskes(userId, taskes);
+    await updateTaskes(address, taskes);
     return NextResponse.json({});
   } catch (error) {
     return NextResponse.json({ message: "Method not allowed" }, { status: 500 });

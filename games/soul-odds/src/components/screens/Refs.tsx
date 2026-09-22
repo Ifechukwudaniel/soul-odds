@@ -6,6 +6,8 @@ import {  RefeshInterval } from "@/constants";
 import { getUserRefers } from "@/services/data/refers";
 import { User } from "@/services/db/user";
 import { useAppStore } from "@/services/store/store";
+import { formatAddress } from "@/utils";
+import { getBaseUrl } from "@/utils/Helpers";
 import { notification } from "@/utils/notifications";
 
 export const InviteComponent = ({ copyInvite }: { copyInvite: () => void }) => {
@@ -48,21 +50,21 @@ export const InviteComponent = ({ copyInvite }: { copyInvite: () => void }) => {
 export const RefsScreen: React.FC = () => {
   const [referredUsers, setReferredUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const userId = useAppStore(state => state.user.id);
+  const address = useAppStore(state => state.user.address);
 
   const user = useAppStore(state => state.user);
 
   const [hapticFeedback, setHapticFeedback] = useState<HapticFeedback | null>(null);
 
   const copyInvite = () => {
-    navigator.clipboard.writeText(`https://t.me/touchswap_bot?start=r_${userId}`);
+    navigator.clipboard.writeText(`${getBaseUrl()}?ref=${address}`);
     hapticFeedback?.impactOccurred("heavy");
     notification.success("link copied");
   };
 
   const fetchReferredUsers = async () => {
     try {
-      const users = await getUserRefers(user!.id.toString());
+      const users = await getUserRefers(user!.address);
       setReferredUsers(users);
     } catch (error) {
       console.error("Failed to fetch referred users", error);
@@ -111,14 +113,14 @@ export const RefsScreen: React.FC = () => {
           <InviteComponent copyInvite={copyInvite} />
         ) : (
           <div className="grid gap-1 my-8 mt-1">
-            {refsList.map(({ username, first, last }, index) => (
+            {refsList.map(({ address: refAddress, username: refUsername }, index) => (
               <div
                 key={index}
                 className="bg-[#81DBE233] py-3.5 px-4 rounded text-[0.8rem] font-[500] flex items-center overflow-y-scroll h-full"
               >
                 <span className="mr-3">{index + 1}.</span>
                 <Image src="/img/defaultImg.png" alt="default Profile Image" width={20} height={20} />
-                <span className="ml-3">@{username || first + last}</span>
+                <span className="ml-3">{refUsername || formatAddress(refAddress)}</span>
               </div>
             ))}
           </div>

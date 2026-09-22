@@ -22,26 +22,20 @@ import {
 // Need a database for production? Check out https://get.neon.com/BMFYNtx
 // Tested and compatible with Next.js Boilerplate
 
-export const counterSchema = pgTable('counter', {
-  id: serial('id').primaryKey(),
-  count: integer('count').default(0),
-  updatedAt: timestamp('updated_at', { mode: 'date' })
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
-  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
-});
-
 // ---------------------------------------------------------------------------
 // Users
 // ---------------------------------------------------------------------------
 // A user is identified only by their wallet address (lowercase 0x-prefixed
-// hex, 42 chars) - there is no app-assigned id. `points` is the leaderboard
-// score, `balance` is the spendable amount and `totalProfit` is the lifetime
-// net win/loss (can be negative).
+// hex, 42 chars) - there is no app-assigned id. `username` is optional and
+// chosen after signup (a fresh user has none yet), `points` is the
+// leaderboard score, `balance` is the spendable amount and `totalProfit` is
+// the lifetime net win/loss (can be negative). `referredBy` is the address
+// of whoever referred this user, set once at signup.
 
 export const userSchema = pgTable('user', {
   address: varchar('address', { length: 42 }).primaryKey(),
+  username: varchar('username', { length: 255 }),
+  referredBy: varchar('referred_by', { length: 42 }),
   points: integer('points').default(0).notNull(),
   balance: numeric('balance', { precision: 20, scale: 2, mode: 'number' }).default(0).notNull(),
   totalProfit: numeric('total_profit', { precision: 20, scale: 2, mode: 'number' })
@@ -78,21 +72,18 @@ export type NewTask = typeof taskSchema.$inferInsert;
 // Boosts
 // ---------------------------------------------------------------------------
 
-export const boostTypeEnum = pgEnum('boost_type', ['free', 'paid', 'paid-no-levels']);
+export const boostTypeEnum = pgEnum('boost_type', ['paid', 'paid-no-levels']);
 
 export const boostSchema = pgTable('boost', {
   id: serial('id').primaryKey(),
   type: boostTypeEnum('type').notNull(),
   // Catalog id (1-6 in the seed data), NOT the row id. Each user has one
-  // row per boostId, so lookups must always filter on (userId, boostId)
+  // row per boostId, so lookups must always filter on (userAddress, boostId)
   // together - boostId alone is not unique across users.
   boostId: integer('boost_id').notNull(),
   userAddress: varchar('user_address', { length: 42 })
     .notNull()
     .references(() => userSchema.address),
-  totalPerDay: integer('total_per_day'),
-  left: integer('left'),
-  lastUsed: timestamp('last_used', { mode: 'date' }),
   level: integer('level'),
   maximumLevel: integer('maximum_level'),
   cost: integer('cost'),

@@ -27,15 +27,22 @@ export async function findAllUsers(): Promise<User[]> {
   return db.select().from(userSchema);
 }
 
-export async function createUser(address: string): Promise<User> {
+export async function createUser(address: string, referredBy?: string): Promise<User> {
   const [created] = await db
     .insert(userSchema)
-    .values({ address: normalizeAddress(address) })
+    .values({
+      address: normalizeAddress(address),
+      referredBy: referredBy ? normalizeAddress(referredBy) : undefined,
+    })
     .returning();
 
   await createUserBoost(created!.address);
 
   return created!;
+}
+
+export async function getUserRefers(address: string): Promise<User[]> {
+  return db.select().from(userSchema).where(eq(userSchema.referredBy, normalizeAddress(address)));
 }
 
 export async function updateUser(user: Partial<User> & { address: string }): Promise<void> {
