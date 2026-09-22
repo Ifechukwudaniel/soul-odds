@@ -1,6 +1,11 @@
+import { useRef } from "react";
 import { getMarketIcon } from "@/lib/mortal-odds/market-icons";
 import { playClickSound } from "@/utils/playClickSound";
-import type { MarketConfig, Price } from "@/types";
+import type { MarketConfig, MarketOption, Price } from "@/types";
+
+// The grid is 2 columns wide (see the `grid-cols-2` below); arrow-key roving needs that number to move up/down a row.
+const GRID_COLUMNS = 2;
+const ARROW_MOVE: Record<string, number> = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: GRID_COLUMNS, ArrowUp: -GRID_COLUMNS };
 
 export const ChoiceMarket = (props: {
   market: MarketConfig;
@@ -12,6 +17,37 @@ export const ChoiceMarket = (props: {
   const selectedPrice = props.selectedOptionId ? props.prices[props.selectedOptionId] : undefined;
   const selectedOdds = selectedPrice?.odds;
   const options = props.market.options.filter((option) => option.id in props.prices);
+  const optionRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  const isPickable = (option: MarketOption) => {
+    const price = props.prices[option.id];
+    return !!price && price.odds !== null;
+  };
+
+  // Only the selected option (or the first pickable one, before anything's picked) is a Tab stop, like a native
+  // radio group. Arrow keys move both focus and the pick together — the same action a click already takes —
+  // clamped at the grid's edges and skipping past any closed (unpickable) option in the pressed direction.
+  const rovingId = props.selectedOptionId ?? options.find(isPickable)?.id;
+
+  const moveSelection = (fromIndex: number, key: string) => {
+    const delta = ARROW_MOVE[key];
+    const rawTarget = key === "Home" ? 0 : key === "End" ? options.length - 1 : delta === undefined ? null : fromIndex + delta;
+    if (rawTarget === null) {
+      return;
+    }
+    const step = key === "End" ? -1 : key === "Home" ? 1 : Math.sign(delta ?? 1) || 1;
+    let index = Math.min(Math.max(rawTarget, 0), options.length - 1);
+    while (index >= 0 && index < options.length && !isPickable(options[index]!)) {
+      index += step;
+    }
+    const target = options[index];
+    if (!target) {
+      return;
+    }
+    playClickSound();
+    props.onSelect(target.id);
+    optionRefs.current[target.id]?.focus();
+  };
 
   return (
     <div className="flex h-full flex-col items-center justify-center gap-5 text-center">
@@ -25,16 +61,26 @@ export const ChoiceMarket = (props: {
         </p>
       </div>
 
-      <div className="grid w-full max-w-xl grid-cols-2 gap-3">
-        {options.map((option) => {
-          const price = props.prices[option.id];
+      <div role="radiogroup" aria-label={props.market.title} className="grid w-full max-w-xl grid-cols-2 gap-3">
+        {options.map((option, index) => {
           const isSelected = props.selectedOptionId === option.id;
           return (
             <button
-              type="button"
               key={option.id}
-              disabled={!price || price.odds === null}
-              aria-pressed={isSelected}
+              ref={(node) => {
+                optionRefs.current[option.id] = node;
+              }}
+              type="button"
+              role="radio"
+              aria-checked={isSelected}
+              disabled={!isPickable(option)}
+              tabIndex={option.id === rovingId ? 0 : -1}
+              onKeyDown={(event) => {
+                if (event.key in ARROW_MOVE || event.key === "Home" || event.key === "End") {
+                  event.preventDefault();
+                  moveSelection(index, event.key);
+                }
+              }}
               onClick={() => {
                 playClickSound();
                 props.onSelect(option.id);

@@ -7,16 +7,28 @@ type MenuLink = {
   activeIcon: React.ReactNode;
   isActive: boolean;
   onClick: () => void;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLButtonElement>) => void;
+  innerRef?: (node: HTMLButtonElement | null) => void;
 };
 
-export const MenuBtn: React.FC<MenuLink> = ({ label, icon, isActive, activeIcon, onClick }) => {
+export const MenuBtn: React.FC<MenuLink> = ({ label, icon, isActive, activeIcon, onClick, onKeyDown, innerRef }) => {
   return (
-    <div className="flex flex-col items-center cursor-pointer" onClick={onClick}>
-      <div className="relative">
+    <button
+      ref={innerRef}
+      type="button"
+      role="tab"
+      aria-selected={isActive}
+      tabIndex={isActive ? 0 : -1}
+      onClick={onClick}
+      onKeyDown={onKeyDown}
+      className="game-nav-btn flex flex-col items-center cursor-pointer border-0 bg-transparent p-0 font-inherit text-inherit"
+    >
+      <div className="nav-bubble relative">
         <div className="absolute top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%]">
           {isActive ? activeIcon : icon}
         </div>
-        <img src={`${isActive ? "/img/bubbleactive.png" : "/img/bubble.png"}`} alt="Bubble" width={64} height={64} />
+        {/* Decorative background shape behind the real icon; the button's accessible name comes from the label below. */}
+        <img src={`${isActive ? "/img/bubbleactive.png" : "/img/bubble.png"}`} alt="" width={64} height={64} />
       </div>
 
       <div
@@ -26,6 +38,6 @@ export const MenuBtn: React.FC<MenuLink> = ({ label, icon, isActive, activeIcon,
       >
         {label}
       </div>
-    </div>
+    </button>
   );
 };

@@ -239,10 +239,50 @@ main {
   margin-bottom: 22px;
 }
 
-/* OverlayScrollbars removes the viewport outline; restore a visible keyboard focus ring. */
-[data-overlayscrollbars] > [data-overlayscrollbars-viewport]:focus-visible {
+/*
+ * A scroll area that's a keyboard tab stop only so it can be scrolled (no interactive content of its own,
+ * e.g. the leaderboard list) intentionally shows no focus ring in normal mode — a ring around content that
+ * isn't itself a control read as a stray box, not a control being "selected". Windows high-contrast mode
+ * still gets one below: there, it's the only sign focus moved at all, so it's a hard requirement, not taste.
+ */
+
+/*
+ * Every other keyboard-focused control gets the same gold ring (mouse/touch focus stays ring-free via
+ * :focus-visible). `.chamfer-btn`/`.stat-card`/`.game-nav-btn` clip or reshape their own box (clip-path, or a
+ * ring that should follow a round emblem instead of the whole pill), so they get their own treatment below.
+ */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
   outline: 2px solid var(--anubis-gold);
-  outline-offset: -2px;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.chamfer-btn:focus-visible,
+.stat-card:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--anubis-gold);
+}
+
+/*
+ * Bottom nav (components/MenuBtn.tsx): the button's own box is a tall rectangle (round emblem, pill label
+ * below), so a ring around the whole thing reads as a stray box rather than "this icon is selected". Instead
+ * the ring wraps just the round emblem, like a glowing medallion — .nav-bubble marks that inner circle.
+ */
+.game-nav-btn:focus-visible {
+  outline: none;
+}
+
+.game-nav-btn:focus-visible .nav-bubble {
+  border-radius: 9999px;
+  box-shadow:
+    0 0 0 3px var(--anubis-gold),
+    0 0 14px 3px rgba(245, 184, 61, 0.6);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -293,8 +333,13 @@ main {
     display: none;
   }
 
+  /*
+   * The scroll-viewport ring is suppressed above for normal mode (see the comment near line 238); forced-colors
+   * users still need one, since color/box-shadow cues elsewhere on the page are gone here too.
+   */
   [data-overlayscrollbars] > [data-overlayscrollbars-viewport]:focus-visible {
-    outline-color: Highlight;
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
   }
 }
 
@@ -350,6 +395,66 @@ a[href][aria-disabled="true"],
   cursor: url("/cursors/crosshair.png") 16 16, crosshair;
   cursor: -webkit-image-set(url("/cursors/crosshair.png") 1x, url("/cursors/crosshair@2x.png") 2x) 16 16, crosshair;
   cursor: image-set(url("/cursors/crosshair.png") 1x, url("/cursors/crosshair@2x.png") 2x) 16 16, crosshair;
+}
+
+/*
+ * Shared modal surface (InfoDialog, SettingsModal): the mystic-glass gold border on a slightly see-through dark card
+ * (about 90% opaque) that blurs whatever is behind it. Pair it with a `bg-black/60` overlay for the dimmed page.
+ */
+.game-modal-panel {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(rgba(10, 9, 8, 0.9), rgba(7, 7, 6, 0.9)) padding-box,
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.38) 0%,
+      rgba(255, 255, 255, 0.12) 22%,
+      rgba(255, 255, 255, 0.045) 48%,
+      rgba(208, 170, 91, 0.18) 76%,
+      rgba(255, 255, 255, 0.08) 100%
+    ) border-box;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 8px 22px rgba(0, 0, 0, 0.35);
+}
+
+/* Shared modal entrance (components/game/GameDialog.tsx): rises in over a fading backdrop. */
+@keyframes info-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes info-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.game-dialog[open] {
+  animation: info-dialog-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.game-dialog[open]::backdrop {
+  animation: info-backdrop-in 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-dialog[open],
+  .game-dialog[open]::backdrop {
+    animation: none;
+  }
 }
 
 /* Cartouche: the oval name-ring of Egyptian inscription — a pill with flat end bars. */

@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { InfoDialog } from "@/components/game/InfoDialog";
+import { LAND_INFO } from "@/components/game/mortal-odds/stage/draw/slide-info";
 import { ROAM_DURATION, WorldMap } from "@/components/game/mortal-odds/stage/map/WorldMap";
 import { fmtYear } from "@/lib/mortal-odds/format";
 import type { Place } from "@/types";
@@ -11,7 +13,10 @@ import { serifFont } from "@/styles/serif-font";
 export const WhereSlide = (props: { year: number; place: Place; local: string }) => (
   <div className="flex h-full flex-col items-center gap-3 overflow-hidden text-center">
     <div className="shrink-0">
-      <h3 className={`${serifFont.className} font-bold text-3xl text-[#F1D6AE] sm:text-4xl leading-[0.75] pt-[0.5rem]`}>In which land?</h3>
+      <div className="flex items-center justify-center gap-3">
+        <h3 className={`${serifFont.className} font-bold text-3xl text-[#F1D6AE] sm:text-4xl leading-[0.75] pt-[0.5rem]`}>In which land?</h3>
+        <InfoDialog {...LAND_INFO} />
+      </div>
       <p className="mt-1 max-w-lg text-sm text-[0.8rem] text-[#f1f1f2c0]">
         Where people lived in {fmtYear(props.year)}. Brighter clusters held more people.
       </p>
