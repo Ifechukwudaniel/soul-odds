@@ -35,7 +35,7 @@ export const SocialQuestScreen = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-       let userTask =  await getUserTasks(user.id.toString());
+       let userTask =  await getUserTasks(user.address);
        socialQuestsLists.tasks = userTask;
        setLoading(false)
       } catch (error) {
@@ -53,7 +53,7 @@ export const SocialQuestScreen = () => {
     if(window !== null) {
       window.open(socialQuestsLists.tasks[index].link,"_blank");
       socialQuestsLists.tasks[index].completed = true
-      await postUserTasks(user.id,index)
+      await postUserTasks(user.address,index)
     }
   };
 

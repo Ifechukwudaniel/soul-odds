@@ -23,9 +23,6 @@ export const BoostCard: React.FC<BoostCardProps> = ({ title, icon, desc, initial
   const boosts = useAppStore(state => state.paidBoosts);
   const updateBalance = useAppStore(state => state.updateBalance);
   const updateBoostLevel = useAppStore(state => state.updatePaidBoostLevel);
-  const increaseMaxEnergy = useAppStore(state => state.increaseMaxEnergy);
-  const increaseTap = useAppStore(state => state.increaseTap);
-  const activateAutoClick = useAppStore(state => state.activateAutoClick);
 
   const [hapticFeedback, setHapticFeedback] = useState<HapticFeedback | null>(null);
 
@@ -52,7 +49,6 @@ export const BoostCard: React.FC<BoostCardProps> = ({ title, icon, desc, initial
 
       if (boostId === 6) {
         updateBalance(balance - totalCost);
-        activateAutoClick();
         hapticFeedback?.impactOccurred("rigid");
         closeModal();
         return;
@@ -62,8 +58,6 @@ export const BoostCard: React.FC<BoostCardProps> = ({ title, icon, desc, initial
         if (balance >= totalCost && level < maximumLevel) {
           updateBalance(balance - totalCost);
           updateBoostLevel(boostId, level + 1);
-          if (boostId === 5) increaseMaxEnergy();
-          if (boostId === 4) increaseTap();
           hapticFeedback?.impactOccurred("rigid");
           closeModal();
         }

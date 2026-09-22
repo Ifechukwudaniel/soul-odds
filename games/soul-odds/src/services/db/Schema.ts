@@ -1,8 +1,7 @@
 import type { InferSelectModel } from 'drizzle-orm';
 import {
-  boolean,
   integer,
-  jsonb,
+  numeric,
   pgEnum,
   pgTable,
   serial,
@@ -23,58 +22,30 @@ import {
 // Need a database for production? Check out https://get.neon.com/BMFYNtx
 // Tested and compatible with Next.js Boilerplate
 
-export const counterSchema = pgTable('counter', {
-  id: serial('id').primaryKey(),
-  count: integer('count').default(0),
+// ---------------------------------------------------------------------------
+// Users
+// ---------------------------------------------------------------------------
+// A user is identified only by their wallet address (lowercase 0x-prefixed
+// hex, 42 chars) - there is no app-assigned id. `username` is optional and
+// chosen after signup (a fresh user has none yet), `points` is the
+// leaderboard score, `balance` is the spendable amount and `totalProfit` is
+// the lifetime net win/loss (can be negative). `referredBy` is the address
+// of whoever referred this user, set once at signup.
+
+export const userSchema = pgTable('user', {
+  address: varchar('address', { length: 42 }).primaryKey(),
+  username: varchar('username', { length: 255 }),
+  referredBy: varchar('referred_by', { length: 42 }),
+  points: integer('points').default(0).notNull(),
+  balance: numeric('balance', { precision: 20, scale: 2, mode: 'number' }).default(0).notNull(),
+  totalProfit: numeric('total_profit', { precision: 20, scale: 2, mode: 'number' })
+    .default(0)
+    .notNull(),
   updatedAt: timestamp('updated_at', { mode: 'date' })
     .defaultNow()
     .$onUpdate(() => new Date())
     .notNull(),
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
-});
-
-// ---------------------------------------------------------------------------
-// Users
-// ---------------------------------------------------------------------------
-// `energy` and `social` were plain nested objects in the Typesaurus User
-// interface; there's no reason to break them into columns, so they're kept
-// as jsonb here. `id` is NOT auto-generated - the app assigns it externally
-// (e.g. a Telegram user id), exactly like the original Typesaurus doc's
-// custom `id` field, so it's a plain integer primary key rather than serial.
-
-export type Energy = {
-  maxEnergy: number;
-  energyLeft: number;
-};
-
-export type SocialLinks = {
-  twitter: string;
-  discord: string;
-};
-
-export const userSchema = pgTable('user', {
-  id: integer('id').primaryKey(),
-  creationTimestamp: timestamp('creation_timestamp', { mode: 'date' }).defaultNow().notNull(),
-  username: varchar('username', { length: 255 }).notNull(),
-  rank: integer('rank').default(0).notNull(),
-  balance: integer('balance').default(0).notNull(),
-  touches: integer('touches').default(0).notNull(),
-  wallet: varchar('wallet', { length: 255 }),
-  social: jsonb('social').$type<SocialLinks>(),
-  online: boolean('online').default(false).notNull(),
-  lastOnline: timestamp('last_online', { mode: 'date' }).defaultNow().notNull(),
-  lang: varchar('lang', { length: 16 }).notNull(),
-  first: varchar('first', { length: 255 }).notNull(),
-  last: varchar('last', { length: 255 }).notNull(),
-  referedBy: integer('refered_by'),
-  energy: jsonb('energy').$type<Energy>().notNull(),
-  connectionId: varchar('connection_id', { length: 255 }),
-  totalCoinsMined: integer('total_coins_mined').default(0).notNull(),
-  totalRefered: integer('total_refered').default(0).notNull(),
-  totalReferedCliamed: integer('total_refered_claimed').default(0).notNull(),
-  taskesCompleted: integer('taskes_completed').array().notNull().default([]),
-  lastExtraTap: timestamp('last_extra_tap', { mode: 'date' }),
-  lastRefillTap: timestamp('last_refill_tap', { mode: 'date' }),
 });
 
 export type User = InferSelectModel<typeof userSchema>;
@@ -101,19 +72,18 @@ export type NewTask = typeof taskSchema.$inferInsert;
 // Boosts
 // ---------------------------------------------------------------------------
 
-export const boostTypeEnum = pgEnum('boost_type', ['free', 'paid', 'paid-no-levels']);
+export const boostTypeEnum = pgEnum('boost_type', ['paid', 'paid-no-levels']);
 
 export const boostSchema = pgTable('boost', {
   id: serial('id').primaryKey(),
   type: boostTypeEnum('type').notNull(),
   // Catalog id (1-6 in the seed data), NOT the row id. Each user has one
-  // row per boostId, so lookups must always filter on (userId, boostId)
+  // row per boostId, so lookups must always filter on (userAddress, boostId)
   // together - boostId alone is not unique across users.
   boostId: integer('boost_id').notNull(),
-  userId: integer('user_id').notNull().references(() => userSchema.id),
-  totalPerDay: integer('total_per_day'),
-  left: integer('left'),
-  lastUsed: timestamp('last_used', { mode: 'date' }),
+  userAddress: varchar('user_address', { length: 42 })
+    .notNull()
+    .references(() => userSchema.address),
   level: integer('level'),
   maximumLevel: integer('maximum_level'),
   cost: integer('cost'),

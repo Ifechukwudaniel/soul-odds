@@ -1,12 +1,11 @@
 import axios from "axios";
-import {  User } from "../db/user";
 import {UserTask} from '@/types';
 
 export const getUserTasks = async (
-  userId:string
+  address:string
 ):Promise<UserTask[]> => {
   try {
-    const tasks = (await axios.get(`/api/tasks?userId=${userId}`)).data as UserTask[];
+    const tasks = (await axios.get(`/api/tasks?address=${address}`)).data as UserTask[];
     return tasks
   } catch (error) {
     console.log(error)
@@ -16,10 +15,10 @@ export const getUserTasks = async (
 
 
 
-export const postUserTasks = async ( userId:number, taskId:number) => {
-  const data = JSON.stringify({userId,taskId});
+export const postUserTasks = async ( address:string, taskId:number) => {
+  const data = JSON.stringify({address,taskId});
   try {
-      await axios.post("/api/tasks",data) 
+      await axios.post("/api/tasks",data)
   } catch (error) {
       throw new Error("Could not post data");
   }

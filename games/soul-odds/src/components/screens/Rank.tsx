@@ -20,7 +20,7 @@ export const RankScreen = () => {
   const user = useAppStore((state) => state.user);
   const { stats } = useMortalOddsPlayer();
 
-  const currentUserId = String(user.id);
+  const currentUserId = user.address;
   const currentUserEntry: LeaderboardUser = {
     id: currentUserId,
     rank: 0,

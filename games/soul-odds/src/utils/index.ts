@@ -37,3 +37,13 @@ export function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
+/**
+ * Shortens a wallet address to a leading and trailing slice for display.
+ * @param address The full address.
+ * @returns The address unchanged if it's already short, otherwise `0x1234…6789`.
+ */
+export function formatAddress(address: string) {
+  if (address.length <= 10) return address;
+  return `${address.slice(0, 6)}…${address.slice(-4)}`;
+}
+

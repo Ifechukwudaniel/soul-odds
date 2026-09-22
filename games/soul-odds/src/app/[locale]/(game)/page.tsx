@@ -20,11 +20,9 @@ import {
   StatsScreen,
   RankScreen
 } from "@/components/screens";
-import { ONE_SECOND } from "@/constants";
 import { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
 import { socketInstance } from "@/services/socket";
 import { useAppStore } from "@/services/store/store";
-import { checkIfMoreThanADay } from "@/utils";
 import { notification } from "@/utils/notifications";
 
 export default function GamePage() {
@@ -34,9 +32,6 @@ export default function GamePage() {
   const screen = useAppStore((state) => state.screen);
   const setScreen = useAppStore((state) => state.setScreen);
   const updateUser = useAppStore((state) => state.updateUser);
-  const setFreeBoosts = useAppStore((state) => state.setFreeBoosts);
-  const updateEnergyByTime = useAppStore((state) => state.updateEnergyByTime);
-  const freeBoost = useAppStore((state) => state.freeBoosts);
   const user = useAppStore((state) => state.user);
   const player = useMortalOddsPlayer();
   const { snapshot } = useCasinoHostContext();
@@ -67,18 +62,6 @@ export default function GamePage() {
   }, [hostBalance, updateUser]);
 
   useEffect(() => {
-    if (freeBoost.length > 0) {
-      const boostData = freeBoost.map((boost) => {
-        if (checkIfMoreThanADay(boost.lastUsed!)) {
-          return { ...boost, left: boost.totalPerDay };
-        }
-        return boost;
-      });
-      setFreeBoosts(boostData);
-    }
-  }, []);
-
-  useEffect(() => {
     const handleConnect = () => {
       setIsConnected(true);
       setTransport(socketInstance.io.engine.transport.name);
@@ -103,11 +86,6 @@ export default function GamePage() {
       socketInstance.off("disconnect", handleDisconnect);
     };
   }, []);
-
-  useEffect(() => {
-    const interval = setInterval(updateEnergyByTime, ONE_SECOND * 2);
-    return () => clearInterval(interval);
-  }, [updateEnergyByTime]);
 
   const AvatarIcon = getAvatarById(user.avatarId).Icon;
 
