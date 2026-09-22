@@ -19,6 +19,7 @@ from an empty folder to a working game running locally.
 
 | Guide                                                 | What it covers                                                                                                                                             |
 | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Casino SDK](./CASINO_SDK.md)                         | The `@chain/casino-sdk` package README: guest/host usage, package layout, distribution.                                                                    |
 | [Getting Started](./GETTING_STARTED.md)               | **Start here.** Step-by-step: run the local stack, write the contract, build the UI, ship.                                                                 |
 | [Local Simulator](./LOCAL_SIMULATOR.md)               | The offline test environment: what it runs, what it replicates from production, how to break things on purpose.                                            |
 | [Building Casino Games](./CHAIN_WTF_CASINO_GAMES.md)  | **The complete reference**: host/guest model, Penpal bridge, `gameData` / `actionData`, ABI patterns, full frontend examples (coinflip, blackjack, mines). |

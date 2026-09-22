@@ -39,15 +39,15 @@ bun install
 bun start
 ```
 
-See [`simulator/README.md`](./simulator/README.md).
+See [`simulator/README.md`](../simulator/README.md).
 
 Slot games can use the slot engine add-on instead of writing a contract; `bun run start:slots` runs
-the same stack with the Lucky Reels example. See [`docs/SLOT_ENGINE.md`](./docs/SLOT_ENGINE.md),
-and [`docs/MIGRATING_FROM_STAKE_ENGINE.md`](./docs/MIGRATING_FROM_STAKE_ENGINE.md) to bring a
+the same stack with the Lucky Reels example. See [`docs/SLOT_ENGINE.md`](SLOT_ENGINE.md),
+and [`docs/MIGRATING_FROM_STAKE_ENGINE.md`](MIGRATING_FROM_STAKE_ENGINE.md) to bring a
 Stake Engine game over.
 
-Start with [`docs/CHAIN_WTF_CASINO_GAMES.md`](./docs/CHAIN_WTF_CASINO_GAMES.md).
-See [`docs/CHANGELOG.md`](./docs/CHANGELOG.md) for date-versioned SDK changes.
+Start with [`docs/CHAIN_WTF_CASINO_GAMES.md`](CHAIN_WTF_CASINO_GAMES.md).
+See [`docs/CHANGELOG.md`](CHANGELOG.md) for date-versioned SDK changes.
 
 ## Dependency
 
