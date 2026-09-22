@@ -7,16 +7,16 @@ export const Bubble = ({ active }: { active: boolean }) => {
         <svg width="64" height="64" viewBox="0 0 56 57" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g filter="url(#filter0_d_100_416)">
             <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
               d="M27.9999 51.6492C40.9595 51.6492 51.4654 41.1434 51.4654 28.1838C51.4654 15.2241 40.9595 4.71829 27.9999 4.71829C15.0403 4.71829 4.53442 15.2241 4.53442 28.1838C4.53442 41.1434 15.0403 51.6492 27.9999 51.6492ZM27.9999 47.9827C38.9346 47.9827 47.7989 39.1184 47.7989 28.1838C47.7989 17.2491 38.9346 8.38477 27.9999 8.38477C17.0652 8.38477 8.2009 17.2491 8.2009 28.1838C8.2009 39.1184 17.0652 47.9827 27.9999 47.9827Z"
               fill="url(#paint0_radial_100_416)"
             />
           </g>
           <g filter="url(#filter1_d_100_416)">
             <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
               d="M27.9999 47.9827C38.9346 47.9827 47.7989 39.1184 47.7989 28.1838C47.7989 17.2491 38.9346 8.38477 27.9999 8.38477C17.0652 8.38477 8.20093 17.2491 8.20093 28.1838C8.20093 39.1184 17.0652 47.9827 27.9999 47.9827Z"
               fill="#00E7CA"
             />
@@ -27,8 +27,8 @@ export const Bubble = ({ active }: { active: boolean }) => {
           </g>
           <g opacity="0.9" filter="url(#filter2_i_100_416)">
             <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
               d="M27.9999 47.9827C38.9346 47.9827 47.7989 39.1184 47.7989 28.1838C47.7989 17.2491 38.9346 8.38477 27.9999 8.38477C17.0652 8.38477 8.20093 17.2491 8.20093 28.1838C8.20093 39.1184 17.0652 47.9827 27.9999 47.9827Z"
               fill="#00E7CA"
             />
@@ -39,16 +39,16 @@ export const Bubble = ({ active }: { active: boolean }) => {
           </g>
           <g opacity="0.7" filter="url(#filter3_i_100_416)">
             <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
               d="M27.9999 47.9827C38.9346 47.9827 47.7989 39.1184 47.7989 28.1838C47.7989 17.2491 38.9346 8.38477 27.9999 8.38477C17.0652 8.38477 8.20093 17.2491 8.20093 28.1838C8.20093 39.1184 17.0652 47.9827 27.9999 47.9827Z"
               fill="#00E7CA"
-              fill-opacity="0.7"
+              fillOpacity="0.7"
             />
             <path
               d="M47.7989 28.1838C47.7989 39.1184 38.9346 47.9827 27.9999 47.9827C17.0652 47.9827 8.20093 39.1184 8.20093 28.1838C8.20093 17.2491 17.0652 8.38477 27.9999 8.38477C38.9346 8.38477 47.7989 17.2491 47.7989 28.1838Z"
               fill="#00E7CA"
-              fill-opacity="0.7"
+              fillOpacity="0.7"
             />
           </g>
           <mask
@@ -62,16 +62,16 @@ export const Bubble = ({ active }: { active: boolean }) => {
           >
             <g opacity="0.7">
               <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M27.9999 47.9827C38.9346 47.9827 47.7989 39.1184 47.7989 28.1838C47.7989 17.2491 38.9346 8.38477 27.9999 8.38477C17.0652 8.38477 8.20093 17.2491 8.20093 28.1838C8.20093 39.1184 17.0652 47.9827 27.9999 47.9827Z"
                 fill="#FFB34F"
-                fill-opacity="0.2"
+                fillOpacity="0.2"
               />
               <path
                 d="M47.7989 28.1838C47.7989 39.1184 38.9346 47.9827 27.9999 47.9827C17.0652 47.9827 8.20093 39.1184 8.20093 28.1838C8.20093 17.2491 17.0652 8.38477 27.9999 8.38477C38.9346 8.38477 47.7989 17.2491 47.7989 28.1838Z"
                 fill="#FFB34F"
-                fill-opacity="0.2"
+                fillOpacity="0.2"
               />
             </g>
           </mask>
@@ -84,19 +84,19 @@ export const Bubble = ({ active }: { active: boolean }) => {
               <path
                 d="M47.799 21.2174C32.9023 15.3309 24.7246 15.5456 10.4009 21.2174V6.18487L47.799 5.08493V21.2174Z"
                 stroke="black"
-                stroke-width="0.733296"
+                strokeWidth="0.733296"
               />
             </g>
           </g>
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M27.9999 47.9827C38.9346 47.9827 47.7989 39.1184 47.7989 28.1838C47.7989 17.2491 38.9346 8.38477 27.9999 8.38477C17.0652 8.38477 8.20093 17.2491 8.20093 28.1838C8.20093 39.1184 17.0652 47.9827 27.9999 47.9827ZM27.9999 46.3557C37.2261 46.3557 46.1719 37.4099 46.1719 28.1838C46.1719 18.9576 37.2261 10.0118 27.9999 10.0118C18.7738 10.0118 9.82793 18.9576 9.82793 28.1838C9.82793 37.4099 18.7738 46.3557 27.9999 46.3557Z"
             fill="url(#paint1_linear_100_416)"
           />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M14 14.1838C6.26801 21.9158 6.26801 34.4518 14 42.1838C21.732 49.9158 34.268 49.9158 42 42.1838C49.732 34.4518 49.732 21.9158 42 14.1838C34.268 6.45179 21.732 6.45179 14 14.1838ZM15.1505 15.3342C8.6266 21.8581 8.6266 34.5094 15.1505 41.0333C21.6743 47.5572 34.3257 47.5572 40.8495 41.0333C47.3734 34.5095 47.3734 21.8581 40.8495 15.3342C34.3257 8.81038 21.6743 8.81038 15.1505 15.3342Z"
             fill="url(#paint2_linear_100_416)"
           />
@@ -108,9 +108,9 @@ export const Bubble = ({ active }: { active: boolean }) => {
               width="49.1308"
               height="49.1308"
               filterUnits="userSpaceOnUse"
-              color-interpolation-filters="sRGB"
+              colorInterpolationFilters="sRGB"
             >
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
               <feColorMatrix
                 in="SourceAlpha"
                 type="matrix"
@@ -131,9 +131,9 @@ export const Bubble = ({ active }: { active: boolean }) => {
               width="45.4643"
               height="45.4644"
               filterUnits="userSpaceOnUse"
-              color-interpolation-filters="sRGB"
+              colorInterpolationFilters="sRGB"
             >
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
               <feColorMatrix
                 in="SourceAlpha"
                 type="matrix"
@@ -154,9 +154,9 @@ export const Bubble = ({ active }: { active: boolean }) => {
               width="39.5979"
               height="42.5312"
               filterUnits="userSpaceOnUse"
-              color-interpolation-filters="sRGB"
+              colorInterpolationFilters="sRGB"
             >
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
               <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
               <feColorMatrix
                 in="SourceAlpha"
@@ -177,9 +177,9 @@ export const Bubble = ({ active }: { active: boolean }) => {
               width="40.3312"
               height="42.5312"
               filterUnits="userSpaceOnUse"
-              color-interpolation-filters="sRGB"
+              colorInterpolationFilters="sRGB"
             >
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
               <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
               <feColorMatrix
                 in="SourceAlpha"
@@ -200,9 +200,9 @@ export const Bubble = ({ active }: { active: boolean }) => {
               width="41.0645"
               height="19.9828"
               filterUnits="userSpaceOnUse"
-              color-interpolation-filters="sRGB"
+              colorInterpolationFilters="sRGB"
             >
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
               <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
               <feGaussianBlur stdDeviation="0.733296" result="effect1_foregroundBlur_100_416" />
             </filter>
@@ -214,9 +214,9 @@ export const Bubble = ({ active }: { active: boolean }) => {
               gradientUnits="userSpaceOnUse"
               gradientTransform="translate(27.9999 28.1838) rotate(90) scale(23.4655)"
             >
-              <stop offset="0.852574" stop-color="#52545A" />
-              <stop offset="0.921987" stop-color="#6E6E79" />
-              <stop offset="1" stop-color="#60646A" />
+              <stop offset="0.852574" stopColor="#52545A" />
+              <stop offset="0.921987" stopColor="#6E6E79" />
+              <stop offset="1" stopColor="#60646A" />
             </radialGradient>
             <linearGradient
               id="paint1_linear_100_416"
@@ -226,10 +226,10 @@ export const Bubble = ({ active }: { active: boolean }) => {
               y2="8.38477"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0.624028" stop-color="#4CFFF3" />
-              <stop offset="0.852574" stop-color="#5BF4EA" />
-              <stop offset="0.921987" stop-color="#51F2E2" />
-              <stop offset="1" stop-color="#A6FAEE" />
+              <stop offset="0.624028" stopColor="#4CFFF3" />
+              <stop offset="0.852574" stopColor="#5BF4EA" />
+              <stop offset="0.921987" stopColor="#51F2E2" />
+              <stop offset="1" stopColor="#A6FAEE" />
             </linearGradient>
             <linearGradient
               id="paint2_linear_100_416"
@@ -239,10 +239,10 @@ export const Bubble = ({ active }: { active: boolean }) => {
               y2="42.1838"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0.624028" stop-color="#4CFFF3" stop-opacity="0" />
-              <stop offset="0.852574" stop-color="#5BF4D8" />
-              <stop offset="0.921987" stop-color="#51F2E5" />
-              <stop offset="1" stop-color="#A6FAF5" />
+              <stop offset="0.624028" stopColor="#4CFFF3" stopOpacity="0" />
+              <stop offset="0.852574" stopColor="#5BF4D8" />
+              <stop offset="0.921987" stopColor="#51F2E5" />
+              <stop offset="1" stopColor="#A6FAF5" />
             </linearGradient>
           </defs>
         </svg>
@@ -250,16 +250,16 @@ export const Bubble = ({ active }: { active: boolean }) => {
         <svg width="64" height="64" viewBox="0 0 56 57" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g filter="url(#filter0_d_100_466)">
             <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
               d="M27.9999 51.6492C40.9595 51.6492 51.4654 41.1434 51.4654 28.1838C51.4654 15.2241 40.9595 4.71829 27.9999 4.71829C15.0403 4.71829 4.53442 15.2241 4.53442 28.1838C4.53442 41.1434 15.0403 51.6492 27.9999 51.6492ZM27.9999 47.9827C38.9346 47.9827 47.7989 39.1184 47.7989 28.1838C47.7989 17.2491 38.9346 8.38477 27.9999 8.38477C17.0652 8.38477 8.2009 17.2491 8.2009 28.1838C8.2009 39.1184 17.0652 47.9827 27.9999 47.9827Z"
               fill="url(#paint0_radial_100_466)"
             />
           </g>
           <g filter="url(#filter1_d_100_466)">
             <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
               d="M27.9999 47.9827C38.9346 47.9827 47.7989 39.1184 47.7989 28.1838C47.7989 17.2491 38.9346 8.38477 27.9999 8.38477C17.0652 8.38477 8.20093 17.2491 8.20093 28.1838C8.20093 39.1184 17.0652 47.9827 27.9999 47.9827Z"
               fill="#0D2A28"
             />
@@ -270,8 +270,8 @@ export const Bubble = ({ active }: { active: boolean }) => {
           </g>
           <g opacity="0.9" filter="url(#filter2_i_100_466)">
             <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
               d="M27.9999 47.9827C38.9346 47.9827 47.7989 39.1184 47.7989 28.1838C47.7989 17.2491 38.9346 8.38477 27.9999 8.38477C17.0652 8.38477 8.20093 17.2491 8.20093 28.1838C8.20093 39.1184 17.0652 47.9827 27.9999 47.9827Z"
               fill="#0D2A28"
             />
@@ -282,8 +282,8 @@ export const Bubble = ({ active }: { active: boolean }) => {
           </g>
           <g opacity="0.7" filter="url(#filter3_i_100_466)">
             <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
               d="M27.9999 47.9827C38.9346 47.9827 47.7989 39.1184 47.7989 28.1838C47.7989 17.2491 38.9346 8.38477 27.9999 8.38477C17.0652 8.38477 8.20093 17.2491 8.20093 28.1838C8.20093 39.1184 17.0652 47.9827 27.9999 47.9827Z"
               fill="#0D2A28"
             />
@@ -303,16 +303,16 @@ export const Bubble = ({ active }: { active: boolean }) => {
           >
             <g opacity="0.7">
               <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M27.9999 47.9827C38.9346 47.9827 47.7989 39.1184 47.7989 28.1838C47.7989 17.2491 38.9346 8.38477 27.9999 8.38477C17.0652 8.38477 8.20093 17.2491 8.20093 28.1838C8.20093 39.1184 17.0652 47.9827 27.9999 47.9827Z"
                 fill="#FFB34F"
-                fill-opacity="0.2"
+                fillOpacity="0.2"
               />
               <path
                 d="M47.7989 28.1838C47.7989 39.1184 38.9346 47.9827 27.9999 47.9827C17.0652 47.9827 8.20093 39.1184 8.20093 28.1838C8.20093 17.2491 17.0652 8.38477 27.9999 8.38477C38.9346 8.38477 47.7989 17.2491 47.7989 28.1838Z"
                 fill="#FFB34F"
-                fill-opacity="0.2"
+                fillOpacity="0.2"
               />
             </g>
           </mask>
@@ -325,19 +325,19 @@ export const Bubble = ({ active }: { active: boolean }) => {
               <path
                 d="M47.799 21.2174C32.9023 15.3309 24.7246 15.5456 10.4009 21.2174V6.18487L47.799 5.08493V21.2174Z"
                 stroke="#0D2A28"
-                stroke-width="0.733296"
+                strokeWidth="0.733296"
               />
             </g>
           </g>
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M27.9999 47.9827C38.9346 47.9827 47.7989 39.1184 47.7989 28.1838C47.7989 17.2491 38.9346 8.38477 27.9999 8.38477C17.0652 8.38477 8.20093 17.2491 8.20093 28.1838C8.20093 39.1184 17.0652 47.9827 27.9999 47.9827ZM27.9999 46.3557C37.2261 46.3557 46.1719 37.4099 46.1719 28.1838C46.1719 18.9576 37.2261 10.0118 27.9999 10.0118C18.7738 10.0118 9.82793 18.9576 9.82793 28.1838C9.82793 37.4099 18.7738 46.3557 27.9999 46.3557Z"
             fill="#0D2A28"
           />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M14 14.1838C6.26801 21.9158 6.26801 34.4518 14 42.1838C21.732 49.9158 34.268 49.9158 42 42.1838C49.732 34.4518 49.732 21.9158 42 14.1838C34.268 6.45179 21.732 6.45179 14 14.1838ZM15.1505 15.3342C8.6266 21.8581 8.6266 34.5094 15.1505 41.0333C21.6743 47.5572 34.3257 47.5572 40.8495 41.0333C47.3734 34.5095 47.3734 21.8581 40.8495 15.3342C34.3257 8.81038 21.6743 8.81038 15.1505 15.3342Z"
             fill="#0D2A28"
           />
@@ -349,9 +349,9 @@ export const Bubble = ({ active }: { active: boolean }) => {
               width="49.1308"
               height="49.1308"
               filterUnits="userSpaceOnUse"
-              color-interpolation-filters="sRGB"
+              colorInterpolationFilters="sRGB"
             >
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
               <feColorMatrix
                 in="SourceAlpha"
                 type="matrix"
@@ -372,9 +372,9 @@ export const Bubble = ({ active }: { active: boolean }) => {
               width="45.4643"
               height="45.4644"
               filterUnits="userSpaceOnUse"
-              color-interpolation-filters="sRGB"
+              colorInterpolationFilters="sRGB"
             >
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
               <feColorMatrix
                 in="SourceAlpha"
                 type="matrix"
@@ -395,9 +395,9 @@ export const Bubble = ({ active }: { active: boolean }) => {
               width="39.5979"
               height="42.5312"
               filterUnits="userSpaceOnUse"
-              color-interpolation-filters="sRGB"
+              colorInterpolationFilters="sRGB"
             >
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
               <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
               <feColorMatrix
                 in="SourceAlpha"
@@ -418,9 +418,9 @@ export const Bubble = ({ active }: { active: boolean }) => {
               width="40.3312"
               height="42.5312"
               filterUnits="userSpaceOnUse"
-              color-interpolation-filters="sRGB"
+              colorInterpolationFilters="sRGB"
             >
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
               <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
               <feColorMatrix
                 in="SourceAlpha"
@@ -441,9 +441,9 @@ export const Bubble = ({ active }: { active: boolean }) => {
               width="41.0645"
               height="19.9828"
               filterUnits="userSpaceOnUse"
-              color-interpolation-filters="sRGB"
+              colorInterpolationFilters="sRGB"
             >
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
               <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
               <feGaussianBlur stdDeviation="0.733296" result="effect1_foregroundBlur_100_466" />
             </filter>
@@ -455,9 +455,9 @@ export const Bubble = ({ active }: { active: boolean }) => {
               gradientUnits="userSpaceOnUse"
               gradientTransform="translate(27.9999 28.1838) rotate(90) scale(23.4655)"
             >
-              <stop offset="0.852574" stop-color="#52545A" />
-              <stop offset="0.921987" stop-color="#6E6E79" />
-              <stop offset="1" stop-color="#60646A" />
+              <stop offset="0.852574" stopColor="#52545A" />
+              <stop offset="0.921987" stopColor="#6E6E79" />
+              <stop offset="1" stopColor="#60646A" />
             </radialGradient>
           </defs>
         </svg>

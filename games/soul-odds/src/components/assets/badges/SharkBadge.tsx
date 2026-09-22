@@ -170,19 +170,19 @@ export const SharkBadge = ({ unlocked = false }: { unlocked: boolean }) => {
             d="M5.43262 83.8197L5.43262 55.0703L27.647 55.0703L27.647 76.0875L6.52792 84.5605C6.00355 84.7708 5.43262 84.3847 5.43262 83.8197Z"
             fill="#040208"
             stroke="#EDEDED"
-            stroke-width="0.532081"
+            strokeWidth="0.532081"
           />
           <path
             d="M61.9668 83.8197L61.9668 55.0703L39.7524 55.0703L39.7524 76.0875L60.8715 84.5605C61.3959 84.7708 61.9668 84.3847 61.9668 83.8197Z"
             fill="#040208"
             stroke="#EDEDED"
-            stroke-width="0.532081"
+            strokeWidth="0.532081"
           />
           <path
             d="M2.73373 17.0395L31.4661 1.40938C32.7344 0.719435 34.266 0.719436 35.5343 1.40938L64.2667 17.0395C65.6365 17.7847 66.4893 19.2193 66.4893 20.7787L66.4892 56.5075C66.4892 58.0669 65.6365 59.5015 64.2667 60.2466L35.5343 75.8768C34.266 76.5667 32.7344 76.5667 31.4661 75.8768L2.73372 60.2466C1.36387 59.5015 0.511158 58.0669 0.511158 56.5075L0.511167 20.7787C0.511167 19.2193 1.36388 17.7847 2.73373 17.0395Z"
             fill="#040208"
             stroke="#EDEDED"
-            stroke-width="0.532081"
+            strokeWidth="0.532081"
           />
           <path
             d="M31.3072 7.02404L7.6524 19.892C6.20241 20.6808 5.29981 22.1993 5.29981 23.8499L5.2998 53.3016C5.2998 54.9523 6.20241 56.4708 7.6524 57.2596L31.3072 70.1275C32.6497 70.8578 34.2708 70.8578 35.6133 70.1275L59.2681 57.2596C60.7181 56.4708 61.6207 54.9523 61.6207 53.3016L61.6207 23.8499C61.6207 22.1993 60.7181 20.6808 59.2681 19.892L35.6133 7.02404C34.2708 6.29373 32.6497 6.29373 31.3072 7.02404Z"
@@ -192,7 +192,7 @@ export const SharkBadge = ({ unlocked = false }: { unlocked: boolean }) => {
             <path
               d="M31.3072 7.02404L7.6524 19.892C6.20241 20.6808 5.29981 22.1993 5.29981 23.8499L5.2998 53.3016C5.2998 54.9523 6.20241 56.4708 7.6524 57.2596L31.3072 70.1275C32.6497 70.8578 34.2708 70.8578 35.6133 70.1275L59.2681 57.2596C60.7181 56.4708 61.6207 54.9523 61.6207 53.3016L61.6207 23.8499C61.6207 22.1993 60.7181 20.6808 59.2681 19.892L35.6133 7.02404C34.2708 6.29373 32.6497 6.29373 31.3072 7.02404Z"
               stroke="#040208"
-              stroke-width="0.266041"
+              strokeWidth="0.266041"
             />
           </g>
           <g opacity="0.5">
@@ -224,7 +224,7 @@ export const SharkBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <path
                 d="M10.0606 21.6277L31.7137 9.85928C32.9108 9.20868 34.3559 9.20868 35.5529 9.85928L57.206 21.6277C58.5004 22.3312 59.3062 23.6864 59.3062 25.1596L59.3062 52.0957C59.3062 53.5689 58.5004 54.9241 57.206 55.6276L35.5529 67.3961C34.3559 68.0467 32.9107 68.0467 31.7137 67.3961L10.0606 55.6276C8.76624 54.9241 7.96038 53.5689 7.96038 52.0957L7.96038 25.1596C7.96038 23.6864 8.76625 22.3312 10.0606 21.6277Z"
                 stroke="#EDEDED"
-                stroke-width="0.532081"
+                strokeWidth="0.532081"
               />
             </g>
           </g>
@@ -236,9 +236,9 @@ export const SharkBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               width="56.7465"
               height="64.6247"
               filterUnits="userSpaceOnUse"
-              color-interpolation-filters="sRGB"
+              colorInterpolationFilters="sRGB"
             >
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
               <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
               <feGaussianBlur stdDeviation="0.0399061" result="effect1_foregroundBlur_742_8912" />
             </filter>
@@ -249,9 +249,9 @@ export const SharkBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               width="51.8779"
               height="59.0449"
               filterUnits="userSpaceOnUse"
-              color-interpolation-filters="sRGB"
+              colorInterpolationFilters="sRGB"
             >
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
               <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
               <feColorMatrix
                 in="SourceAlpha"

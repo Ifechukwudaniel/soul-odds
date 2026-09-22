@@ -13,12 +13,12 @@ export const DiamondIcon = () => {
         opacity="0.5"
         d="M17.1863 28.811L30.666 44.4335L8.60239 32.4196L15.157 8.16722L17.1413 28.7056L17.1471 28.7655L17.1863 28.811Z"
         stroke="#1B0054"
-        stroke-width="0.378281"
+        strokeWidth="0.378281"
       />
       <path
         d="M8.60872 32.4169L15.3689 7.40401L38.1244 19.7946L31.3643 44.8075L8.60872 32.4169Z"
         stroke="#1B0054"
-        stroke-width="0.389089"
+        strokeWidth="0.389089"
       />
       <defs>
         <linearGradient
@@ -29,8 +29,8 @@ export const DiamondIcon = () => {
           y2="8.05154"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#619BBA" />
-          <stop offset="1" stop-color="#81BBE2" />
+          <stop stopColor="#619BBA" />
+          <stop offset="1" stopColor="#81BBE2" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_319_3441"
@@ -40,8 +40,8 @@ export const DiamondIcon = () => {
           y2="16.6105"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B9E8EA" />
-          <stop offset="1" stop-color="#D2F8F9" />
+          <stop stopColor="#B9E8EA" />
+          <stop offset="1" stopColor="#D2F8F9" />
         </linearGradient>
         <linearGradient
           id="paint2_linear_319_3441"
@@ -51,8 +51,8 @@ export const DiamondIcon = () => {
           y2="35.6446"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B9E6EA" />
-          <stop offset="1" stop-color="#81DBE2" />
+          <stop stopColor="#B9E6EA" />
+          <stop offset="1" stopColor="#81DBE2" />
         </linearGradient>
         <linearGradient
           id="paint3_linear_319_3441"
@@ -62,8 +62,8 @@ export const DiamondIcon = () => {
           y2="33.8809"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#61AABA" />
-          <stop offset="1" stop-color="#297E91" />
+          <stop stopColor="#61AABA" />
+          <stop offset="1" stopColor="#297E91" />
         </linearGradient>
         <linearGradient
           id="paint4_linear_319_3441"
@@ -73,8 +73,8 @@ export const DiamondIcon = () => {
           y2="22.4369"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B9DEEA" />
-          <stop offset="1" stop-color="#81CBE2" />
+          <stop stopColor="#B9DEEA" />
+          <stop offset="1" stopColor="#81CBE2" />
         </linearGradient>
         <linearGradient
           id="paint5_linear_319_3441"
@@ -84,8 +84,8 @@ export const DiamondIcon = () => {
           y2="32.1714"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#619BBA" />
-          <stop offset="1" stop-color="#81BBE2" />
+          <stop stopColor="#619BBA" />
+          <stop offset="1" stopColor="#81BBE2" />
         </linearGradient>
       </defs>
     </svg>

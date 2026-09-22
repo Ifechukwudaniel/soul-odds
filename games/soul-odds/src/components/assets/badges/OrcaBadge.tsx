@@ -224,24 +224,24 @@ export const OrcaBadge = ({ unlocked = false }: { unlocked: boolean }) => {
             d="M7.11133 68.5651V40.7219H56.1405V68.3219C56.1405 68.5814 56.0017 68.8211 55.7766 68.9503L31.6762 82.7806C31.452 82.9093 31.1763 82.9088 30.9526 82.7793L7.47299 69.1923C7.24916 69.0627 7.11133 68.8237 7.11133 68.5651Z"
             fill="#040208"
             stroke="#EDEDED"
-            stroke-width="0.241523"
+            strokeWidth="0.241523"
           />
           <path
             d="M21.2404 40.8427V77.0196L7.53347 69.0877C7.34695 68.9798 7.23209 68.7806 7.23209 68.5651V40.8427H21.2404Z"
             fill="#040208"
             stroke="#EDEDED"
-            stroke-width="0.241523"
+            strokeWidth="0.241523"
           />
           <mask id="path-3-inside-1_2030_185" fill="white">
             <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
               d="M20.8789 76.9498V40.7222H21.362V77.2293L20.8789 76.9498Z"
             />
           </mask>
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M20.8789 76.9498V40.7222H21.362V77.2293L20.8789 76.9498Z"
             fill="#040208"
           />
@@ -254,14 +254,14 @@ export const OrcaBadge = ({ unlocked = false }: { unlocked: boolean }) => {
             d="M42.0115 40.6012V76.7781L55.7185 68.8463C55.905 68.7383 56.0199 68.5392 56.0199 68.3237V40.6012H42.0115Z"
             fill="#040208"
             stroke="#EDEDED"
-            stroke-width="0.241523"
+            strokeWidth="0.241523"
           />
           <mask id="path-6-inside-2_2030_185" fill="white">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M42.373 76.7081V40.4805H41.89V76.9876L42.373 76.7081Z" />
+            <path fillRule="evenodd" clipRule="evenodd" d="M42.373 76.7081V40.4805H41.89V76.9876L42.373 76.7081Z" />
           </mask>
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M42.373 76.7081V40.4805H41.89V76.9876L42.373 76.7081Z"
             fill="#040208"
           />
@@ -274,7 +274,7 @@ export const OrcaBadge = ({ unlocked = false }: { unlocked: boolean }) => {
             d="M2.42325 16.1038L29.5779 1.33198C30.7765 0.67993 32.224 0.67993 33.4226 1.33198L60.5772 16.1038C61.8719 16.8081 62.6778 18.1639 62.6778 19.6377L62.6778 53.4045C62.6778 54.8783 61.8719 56.2341 60.5772 56.9383L33.4226 71.7102C32.224 72.3622 30.7765 72.3622 29.5779 71.7102L2.42324 56.9383C1.12861 56.2341 0.322721 54.8783 0.322721 53.4045L0.322729 19.6377C0.322729 18.1639 1.12862 16.8081 2.42325 16.1038Z"
             fill="#040208"
             stroke="#EDEDED"
-            stroke-width="0.502863"
+            strokeWidth="0.502863"
           />
           <g opacity="0.5">
             <mask
@@ -290,7 +290,7 @@ export const OrcaBadge = ({ unlocked = false }: { unlocked: boolean }) => {
                 d="M9.34769 20.4403L29.8117 9.31807C30.943 8.70321 32.3088 8.70321 33.4401 9.31807L53.9041 20.4403C55.1275 21.1052 55.8891 22.3859 55.8891 23.7782L55.8891 49.2352C55.8891 50.6275 55.1274 51.9083 53.9041 52.5732L33.4401 63.6954C32.3088 64.3103 30.943 64.3103 29.8117 63.6954L9.34768 52.5732C8.12437 51.9083 7.36276 50.6275 7.36276 49.2352L7.36277 23.7782C7.36277 22.3859 8.12438 21.1052 9.34769 20.4403Z"
                 fill="#A6D3DE"
                 stroke="#EDEDED"
-                stroke-width="0.502863"
+                strokeWidth="0.502863"
               />
             </mask>
             <g mask="url(#mask0_2030_185)">
@@ -298,7 +298,7 @@ export const OrcaBadge = ({ unlocked = false }: { unlocked: boolean }) => {
                 d="M9.34769 20.4403L29.8117 9.31807C30.943 8.70321 32.3088 8.70321 33.4401 9.31807L53.9041 20.4403C55.1275 21.1052 55.8891 22.3859 55.8891 23.7782L55.8891 49.2352C55.8891 50.6275 55.1274 51.9083 53.9041 52.5732L33.4401 63.6954C32.3088 64.3103 30.943 64.3103 29.8117 63.6954L9.34768 52.5732C8.12437 51.9083 7.36276 50.6275 7.36276 49.2352L7.36277 23.7782C7.36277 22.3859 8.12438 21.1052 9.34769 20.4403Z"
                 fill="#040208"
                 stroke="#EDEDED"
-                stroke-width="0.502863"
+                strokeWidth="0.502863"
               />
               <g filter="url(#filter0_i_2030_185)">
                 <path
@@ -309,7 +309,7 @@ export const OrcaBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <path
                 d="M9.34769 20.4403L29.8117 9.31807C30.943 8.70321 32.3088 8.70321 33.4401 9.31807L53.9041 20.4403C55.1275 21.1052 55.8891 22.3859 55.8891 23.7782L55.8891 49.2352C55.8891 50.6275 55.1274 51.9083 53.9041 52.5732L33.4401 63.6954C32.3088 64.3103 30.943 64.3103 29.8117 63.6954L9.34768 52.5732C8.12437 51.9083 7.36276 50.6275 7.36276 49.2352L7.36277 23.7782C7.36277 22.3859 8.12438 21.1052 9.34769 20.4403Z"
                 stroke="#EDEDED"
-                stroke-width="0.502863"
+                strokeWidth="0.502863"
               />
             </g>
           </g>
@@ -321,9 +321,9 @@ export const OrcaBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               width="49.0293"
               height="55.8025"
               filterUnits="userSpaceOnUse"
-              color-interpolation-filters="sRGB"
+              colorInterpolationFilters="sRGB"
             >
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
               <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
               <feColorMatrix
                 in="SourceAlpha"

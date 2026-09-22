@@ -58,6 +58,7 @@ export const ProfileModal = (props: {
     <AnimatePresence>
       {props.isOpen && (
         <motion.div
+          key="profile-modal"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -100,8 +101,8 @@ export const ProfileModal = (props: {
           </motion.div>
         </motion.div>
       )}
-      <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
-      <AvatarPickerModal isOpen={isAvatarPickerOpen} onClose={() => setIsAvatarPickerOpen(false)} />
+      <SettingsModal key="settings-modal" isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+      <AvatarPickerModal key="avatar-picker-modal" isOpen={isAvatarPickerOpen} onClose={() => setIsAvatarPickerOpen(false)} />
     </AnimatePresence>
   );
 };
