@@ -1,8 +1,10 @@
 import { encodeAbiParameters, type Hex, hexToBigInt, keccak256, numberToHex } from 'viem';
 
 export const SOUL_ERAS = [
-  'Ancient',
+  'Paleolithic',
+  'Agrarian',
   'Medieval',
+  'Renaissance',
   'EarlyModern',
   'Industrial',
   'Modern',

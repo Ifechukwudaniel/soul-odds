@@ -302,9 +302,9 @@ describe('SoulOddsEngine', async () => {
 
     it('rejects an invalid era', async () => {
       // Solidity decodes the calldata `era` straight into the `SoulEra` enum, so an out-of-range
-      // value (6, past `Contemporary`) reverts as an enum-conversion panic before `_validateEra`'s
+      // value (8, past `Contemporary`) reverts as an enum-conversion panic before `_validateEra`'s
       // own check ever runs — the explicit check only guards internal/memory-struct call sites.
-      await assert.rejects(deployer.write.deployTitle([[{ ...example.input, era: 6 }]]));
+      await assert.rejects(deployer.write.deployTitle([[{ ...example.input, era: 8 }]]));
     });
 
     it('rejects an inverted or out-of-range birth year range', async () => {
