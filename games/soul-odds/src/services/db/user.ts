@@ -79,7 +79,8 @@ export async function useTokens(address: string, amount: number): Promise<void> 
  * @param sortBy Which column to rank by.
  * @param limit The maximum number of users to return.
  * @param address When given, guarantees this user is included even if their
- * rank falls outside `limit` - appended last if they're not already in range.
+ * rank falls outside `limit` - inserted at the position their own score
+ * would place them, not tacked onto the end.
  * @returns The ranked users.
  */
 export async function getLeaderboard(
@@ -87,7 +88,8 @@ export async function getLeaderboard(
   limit: number = DEFAULT_LEADERBOARD_LIMIT,
   address?: string,
 ): Promise<User[]> {
-  const column = sortBy === 'balance' ? userSchema.balance : userSchema.points;
+  const key = sortBy === 'balance' ? 'balance' : 'points';
+  const column = userSchema[key];
   const users = await db.select().from(userSchema).orderBy(desc(column)).limit(limit);
 
   if (!address) {
@@ -100,7 +102,15 @@ export async function getLeaderboard(
   }
 
   const currentUser = await findUser(normalized);
-  return currentUser ? [...users, currentUser] : users;
+  if (!currentUser) {
+    return users;
+  }
+
+  const insertAt = users.findIndex((user) => user[key] < currentUser[key]);
+  if (insertAt === -1) {
+    return [...users, currentUser];
+  }
+  return [...users.slice(0, insertAt), currentUser, ...users.slice(insertAt)];
 }
 
 export async function getAllTokensInCircluation(): Promise<TotalTokenInCirclation> {

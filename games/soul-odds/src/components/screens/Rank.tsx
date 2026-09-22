@@ -1,40 +1,61 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { Loader } from "../Loader";
 import { Leaderboard } from "@/components/game/leaderboard/Leaderboard";
+import { RefeshInterval } from "@/constants";
+import { getLeaderboard } from "@/services/data/leaderboard";
+import type { User } from "@/services/db/user";
 import { useAppStore } from "@/services/store/store";
 import type { LeaderboardUser } from "@/types";
+import { formatAddress } from "@/utils";
 
 const RESET_AT = new Date("2026-09-28T00:00:00Z");
 
-/** Placeholder competitors until a real leaderboard endpoint exists; the current user is merged in below. */
-const MOCK_USERS: LeaderboardUser[] = [
-  { id: "1", rank: 1, username: "Jolie Joie", handle: "joliejoie", followers: 40200, points: 2_500_000, reward: 100_000 },
-  { id: "2", rank: 2, username: "Brian Ngo", handle: "brianngo", followers: 31000, points: 2_200_000, reward: 50_000 },
-  { id: "3", rank: 3, username: "David Do", handle: "davidgo", followers: 28500, points: 2_100_000, reward: 20_000 },
-  { id: "4", rank: 4, username: "Henrietta O'Connell", handle: "henrietta", followers: 12241, points: 2_114_424, reward: 1000 },
-  { id: "5", rank: 5, username: "Darrel Bins", handle: "darrel", followers: 12241, points: 2_114_424, reward: 1000 },
-];
-
-export const RankScreen = () => {
-  const user = useAppStore((state) => state.user);
-
-  const currentUserId = user.address;
-  const currentUserEntry: LeaderboardUser = {
-    id: currentUserId,
-    rank: 0,
-    username: user.username || "You",
-    handle: (user.username || "you").toLowerCase(),
+function toLeaderboardUser(user: User, rank: number): LeaderboardUser {
+  const displayName = user.username || formatAddress(user.address);
+  return {
+    id: user.address,
+    rank,
+    username: displayName,
+    handle: displayName.toLowerCase(),
     followers: 0,
-    points: Math.round(user.skill),
+    points: user.points,
     reward: 0,
   };
+}
 
-  // Rank is derived from sorted position, not stored, so the current user always lands where their real points put them.
-  const users = [...MOCK_USERS.filter((entry) => entry.id !== currentUserId), currentUserEntry]
-    .sort((a, b) => b.points - a.points)
-    .map((entry, index) => ({ ...entry, rank: index + 1 }));
+export const RankScreen = () => {
+  const address = useAppStore((state) => state.user.address);
+  const [users, setUsers] = useState<LeaderboardUser[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const currentUser = users.find((entry) => entry.id === currentUserId);
+  const fetchLeaderboard = async () => {
+    try {
+      const rankedUsers = await getLeaderboard({ sortBy: "points", address: address || undefined });
+      setUsers(rankedUsers.map((user, index) => toLeaderboardUser(user, index + 1)));
+    } catch (error) {
+      console.error("Failed to fetch leaderboard", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLeaderboard();
+    const interval = setInterval(fetchLeaderboard, RefeshInterval);
+    return () => clearInterval(interval);
+  }, [address]);
+
+  if (loading) {
+    return (
+      <section className="flex flex-col h-screen justify-center items-center">
+        <Loader />
+      </section>
+    );
+  }
+
+  const currentUser = users.find((entry) => entry.id === address);
 
   return <Leaderboard users={users} currentUser={currentUser} resetAt={RESET_AT} />;
 };
