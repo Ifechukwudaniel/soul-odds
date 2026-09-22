@@ -3,7 +3,7 @@ import React from "react";
 export const SolanaLogo = () => {
   return (
     <svg width="81" height="12" viewBox="0 0 81 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g clip-path="url(#clip0_323_9108)">
+      <g clipPath="url(#clip0_323_9108)">
         <mask id="mask0_323_9108" maskUnits="userSpaceOnUse" x="0" y="0" width="81" height="12">
           <path d="M80.75 0H0V12H80.75V0Z" fill="white" />
         </mask>

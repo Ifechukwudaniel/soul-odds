@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, use } from "react";
+import { createContext, use, useState } from "react";
 import type { HostApiV1, HostSnapshotV1 } from "@chain/casino-sdk/guest";
 import { Loader } from "@/components/Loader";
 import { useCasinoHost } from "@/hooks/useCasinoHost";
@@ -21,18 +21,23 @@ export function useCasinoHostContext(): CasinoHostContextValue {
   return value;
 }
 
-/** Connects to the casino host and gates rendering until the handshake and first snapshot land. */
+/**
+ * Connects to the casino host and gates rendering until the handshake and first snapshot land.
+ * The loader stays mounted through its own exit transition (see Loader's `ready`/`onExit`) so a
+ * handshake that resolves instantly still dissolves out instead of flashing off screen.
+ */
 export function AppWalletProvider(props: { children: React.ReactNode }) {
   const { hostApi, snapshot } = useCasinoHost();
+  const [connected, setConnected] = useState(false);
 
-  if (!hostApi || !snapshot) {
+  if (!connected) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <Loader />
-          <span>Connecting to host…</span>
-        </div>
-      </div>
+      <Loader
+        label="Connecting to host…"
+        hint="The realm is taking a moment to answer…"
+        ready={Boolean(hostApi && snapshot)}
+        onExit={() => setConnected(true)}
+      />
     );
   }
 

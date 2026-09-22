@@ -44,16 +44,9 @@ export const PredictionsPanel = (props: {
       <div className="flex min-h-0 flex-1 flex-col gap-4">
         <div className="flex min-h-0 flex-1 flex-col gap-3">
           <div className="flex items-center justify-between">
-            <button
-              type="button"
-              onClick={() => {
-                playClickSound();
-                props.onBack();
-              }}
-              className="rounded-lg border border-white/10 px-3 py-1.5 text-sm text-white/70 hover:text-white"
-            >
+            <GameButton variant="papyrus" onClick={props.onBack} className="px-4 py-1.5 text-xs">
               ← Back
-            </button>
+            </GameButton>
             <span className="text-white/40 text-xs">
               {step + 1} of {marketsConfig.length}
             </span>

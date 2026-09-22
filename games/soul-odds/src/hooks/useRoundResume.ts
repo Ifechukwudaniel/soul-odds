@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useCasinoHost } from "@/hooks/useCasinoHost";
+import { notification } from "@/utils/notifications";
 import type { MortalOddsBets } from "@/hooks/useMortalOddsBets";
 import type { MortalOddsRound, RevealResult } from "@/hooks/useMortalOddsDraw";
 import { clearRound, readRound, roundStorageKey, toResumablePhase, writeRound } from "@/lib/mortal-odds/round-storage";
@@ -36,6 +37,7 @@ export function useRoundResume(options: {
       setCharges(stored.charges);
       setChipSize(stored.chipSize);
       setRestoredReveal(stored.reveal);
+      notification.info(stored.phase === "revealed" ? "Here's how your last soul turned out." : "Picking up your round in progress — your wager is safe.");
     }
     setChecked(true);
   }, [key, checked]);

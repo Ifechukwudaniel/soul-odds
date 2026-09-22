@@ -1,79 +1,52 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { useId } from "react";
 import { FaVolumeMute, FaVolumeUp } from "react-icons/fa";
-import { CloseIcon } from "@/components/assets/CloseIcon";
+import { GameDialog } from "@/components/game/GameDialog";
+import { ModalCloseButton, ModalHeader } from "@/components/game/GameModalParts";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
 import { playClickSound } from "@/utils/playClickSound";
 
 export const SettingsModal = (props: { isOpen: boolean; onClose: () => void }) => {
   const { isMuted, toggle, volume, setVolume } = useBackgroundMusic();
+  const titleId = useId();
 
   return (
-    <AnimatePresence>
-      {props.isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-30 flex items-center justify-center bg-black/60 px-4"
-          onClick={() => {
-            playClickSound();
-            props.onClose();
-          }}
-        >
-          <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
-            transition={{ type: "spring", bounce: 0, duration: 0.3 }}
-            onClick={(event) => event.stopPropagation()}
-            className="relative flex w-full max-w-md flex-col gap-5 rounded-3xl bg-[#18131FE5] p-6"
-            style={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
-          >
+    <GameDialog isOpen={props.isOpen} onClose={props.onClose} labelledBy={titleId} className="w-full max-w-md">
+      <div className="relative flex flex-col gap-5 p-6">
+        <ModalCloseButton onClick={props.onClose} />
+
+        <ModalHeader title="Settings" titleId={titleId} />
+
+        <div className="flex flex-col gap-3 rounded-xl border border-[#d4af37]/25 bg-[#F5B83D]/5 px-4 py-3">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-white/60">Music volume</p>
             <button
               type="button"
+              aria-label={isMuted ? "Unmute sound" : "Mute sound"}
               onClick={() => {
                 playClickSound();
-                props.onClose();
+                toggle();
               }}
-              className="absolute top-4 right-4"
+              className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[#d4af37]/50 bg-[#F5B83D]/10 text-[#F5B83D] transition-colors hover:bg-[#F5B83D]/25 hover:text-[#FDE991]"
             >
-              <CloseIcon />
+              {isMuted ? <FaVolumeMute size={16} /> : <FaVolumeUp size={16} />}
             </button>
+          </div>
 
-            <h2 className="text-lg font-bold text-white">Settings</h2>
-
-            <div className="flex flex-col gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-white/60">Music volume</p>
-                <button
-                  type="button"
-                  aria-label={isMuted ? "Unmute sound" : "Mute sound"}
-                  onClick={() => {
-                    playClickSound();
-                    toggle();
-                  }}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/60 text-white transition-colors hover:bg-white/10"
-                >
-                  {isMuted ? <FaVolumeMute size={16} /> : <FaVolumeUp size={16} />}
-                </button>
-              </div>
-
-              <input
-                type="range"
-                min={0}
-                max={1}
-                step={0.01}
-                value={volume}
-                disabled={isMuted}
-                onChange={(event) => setVolume(Number(event.target.value))}
-                className="w-full accent-[#F5B83D] disabled:opacity-40"
-              />
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.01}
+            value={volume}
+            disabled={isMuted}
+            aria-label="Music volume"
+            onChange={(event) => setVolume(Number(event.target.value))}
+            className="w-full accent-[#F5B83D] disabled:opacity-40"
+          />
+        </div>
+      </div>
+    </GameDialog>
   );
 };

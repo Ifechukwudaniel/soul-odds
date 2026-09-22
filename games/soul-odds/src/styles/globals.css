@@ -1,4 +1,5 @@
 @import './font.css';
+@import 'react-toastify/dist/ReactToastify.css';
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -72,6 +73,50 @@ main {
   --anubis-carnelian: #b7410e;
   --anubis-papyrus: #e8dcc0;
   --anubis-obsidian: #0b0a08;
+}
+
+/*
+ * react-toastify skin (utils/notifications.tsx): the papyrus-banner card, and the built-in
+ * progress bar recolored per status — no hand-rolled countdown. Selectors are double-classed to
+ * out-specificity the imported base stylesheet regardless of merge order, and colors are set as
+ * literal values rather than by overriding react-toastify's own CSS variables, since Tailwind's
+ * build can flatten those at build time before any runtime specificity would get a say.
+ */
+.Toastify__toast.Toastify__toast {
+  width: 24rem;
+  min-height: auto;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.55), 0 3px 0 0 #7a5a1f80, inset 0 1px 0 0 #fff8e8b3;
+  background: linear-gradient(to bottom, #f3ead2, var(--anubis-papyrus));
+  border: 2px solid var(--anubis-gold-leaf);
+  color: #33353d;
+  font-family: inherit;
+}
+
+.Toastify__progress-bar--wrp.Toastify__progress-bar--wrp {
+  height: 4px;
+  border-radius: 0 0 1rem 1rem;
+}
+
+.Toastify__progress-bar--bg.Toastify__progress-bar--bg {
+  opacity: 0.25;
+}
+
+.Toastify__progress-bar--success.Toastify__progress-bar--success {
+  background: #6ba84f;
+}
+
+.Toastify__progress-bar--info.Toastify__progress-bar--info {
+  background: var(--anubis-faience);
+}
+
+.Toastify__progress-bar--warning.Toastify__progress-bar--warning {
+  background: var(--anubis-gold);
+}
+
+.Toastify__progress-bar--error.Toastify__progress-bar--error {
+  background: var(--anubis-carnelian);
 }
 
 /*
@@ -239,10 +284,50 @@ main {
   margin-bottom: 22px;
 }
 
-/* OverlayScrollbars removes the viewport outline; restore a visible keyboard focus ring. */
-[data-overlayscrollbars] > [data-overlayscrollbars-viewport]:focus-visible {
+/*
+ * A scroll area that's a keyboard tab stop only so it can be scrolled (no interactive content of its own,
+ * e.g. the leaderboard list) intentionally shows no focus ring in normal mode — a ring around content that
+ * isn't itself a control read as a stray box, not a control being "selected". Windows high-contrast mode
+ * still gets one below: there, it's the only sign focus moved at all, so it's a hard requirement, not taste.
+ */
+
+/*
+ * Every other keyboard-focused control gets the same gold ring (mouse/touch focus stays ring-free via
+ * :focus-visible). `.chamfer-btn`/`.stat-card`/`.game-nav-btn` clip or reshape their own box (clip-path, or a
+ * ring that should follow a round emblem instead of the whole pill), so they get their own treatment below.
+ */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
   outline: 2px solid var(--anubis-gold);
-  outline-offset: -2px;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.chamfer-btn:focus-visible,
+.stat-card:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--anubis-gold);
+}
+
+/*
+ * Bottom nav (components/MenuBtn.tsx): the button's own box is a tall rectangle (round emblem, pill label
+ * below), so a ring around the whole thing reads as a stray box rather than "this icon is selected". Instead
+ * the ring wraps just the round emblem, like a glowing medallion — .nav-bubble marks that inner circle.
+ */
+.game-nav-btn:focus-visible {
+  outline: none;
+}
+
+.game-nav-btn:focus-visible .nav-bubble {
+  border-radius: 9999px;
+  box-shadow:
+    0 0 0 3px var(--anubis-gold),
+    0 0 14px 3px rgba(245, 184, 61, 0.6);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -293,8 +378,13 @@ main {
     display: none;
   }
 
+  /*
+   * The scroll-viewport ring is suppressed above for normal mode (see the comment near line 238); forced-colors
+   * users still need one, since color/box-shadow cues elsewhere on the page are gone here too.
+   */
   [data-overlayscrollbars] > [data-overlayscrollbars-viewport]:focus-visible {
-    outline-color: Highlight;
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
   }
 }
 
@@ -350,6 +440,76 @@ a[href][aria-disabled="true"],
   cursor: url("/cursors/crosshair.png") 16 16, crosshair;
   cursor: -webkit-image-set(url("/cursors/crosshair.png") 1x, url("/cursors/crosshair@2x.png") 2x) 16 16, crosshair;
   cursor: image-set(url("/cursors/crosshair.png") 1x, url("/cursors/crosshair@2x.png") 2x) 16 16, crosshair;
+}
+
+/*
+ * Shared modal surface (InfoDialog, SettingsModal): the mystic-glass gold border on a slightly see-through dark card
+ * (about 90% opaque) that blurs whatever is behind it. Pair it with a `bg-black/60` overlay for the dimmed page.
+ */
+.game-modal-panel {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(rgba(10, 9, 8, 0.9), rgba(7, 7, 6, 0.9)) padding-box,
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.38) 0%,
+      rgba(255, 255, 255, 0.12) 22%,
+      rgba(255, 255, 255, 0.045) 48%,
+      rgba(208, 170, 91, 0.18) 76%,
+      rgba(255, 255, 255, 0.08) 100%
+    ) border-box;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 8px 22px rgba(0, 0, 0, 0.35);
+}
+
+/* Toast auto-dismiss countdown (utils/notifications.tsx): the gold bar shrinks left-to-right over the toast's duration. */
+@keyframes toast-countdown {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* Shared modal entrance (components/game/GameDialog.tsx): rises in over a fading backdrop. */
+@keyframes info-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes info-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.game-dialog[open] {
+  animation: info-dialog-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.game-dialog[open]::backdrop {
+  animation: info-backdrop-in 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-dialog[open],
+  .game-dialog[open]::backdrop {
+    animation: none;
+  }
 }
 
 /* Cartouche: the oval name-ring of Egyptian inscription — a pill with flat end bars. */
@@ -461,6 +621,72 @@ a[href][aria-disabled="true"],
   filter: drop-shadow(0 0 6px rgba(253, 233, 145, 0.75)) drop-shadow(0 0 16px rgba(251, 187, 63, 0.45));
 }
 
+/*
+ * Game loader (components/Loader.tsx): chamfered progress track, same octagon-clip technique as
+ * .chamfer-btn, sized for a thin bar. The fill is a separate absolutely-positioned element so its
+ * width can be tweened without re-clipping the frame.
+ */
+.loader-track {
+  --shape-offset: 6px;
+  --inset: 2px;
+  --octagon: polygon(
+    0 var(--shape-offset),
+    var(--shape-offset) 0,
+    calc(100% - var(--shape-offset)) 0,
+    100% var(--shape-offset),
+    100% calc(100% - var(--shape-offset)),
+    calc(100% - var(--shape-offset)) 100%,
+    var(--shape-offset) 100%,
+    0 calc(100% - var(--shape-offset))
+  );
+  position: relative;
+  clip-path: var(--octagon);
+  background: linear-gradient(91.67deg, #fde991 0%, #baaf7f 40%, #fde991 70%, #b07464 100%);
+}
+
+.loader-track::before {
+  content: "";
+  position: absolute;
+  inset: var(--inset);
+  clip-path: var(--octagon);
+  background: #06080c;
+  z-index: 0;
+}
+
+.loader-track-fill {
+  position: absolute;
+  inset: var(--inset);
+  clip-path: var(--octagon);
+  z-index: 1;
+  background: linear-gradient(90deg, #a97a2a 0%, #f5b83d 55%, #fde991 100%);
+  overflow: hidden;
+}
+
+.loader-track-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 60px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  animation: loader-shimmer 1.6s linear infinite;
+}
+
+@keyframes loader-shimmer {
+  0% {
+    transform: translateX(-60px);
+  }
+  100% {
+    transform: translateX(calc(100% + 60px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-track-fill::after {
+    animation: none;
+    display: none;
+  }
+}
+
 .green-gradient {
   background: linear-gradient(
     0deg,
@@ -561,47 +787,6 @@ a[href][aria-disabled="true"],
   user-select: none;
 }
 
-/* Loader */
-.loader {
-  display: block;
-  position: relative;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  border: 3px solid transparent;
-  border-top-color: #657500;
-  -webkit-animation: spin 1.7s linear infinite;
-  animation: spin 1.7s linear infinite;
-  z-index: 11;
-}
-.loader:before {
-  content: "";
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  right: 5px;
-  bottom: 5px;
-  border-radius: 50%;
-  border: 3px solid transparent;
-  border-top-color: #5130b5;
-  -webkit-animation: spin-reverse 0.6s linear infinite;
-  animation: spin-reverse 0.6s linear infinite;
-}
-
-.loader:after {
-  content: "";
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  right: 15px;
-  bottom: 15px;
-  border-radius: 50%;
-  border: 3px solid transparent;
-  border-top-color: #e69b00;
-  -webkit-animation: spin 1s linear infinite;
-  animation: spin 1s linear infinite;
-}
-
 .button-animation {
   animation: buttonAnimation 1s infinite ease-in-out;
 }
@@ -675,42 +860,6 @@ a[href][aria-disabled="true"],
   }
 }
 
-
-@-webkit-keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@-webkit-keyframes spin-reverse {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(-360deg);
-  }
-}
-
-@keyframes spin-reverse {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(-360deg);
-  }
-}
 
 @keyframes numberAnimation {
   0% {

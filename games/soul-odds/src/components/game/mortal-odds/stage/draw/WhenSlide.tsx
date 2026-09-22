@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { InfoDialog } from "@/components/game/InfoDialog";
+import { AGE_INFO } from "@/components/game/mortal-odds/stage/draw/slide-info";
 import { PopulationChart } from "@/components/game/mortal-odds/stage/draw/PopulationChart";
 import { YearReel } from "@/components/game/mortal-odds/stage/draw/YearReel";
 import { fmtNumber, fmtYear, periodName } from "@/lib/mortal-odds/format";
@@ -28,7 +30,10 @@ export const WhenSlide = (props: {
 
   return (
     <div className="flex min-h-full flex-col items-center  gap-5 text-center">
-      <h2 className={`${serifFont.className} font-bold text-3xl text-[#F1D6AE] sm:text-4xl leading-[0.55] pt-[0.5rem]`}>In which age?</h2>
+      <div className="flex items-center justify-center gap-3">
+        <h2 className={`${serifFont.className} font-bold text-3xl text-[#F1D6AE] sm:text-4xl leading-[0.55] pt-[0.5rem]`}>In which age?</h2>
+        <InfoDialog {...AGE_INFO} />
+      </div>
       <p className="max-w-lg text-[0.8rem] text-[#f1f1f2c0]">{INTRO}</p>
 
       <div className="w-full max-w-2xl">

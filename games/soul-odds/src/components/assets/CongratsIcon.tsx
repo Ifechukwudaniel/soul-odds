@@ -831,9 +831,9 @@ export const CongratsIcon = () => {
           width="237.431"
           height="251"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur stdDeviation="17.5" result="effect1_foregroundBlur_459_9076" />
         </filter>
@@ -844,9 +844,9 @@ export const CongratsIcon = () => {
           width="263.842"
           height="254.023"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur stdDeviation="21.1" result="effect1_foregroundBlur_459_9076" />
         </filter>
@@ -857,9 +857,9 @@ export const CongratsIcon = () => {
           width="16.9822"
           height="16.9817"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur stdDeviation="3.08758" result="effect1_foregroundBlur_459_9076" />
         </filter>
@@ -870,9 +870,9 @@ export const CongratsIcon = () => {
           width="2.57314"
           height="2.57299"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur stdDeviation="0.257299" result="effect1_foregroundBlur_459_9076" />
         </filter>
@@ -883,9 +883,9 @@ export const CongratsIcon = () => {
           width="6.40969"
           height="6.40954"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur stdDeviation="1.21644" result="effect1_foregroundBlur_459_9076" />
         </filter>
@@ -896,9 +896,9 @@ export const CongratsIcon = () => {
           width="5.19326"
           height="5.1931"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur stdDeviation="0.912328" result="effect1_foregroundBlur_459_9076" />
         </filter>
@@ -909,9 +909,9 @@ export const CongratsIcon = () => {
           width="17.3099"
           height="17.3104"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur stdDeviation="3.04109" result="effect1_foregroundBlur_459_9076" />
         </filter>
@@ -922,9 +922,9 @@ export const CongratsIcon = () => {
           width="14.4091"
           height="14.4087"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur stdDeviation="2.57299" result="effect1_foregroundBlur_459_9076" />
         </filter>
@@ -935,9 +935,9 @@ export const CongratsIcon = () => {
           width="14.4091"
           height="14.4087"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur stdDeviation="2.57299" result="effect1_foregroundBlur_459_9076" />
         </filter>
@@ -949,8 +949,8 @@ export const CongratsIcon = () => {
           y2="139.888"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F8B54A" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F8B54A" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_459_9076"
@@ -960,8 +960,8 @@ export const CongratsIcon = () => {
           y2="146.653"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint2_linear_459_9076"
@@ -971,8 +971,8 @@ export const CongratsIcon = () => {
           y2="111.78"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F44274" />
-          <stop offset="1" stop-color="#E51F9A" />
+          <stop stopColor="#F44274" />
+          <stop offset="1" stopColor="#E51F9A" />
         </linearGradient>
         <linearGradient
           id="paint3_linear_459_9076"
@@ -982,8 +982,8 @@ export const CongratsIcon = () => {
           y2="136.509"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B5188D" />
-          <stop offset="1" stop-color="#4E69AE" />
+          <stop stopColor="#B5188D" />
+          <stop offset="1" stopColor="#4E69AE" />
         </linearGradient>
         <linearGradient
           id="paint4_linear_459_9076"
@@ -993,8 +993,8 @@ export const CongratsIcon = () => {
           y2="99.381"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B4DF86" />
-          <stop offset="1" stop-color="#84C743" />
+          <stop stopColor="#B4DF86" />
+          <stop offset="1" stopColor="#84C743" />
         </linearGradient>
         <linearGradient
           id="paint5_linear_459_9076"
@@ -1004,8 +1004,8 @@ export const CongratsIcon = () => {
           y2="133.527"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F44274" />
-          <stop offset="1" stop-color="#E51F9A" />
+          <stop stopColor="#F44274" />
+          <stop offset="1" stopColor="#E51F9A" />
         </linearGradient>
         <linearGradient
           id="paint6_linear_459_9076"
@@ -1015,8 +1015,8 @@ export const CongratsIcon = () => {
           y2="76.4548"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FBE422" />
-          <stop offset="1" stop-color="#C8D92B" />
+          <stop stopColor="#FBE422" />
+          <stop offset="1" stopColor="#C8D92B" />
         </linearGradient>
         <linearGradient
           id="paint7_linear_459_9076"
@@ -1026,8 +1026,8 @@ export const CongratsIcon = () => {
           y2="125.648"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F8B54A" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F8B54A" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint8_linear_459_9076"
@@ -1037,8 +1037,8 @@ export const CongratsIcon = () => {
           y2="106.665"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F8B54A" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F8B54A" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint9_linear_459_9076"
@@ -1048,8 +1048,8 @@ export const CongratsIcon = () => {
           y2="49.6448"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BE1E68" />
-          <stop offset="1" stop-color="#B5188D" />
+          <stop stopColor="#BE1E68" />
+          <stop offset="1" stopColor="#B5188D" />
         </linearGradient>
         <linearGradient
           id="paint10_linear_459_9076"
@@ -1059,8 +1059,8 @@ export const CongratsIcon = () => {
           y2="172.266"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B4DF86" />
-          <stop offset="1" stop-color="#84C743" />
+          <stop stopColor="#B4DF86" />
+          <stop offset="1" stopColor="#84C743" />
         </linearGradient>
         <linearGradient
           id="paint11_linear_459_9076"
@@ -1070,8 +1070,8 @@ export const CongratsIcon = () => {
           y2="173.822"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FBE422" />
-          <stop offset="1" stop-color="#C8D92B" />
+          <stop stopColor="#FBE422" />
+          <stop offset="1" stopColor="#C8D92B" />
         </linearGradient>
         <linearGradient
           id="paint12_linear_459_9076"
@@ -1081,8 +1081,8 @@ export const CongratsIcon = () => {
           y2="158.207"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F8B54A" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F8B54A" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint13_linear_459_9076"
@@ -1092,8 +1092,8 @@ export const CongratsIcon = () => {
           y2="133.527"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BE1E68" />
-          <stop offset="1" stop-color="#B5188D" />
+          <stop stopColor="#BE1E68" />
+          <stop offset="1" stopColor="#B5188D" />
         </linearGradient>
         <linearGradient
           id="paint14_linear_459_9076"
@@ -1103,8 +1103,8 @@ export const CongratsIcon = () => {
           y2="134.64"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#6DD0E7" />
-          <stop offset="1" stop-color="#01A7DB" />
+          <stop stopColor="#6DD0E7" />
+          <stop offset="1" stopColor="#01A7DB" />
         </linearGradient>
         <linearGradient
           id="paint15_linear_459_9076"
@@ -1114,8 +1114,8 @@ export const CongratsIcon = () => {
           y2="156.251"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F44274" />
-          <stop offset="1" stop-color="#E51F9A" />
+          <stop stopColor="#F44274" />
+          <stop offset="1" stopColor="#E51F9A" />
         </linearGradient>
         <linearGradient
           id="paint16_linear_459_9076"
@@ -1125,8 +1125,8 @@ export const CongratsIcon = () => {
           y2="151.985"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B5188D" />
-          <stop offset="1" stop-color="#4E69AE" />
+          <stop stopColor="#B5188D" />
+          <stop offset="1" stopColor="#4E69AE" />
         </linearGradient>
         <linearGradient
           id="paint17_linear_459_9076"
@@ -1136,8 +1136,8 @@ export const CongratsIcon = () => {
           y2="169.19"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BE1E68" />
-          <stop offset="1" stop-color="#B5188D" />
+          <stop stopColor="#BE1E68" />
+          <stop offset="1" stopColor="#B5188D" />
         </linearGradient>
         <linearGradient
           id="paint18_linear_459_9076"
@@ -1147,8 +1147,8 @@ export const CongratsIcon = () => {
           y2="154.532"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F8B54A" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F8B54A" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint19_linear_459_9076"
@@ -1158,8 +1158,8 @@ export const CongratsIcon = () => {
           y2="93.3571"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BE1E68" />
-          <stop offset="1" stop-color="#B5188D" />
+          <stop stopColor="#BE1E68" />
+          <stop offset="1" stopColor="#B5188D" />
         </linearGradient>
         <linearGradient
           id="paint20_linear_459_9076"
@@ -1169,8 +1169,8 @@ export const CongratsIcon = () => {
           y2="70.4483"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#6DD0E7" />
-          <stop offset="1" stop-color="#01A7DB" />
+          <stop stopColor="#6DD0E7" />
+          <stop offset="1" stopColor="#01A7DB" />
         </linearGradient>
         <linearGradient
           id="paint21_linear_459_9076"
@@ -1180,8 +1180,8 @@ export const CongratsIcon = () => {
           y2="126.682"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint22_linear_459_9076"
@@ -1191,8 +1191,8 @@ export const CongratsIcon = () => {
           y2="85.3365"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint23_linear_459_9076"
@@ -1202,8 +1202,8 @@ export const CongratsIcon = () => {
           y2="111.41"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BE1E68" />
-          <stop offset="1" stop-color="#B5188D" />
+          <stop stopColor="#BE1E68" />
+          <stop offset="1" stopColor="#B5188D" />
         </linearGradient>
         <linearGradient
           id="paint24_linear_459_9076"
@@ -1213,8 +1213,8 @@ export const CongratsIcon = () => {
           y2="119.454"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FBE422" />
-          <stop offset="1" stop-color="#C8D92B" />
+          <stop stopColor="#FBE422" />
+          <stop offset="1" stopColor="#C8D92B" />
         </linearGradient>
         <linearGradient
           id="paint25_linear_459_9076"
@@ -1224,8 +1224,8 @@ export const CongratsIcon = () => {
           y2="112.24"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BE1E68" />
-          <stop offset="1" stop-color="#B5188D" />
+          <stop stopColor="#BE1E68" />
+          <stop offset="1" stopColor="#B5188D" />
         </linearGradient>
         <linearGradient
           id="paint26_linear_459_9076"
@@ -1235,8 +1235,8 @@ export const CongratsIcon = () => {
           y2="152.757"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B5188D" />
-          <stop offset="1" stop-color="#4E69AE" />
+          <stop stopColor="#B5188D" />
+          <stop offset="1" stopColor="#4E69AE" />
         </linearGradient>
         <linearGradient
           id="paint27_linear_459_9076"
@@ -1246,8 +1246,8 @@ export const CongratsIcon = () => {
           y2="196.525"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint28_linear_459_9076"
@@ -1257,8 +1257,8 @@ export const CongratsIcon = () => {
           y2="68.8892"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FBE422" />
-          <stop offset="1" stop-color="#C8D92B" />
+          <stop stopColor="#FBE422" />
+          <stop offset="1" stopColor="#C8D92B" />
         </linearGradient>
         <linearGradient
           id="paint29_linear_459_9076"
@@ -1268,8 +1268,8 @@ export const CongratsIcon = () => {
           y2="64.2852"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#C6211B" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#C6211B" />
         </linearGradient>
         <linearGradient
           id="paint30_linear_459_9076"
@@ -1279,8 +1279,8 @@ export const CongratsIcon = () => {
           y2="57.9968"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint31_linear_459_9076"
@@ -1290,8 +1290,8 @@ export const CongratsIcon = () => {
           y2="90.3922"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#6DD0E7" />
-          <stop offset="1" stop-color="#01A7DB" />
+          <stop stopColor="#6DD0E7" />
+          <stop offset="1" stopColor="#01A7DB" />
         </linearGradient>
         <linearGradient
           id="paint32_linear_459_9076"
@@ -1301,8 +1301,8 @@ export const CongratsIcon = () => {
           y2="195.102"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FBE422" />
-          <stop offset="1" stop-color="#C8D92B" />
+          <stop stopColor="#FBE422" />
+          <stop offset="1" stopColor="#C8D92B" />
         </linearGradient>
         <linearGradient
           id="paint33_linear_459_9076"
@@ -1312,8 +1312,8 @@ export const CongratsIcon = () => {
           y2="47.3097"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#C6211B" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#C6211B" />
         </linearGradient>
         <linearGradient
           id="paint34_linear_459_9076"
@@ -1323,8 +1323,8 @@ export const CongratsIcon = () => {
           y2="116.84"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F87D5E" />
-          <stop offset="1" stop-color="#EB622C" />
+          <stop stopColor="#F87D5E" />
+          <stop offset="1" stopColor="#EB622C" />
         </linearGradient>
         <linearGradient
           id="paint35_linear_459_9076"
@@ -1334,8 +1334,8 @@ export const CongratsIcon = () => {
           y2="91.1926"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#6DD0E7" />
-          <stop offset="1" stop-color="#01A7DB" />
+          <stop stopColor="#6DD0E7" />
+          <stop offset="1" stopColor="#01A7DB" />
         </linearGradient>
         <linearGradient
           id="paint36_linear_459_9076"
@@ -1345,8 +1345,8 @@ export const CongratsIcon = () => {
           y2="99.9134"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint37_linear_459_9076"
@@ -1356,8 +1356,8 @@ export const CongratsIcon = () => {
           y2="99.3253"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#C6211B" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#C6211B" />
         </linearGradient>
         <linearGradient
           id="paint38_linear_459_9076"
@@ -1367,8 +1367,8 @@ export const CongratsIcon = () => {
           y2="195.648"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FBE422" />
-          <stop offset="1" stop-color="#C8D92B" />
+          <stop stopColor="#FBE422" />
+          <stop offset="1" stopColor="#C8D92B" />
         </linearGradient>
         <linearGradient
           id="paint39_linear_459_9076"
@@ -1378,8 +1378,8 @@ export const CongratsIcon = () => {
           y2="60.9172"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F8B54A" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F8B54A" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint40_linear_459_9076"
@@ -1389,8 +1389,8 @@ export const CongratsIcon = () => {
           y2="86.3694"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint41_linear_459_9076"
@@ -1400,8 +1400,8 @@ export const CongratsIcon = () => {
           y2="90.9629"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BE1E68" />
-          <stop offset="1" stop-color="#B5188D" />
+          <stop stopColor="#BE1E68" />
+          <stop offset="1" stopColor="#B5188D" />
         </linearGradient>
         <linearGradient
           id="paint42_linear_459_9076"
@@ -1411,8 +1411,8 @@ export const CongratsIcon = () => {
           y2="92.9295"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint43_linear_459_9076"
@@ -1422,8 +1422,8 @@ export const CongratsIcon = () => {
           y2="92.8316"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint44_linear_459_9076"
@@ -1433,8 +1433,8 @@ export const CongratsIcon = () => {
           y2="72.48"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F8B54A" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F8B54A" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint45_linear_459_9076"
@@ -1444,8 +1444,8 @@ export const CongratsIcon = () => {
           y2="72.3484"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F8B54A" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F8B54A" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint46_linear_459_9076"
@@ -1455,8 +1455,8 @@ export const CongratsIcon = () => {
           y2="141.955"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F44274" />
-          <stop offset="1" stop-color="#E51F9A" />
+          <stop stopColor="#F44274" />
+          <stop offset="1" stopColor="#E51F9A" />
         </linearGradient>
         <linearGradient
           id="paint47_linear_459_9076"
@@ -1466,8 +1466,8 @@ export const CongratsIcon = () => {
           y2="115.535"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#6DD0E7" />
-          <stop offset="1" stop-color="#01A7DB" />
+          <stop stopColor="#6DD0E7" />
+          <stop offset="1" stopColor="#01A7DB" />
         </linearGradient>
         <linearGradient
           id="paint48_linear_459_9076"
@@ -1477,8 +1477,8 @@ export const CongratsIcon = () => {
           y2="90.2912"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F8B54A" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F8B54A" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint49_linear_459_9076"
@@ -1488,8 +1488,8 @@ export const CongratsIcon = () => {
           y2="166.542"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BE1E68" />
-          <stop offset="1" stop-color="#B5188D" />
+          <stop stopColor="#BE1E68" />
+          <stop offset="1" stopColor="#B5188D" />
         </linearGradient>
         <linearGradient
           id="paint50_linear_459_9076"
@@ -1499,8 +1499,8 @@ export const CongratsIcon = () => {
           y2="168.17"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint51_linear_459_9076"
@@ -1510,8 +1510,8 @@ export const CongratsIcon = () => {
           y2="147.628"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B4DF86" />
-          <stop offset="1" stop-color="#84C743" />
+          <stop stopColor="#B4DF86" />
+          <stop offset="1" stopColor="#84C743" />
         </linearGradient>
         <linearGradient
           id="paint52_linear_459_9076"
@@ -1521,8 +1521,8 @@ export const CongratsIcon = () => {
           y2="69.115"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint53_linear_459_9076"
@@ -1532,8 +1532,8 @@ export const CongratsIcon = () => {
           y2="56.7757"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B4DF86" />
-          <stop offset="1" stop-color="#84C743" />
+          <stop stopColor="#B4DF86" />
+          <stop offset="1" stopColor="#84C743" />
         </linearGradient>
         <linearGradient
           id="paint54_linear_459_9076"
@@ -1543,8 +1543,8 @@ export const CongratsIcon = () => {
           y2="78.501"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B4DF86" />
-          <stop offset="1" stop-color="#84C743" />
+          <stop stopColor="#B4DF86" />
+          <stop offset="1" stopColor="#84C743" />
         </linearGradient>
         <linearGradient
           id="paint55_linear_459_9076"
@@ -1554,8 +1554,8 @@ export const CongratsIcon = () => {
           y2="68.7918"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FBE422" />
-          <stop offset="1" stop-color="#C8D92B" />
+          <stop stopColor="#FBE422" />
+          <stop offset="1" stopColor="#C8D92B" />
         </linearGradient>
         <linearGradient
           id="paint56_linear_459_9076"
@@ -1565,8 +1565,8 @@ export const CongratsIcon = () => {
           y2="179.859"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F44274" />
-          <stop offset="1" stop-color="#E51F9A" />
+          <stop stopColor="#F44274" />
+          <stop offset="1" stopColor="#E51F9A" />
         </linearGradient>
         <linearGradient
           id="paint57_linear_459_9076"
@@ -1576,8 +1576,8 @@ export const CongratsIcon = () => {
           y2="189.179"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B5188D" />
-          <stop offset="1" stop-color="#4E69AE" />
+          <stop stopColor="#B5188D" />
+          <stop offset="1" stopColor="#4E69AE" />
         </linearGradient>
         <linearGradient
           id="paint58_linear_459_9076"
@@ -1587,8 +1587,8 @@ export const CongratsIcon = () => {
           y2="207.017"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F44274" />
-          <stop offset="1" stop-color="#E51F9A" />
+          <stop stopColor="#F44274" />
+          <stop offset="1" stopColor="#E51F9A" />
         </linearGradient>
         <linearGradient
           id="paint59_linear_459_9076"
@@ -1598,8 +1598,8 @@ export const CongratsIcon = () => {
           y2="201.157"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#6DD0E7" />
-          <stop offset="1" stop-color="#01A7DB" />
+          <stop stopColor="#6DD0E7" />
+          <stop offset="1" stopColor="#01A7DB" />
         </linearGradient>
         <linearGradient
           id="paint60_linear_459_9076"
@@ -1609,8 +1609,8 @@ export const CongratsIcon = () => {
           y2="45.9282"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B4DF86" />
-          <stop offset="1" stop-color="#84C743" />
+          <stop stopColor="#B4DF86" />
+          <stop offset="1" stopColor="#84C743" />
         </linearGradient>
         <linearGradient
           id="paint61_linear_459_9076"
@@ -1620,8 +1620,8 @@ export const CongratsIcon = () => {
           y2="135.57"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#C6211B" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#C6211B" />
         </linearGradient>
         <linearGradient
           id="paint62_linear_459_9076"
@@ -1631,8 +1631,8 @@ export const CongratsIcon = () => {
           y2="173.202"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#6DD0E7" />
-          <stop offset="1" stop-color="#01A7DB" />
+          <stop stopColor="#6DD0E7" />
+          <stop offset="1" stopColor="#01A7DB" />
         </linearGradient>
         <linearGradient
           id="paint63_linear_459_9076"
@@ -1642,8 +1642,8 @@ export const CongratsIcon = () => {
           y2="109.696"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#C6211B" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#C6211B" />
         </linearGradient>
         <linearGradient
           id="paint64_linear_459_9076"
@@ -1653,8 +1653,8 @@ export const CongratsIcon = () => {
           y2="73.3325"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint65_linear_459_9076"
@@ -1664,8 +1664,8 @@ export const CongratsIcon = () => {
           y2="147.2"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FBE422" />
-          <stop offset="1" stop-color="#C8D92B" />
+          <stop stopColor="#FBE422" />
+          <stop offset="1" stopColor="#C8D92B" />
         </linearGradient>
         <linearGradient
           id="paint66_linear_459_9076"
@@ -1675,8 +1675,8 @@ export const CongratsIcon = () => {
           y2="73.5675"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BE1E68" />
-          <stop offset="1" stop-color="#B5188D" />
+          <stop stopColor="#BE1E68" />
+          <stop offset="1" stopColor="#B5188D" />
         </linearGradient>
         <linearGradient
           id="paint67_linear_459_9076"
@@ -1686,8 +1686,8 @@ export const CongratsIcon = () => {
           y2="76.6134"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#C6211B" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#C6211B" />
         </linearGradient>
         <linearGradient
           id="paint68_linear_459_9076"
@@ -1697,8 +1697,8 @@ export const CongratsIcon = () => {
           y2="144.345"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F8B54A" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F8B54A" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint69_linear_459_9076"
@@ -1708,8 +1708,8 @@ export const CongratsIcon = () => {
           y2="138.95"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B5188D" />
-          <stop offset="1" stop-color="#4E69AE" />
+          <stop stopColor="#B5188D" />
+          <stop offset="1" stopColor="#4E69AE" />
         </linearGradient>
         <linearGradient
           id="paint70_linear_459_9076"
@@ -1719,8 +1719,8 @@ export const CongratsIcon = () => {
           y2="137.378"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#6DD0E7" />
-          <stop offset="1" stop-color="#01A7DB" />
+          <stop stopColor="#6DD0E7" />
+          <stop offset="1" stopColor="#01A7DB" />
         </linearGradient>
         <linearGradient
           id="paint71_linear_459_9076"
@@ -1730,8 +1730,8 @@ export const CongratsIcon = () => {
           y2="136.655"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint72_linear_459_9076"
@@ -1741,8 +1741,8 @@ export const CongratsIcon = () => {
           y2="125.421"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F44274" />
-          <stop offset="1" stop-color="#E51F9A" />
+          <stop stopColor="#F44274" />
+          <stop offset="1" stopColor="#E51F9A" />
         </linearGradient>
         <linearGradient
           id="paint73_linear_459_9076"
@@ -1752,8 +1752,8 @@ export const CongratsIcon = () => {
           y2="136.536"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F44274" />
-          <stop offset="1" stop-color="#E51F9A" />
+          <stop stopColor="#F44274" />
+          <stop offset="1" stopColor="#E51F9A" />
         </linearGradient>
         <linearGradient
           id="paint74_linear_459_9076"
@@ -1763,8 +1763,8 @@ export const CongratsIcon = () => {
           y2="137.288"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B5188D" />
-          <stop offset="1" stop-color="#4E69AE" />
+          <stop stopColor="#B5188D" />
+          <stop offset="1" stopColor="#4E69AE" />
         </linearGradient>
         <linearGradient
           id="paint75_linear_459_9076"
@@ -1774,8 +1774,8 @@ export const CongratsIcon = () => {
           y2="146.286"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B4DF86" />
-          <stop offset="1" stop-color="#84C743" />
+          <stop stopColor="#B4DF86" />
+          <stop offset="1" stopColor="#84C743" />
         </linearGradient>
         <linearGradient
           id="paint76_linear_459_9076"
@@ -1785,8 +1785,8 @@ export const CongratsIcon = () => {
           y2="159.568"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F44274" />
-          <stop offset="1" stop-color="#E51F9A" />
+          <stop stopColor="#F44274" />
+          <stop offset="1" stopColor="#E51F9A" />
         </linearGradient>
         <linearGradient
           id="paint77_linear_459_9076"
@@ -1796,8 +1796,8 @@ export const CongratsIcon = () => {
           y2="167.178"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#6DD0E7" />
-          <stop offset="1" stop-color="#01A7DB" />
+          <stop stopColor="#6DD0E7" />
+          <stop offset="1" stopColor="#01A7DB" />
         </linearGradient>
         <linearGradient
           id="paint78_linear_459_9076"
@@ -1807,8 +1807,8 @@ export const CongratsIcon = () => {
           y2="80.5011"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F8B54A" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F8B54A" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint79_linear_459_9076"
@@ -1818,8 +1818,8 @@ export const CongratsIcon = () => {
           y2="82.5211"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B4DF86" />
-          <stop offset="1" stop-color="#84C743" />
+          <stop stopColor="#B4DF86" />
+          <stop offset="1" stopColor="#84C743" />
         </linearGradient>
         <linearGradient
           id="paint80_linear_459_9076"
@@ -1829,8 +1829,8 @@ export const CongratsIcon = () => {
           y2="89.3622"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F8B54A" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F8B54A" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint81_linear_459_9076"
@@ -1840,8 +1840,8 @@ export const CongratsIcon = () => {
           y2="99.046"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#6DD0E7" />
-          <stop offset="1" stop-color="#01A7DB" />
+          <stop stopColor="#6DD0E7" />
+          <stop offset="1" stopColor="#01A7DB" />
         </linearGradient>
         <linearGradient
           id="paint82_linear_459_9076"
@@ -1851,8 +1851,8 @@ export const CongratsIcon = () => {
           y2="100.707"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BE1E68" />
-          <stop offset="1" stop-color="#B5188D" />
+          <stop stopColor="#BE1E68" />
+          <stop offset="1" stopColor="#B5188D" />
         </linearGradient>
         <linearGradient
           id="paint83_linear_459_9076"
@@ -1862,8 +1862,8 @@ export const CongratsIcon = () => {
           y2="78.6292"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B4DF86" />
-          <stop offset="1" stop-color="#84C743" />
+          <stop stopColor="#B4DF86" />
+          <stop offset="1" stopColor="#84C743" />
         </linearGradient>
         <linearGradient
           id="paint84_linear_459_9076"
@@ -1873,8 +1873,8 @@ export const CongratsIcon = () => {
           y2="82.4034"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FBE422" />
-          <stop offset="1" stop-color="#C8D92B" />
+          <stop stopColor="#FBE422" />
+          <stop offset="1" stopColor="#C8D92B" />
         </linearGradient>
         <linearGradient
           id="paint85_linear_459_9076"
@@ -1884,8 +1884,8 @@ export const CongratsIcon = () => {
           y2="86.9221"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F8B54A" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F8B54A" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint86_linear_459_9076"
@@ -1895,8 +1895,8 @@ export const CongratsIcon = () => {
           y2="93.1482"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BE1E68" />
-          <stop offset="1" stop-color="#B5188D" />
+          <stop stopColor="#BE1E68" />
+          <stop offset="1" stopColor="#B5188D" />
         </linearGradient>
         <linearGradient
           id="paint87_linear_459_9076"
@@ -1906,8 +1906,8 @@ export const CongratsIcon = () => {
           y2="157.775"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#6DD0E7" />
-          <stop offset="1" stop-color="#01A7DB" />
+          <stop stopColor="#6DD0E7" />
+          <stop offset="1" stopColor="#01A7DB" />
         </linearGradient>
         <linearGradient
           id="paint88_linear_459_9076"
@@ -1917,8 +1917,8 @@ export const CongratsIcon = () => {
           y2="152.879"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F44274" />
-          <stop offset="1" stop-color="#E51F9A" />
+          <stop stopColor="#F44274" />
+          <stop offset="1" stopColor="#E51F9A" />
         </linearGradient>
         <linearGradient
           id="paint89_linear_459_9076"
@@ -1928,8 +1928,8 @@ export const CongratsIcon = () => {
           y2="152.614"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B5188D" />
-          <stop offset="1" stop-color="#4E69AE" />
+          <stop stopColor="#B5188D" />
+          <stop offset="1" stopColor="#4E69AE" />
         </linearGradient>
         <linearGradient
           id="paint90_linear_459_9076"
@@ -1939,8 +1939,8 @@ export const CongratsIcon = () => {
           y2="137.678"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BE1E68" />
-          <stop offset="1" stop-color="#B5188D" />
+          <stop stopColor="#BE1E68" />
+          <stop offset="1" stopColor="#B5188D" />
         </linearGradient>
         <linearGradient
           id="paint91_linear_459_9076"
@@ -1950,8 +1950,8 @@ export const CongratsIcon = () => {
           y2="126.201"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint92_linear_459_9076"
@@ -1961,8 +1961,8 @@ export const CongratsIcon = () => {
           y2="134.115"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BE1E68" />
-          <stop offset="1" stop-color="#B5188D" />
+          <stop stopColor="#BE1E68" />
+          <stop offset="1" stopColor="#B5188D" />
         </linearGradient>
         <linearGradient
           id="paint93_linear_459_9076"
@@ -1972,8 +1972,8 @@ export const CongratsIcon = () => {
           y2="105.506"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FBE422" />
-          <stop offset="1" stop-color="#C8D92B" />
+          <stop stopColor="#FBE422" />
+          <stop offset="1" stopColor="#C8D92B" />
         </linearGradient>
         <linearGradient
           id="paint94_linear_459_9076"
@@ -1983,8 +1983,8 @@ export const CongratsIcon = () => {
           y2="105.491"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B4DF86" />
-          <stop offset="1" stop-color="#84C743" />
+          <stop stopColor="#B4DF86" />
+          <stop offset="1" stopColor="#84C743" />
         </linearGradient>
         <linearGradient
           id="paint95_linear_459_9076"
@@ -1994,8 +1994,8 @@ export const CongratsIcon = () => {
           y2="100.341"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#6DD0E7" />
-          <stop offset="1" stop-color="#01A7DB" />
+          <stop stopColor="#6DD0E7" />
+          <stop offset="1" stopColor="#01A7DB" />
         </linearGradient>
         <linearGradient
           id="paint96_linear_459_9076"
@@ -2005,8 +2005,8 @@ export const CongratsIcon = () => {
           y2="154.315"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FBE422" />
-          <stop offset="1" stop-color="#C8D92B" />
+          <stop stopColor="#FBE422" />
+          <stop offset="1" stopColor="#C8D92B" />
         </linearGradient>
         <linearGradient
           id="paint97_linear_459_9076"
@@ -2016,8 +2016,8 @@ export const CongratsIcon = () => {
           y2="151.689"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#C6211B" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#C6211B" />
         </linearGradient>
         <linearGradient
           id="paint98_linear_459_9076"
@@ -2027,8 +2027,8 @@ export const CongratsIcon = () => {
           y2="151.148"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint99_linear_459_9076"
@@ -2038,8 +2038,8 @@ export const CongratsIcon = () => {
           y2="140.795"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#6DD0E7" />
-          <stop offset="1" stop-color="#01A7DB" />
+          <stop stopColor="#6DD0E7" />
+          <stop offset="1" stopColor="#01A7DB" />
         </linearGradient>
         <linearGradient
           id="paint100_linear_459_9076"
@@ -2049,8 +2049,8 @@ export const CongratsIcon = () => {
           y2="107.564"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F87D5E" />
-          <stop offset="1" stop-color="#EB622C" />
+          <stop stopColor="#F87D5E" />
+          <stop offset="1" stopColor="#EB622C" />
         </linearGradient>
         <linearGradient
           id="paint101_linear_459_9076"
@@ -2060,8 +2060,8 @@ export const CongratsIcon = () => {
           y2="102.765"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FBE422" />
-          <stop offset="1" stop-color="#C8D92B" />
+          <stop stopColor="#FBE422" />
+          <stop offset="1" stopColor="#C8D92B" />
         </linearGradient>
         <linearGradient
           id="paint102_linear_459_9076"
@@ -2071,8 +2071,8 @@ export const CongratsIcon = () => {
           y2="110.136"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#6DD0E7" />
-          <stop offset="1" stop-color="#01A7DB" />
+          <stop stopColor="#6DD0E7" />
+          <stop offset="1" stopColor="#01A7DB" />
         </linearGradient>
         <linearGradient
           id="paint103_linear_459_9076"
@@ -2082,8 +2082,8 @@ export const CongratsIcon = () => {
           y2="103.334"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint104_linear_459_9076"
@@ -2093,8 +2093,8 @@ export const CongratsIcon = () => {
           y2="108.516"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F8B54A" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F8B54A" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint105_linear_459_9076"
@@ -2104,8 +2104,8 @@ export const CongratsIcon = () => {
           y2="126.272"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F8B54A" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F8B54A" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint106_linear_459_9076"
@@ -2115,8 +2115,8 @@ export const CongratsIcon = () => {
           y2="124.096"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F71873" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F71873" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint107_linear_459_9076"
@@ -2126,8 +2126,8 @@ export const CongratsIcon = () => {
           y2="112.788"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BE1E68" />
-          <stop offset="1" stop-color="#B5188D" />
+          <stop stopColor="#BE1E68" />
+          <stop offset="1" stopColor="#B5188D" />
         </linearGradient>
         <linearGradient
           id="paint108_linear_459_9076"
@@ -2137,8 +2137,8 @@ export const CongratsIcon = () => {
           y2="149.924"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#6DD0E7" />
-          <stop offset="1" stop-color="#01A7DB" />
+          <stop stopColor="#6DD0E7" />
+          <stop offset="1" stopColor="#01A7DB" />
         </linearGradient>
         <linearGradient
           id="paint109_linear_459_9076"
@@ -2148,8 +2148,8 @@ export const CongratsIcon = () => {
           y2="123.037"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F8B54A" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F8B54A" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint110_linear_459_9076"
@@ -2159,8 +2159,8 @@ export const CongratsIcon = () => {
           y2="122.919"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BE1E68" />
-          <stop offset="1" stop-color="#B5188D" />
+          <stop stopColor="#BE1E68" />
+          <stop offset="1" stopColor="#B5188D" />
         </linearGradient>
         <linearGradient
           id="paint111_linear_459_9076"
@@ -2170,8 +2170,8 @@ export const CongratsIcon = () => {
           y2="145.746"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B4DF86" />
-          <stop offset="1" stop-color="#84C743" />
+          <stop stopColor="#B4DF86" />
+          <stop offset="1" stopColor="#84C743" />
         </linearGradient>
         <linearGradient
           id="paint112_linear_459_9076"
@@ -2181,8 +2181,8 @@ export const CongratsIcon = () => {
           y2="97.3374"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F44274" />
-          <stop offset="1" stop-color="#E51F9A" />
+          <stop stopColor="#F44274" />
+          <stop offset="1" stopColor="#E51F9A" />
         </linearGradient>
         <linearGradient
           id="paint113_linear_459_9076"
@@ -2192,8 +2192,8 @@ export const CongratsIcon = () => {
           y2="192.351"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F44274" />
-          <stop offset="1" stop-color="#E51F9A" />
+          <stop stopColor="#F44274" />
+          <stop offset="1" stopColor="#E51F9A" />
         </linearGradient>
         <linearGradient
           id="paint114_linear_459_9076"
@@ -2203,8 +2203,8 @@ export const CongratsIcon = () => {
           y2="77.9917"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B5188D" />
-          <stop offset="1" stop-color="#4E69AE" />
+          <stop stopColor="#B5188D" />
+          <stop offset="1" stopColor="#4E69AE" />
         </linearGradient>
         <linearGradient
           id="paint115_linear_459_9076"
@@ -2214,8 +2214,8 @@ export const CongratsIcon = () => {
           y2="49.372"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F8B54A" />
-          <stop offset="1" stop-color="#F8A629" />
+          <stop stopColor="#F8B54A" />
+          <stop offset="1" stopColor="#F8A629" />
         </linearGradient>
         <linearGradient
           id="paint116_linear_459_9076"
@@ -2225,8 +2225,8 @@ export const CongratsIcon = () => {
           y2="123.084"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B4DF86" />
-          <stop offset="1" stop-color="#84C743" />
+          <stop stopColor="#B4DF86" />
+          <stop offset="1" stopColor="#84C743" />
         </linearGradient>
         <linearGradient
           id="paint117_linear_459_9076"
@@ -2236,8 +2236,8 @@ export const CongratsIcon = () => {
           y2="136.783"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFF6D6" stop-opacity="0" />
-          <stop offset="1" stop-color="#FFEFC5" stop-opacity="0.4" />
+          <stop stopColor="#FFF6D6" stopOpacity="0" />
+          <stop offset="1" stopColor="#FFEFC5" stopOpacity="0.4" />
         </linearGradient>
         <linearGradient
           id="paint118_linear_459_9076"
@@ -2247,8 +2247,8 @@ export const CongratsIcon = () => {
           y2="146.254"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFF6D6" stop-opacity="0" />
-          <stop offset="1" stop-color="#FFEFC5" stop-opacity="0.4" />
+          <stop stopColor="#FFF6D6" stopOpacity="0" />
+          <stop offset="1" stopColor="#FFEFC5" stopOpacity="0.4" />
         </linearGradient>
         <linearGradient
           id="paint119_linear_459_9076"
@@ -2258,8 +2258,8 @@ export const CongratsIcon = () => {
           y2="108.212"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFF6D6" stop-opacity="0" />
-          <stop offset="1" stop-color="#FFEFC5" stop-opacity="0.4" />
+          <stop stopColor="#FFF6D6" stopOpacity="0" />
+          <stop offset="1" stopColor="#FFEFC5" stopOpacity="0.4" />
         </linearGradient>
         <linearGradient
           id="paint120_linear_459_9076"
@@ -2269,8 +2269,8 @@ export const CongratsIcon = () => {
           y2="137.009"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFF6D6" stop-opacity="0" />
-          <stop offset="1" stop-color="#FFEFC5" stop-opacity="0.4" />
+          <stop stopColor="#FFF6D6" stopOpacity="0" />
+          <stop offset="1" stopColor="#FFEFC5" stopOpacity="0.4" />
         </linearGradient>
         <linearGradient
           id="paint121_linear_459_9076"
@@ -2280,8 +2280,8 @@ export const CongratsIcon = () => {
           y2="117.73"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFF6D6" stop-opacity="0" />
-          <stop offset="1" stop-color="#FFEFC5" stop-opacity="0.4" />
+          <stop stopColor="#FFF6D6" stopOpacity="0" />
+          <stop offset="1" stopColor="#FFEFC5" stopOpacity="0.4" />
         </linearGradient>
         <linearGradient
           id="paint122_linear_459_9076"
@@ -2291,8 +2291,8 @@ export const CongratsIcon = () => {
           y2="117.503"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFF6D6" stop-opacity="0" />
-          <stop offset="1" stop-color="#FFEFC5" stop-opacity="0.4" />
+          <stop stopColor="#FFF6D6" stopOpacity="0" />
+          <stop offset="1" stopColor="#FFEFC5" stopOpacity="0.4" />
         </linearGradient>
         <linearGradient
           id="paint123_linear_459_9076"
@@ -2302,8 +2302,8 @@ export const CongratsIcon = () => {
           y2="143.253"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFF6D6" stop-opacity="0" />
-          <stop offset="1" stop-color="#FFEFC5" stop-opacity="0.4" />
+          <stop stopColor="#FFF6D6" stopOpacity="0" />
+          <stop offset="1" stopColor="#FFEFC5" stopOpacity="0.4" />
         </linearGradient>
         <linearGradient
           id="paint124_linear_459_9076"
@@ -2313,8 +2313,8 @@ export const CongratsIcon = () => {
           y2="143.813"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFF6D6" stop-opacity="0" />
-          <stop offset="1" stop-color="#FFEFC5" stop-opacity="0.4" />
+          <stop stopColor="#FFF6D6" stopOpacity="0" />
+          <stop offset="1" stopColor="#FFEFC5" stopOpacity="0.4" />
         </linearGradient>
         <linearGradient
           id="paint125_linear_459_9076"
@@ -2324,8 +2324,8 @@ export const CongratsIcon = () => {
           y2="110.623"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFF6D6" stop-opacity="0" />
-          <stop offset="1" stop-color="#FFEFC5" stop-opacity="0.4" />
+          <stop stopColor="#FFF6D6" stopOpacity="0" />
+          <stop offset="1" stopColor="#FFEFC5" stopOpacity="0.4" />
         </linearGradient>
         <linearGradient
           id="paint126_linear_459_9076"
@@ -2335,8 +2335,8 @@ export const CongratsIcon = () => {
           y2="127.95"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFF6D6" stop-opacity="0" />
-          <stop offset="1" stop-color="#FFEFC5" stop-opacity="0.4" />
+          <stop stopColor="#FFF6D6" stopOpacity="0" />
+          <stop offset="1" stopColor="#FFEFC5" stopOpacity="0.4" />
         </linearGradient>
         <linearGradient
           id="paint127_linear_459_9076"
@@ -2346,8 +2346,8 @@ export const CongratsIcon = () => {
           y2="126.753"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFF6D6" stop-opacity="0" />
-          <stop offset="1" stop-color="#FFEFC5" stop-opacity="0.4" />
+          <stop stopColor="#FFF6D6" stopOpacity="0" />
+          <stop offset="1" stopColor="#FFEFC5" stopOpacity="0.4" />
         </linearGradient>
         <linearGradient
           id="paint128_linear_459_9076"
@@ -2357,8 +2357,8 @@ export const CongratsIcon = () => {
           y2="111.057"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFF6D6" stop-opacity="0" />
-          <stop offset="1" stop-color="#FFEFC5" stop-opacity="0.4" />
+          <stop stopColor="#FFF6D6" stopOpacity="0" />
+          <stop offset="1" stopColor="#FFEFC5" stopOpacity="0.4" />
         </linearGradient>
         <linearGradient
           id="paint129_linear_459_9076"
@@ -2368,11 +2368,11 @@ export const CongratsIcon = () => {
           y2="37.6725"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint130_linear_459_9076"
@@ -2382,11 +2382,11 @@ export const CongratsIcon = () => {
           y2="36.2656"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint131_linear_459_9076"
@@ -2396,11 +2396,11 @@ export const CongratsIcon = () => {
           y2="34.1896"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint132_linear_459_9076"
@@ -2410,11 +2410,11 @@ export const CongratsIcon = () => {
           y2="39.6885"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint133_linear_459_9076"
@@ -2424,11 +2424,11 @@ export const CongratsIcon = () => {
           y2="35.2289"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint134_linear_459_9076"
@@ -2438,11 +2438,11 @@ export const CongratsIcon = () => {
           y2="40.7282"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint135_linear_459_9076"
@@ -2452,11 +2452,11 @@ export const CongratsIcon = () => {
           y2="41.7647"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint136_linear_459_9076"
@@ -2466,11 +2466,11 @@ export const CongratsIcon = () => {
           y2="36.2654"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.16" stop-color="#FEB534" />
-          <stop offset="0.46" stop-color="#FECC34" />
-          <stop offset="0.75" stop-color="#FED934" />
-          <stop offset="1" stop-color="#FEDE34" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.16" stopColor="#FEB534" />
+          <stop offset="0.46" stopColor="#FECC34" />
+          <stop offset="0.75" stopColor="#FED934" />
+          <stop offset="1" stopColor="#FEDE34" />
         </linearGradient>
         <linearGradient
           id="paint137_linear_459_9076"
@@ -2480,11 +2480,11 @@ export const CongratsIcon = () => {
           y2="36.8372"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.16" stop-color="#FEB534" />
-          <stop offset="0.46" stop-color="#FECC34" />
-          <stop offset="0.75" stop-color="#FED934" />
-          <stop offset="1" stop-color="#FEDE34" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.16" stopColor="#FEB534" />
+          <stop offset="0.46" stopColor="#FECC34" />
+          <stop offset="0.75" stopColor="#FED934" />
+          <stop offset="1" stopColor="#FEDE34" />
         </linearGradient>
         <linearGradient
           id="paint138_linear_459_9076"
@@ -2494,11 +2494,11 @@ export const CongratsIcon = () => {
           y2="36.8372"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint139_linear_459_9076"
@@ -2508,11 +2508,11 @@ export const CongratsIcon = () => {
           y2="117.01"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint140_linear_459_9076"
@@ -2522,11 +2522,11 @@ export const CongratsIcon = () => {
           y2="110.145"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint141_linear_459_9076"
@@ -2536,11 +2536,11 @@ export const CongratsIcon = () => {
           y2="101.581"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint142_linear_459_9076"
@@ -2550,11 +2550,11 @@ export const CongratsIcon = () => {
           y2="124.266"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint143_linear_459_9076"
@@ -2564,11 +2564,11 @@ export const CongratsIcon = () => {
           y2="105.87"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint144_linear_459_9076"
@@ -2578,11 +2578,11 @@ export const CongratsIcon = () => {
           y2="128.555"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint145_linear_459_9076"
@@ -2592,11 +2592,11 @@ export const CongratsIcon = () => {
           y2="132.83"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint146_linear_459_9076"
@@ -2606,11 +2606,11 @@ export const CongratsIcon = () => {
           y2="116.103"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.16" stop-color="#FEB534" />
-          <stop offset="0.46" stop-color="#FECC34" />
-          <stop offset="0.75" stop-color="#FED934" />
-          <stop offset="1" stop-color="#FEDE34" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.16" stopColor="#FEB534" />
+          <stop offset="0.46" stopColor="#FECC34" />
+          <stop offset="0.75" stopColor="#FED934" />
+          <stop offset="1" stopColor="#FEDE34" />
         </linearGradient>
         <linearGradient
           id="paint147_linear_459_9076"
@@ -2620,11 +2620,11 @@ export const CongratsIcon = () => {
           y2="116.471"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.16" stop-color="#FEB534" />
-          <stop offset="0.46" stop-color="#FECC34" />
-          <stop offset="0.75" stop-color="#FED934" />
-          <stop offset="1" stop-color="#FEDE34" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.16" stopColor="#FEB534" />
+          <stop offset="0.46" stopColor="#FECC34" />
+          <stop offset="0.75" stopColor="#FED934" />
+          <stop offset="1" stopColor="#FEDE34" />
         </linearGradient>
         <linearGradient
           id="paint148_linear_459_9076"
@@ -2634,11 +2634,11 @@ export const CongratsIcon = () => {
           y2="116.471"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint149_linear_459_9076"
@@ -2648,11 +2648,11 @@ export const CongratsIcon = () => {
           y2="116.48"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint150_linear_459_9076"
@@ -2662,11 +2662,11 @@ export const CongratsIcon = () => {
           y2="120.977"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint151_linear_459_9076"
@@ -2676,11 +2676,11 @@ export const CongratsIcon = () => {
           y2="125.071"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint152_linear_459_9076"
@@ -2690,11 +2690,11 @@ export const CongratsIcon = () => {
           y2="114.226"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint153_linear_459_9076"
@@ -2704,11 +2704,11 @@ export const CongratsIcon = () => {
           y2="123.019"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint154_linear_459_9076"
@@ -2718,11 +2718,11 @@ export const CongratsIcon = () => {
           y2="112.176"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint155_linear_459_9076"
@@ -2732,11 +2732,11 @@ export const CongratsIcon = () => {
           y2="110.134"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint156_linear_459_9076"
@@ -2746,11 +2746,11 @@ export const CongratsIcon = () => {
           y2="111.303"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.16" stop-color="#FEB534" />
-          <stop offset="0.46" stop-color="#FECC34" />
-          <stop offset="0.75" stop-color="#FED934" />
-          <stop offset="1" stop-color="#FEDE34" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.16" stopColor="#FEB534" />
+          <stop offset="0.46" stopColor="#FECC34" />
+          <stop offset="0.75" stopColor="#FED934" />
+          <stop offset="1" stopColor="#FEDE34" />
         </linearGradient>
         <linearGradient
           id="paint157_linear_459_9076"
@@ -2760,11 +2760,11 @@ export const CongratsIcon = () => {
           y2="113.407"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.16" stop-color="#FEB534" />
-          <stop offset="0.46" stop-color="#FECC34" />
-          <stop offset="0.75" stop-color="#FED934" />
-          <stop offset="1" stop-color="#FEDE34" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.16" stopColor="#FEB534" />
+          <stop offset="0.46" stopColor="#FECC34" />
+          <stop offset="0.75" stopColor="#FED934" />
+          <stop offset="1" stopColor="#FEDE34" />
         </linearGradient>
         <linearGradient
           id="paint158_linear_459_9076"
@@ -2774,11 +2774,11 @@ export const CongratsIcon = () => {
           y2="113.407"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint159_linear_459_9076"
@@ -2788,11 +2788,11 @@ export const CongratsIcon = () => {
           y2="182.954"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint160_linear_459_9076"
@@ -2802,11 +2802,11 @@ export const CongratsIcon = () => {
           y2="182.333"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint161_linear_459_9076"
@@ -2816,11 +2816,11 @@ export const CongratsIcon = () => {
           y2="180.091"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint162_linear_459_9076"
@@ -2830,11 +2830,11 @@ export const CongratsIcon = () => {
           y2="186.032"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint163_linear_459_9076"
@@ -2844,11 +2844,11 @@ export const CongratsIcon = () => {
           y2="181.213"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint164_linear_459_9076"
@@ -2858,11 +2858,11 @@ export const CongratsIcon = () => {
           y2="187.155"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint165_linear_459_9076"
@@ -2872,11 +2872,11 @@ export const CongratsIcon = () => {
           y2="188.275"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint166_linear_459_9076"
@@ -2886,11 +2886,11 @@ export const CongratsIcon = () => {
           y2="177.279"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.16" stop-color="#FEB534" />
-          <stop offset="0.46" stop-color="#FECC34" />
-          <stop offset="0.75" stop-color="#FED934" />
-          <stop offset="1" stop-color="#FEDE34" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.16" stopColor="#FEB534" />
+          <stop offset="0.46" stopColor="#FECC34" />
+          <stop offset="0.75" stopColor="#FED934" />
+          <stop offset="1" stopColor="#FEDE34" />
         </linearGradient>
         <linearGradient
           id="paint167_linear_459_9076"
@@ -2900,11 +2900,11 @@ export const CongratsIcon = () => {
           y2="179.585"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.16" stop-color="#FEB534" />
-          <stop offset="0.46" stop-color="#FECC34" />
-          <stop offset="0.75" stop-color="#FED934" />
-          <stop offset="1" stop-color="#FEDE34" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.16" stopColor="#FEB534" />
+          <stop offset="0.46" stopColor="#FECC34" />
+          <stop offset="0.75" stopColor="#FED934" />
+          <stop offset="1" stopColor="#FEDE34" />
         </linearGradient>
         <linearGradient
           id="paint168_linear_459_9076"
@@ -2914,11 +2914,11 @@ export const CongratsIcon = () => {
           y2="179.585"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint169_linear_459_9076"
@@ -2928,11 +2928,11 @@ export const CongratsIcon = () => {
           y2="52.9498"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint170_linear_459_9076"
@@ -2942,11 +2942,11 @@ export const CongratsIcon = () => {
           y2="55.4217"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint171_linear_459_9076"
@@ -2956,11 +2956,11 @@ export const CongratsIcon = () => {
           y2="59.755"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint172_linear_459_9076"
@@ -2970,11 +2970,11 @@ export const CongratsIcon = () => {
           y2="48.276"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint173_linear_459_9076"
@@ -2984,11 +2984,11 @@ export const CongratsIcon = () => {
           y2="57.5856"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint174_linear_459_9076"
@@ -2998,11 +2998,11 @@ export const CongratsIcon = () => {
           y2="46.1054"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint175_linear_459_9076"
@@ -3012,11 +3012,11 @@ export const CongratsIcon = () => {
           y2="43.9427"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint176_linear_459_9076"
@@ -3026,11 +3026,11 @@ export const CongratsIcon = () => {
           y2="58.0381"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.16" stop-color="#FEB534" />
-          <stop offset="0.46" stop-color="#FECC34" />
-          <stop offset="0.75" stop-color="#FED934" />
-          <stop offset="1" stop-color="#FEDE34" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.16" stopColor="#FEB534" />
+          <stop offset="0.46" stopColor="#FECC34" />
+          <stop offset="0.75" stopColor="#FED934" />
+          <stop offset="1" stopColor="#FEDE34" />
         </linearGradient>
         <linearGradient
           id="paint177_linear_459_9076"
@@ -3040,11 +3040,11 @@ export const CongratsIcon = () => {
           y2="55.9707"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.16" stop-color="#FEB534" />
-          <stop offset="0.46" stop-color="#FECC34" />
-          <stop offset="0.75" stop-color="#FED934" />
-          <stop offset="1" stop-color="#FEDE34" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.16" stopColor="#FEB534" />
+          <stop offset="0.46" stopColor="#FECC34" />
+          <stop offset="0.75" stopColor="#FED934" />
+          <stop offset="1" stopColor="#FEDE34" />
         </linearGradient>
         <linearGradient
           id="paint178_linear_459_9076"
@@ -3054,11 +3054,11 @@ export const CongratsIcon = () => {
           y2="55.9707"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint179_linear_459_9076"
@@ -3068,11 +3068,11 @@ export const CongratsIcon = () => {
           y2="90.3153"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint180_linear_459_9076"
@@ -3082,11 +3082,11 @@ export const CongratsIcon = () => {
           y2="72.0463"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint181_linear_459_9076"
@@ -3096,11 +3096,11 @@ export const CongratsIcon = () => {
           y2="47.3527"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint182_linear_459_9076"
@@ -3110,11 +3110,11 @@ export const CongratsIcon = () => {
           y2="112.762"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint183_linear_459_9076"
@@ -3124,11 +3124,11 @@ export const CongratsIcon = () => {
           y2="59.7185"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint184_linear_459_9076"
@@ -3138,11 +3138,11 @@ export const CongratsIcon = () => {
           y2="125.128"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint185_linear_459_9076"
@@ -3152,11 +3152,11 @@ export const CongratsIcon = () => {
           y2="137.457"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <linearGradient
           id="paint186_linear_459_9076"
@@ -3166,11 +3166,11 @@ export const CongratsIcon = () => {
           y2="80.65"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.16" stop-color="#FEB534" />
-          <stop offset="0.46" stop-color="#FECC34" />
-          <stop offset="0.75" stop-color="#FED934" />
-          <stop offset="1" stop-color="#FEDE34" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.16" stopColor="#FEB534" />
+          <stop offset="0.46" stopColor="#FECC34" />
+          <stop offset="0.75" stopColor="#FED934" />
+          <stop offset="1" stopColor="#FEDE34" />
         </linearGradient>
         <linearGradient
           id="paint187_linear_459_9076"
@@ -3180,11 +3180,11 @@ export const CongratsIcon = () => {
           y2="84.5785"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.16" stop-color="#FEB534" />
-          <stop offset="0.46" stop-color="#FECC34" />
-          <stop offset="0.75" stop-color="#FED934" />
-          <stop offset="1" stop-color="#FEDE34" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.16" stopColor="#FEB534" />
+          <stop offset="0.46" stopColor="#FECC34" />
+          <stop offset="0.75" stopColor="#FED934" />
+          <stop offset="1" stopColor="#FEDE34" />
         </linearGradient>
         <linearGradient
           id="paint188_linear_459_9076"
@@ -3194,11 +3194,11 @@ export const CongratsIcon = () => {
           y2="84.5785"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FEA634" />
-          <stop offset="0.19" stop-color="#EB9A27" />
-          <stop offset="0.48" stop-color="#D48D17" />
-          <stop offset="0.76" stop-color="#C7850E" />
-          <stop offset="1" stop-color="#C2820B" />
+          <stop stopColor="#FEA634" />
+          <stop offset="0.19" stopColor="#EB9A27" />
+          <stop offset="0.48" stopColor="#D48D17" />
+          <stop offset="0.76" stopColor="#C7850E" />
+          <stop offset="1" stopColor="#C2820B" />
         </linearGradient>
         <image
           id="image0_459_9076"

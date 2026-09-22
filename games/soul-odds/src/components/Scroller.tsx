@@ -63,17 +63,34 @@ const syncScrollState = (instance: OverlayScrollbars) => {
   viewport.tabIndex = needsFocusStop ? 0 : -1;
 };
 
+/*
+ * OverlayScrollbars' own `updated` event only fires on an overflow change, not on every content change — so a
+ * viewport that already overflows (or doesn't, either way) can go a tab stop or not based on what was in the DOM
+ * at that one moment, and stay wrong from then on if content swaps in afterwards without changing the overflow
+ * (e.g. a StageSlide's buttons arriving a tick after its prices do). Watching the viewport directly re-checks on
+ * every such change regardless of what the library itself noticed.
+ */
+const watchContentForFocusStop = (instance: OverlayScrollbars) => {
+  const { viewport } = instance.elements();
+  const observer = new MutationObserver(() => syncScrollState(instance));
+  observer.observe(viewport, { childList: true, subtree: true });
+};
+
 const verticalEvents: EventListeners = {
   initialized: (instance) => {
     addArrow(instance, -1);
     addArrow(instance, 1);
     syncScrollState(instance);
+    watchContentForFocusStop(instance);
   },
   updated: syncScrollState,
 };
 
 const horizontalEvents: EventListeners = {
-  initialized: syncScrollState,
+  initialized: (instance) => {
+    syncScrollState(instance);
+    watchContentForFocusStop(instance);
+  },
   updated: syncScrollState,
 };
 

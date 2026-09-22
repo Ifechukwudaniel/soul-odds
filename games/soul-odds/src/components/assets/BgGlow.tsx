@@ -23,9 +23,9 @@ export const BgGlow = ({ className, styles }: { className?: string; styles?: CSS
           width="492.4"
           height="492.4"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur stdDeviation="70.6" result="effect1_foregroundBlur_319_3363" />
         </filter>
