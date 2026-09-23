@@ -16,11 +16,31 @@ const STARTING_BALANCE = parseUnits("1000", DECIMALS);
 const SMALLEST_CHIP = parseUnits("1", DECIMALS);
 const OPEN_LATENCY_MS = 250;
 const SETTLE_LATENCY_MS = 800;
-const DEMO_WALLET = "0x0000000000000000000000000000000000000001";
 const DEMO_GAME = "0x0000000000000000000000000000000000000002";
 
 const STORAGE_KEY = "soul-odds-demo-host:v1";
+const WALLET_STORAGE_KEY = "soul-odds-demo-host:wallet";
 const MAX_SAVED_SESSIONS = 20;
+
+const randomAddress = (): `0x${string}` => toHex(crypto.getRandomValues(new Uint8Array(20)));
+
+/** Every guest gets their own demo wallet, persisted per browser instead of a shared constant. */
+function loadOrCreateWallet(): `0x${string}` {
+  try {
+    const saved = localStorage.getItem(WALLET_STORAGE_KEY);
+    if (saved && /^0x[0-9a-f]{40}$/.test(saved)) return saved as `0x${string}`;
+  } catch {
+    // storage unavailable: fall through to a wallet that just won't persist across reloads
+  }
+
+  const address = randomAddress();
+  try {
+    localStorage.setItem(WALLET_STORAGE_KEY, address);
+  } catch {
+    // storage unavailable: the demo still plays, it just gets a new identity on refresh
+  }
+  return address;
+}
 
 type SavedDemoHost = { balance: string; nextSessionId: number; sessions: Session[] };
 
@@ -52,7 +72,7 @@ const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve,
 
 const randomHex32 = (): Hex => toHex(crypto.getRandomValues(new Uint8Array(32)));
 
-function buildSnapshot(balance: bigint, sessions: Session[]): HostSnapshotV1 {
+function buildSnapshot(wallet: `0x${string}`, balance: bigint, sessions: Session[]): HostSnapshotV1 {
   return {
     apiVersion: 1,
     integration: {
@@ -67,7 +87,7 @@ function buildSnapshot(balance: bigint, sessions: Session[]): HostSnapshotV1 {
         locales: { en: { name: "Soul Odds" } },
       },
     },
-    wallet: { address: DEMO_WALLET, smartVaultAddress: DEMO_WALLET, status: "ready" },
+    wallet: { address: wallet, smartVaultAddress: wallet, status: "ready" },
     token: { symbol: "DEMO", decimals: DECIMALS },
     balances: { smartVaultBalance: balance.toString() },
     sessions: { items: sessions },
@@ -81,12 +101,13 @@ function buildSnapshot(balance: bigint, sessions: Session[]): HostSnapshotV1 {
  * contract uses, and pushes each change to `publish` the way the real host pushes snapshots.
  */
 export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Promise<HostApiV1> {
+  const wallet = loadOrCreateWallet();
   const saved = loadSaved();
   let balance = saved ? BigInt(saved.balance) : STARTING_BALANCE;
   let nextSessionId = saved?.nextSessionId ?? 1;
   let sessions: Session[] = saved?.sessions ?? [];
 
-  const push = () => publish(buildSnapshot(balance, sessions));
+  const push = () => publish(buildSnapshot(wallet, balance, sessions));
   const persist = () => save({ balance: balance.toString(), nextSessionId, sessions: sessions.slice(0, MAX_SAVED_SESSIONS) });
 
   const patchSession = (sessionId: string, patch: Partial<Session>) => {
