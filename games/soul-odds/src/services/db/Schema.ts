@@ -1,13 +1,16 @@
 import type { InferSelectModel } from 'drizzle-orm';
 import {
   boolean,
+  index,
   integer,
+  jsonb,
   numeric,
   pgTable,
   serial,
   timestamp,
   varchar,
 } from 'drizzle-orm/pg-core';
+import type { SinNarratives } from '@/lib/mortal-odds/openrouter';
 
 export const userSchema = pgTable('user', {
   address: varchar('address', { length: 42 }).primaryKey(),
@@ -72,3 +75,28 @@ export const cliopatriaPlaceSchema = pgTable('cliopatria_place', {
 
 export type CliopatriaPlaceRow = InferSelectModel<typeof cliopatriaPlaceSchema>;
 export type NewCliopatriaPlaceRow = typeof cliopatriaPlaceSchema.$inferInsert;
+// ---------------------------------------------------------------------------
+// Sin catalog
+// ---------------------------------------------------------------------------
+// One row per pre-generated set of sin narratives, written for one place and the
+// years `fromYear`..`toYear` it applies to, so a place that spans centuries (an
+// empire) has several rows and serving only ever considers those covering the
+// drawn year. A period can hold more than one row: `useCount` drives when the sins
+// route asks OpenRouter to grow that period's pool by one more, and is bumped with
+// atomic SQL so concurrent requests can't lose each other's writes.
+
+export const sinCatalogSchema = pgTable(
+  'sin_variant',
+  {
+    id: serial('id').primaryKey(),
+    location: varchar('location', { length: 255 }).notNull(),
+    fromYear: integer('from_year').notNull(),
+    toYear: integer('to_year').notNull(),
+    narratives: jsonb('narratives').$type<SinNarratives>().notNull(),
+    useCount: integer('use_count').default(0).notNull(),
+  },
+  (table) => [index('sin_variant_location_period_idx').on(table.location, table.fromYear, table.toYear)],
+);
+
+export type SinCatalogRow = InferSelectModel<typeof sinCatalogSchema>;
+export type NewSinCatalogRow = typeof sinCatalogSchema.$inferInsert;

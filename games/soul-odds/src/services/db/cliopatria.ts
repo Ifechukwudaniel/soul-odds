@@ -39,3 +39,19 @@ export async function insertCliopatriaPlaces(rows: NewCliopatriaPlaceRow[]): Pro
   if (rows.length === 0) return;
   await db.insert(cliopatriaPlaceSchema).values(rows);
 }
+
+/** One representative year per distinct place name: the midpoint of its widest attested span. */
+export async function findMidYearByPlaceName(): Promise<Map<string, number>> {
+  const rows = await db
+    .select({ name: cliopatriaPlaceSchema.name, fromYear: cliopatriaPlaceSchema.fromYear, toYear: cliopatriaPlaceSchema.toYear })
+    .from(cliopatriaPlaceSchema);
+
+  const widest = new Map<string, { fromYear: number; toYear: number }>();
+  for (const row of rows) {
+    const existing = widest.get(row.name);
+    if (!existing || row.toYear - row.fromYear > existing.toYear - existing.fromYear) {
+      widest.set(row.name, { fromYear: row.fromYear, toYear: row.toYear });
+    }
+  }
+  return new Map(Array.from(widest, ([name, span]) => [name, Math.round((span.fromYear + span.toYear) / 2)]));
+}

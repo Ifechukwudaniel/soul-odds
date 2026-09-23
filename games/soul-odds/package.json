@@ -19,6 +19,7 @@
     "db:seed": "dotenv -e .env -- tsx src/services/seedDb.ts",
     "db:seed:cliopatria": "dotenv -e .env -- tsx src/services/seedCliopatria.ts",
     "db:seed:sin-catalog": "dotenv -e .env -- tsx src/services/seedSinCatalog.ts",
+    "db:seed:sin-catalog:prod": "dotenv -e .env -- tsx src/services/seedSinCatalog.ts --prod",
     "db:seed:cliopatria:zip": "dotenv -e .env -- tsx src/scripts/seed-cliopatria-from-zip.ts",
     "game:socket-server": "tsx src/server/index.ts",
     "check:types": "tsc --noEmit --pretty",

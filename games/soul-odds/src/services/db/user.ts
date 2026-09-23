@@ -106,6 +106,14 @@ export async function addPoints(address: string, delta: number): Promise<void> {
     .where(eq(userSchema.address, normalizeAddress(address)));
 }
 
+/** Adds to (never replaces) a user's lifetime winnings — an atomic increment, so concurrent rounds can't clobber each other. */
+export async function addWinnings(address: string, delta: number): Promise<void> {
+  await db
+    .update(userSchema)
+    .set({ totalProfit: sql`${userSchema.totalProfit} + ${Math.round(delta * 100) / 100}` })
+    .where(eq(userSchema.address, normalizeAddress(address)));
+}
+
 export async function useTokens(address: string, amount: number): Promise<void> {
   const user = await findUser(address);
 
