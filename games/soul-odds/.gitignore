@@ -27,6 +27,8 @@ local.db
 # gracefully when the unzipped .geojson is absent (see db:seed:cliopatria:zip)
 /cliopatria.geojson/*
 !/cliopatria.geojson/*.zip
+# The population estimates are built from the dataset but shipped with the app, so they stay tracked.
+!/cliopatria.geojson/cliopatria-population.json
 
 # misc
 .DS_Store

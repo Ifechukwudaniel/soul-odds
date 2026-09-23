@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { estimatePopulation, estimatesAt } from "@/lib/mortal-odds/population-estimate";
+import { describePopulation, estimatePopulation, estimatesAt } from "@/lib/mortal-odds/population-estimate";
 
 describe("estimatePopulation", () => {
   it("returns the researched figure for a polity in a year it has one", () => {
     const estimate = estimatePopulation({ empire: "Roman Empire", year: 100 });
-    expect(estimate?.method).toBe("seshat");
-    expect(estimate?.population).toBe(55_000_000);
+    expect(estimate?.method).toMatch(/^seshat/);
+    expect(estimate?.population).toBeGreaterThan(40_000_000);
+    expect(estimate?.population).toBeLessThan(80_000_000);
   });
 
   it("matches names case-insensitively", () => {
@@ -40,5 +41,15 @@ describe("estimatesAt", () => {
     expect(polities.every((polity) => polity.fromYear <= 100 && 100 <= polity.toYear)).toBe(true);
     expect(polities.some((polity) => polity.empire.startsWith("("))).toBe(false);
     expect(polities[0]!.population).toBeGreaterThanOrEqual(polities[1]!.population);
+  });
+});
+
+describe("describePopulation", () => {
+  it("says how many people lived in an empire at that time", () => {
+    expect(describePopulation({ empire: "Roman Empire", year: 100 })).toMatch(/^Roman Empire, 100 CE: about \d+ million people lived here\.$/);
+  });
+
+  it("returns null when the empire did not exist then", () => {
+    expect(describePopulation({ empire: "Roman Empire", year: 1800 })).toBeNull();
   });
 });

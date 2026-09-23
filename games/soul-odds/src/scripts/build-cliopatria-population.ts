@@ -4,7 +4,7 @@ import { worldPopCurve } from "@/lib/mortal-odds/config";
 import { centroidOf, loadCliopatria } from "@/lib/mortal-odds/cliopatria";
 import { interpolate } from "@/lib/mortal-odds/curves";
 
-// Builds cliopatria.geojson/cliopatria_population.csv and src/config/mortal-odds/cliopatria-population.json:
+// Builds cliopatria.geojson/cliopatria_population.csv and cliopatria.geojson/cliopatria-population.json:
 // one population estimate per Cliopatria row (a polity over the years it held one territory), keyed by
 // (Name, FromYear, ToYear). The JSON is what `lib/mortal-odds/population-estimate.ts` and the population API read.
 //
@@ -18,7 +18,7 @@ import { interpolate } from "@/lib/mortal-odds/curves";
 
 const SESHAT_URL = "https://seshat-db.com/api/sc/polity-populations/?format=json&page_size=200";
 const CSV_PATH = path.join(process.cwd(), "cliopatria.geojson", "cliopatria_population.csv");
-const JSON_PATH = path.join(process.cwd(), "src", "config", "mortal-odds", "cliopatria-population.json");
+const JSON_PATH = path.join(process.cwd(), "cliopatria.geojson", "cliopatria-population.json");
 const MAX_GAP_YEARS = 200;
 const NEIGHBOURS = 10;
 const MAX_IMPUTED_DENSITY = 300;

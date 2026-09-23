@@ -3,6 +3,8 @@ import { Env } from "@/libs/Env";
 import { SIN_CATEGORIES } from "@/lib/mortal-odds/config";
 import { fmtYear, lowercaseFirst } from "@/lib/mortal-odds/format";
 import { findAnachronism } from "@/lib/mortal-odds/life-story-lint";
+import { checkPopulation } from "@/lib/mortal-odds/population-lint";
+import type { PopulationRange } from "@/lib/mortal-odds/population-lint";
 import { findSinAnachronisms } from "@/lib/mortal-odds/sin-lint";
 import type { SinCategoryId } from "@/lib/mortal-odds/config";
 
@@ -15,7 +17,7 @@ const MODEL = "mistralai/mistral-nemo";
  * with a JSON array", so callers handle whichever shape their prompt actually gets back).
  * Throws on a missing key, request failure, or a response that isn't valid JSON.
  */
-async function completeJson(systemPrompt: string, userPrompt: string): Promise<unknown> {
+async function completeJson(systemPrompt: string, userPrompt: string, model: string = MODEL): Promise<unknown> {
   const apiKey = Env.OPENROUTER_API_KEY;
   if (!apiKey) {
     throw new Error("OPENROUTER_API_KEY is not configured");
@@ -29,7 +31,7 @@ async function completeJson(systemPrompt: string, userPrompt: string): Promise<u
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: MODEL,
+      model,
       response_format: { type: "json_object" },
       messages: [
         { role: "system", content: systemPrompt },
@@ -37,7 +39,7 @@ async function completeJson(systemPrompt: string, userPrompt: string): Promise<u
       ],
     }),
   });
-  console.log(`[openrouter] ${MODEL} responded in ${Date.now() - startedAt}ms (status ${response.status})`);
+  console.log(`[openrouter] ${model} responded in ${Date.now() - startedAt}ms (status ${response.status})`);
 
   if (!response.ok) {
     throw new Error(`OpenRouter request failed: ${response.status} ${await response.text()}`);
@@ -49,7 +51,19 @@ async function completeJson(systemPrompt: string, userPrompt: string): Promise<u
     throw new Error("OpenRouter response had no content");
   }
 
-  return JSON.parse(content) as unknown;
+  return parseJsonReply(content);
+}
+
+/** Parses a reply as JSON, falling back to the outermost object or array in it for models that wrap the JSON in prose or a code fence. */
+function parseJsonReply(content: string): unknown {
+  try {
+    return JSON.parse(content) as unknown;
+  } catch (error) {
+    const start = content.search(/[{[]/);
+    const end = Math.max(content.lastIndexOf("}"), content.lastIndexOf("]"));
+    if (start === -1 || end <= start) throw error;
+    return JSON.parse(content.slice(start, end + 1)) as unknown;
+  }
 }
 
 const CATEGORY_ORDER = SIN_CATEGORIES.map((category) => category.id) as [SinCategoryId, ...SinCategoryId[]];
@@ -188,4 +202,47 @@ export async function generateLifeStory(options: {
     }
   }
   throw new Error("Life story kept contradicting its era");
+}
+
+const populationSchema = z.object({ low: z.number().positive(), mid: z.number().positive(), high: z.number().positive() });
+
+const POPULATION_ATTEMPTS = 3;
+
+const POPULATION_SYSTEM_PROMPT =
+  'You estimate historical populations for a game, drawing on archaeological and historical scholarship. Reply with strict JSON: {"low": number, "mid": number, "high": number}, whole numbers of people living inside the given polity\'s territory in the given year: your best estimate and a plausible range, low <= mid <= high. The territory\'s area is given; averaged over a whole territory, density is usually well under 50 people per km² and never above 300. Never exceed the world population that year.';
+
+/**
+ * Asks an OpenRouter model how many people lived in a polity's territory in one year, checking the
+ * answer against the territory's area and the world population and asking again (naming the
+ * problem) when it doesn't add up. A researched `reference` figure, when there is one, anchors it.
+ * Throws when every attempt is implausible.
+ */
+export async function generatePopulationEstimate(options: {
+  name: string;
+  year: number;
+  place: SinPlaceContext;
+  areaKm2: number;
+  world: number;
+  reference?: { year: number; population: number; areaKm2: number };
+  /** The OpenRouter model to ask; historical figures need a stronger one than the default. */
+  model?: string;
+}): Promise<PopulationRange> {
+  const { name, year, place, areaKm2, world, reference, model } = options;
+  const facts = [
+    `Polity: ${describePlace(name, place)}. Year: ${fmtYear(year)}.`,
+    `Territory: about ${Math.round(areaKm2)} km². World population then: about ${Math.round(world)}.`,
+    reference ? `A researched figure for this polity: about ${Math.round(reference.population)} people in ${fmtYear(reference.year)} across about ${Math.round(reference.areaKm2)} km²; stay consistent with it, adjusted for the territory and the year.` : null,
+  ]
+    .filter((line): line is string => line !== null)
+    .join(" ");
+
+  let problem: string | null = null;
+  for (let attempt = 1; attempt <= POPULATION_ATTEMPTS; attempt++) {
+    const content = await completeJson(POPULATION_SYSTEM_PROMPT, problem ? `${facts} Your previous answer was rejected: ${problem}.` : facts, model);
+    const parsed = populationSchema.parse(Array.isArray(content) ? content[0] : content);
+    const estimate = { low: Math.round(parsed.low), mid: Math.round(parsed.mid), high: Math.round(parsed.high) };
+    problem = checkPopulation({ estimate, areaKm2, world, year });
+    if (!problem) return estimate;
+  }
+  throw new Error(`Population for ${name} (${fmtYear(year)}) stayed implausible: ${problem}`);
 }

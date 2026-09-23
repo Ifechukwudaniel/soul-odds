@@ -1,14 +1,17 @@
-import populationFile from "@/config/mortal-odds/cliopatria-population.json";
+import populationFile from "../../../cliopatria.geojson/cliopatria-population.json";
 import { worldPopCurve } from "@/lib/mortal-odds/config";
 import { interpolate } from "@/lib/mortal-odds/curves";
+import { fmtPeople, fmtYear } from "@/lib/mortal-odds/format";
 
 // The estimates are built by `scripts/build-cliopatria-population.ts`: one row per Cliopatria polity
 // over the years it held one territory. `method` says where the number came from: "seshat" (a
 // researched figure for exactly that row), "seshat_scaled" (a researched figure for the same polity
-// at a nearby date, scaled to this row's territory) or "imputed" (typical density of nearby polities
-// in time and place, capped and kept under the world population).
+// at a nearby date, scaled to this row's territory), "imputed" (typical density of nearby polities
+// in time and place, capped and kept under the world population) or "llm" (a model's estimate for
+// a fixed window of years, checked against the territory's area and the world population; built by
+// `scripts/regenerate-cliopatria-population.ts`).
 
-export type PopulationMethod = "seshat" | "seshat_scaled" | "imputed";
+export type PopulationMethod = "seshat" | "seshat_scaled" | "imputed" | "llm";
 
 type PopulationRow = {
   name: string;
@@ -42,7 +45,7 @@ const LONG_ROW_YEARS = 50;
 const MAX_TIME_SCALE = 4;
 
 function isMethod(value: unknown): value is PopulationMethod {
-  return value === "seshat" || value === "seshat_scaled" || value === "imputed";
+  return value === "seshat" || value === "seshat_scaled" || value === "imputed" || value === "llm";
 }
 
 function toRow(values: (string | number)[]): PopulationRow[] {
@@ -118,6 +121,15 @@ export function estimatePopulation(options: { empire?: string; wikidata?: string
   const alive = candidates.filter((row) => covers(row, year));
   const [best] = (alive.some((row) => !isDuplicate(row)) ? alive.filter((row) => !isDuplicate(row)) : alive).sort((a, b) => b.areaKm2 - a.areaKm2);
   return best ? toEstimate(best, year) : null;
+}
+
+/**
+ * One line saying how many people lived in an empire at that time, e.g. "Roman Empire, 100 CE: about 55 million people lived here."
+ * Takes the same options as `estimatePopulation`; null when nothing by that name existed in that year.
+ */
+export function describePopulation(options: { empire?: string; wikidata?: string; year: number }): string | null {
+  const estimate = estimatePopulation(options);
+  return estimate ? `${estimate.empire}, ${fmtYear(options.year)}: about ${fmtPeople(estimate.population)} people lived here.` : null;
 }
 
 /** Every polity alive in a year with its estimate, most populous first. Duplicate rows are left out. */

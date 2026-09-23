@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireApiSecret } from "@/libs/ApiAuth";
-import { estimatePopulation, estimatesAt } from "@/lib/mortal-odds/population-estimate";
+import { describePopulation, estimatePopulation, estimatesAt } from "@/lib/mortal-odds/population-estimate";
 
 /**
- * Estimated population of an empire in a year: `?empire=Roman Empire&year=100` (or `?wikidata=Q2277&year=100`).
+ * Estimated population of an empire in a year: `?empire=Roman Empire&year=100` (or `?wikidata=Q2277&year=100`); the response includes a `text` line saying it in words.
  * With only `year`, lists every polity alive that year, most populous first. Years are negative for BCE.
  */
 export async function GET(request: NextRequest) {
@@ -29,5 +29,5 @@ export async function GET(request: NextRequest) {
   if (!estimate) {
     return NextResponse.json({ message: "No empire by that name existed in that year." }, { status: 404 });
   }
-  return NextResponse.json(estimate);
+  return NextResponse.json({ ...estimate, text: describePopulation({ empire, wikidata, year }) });
 }
