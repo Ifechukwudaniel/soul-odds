@@ -57,6 +57,13 @@
       "when": 1790188392582,
       "tag": "0007_sin_variants",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1790198138898,
+      "tag": "0008_bet_history",
+      "breakpoints": true
     }
   ]
 }

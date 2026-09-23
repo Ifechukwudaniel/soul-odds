@@ -1,0 +1,22 @@
+CREATE TABLE "bet_history" (
+	"address" varchar(42) NOT NULL,
+	"id" varchar(128) NOT NULL,
+	"settled_at" timestamp NOT NULL,
+	"place_name" varchar(255) NOT NULL,
+	"lat" double precision NOT NULL,
+	"lon" double precision NOT NULL,
+	"name" varchar(60),
+	"story" text NOT NULL,
+	"born_year" integer NOT NULL,
+	"death_year" integer NOT NULL,
+	"age" integer NOT NULL,
+	"sex" varchar(4) NOT NULL,
+	"sin" text,
+	"wager" double precision NOT NULL,
+	"fees" double precision NOT NULL,
+	"net" double precision NOT NULL,
+	"round_net" double precision NOT NULL,
+	"skill" double precision NOT NULL,
+	"bets" jsonb NOT NULL,
+	CONSTRAINT "bet_history_address_id_pk" PRIMARY KEY("address","id")
+);
