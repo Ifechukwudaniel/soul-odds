@@ -64,6 +64,13 @@
       "when": 1790198138898,
       "tag": "0008_bet_history",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1790201566805,
+      "tag": "0009_drop_sin_use_count",
+      "breakpoints": true
     }
   ]
 }
