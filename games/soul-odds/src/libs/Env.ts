@@ -8,8 +8,10 @@ export const Env = createEnv({
     BOT_TOKEN: z.string().optional(),
     FIRESTORE_EMULATOR_HOST: z.string().optional(),
     GOOGLE_APPLICATION_CREDENTIALS: z.string().optional(),
+    OPENROUTER_API_KEY: z.string().startsWith('sk-or-').optional(),
   },
   client: {
+    NEXT_PUBLIC_API_SECRET: z.string().min(1).optional(),
     NEXT_PUBLIC_APP_URL: z.string().optional(),
     NEXT_PUBLIC_LOGGING_LEVEL: z
       .enum(['error', 'info', 'debug', 'warning', 'trace', 'fatal'])
@@ -31,6 +33,8 @@ export const Env = createEnv({
     BOT_TOKEN: process.env.BOT_TOKEN,
     FIRESTORE_EMULATOR_HOST: process.env.FIRESTORE_EMULATOR_HOST,
     GOOGLE_APPLICATION_CREDENTIALS: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+    OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
+    NEXT_PUBLIC_API_SECRET: process.env.NEXT_PUBLIC_API_SECRET,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_LOGGING_LEVEL: process.env.NEXT_PUBLIC_LOGGING_LEVEL,
     NEXT_PUBLIC_BETTER_STACK_SOURCE_TOKEN: process.env.NEXT_PUBLIC_BETTER_STACK_SOURCE_TOKEN,

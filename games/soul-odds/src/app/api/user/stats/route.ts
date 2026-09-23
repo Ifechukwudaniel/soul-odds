@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { requireApiSecret } from "@/libs/ApiAuth";
 import { findAllUsers, getAllTokensInCirculation } from "@/services/db/user";
 
 
@@ -7,7 +8,12 @@ export type Stat = {
   totalTokens: number,
 };
 
-export async function GET() {
+export async function GET(request: Request) {
+  const unauthorized = requireApiSecret(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   try {
     const allUsers = await findAllUsers();
     const allTokensInCirculation = await getAllTokensInCirculation();

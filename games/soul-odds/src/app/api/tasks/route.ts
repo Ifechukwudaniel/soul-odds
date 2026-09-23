@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
+import { requireApiSecret } from "@/libs/ApiAuth";
 import { getAllTasks } from "@/services/db/task";
 import { findUser, updateTasks } from "@/services/db/user";
 
 import { UserTask } from "@/types";
 
 export async function GET(request: NextRequest) {
+  const unauthorized = requireApiSecret(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   try {
     const address = request.nextUrl.searchParams.get("address");
     const user = await findUser(address as string);
@@ -26,6 +32,11 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const unauthorized = requireApiSecret(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   try {
     const { address, taskId } = await request.json();
     if (!address || !taskId) return NextResponse.json({ message: "Invalid Parameter" }, { status: 500 });

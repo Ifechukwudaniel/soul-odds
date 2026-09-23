@@ -1,10 +1,10 @@
-import axios from "axios";
+import { apiClient } from "@/libs/ApiClient";
 import { User } from "@/services/db/user";
 
 
 export const getUser = async (address:string) :Promise<User>=> {
   try {
-    let user = (await axios.get(`/api/user/${address}`)).data as User;
+    let user = (await apiClient.get(`/api/user/${address}`)).data as User;
     return user
   } catch (error) {
     console.error(error);
@@ -23,7 +23,7 @@ export const getUser = async (address:string) :Promise<User>=> {
  */
 export const registerUser = async (address: string, referredBy?: string, balance?: number): Promise<void> => {
   try {
-    await axios.post("/api/user", { address, referredBy, balance });
+    await apiClient.post("/api/user", { address, referredBy, balance });
   } catch (error) {
     console.error(error);
     throw new Error("Could not register user");

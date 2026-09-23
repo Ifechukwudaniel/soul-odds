@@ -1,5 +1,4 @@
 import React from "react";
-import { Balance } from "../Balance";
 import { RelicIcon } from "../assets/RelicIcon";
 import { BoostCard } from "../touchswap/BoostCard";
 import { useAppStore } from "@/services/store/store";
@@ -24,7 +23,7 @@ export const boostCardLists: BoostCardList[] = [
     desc: "Redraws cost less the more you level this up, down to a floor that never quite reaches free.",
     icon: <RelicIcon relic="sarcophagus" size={40} />,
     initalCost: 10000,
-    id: 3,
+    id: 1,
     noLevel: false,
   },
   {
@@ -32,7 +31,7 @@ export const boostCardLists: BoostCardList[] = [
     desc: "Increases your payout by 1% per level.",
     icon: <RelicIcon relic="obelisk" size={40} />,
     initalCost: 10000,
-    id: 5,
+    id: 2,
     noLevel: false,
   },
   {
@@ -40,15 +39,15 @@ export const boostCardLists: BoostCardList[] = [
     desc: "Activate a blessing: for a limited time, landing a perfect round pays double.",
     icon: <RelicIcon relic="chest" size={40} />,
     initalCost: 200000,
-    id: 6,
+    id: 3,
     noLevel: true,
   },
   {
     title: "Oracle's Whisper",
-    desc: "Reveals a hint about the soul's true fate before you lock in your bets.",
+    desc: "Reveals how likely each outcome is before you lock in your bets.",
     icon: <RelicIcon relic="scarab" size={40} />,
     initalCost: 50000,
-    id: 7,
+    id: 4,
     noLevel: true,
     hidden: false,
   },

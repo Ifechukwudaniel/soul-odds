@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { requireApiSecret } from "@/libs/ApiAuth";
 import { erasConfig } from "@/lib/mortal-odds/config";
 import { eraFor } from "@/lib/mortal-odds/geo";
 import titleFile from "@/config/mortal-odds/soul-odds-title.json";
@@ -15,6 +16,11 @@ function soulEraFor(year: number): string {
 }
 
 export async function GET(request: NextRequest) {
+  const unauthorized = requireApiSecret(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   const yearParam = request.nextUrl.searchParams.get("year");
   const year = Number(yearParam);
 

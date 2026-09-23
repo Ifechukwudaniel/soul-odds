@@ -19,6 +19,8 @@ type ModalProps = {
   maxLevel?: number;
   disabled?: boolean;
   noLevel?: boolean;
+  /** Real-money fallback shown when the player can't afford `cost` in soft currency. */
+  onBuyWithTokens?: () => void;
 };
 
 const useIsDesktop = (breakpoint = 768) => {
@@ -48,6 +50,7 @@ export const Modal: React.FC<ModalProps> = ({
   level,
   disabled = false,
   noLevel = false,
+  onBuyWithTokens,
 }) => {
   const balance = useAppStore(state => state.user!.balance);
   const isLevelCompleted = maxLevel! > 0 && level == maxLevel;
@@ -146,6 +149,16 @@ export const Modal: React.FC<ModalProps> = ({
                 onClick={onClick}
               >
                 {!isLevelCompleted ? "Get" : "You are at the last Level"}
+              </button>
+            ) : onBuyWithTokens ? (
+              <button
+                className={`btn bg-white w-[90%] text-black py-4 font-bold rounded-lg align-baseline mt-12 ${
+                  !isDisabled ? "opacity-100" : "opacity-50"
+                }`}
+                disabled={isDisabled}
+                onClick={onBuyWithTokens}
+              >
+                Buy with tokens
               </button>
             ) : (
               <button

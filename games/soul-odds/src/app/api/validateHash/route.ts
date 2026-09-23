@@ -1,8 +1,14 @@
 import { webcrypto } from 'crypto';
 import { NextResponse } from 'next/server';
+import { requireApiSecret } from '@/libs/ApiAuth';
 import { Env } from '@/libs/Env';
 
 export async function POST(request: Request) {
+  const unauthorized = requireApiSecret(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   const body = await request.json();
 
   if (!body.hash) {

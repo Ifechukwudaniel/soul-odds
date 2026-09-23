@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { requireApiSecret } from "@/libs/ApiAuth";
 import { erasConfig, placesConfig } from "@/lib/mortal-odds/config";
 import { pickPlace, regionShare } from "@/lib/mortal-odds/draw";
 import { eraFor } from "@/lib/mortal-odds/geo";
@@ -9,6 +10,11 @@ import type { RegionId } from "@/types";
 const MIN_SUPPORTED_YEAR = -10_000;
 
 export async function GET(request: NextRequest) {
+  const unauthorized = requireApiSecret(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   const yearParam = request.nextUrl.searchParams.get("year");
   const year = Number(yearParam);
 
@@ -35,8 +41,6 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  // Cliopatria has nothing for this year (or isn't loaded on this machine) - fall back to the
-  // hand-curated regions in placesConfig, same weighted pick the birth-draw flow itself uses.
   const era = eraFor({ year, erasConfig });
   const regionIds = Object.keys(era.shares) as RegionId[];
   const region = pickWeighted({ items: regionIds, weight: (id) => era.shares[id], rng });
