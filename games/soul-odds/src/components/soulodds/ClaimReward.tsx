@@ -9,7 +9,7 @@ import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 type ModalProps = {
   onClose?: () => void;
   isOpen: boolean;
-  reward: number;
+  reward: number | string;
 };
 
 export const ClaimReward: React.FC<ModalProps> = ({ onClose, isOpen, reward }) => {
@@ -44,7 +44,7 @@ export const ClaimReward: React.FC<ModalProps> = ({ onClose, isOpen, reward }) =
               </div>
               <div className="mb-10 mt-1 flex flex-col items-center">
                 <p className="font-bold mb-1">Reward claimed</p>
-                <Balance count={reward} size="xl" />
+                {typeof reward === "number" ? <Balance count={reward} size="xl" /> : <p className="text-xl font-[600]">{reward}</p>}
               </div>
 
               <button

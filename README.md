@@ -25,7 +25,6 @@ itself.
   the reveal, get paid per-pick at that pick's odds.
 - **Ranks** — global leaderboard (`/ranks`).
 - **Referrals** — invite links and referral tracking (`/refs`).
-- **Boosts** — paid/earned boosts that affect play (`/boost`).
 - **Quests** — task-based rewards (`/quests`).
 - **Badges** and **Stats** — player progression and history (`/badges`, `/stats`).
 - **Demo mode** — the game is fully playable outside the Chain.wtf host with a local, persisted
@@ -182,7 +181,7 @@ Run from `games/soul-odds/`:
 ```
 games/soul-odds/
 ├── public/game.manifest.json         # Chain.wtf manifest (capabilities, presentation mode)
-├── src/app/[locale]/(game)/          # Routed pages: home, ranks, refs, boost, quests, badges, stats
+├── src/app/[locale]/(game)/          # Routed pages: home, ranks, refs, quests, badges, stats
 ├── src/components/game/              # UI, incl. mortal-odds round flow (stage/reveal/…)
 ├── src/config/mortal-odds/           # Title config (soul-odds-title.json), epitaphs, time stories
 ├── src/hooks/useCasinoHost.ts        # Chain.wtf guest/host bridge + standalone fallback

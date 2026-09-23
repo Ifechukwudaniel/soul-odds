@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { Balance } from "../../Balance";
 import { ArrowRight } from "@/components/assets/ArrowRight";
 import { TScreens, useAppStore } from "@/services/store/store";
 import { playClickSound } from "@/utils/playClickSound";
@@ -9,9 +8,10 @@ type QuestCardProps = {
   title: string;
   icon?: React.ReactNode;
   page: string;
+  reward: string;
 };
 
-export const QuestCard: React.FC<QuestCardProps> = ({ title, page }) => {
+export const QuestCard: React.FC<QuestCardProps> = ({ title, page, reward }) => {
   const setScreen = useAppStore(state => state.setScreen);
 
   const handleQuestSelect = () => {
@@ -28,7 +28,7 @@ export const QuestCard: React.FC<QuestCardProps> = ({ title, page }) => {
         <Image src={"/egypt/Ruins/sand_ruins_broken_wall_hieroglyph_01.png"} width={40} height={40} alt="Task Icon" priority />
         <div className="ml-3">
           <h3 className="text-[0.8rem] font-[500] leading-[1.8] text-[#AFAFAF]">{title}</h3>
-          <Balance size="sm" count={120000} />
+          <p className="text-sm font-[600] text-[#F5B83D]">{reward}</p>
         </div>
       </div>
 
