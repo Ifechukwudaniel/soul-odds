@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
+import { requireApiSecret } from "@/libs/ApiAuth";
 import { generateLifeStory } from "@/lib/mortal-odds/openrouter";
 
 export async function GET(request: NextRequest) {
+  const unauthorized = requireApiSecret(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   const params = request.nextUrl.searchParams;
   const sex = params.get("sex");
   const location = params.get("location");

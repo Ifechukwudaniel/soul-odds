@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { requireApiSecret } from "@/libs/ApiAuth";
 import { erasConfig, placesConfig } from "@/lib/mortal-odds/config";
 import { pickPlace, regionShare } from "@/lib/mortal-odds/draw";
 import { eraFor } from "@/lib/mortal-odds/geo";
@@ -9,6 +10,11 @@ import type { RegionId } from "@/types";
 const MIN_SUPPORTED_YEAR = -10_000;
 
 export async function GET(request: NextRequest) {
+  const unauthorized = requireApiSecret(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   const yearParam = request.nextUrl.searchParams.get("year");
   const year = Number(yearParam);
 

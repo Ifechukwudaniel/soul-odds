@@ -1,4 +1,4 @@
-import axios from "axios";
+import { apiClient } from "@/libs/ApiClient";
 import type { LeaderboardSort, User } from "@/services/db/user";
 
 type GetLeaderboardOptions = {
@@ -12,7 +12,7 @@ export const getLeaderboard = async (options?: GetLeaderboardOptions): Promise<U
     const params = new URLSearchParams({ sortBy: options?.sortBy ?? "points" });
     if (options?.address) params.set("address", options.address);
 
-    const users = (await axios.get(`/api/leaderboard?${params.toString()}`)).data as User[];
+    const users = (await apiClient.get(`/api/leaderboard?${params.toString()}`)).data as User[];
     return users;
   } catch (error) {
     console.error(error);

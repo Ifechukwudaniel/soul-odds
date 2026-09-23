@@ -1,4 +1,4 @@
-import axios from "axios";
+import { apiClient } from "@/libs/ApiClient";
 import { Boost } from "@/services/db/boost";
 import type { TBoost } from "@/services/store/store";
 
@@ -14,7 +14,7 @@ export const toTBoost = (boost: Boost): TBoost => ({
 
 export const getPayedBoost = async (address:string) :Promise<Boost[]>=> {
     try {
-      let boosts = (await axios.get(`/api/boost/${address}/paidBoost`)).data as Boost[]
+      let boosts = (await apiClient.get(`/api/boost/${address}/paidBoost`)).data as Boost[]
       return boosts
     } catch (error) {
       console.error(error);
@@ -23,7 +23,7 @@ export const getPayedBoost = async (address:string) :Promise<Boost[]>=> {
 };
 export const getNoLevelBoost = async (address:string) :Promise<Boost[]>=> {
     try {
-      let boosts = (await axios.get(`/api/boost/${address}/paidNoLevelBoost`)).data as Boost[]
+      let boosts = (await apiClient.get(`/api/boost/${address}/paidNoLevelBoost`)).data as Boost[]
       return boosts
     } catch (error) {
       console.error(error);

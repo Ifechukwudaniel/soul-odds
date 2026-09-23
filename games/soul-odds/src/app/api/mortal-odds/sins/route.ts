@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
+import { requireApiSecret } from "@/libs/ApiAuth";
 import { sinsConfig } from "@/lib/mortal-odds/config";
 import { generateSinNarratives } from "@/lib/mortal-odds/openrouter";
 
 
 export async function GET(request: NextRequest) {
+  const unauthorized = requireApiSecret(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   const yearParam = request.nextUrl.searchParams.get("year");
   const location = request.nextUrl.searchParams.get("location");
 

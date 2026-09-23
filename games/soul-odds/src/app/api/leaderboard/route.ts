@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
+import { requireApiSecret } from "@/libs/ApiAuth";
 import { getLeaderboard, type LeaderboardSort } from "@/services/db/user";
 
 const SORT_OPTIONS: LeaderboardSort[] = ["points", "balance"];
 
 export async function GET(request: NextRequest) {
+  const unauthorized = requireApiSecret(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   try {
     const sortByParam = request.nextUrl.searchParams.get("sortBy");
     const sortBy: LeaderboardSort = SORT_OPTIONS.includes(sortByParam as LeaderboardSort)

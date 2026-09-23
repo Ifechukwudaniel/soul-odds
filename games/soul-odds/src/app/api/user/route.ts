@@ -1,14 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isAddress } from "viem";
+import { requireApiSecret } from "@/libs/ApiAuth";
 import { createUser, findAllUsers, findUser, updateUser } from "@/services/db/user";
 
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const unauthorized = requireApiSecret(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   const users = await findAllUsers();
   return NextResponse.json(users);
 }
 
 export async function POST(request: NextRequest) {
+  const unauthorized = requireApiSecret(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   try {
     const { address, referredBy, balance } = await request.json();
     if (!address) return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
