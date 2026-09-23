@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { accumulateSkill } from "@/lib/mortal-odds/skill";
+import { addPoints, consumeFreeRedraw, getUser } from "@/services/data/user";
 import { useAppStore } from "@/services/store/store";
 
 export type MortalOddsPlayerStats = { bankroll: number; rounds: number; bestRound: number; streak: number; skill: number; totalWinnings: number };
@@ -25,11 +26,14 @@ export function useMortalOddsPlayer(): {
   stats: MortalOddsPlayerStats;
   canAfford: (amount: number) => boolean;
   spend: (amount: number) => boolean;
+  freeRedraws: number;
+  payRedraw: (fee: number) => "free" | "paid" | null;
   commitRound: (options: { net: number; skill: number; totalStake: number }) => void;
   reset: () => void;
 } {
   const balance = useAppStore(state => state.user.balance);
   const skill = useAppStore(state => state.user.skill);
+  const address = useAppStore(state => state.user.address);
   /**
    * A round's stake and payout now move for real through `hostApi.openSession`/`submitAction`,
    * so `user.balance` is driven entirely by the host's pushed snapshot (see the balance-sync
@@ -37,6 +41,7 @@ export function useMortalOddsPlayer(): {
    */
   const applyRedrawFeeDelta = useAppStore(state => state.applyBalanceDelta);
   const updateUser = useAppStore(state => state.updateUser);
+  const freeRedraws = useAppStore(state => state.user.freeRedraws);
   const [roundStats, setRoundStats] = useState<RoundStats>(DEFAULT_ROUND_STATS);
 
   useEffect(() => {
@@ -64,12 +69,34 @@ export function useMortalOddsPlayer(): {
   };
 
   /**
+   * Pays for a redraw with a banked free redraw when there is one, otherwise with the flat fee.
+   * The free redraw is spent optimistically; if the server disagrees, the local count is re-synced from it.
+   */
+  const payRedraw = (fee: number) => {
+    if (freeRedraws > 0) {
+      updateUser({ freeRedraws: freeRedraws - 1 });
+      consumeFreeRedraw(address).catch(() =>
+        getUser(address)
+          .then((user) => updateUser({ freeRedraws: user.freeRedraws }))
+          .catch((error) => console.error("Could not sync free redraws:", error)),
+      );
+      return "free";
+    }
+    return spend(fee) ? "paid" : null;
+  };
+
+  /**
    * The round's stake/payout already moved on-chain, so this only accumulates the stats that have
-   * no chain equivalent: skill and streaks. Skill is still spoofable client-side until it moves
-   * server-side, but the balance itself is no longer at risk from that.
+   * no chain equivalent: skill and streaks. The delta is still computed client-side (not yet
+   * validated server-side), but it's now also persisted to the user's DB `points` column — the
+   * same column the leaderboard already sorts by — so skill survives a refresh and shows up
+   * there, instead of living only in this browser's localStorage.
    */
   const commitRound = (options: { net: number; skill: number }) => {
     updateUser({ skill: accumulateSkill(skill, options.skill) });
+    if (address && options.skill !== 0) {
+      addPoints(address, options.skill).catch((error) => console.error("Could not persist skill points:", error));
+    }
     persistRoundStats({
       rounds: roundStats.rounds + 1,
       bestRound: Math.max(roundStats.bestRound, options.net),
@@ -84,6 +111,8 @@ export function useMortalOddsPlayer(): {
     stats: { bankroll: balance, skill, ...roundStats },
     canAfford,
     spend,
+    freeRedraws,
+    payRedraw,
     commitRound,
     reset: () => persistRoundStats(DEFAULT_ROUND_STATS),
   };

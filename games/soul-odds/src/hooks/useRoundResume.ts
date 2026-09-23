@@ -56,9 +56,10 @@ export function useRoundResume(options: {
       bets: slip.bets,
       charges,
       chipSize,
+      configurationIndex: round.configurationIndex,
       reveal: round.reveal,
     });
-  }, [key, checked, round.phase, round.sessionKey, round.wagerWei, round.draw, round.context, round.samplesSeed, round.era, round.reveal, slip.bets, charges, chipSize]);
+  }, [key, checked, round.phase, round.sessionKey, round.wagerWei, round.draw, round.context, round.samplesSeed, round.era, round.configurationIndex, round.reveal, slip.bets, charges, chipSize]);
 
   return { restoredReveal };
 }
