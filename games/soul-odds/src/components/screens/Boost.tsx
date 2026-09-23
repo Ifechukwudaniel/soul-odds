@@ -44,7 +44,7 @@ export const boostCardLists: BoostCardList[] = [
   },
   {
     title: "Oracle's Whisper",
-    desc: "Reveals a hint about the soul's true fate before you lock in your bets.",
+    desc: "Reveals how likely each outcome is before you lock in your bets.",
     icon: <RelicIcon relic="scarab" size={40} />,
     initalCost: 50000,
     id: 4,
