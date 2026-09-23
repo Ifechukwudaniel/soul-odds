@@ -37,7 +37,7 @@ import { genericSinNarratives, sinFromNarrative } from "@/lib/mortal-odds/sin-na
 import { categoriesOfCrimeMask } from "@/lib/mortal-odds/sin-selection";
 import { sinNarrativesKeyFor, SinNarrativesLoader } from "@/lib/mortal-odds/sin-narratives-loader";
 import type { SinNarrativesState } from "@/lib/mortal-odds/sin-narratives-loader";
-import type { SinNarratives } from "@/lib/mortal-odds/openrouter";
+import type { SinNarratives } from "@/lib/mortal-odds/sin-variants";
 import {
   ageBucketIndex,
   configurationIndexFromGameState,

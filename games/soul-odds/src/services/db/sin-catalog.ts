@@ -17,10 +17,6 @@ export async function findAllSinCatalogRows(): Promise<SinCatalogRow[]> {
   return db.select().from(sinCatalogSchema);
 }
 
-export async function insertSinVariant(row: NewSinCatalogRow): Promise<void> {
-  await db.insert(sinCatalogSchema).values(row);
-}
-
 export async function insertSinVariants(rows: NewSinCatalogRow[]): Promise<void> {
   if (rows.length === 0) return;
   await db.insert(sinCatalogSchema).values(rows);

@@ -7,7 +7,7 @@ import { StageSlide } from "@/components/game/mortal-odds/stage/StageSlide";
 import { ChoiceMarket } from "@/components/game/mortal-odds/stage/markets/ChoiceMarket";
 import { SinsMarket } from "@/components/game/mortal-odds/stage/markets/SinsMarket";
 import { marketsConfig } from "@/lib/mortal-odds/config";
-import type { SinNarratives } from "@/lib/mortal-odds/openrouter";
+import type { SinNarratives } from "@/lib/mortal-odds/sin-variants";
 import { playClickSound } from "@/utils/playClickSound";
 import type { Bet, MarketPrices } from "@/types";
 

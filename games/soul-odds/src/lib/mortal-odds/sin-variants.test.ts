@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { periodOf, withPeriod } from "@/lib/mortal-odds/sin-variants";
-import type { SinNarratives } from "@/lib/mortal-odds/openrouter";
+import type { SinNarratives } from "@/lib/mortal-odds/sin-variants";
 
 const entry = { label: "Theft", phrase: "stole grain" };
 const narratives: SinNarratives = { violence: entry, deceit: entry, greed: entry, heresy: entry };

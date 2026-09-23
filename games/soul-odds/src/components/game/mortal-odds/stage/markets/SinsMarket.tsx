@@ -8,7 +8,7 @@ import { SIN_CATEGORIES } from "@/lib/mortal-odds/config";
 import { narrativeFor } from "@/lib/mortal-odds/sin-narrative-helpers";
 import { categoriesOfSinOption, MAX_SINS, sinOptionId } from "@/lib/mortal-odds/sin-selection";
 import { playClickSound } from "@/utils/playClickSound";
-import type { SinNarratives } from "@/lib/mortal-odds/openrouter";
+import type { SinNarratives } from "@/lib/mortal-odds/sin-variants";
 import type { SinCategoryId } from "@/lib/mortal-odds/config";
 import type { MarketConfig, Price } from "@/types";
 

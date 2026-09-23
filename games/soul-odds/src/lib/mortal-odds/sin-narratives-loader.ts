@@ -1,4 +1,4 @@
-import type { SinNarratives } from "@/lib/mortal-odds/openrouter";
+import type { SinNarratives } from "@/lib/mortal-odds/sin-variants";
 
 export type SinNarrativesState = { ready: true; narratives: SinNarratives } | { ready: false };
 

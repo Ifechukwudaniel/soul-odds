@@ -1,4 +1,10 @@
-import type { SinNarratives } from "@/lib/mortal-odds/openrouter";
+import type { SinCategoryId } from "@/lib/mortal-odds/config";
+
+/** One crime per on-chain category: a short title-case name and a past-tense clause describing the act. */
+export type SinNarratives = Record<SinCategoryId, { label: string; phrase: string }>;
+
+/** Where and when a place existed, so a sin can be looked up for its real region and period rather than just its name. */
+export type SinPlaceContext = { lat: number; lon: number; fromYear?: number; toYear?: number };
 
 /** A sin narrative set plus the years it was written for, as the seed file stores it (the database keeps the period in columns). */
 export type SinVariant = SinNarratives & { fromYear?: number; toYear?: number };

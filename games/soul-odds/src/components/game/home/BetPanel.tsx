@@ -10,7 +10,7 @@ import { SlipRow } from "@/components/game/home/SlipRow";
 import { Scroller } from "@/components/Scroller";
 import { betOdds } from "@/lib/mortal-odds/bets";
 import { serifFont } from "@/styles/serif-font";
-import type { SinNarratives } from "@/lib/mortal-odds/openrouter";
+import type { SinNarratives } from "@/lib/mortal-odds/sin-variants";
 import type { Bet, MarketPrices, Price, RoundCharge } from "@/types";
 
 export const BetPanel = (props: {

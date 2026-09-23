@@ -2,7 +2,7 @@ import { DEATH_WINDOW, marketsConfig } from "@/lib/mortal-odds/config";
 import { fmtYear } from "@/lib/mortal-odds/format";
 import { narrativeFor } from "@/lib/mortal-odds/sin-narrative-helpers";
 import { categoriesOfSinOption } from "@/lib/mortal-odds/sin-selection";
-import type { SinNarratives } from "@/lib/mortal-odds/openrouter";
+import type { SinNarratives } from "@/lib/mortal-odds/sin-variants";
 import type { Bet, MarketPrices, Price } from "@/types";
 
 export function betLabel(bet: Bet, sinNarratives?: SinNarratives | null): { market: string; pick: string } {

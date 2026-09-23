@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { sinNarrativesKeyFor, SinNarrativesLoader } from "@/lib/mortal-odds/sin-narratives-loader";
-import type { SinNarratives } from "@/lib/mortal-odds/openrouter";
+import type { SinNarratives } from "@/lib/mortal-odds/sin-variants";
 
 const narratives = (label: string): SinNarratives =>
   ({

@@ -15,6 +15,19 @@ export async function pickCliopatriaPlace(year: number): Promise<CliopatriaPlace
   return place;
 }
 
+/** The polity alive in `year` whose representative point is nearest (lat, lon), or `undefined` if none was alive. */
+export async function findNearestCliopatriaPlace(options: { lat: number; lon: number; year: number }): Promise<CliopatriaPlaceRow | undefined> {
+  const { lat, lon, year } = options;
+  const [place] = await db
+    .select()
+    .from(cliopatriaPlaceSchema)
+    .where(and(lte(cliopatriaPlaceSchema.fromYear, year), gte(cliopatriaPlaceSchema.toYear, year)))
+    // Squared distance with longitude scaled by latitude: only the order matters, not the unit.
+    .orderBy(sql`power(${cliopatriaPlaceSchema.lat} - ${lat}, 2) + power(cos(radians(${lat})) * (${cliopatriaPlaceSchema.lon} - ${lon}), 2)`)
+    .limit(1);
+  return place;
+}
+
 /** Every date-sliced row for a polity name (case-insensitive) — a polity can have several, one per era slice. */
 export async function findCliopatriaPlacesByName(name: string): Promise<CliopatriaPlaceRow[]> {
   return db.select().from(cliopatriaPlaceSchema).where(ilike(cliopatriaPlaceSchema.name, name));

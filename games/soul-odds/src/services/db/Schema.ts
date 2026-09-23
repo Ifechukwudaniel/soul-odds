@@ -14,7 +14,7 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 import type { BetHistoryBet } from '@/lib/mortal-odds/bet-history';
-import type { SinNarratives } from '@/lib/mortal-odds/openrouter';
+import type { SinNarratives } from '@/lib/mortal-odds/sin-variants';
 
 export const userSchema = pgTable('user', {
   address: varchar('address', { length: 42 }).primaryKey(),

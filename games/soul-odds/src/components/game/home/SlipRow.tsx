@@ -2,7 +2,7 @@ import { PiXBold } from "react-icons/pi";
 import { CurrencyCoinIcon } from "@/components/assets/CurrencyCoinIcon";
 import { betLabel } from "@/lib/mortal-odds/bets";
 import { playClickSound } from "@/utils/playClickSound";
-import type { SinNarratives } from "@/lib/mortal-odds/openrouter";
+import type { SinNarratives } from "@/lib/mortal-odds/sin-variants";
 import type { Bet } from "@/types";
 
 export const SlipRow = (props: { bet: Bet; potentialWin: number | null; onRemove?: () => void; sinNarratives: SinNarratives | null }) => {

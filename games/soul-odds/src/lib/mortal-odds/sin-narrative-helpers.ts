@@ -1,5 +1,5 @@
 import type { SinCategoryId } from "@/lib/mortal-odds/config";
-import type { SinNarratives } from "@/lib/mortal-odds/openrouter";
+import type { SinNarratives } from "@/lib/mortal-odds/sin-variants";
 import type { Sin } from "@/types";
 
 function genericPhrase(label: string): { label: string; phrase: string } {

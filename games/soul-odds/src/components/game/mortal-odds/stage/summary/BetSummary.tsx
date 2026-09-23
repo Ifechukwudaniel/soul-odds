@@ -10,7 +10,7 @@ import { betLabel, betOdds } from "@/lib/mortal-odds/bets";
 import { fmtYear } from "@/lib/mortal-odds/format";
 import { getMarketIcon } from "@/lib/mortal-odds/market-icons";
 import { serifFont } from "@/styles/serif-font";
-import type { SinNarratives } from "@/lib/mortal-odds/openrouter";
+import type { SinNarratives } from "@/lib/mortal-odds/sin-variants";
 import type { Bet, Draw, MarketPrices, Price, RoundCharge } from "@/types";
 
 const COUNT_WORDS = ["No", "One", "Two", "Three", "Four", "Five", "Six"];

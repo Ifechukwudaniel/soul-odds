@@ -1,5 +1,5 @@
 import { apiClient } from "@/libs/ApiClient";
-import type { SinNarratives, SinPlaceContext } from "@/lib/mortal-odds/openrouter";
+import type { SinNarratives, SinPlaceContext } from "@/lib/mortal-odds/sin-variants";
 
 /** Fetches this draw's four era-specific sin narratives from the backend. */
 export async function fetchSinNarratives(options: { year: number; location: string; place?: SinPlaceContext }): Promise<SinNarratives> {
