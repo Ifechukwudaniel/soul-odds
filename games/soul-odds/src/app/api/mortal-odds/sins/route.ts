@@ -2,8 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireApiSecret } from "@/libs/ApiAuth";
 import { sinsConfig } from "@/lib/mortal-odds/config";
 import { generateSinNarratives } from "@/lib/mortal-odds/openrouter";
-import { readSinCatalog, writeSinCatalog } from "@/lib/mortal-odds/sin-catalog";
-import type { SinCatalog, SinCatalogEntry } from "@/lib/mortal-odds/sin-catalog";
+import type { SinPlaceContext } from "@/lib/mortal-odds/openrouter";
+import { variantsCovering, withPeriod } from "@/lib/mortal-odds/sin-variants";
+import {
+  appendSinCatalogVariant,
+  findSinCatalogEntry,
+  incrementSinCatalogUseCount,
+  insertSinCatalogEntry,
+} from "@/services/db/sin-catalog";
 
 /** Every this-many-th time a place is served from the catalog, ask OpenRouter to grow its variant pool by one. */
 const GROWTH_INTERVAL = 3;
@@ -13,35 +19,30 @@ const GROWTH_INTERVAL = 3;
  * fire-and-forget from the caller's point of view, so a place already in the catalog never waits
  * on this. Runs after the response has already gone out; safe here because this app runs as a
  * persistent `next start` process, not a serverless function that gets frozen post-response.
- *
- * Reads and writes the whole catalog file without locking, so two requests growing the same
- * place in the same instant can race and one write can be lost — acceptable for an approximate
- * "grow every few uses" cadence at this project's scale; a real fix would move the catalog into
- * the database, the way `services/db/user.ts`'s `addPoints` does its atomic increment.
  */
-async function recordUseAndMaybeGrow(location: string, year: number): Promise<void> {
-  const catalog = await readSinCatalog();
-  const entry = catalog[location];
-  if (!entry) return;
+async function recordUseAndMaybeGrow(options: { location: string; year: number; place?: SinPlaceContext }): Promise<void> {
+  const { location, year, place } = options;
+  const useCount = await incrementSinCatalogUseCount(location);
+  if (useCount === undefined || useCount % GROWTH_INTERVAL !== 0) return;
 
-  entry.useCount += 1;
-  if (entry.useCount % GROWTH_INTERVAL === 0) {
-    try {
-      entry.variants.push(await generateSinNarratives({ year, location }));
-    } catch (error) {
-      console.error(`Could not grow sin catalog for "${location}":`, error);
-    }
+  try {
+    await appendSinCatalogVariant(location, withPeriod(await generateSinNarratives({ year, location, place }), year));
+  } catch (error) {
+    console.error(`Could not grow sin catalog for "${location}":`, error);
   }
-  await writeSinCatalog(catalog);
+}
+
+/** Reads the optional place details (`lat`, `lon` and, for real polities, `fromYear`/`toYear`); undefined unless the coordinates are both valid. */
+function readPlaceContext(params: URLSearchParams): SinPlaceContext | undefined {
+  const finite = (key: string) => (params.get(key) === null ? undefined : Number.isFinite(Number(params.get(key))) ? Number(params.get(key)) : undefined);
+  const lat = finite("lat");
+  const lon = finite("lon");
+  if (lat === undefined || lon === undefined) return undefined;
+  return { lat, lon, fromYear: finite("fromYear"), toYear: finite("toYear") };
 }
 
 function pickRandom<T>(items: T[]): T {
   return items[Math.floor(Math.random() * items.length)]!;
-}
-
-async function seedCatalogEntry(catalog: SinCatalog, location: string, entry: SinCatalogEntry): Promise<void> {
-  catalog[location] = entry;
-  await writeSinCatalog(catalog);
 }
 
 export async function GET(request: NextRequest) {
@@ -66,17 +67,23 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ message: 'Missing "location" query parameter.' }, { status: 400 });
   }
 
-  const catalog = await readSinCatalog();
-  const entry = catalog[location];
+  const place = readPlaceContext(request.nextUrl.searchParams);
+  const entry = await findSinCatalogEntry(location);
   if (entry) {
-    const response = NextResponse.json(pickRandom(entry.variants));
-    void recordUseAndMaybeGrow(location, year);
-    return response;
+    // An empire spans centuries, so only a variant written for this year's period is ever served;
+    // when there is none, fall through and generate one for it.
+    const pool = variantsCovering(entry.variants, year);
+    if (pool.length > 0) {
+      const response = NextResponse.json(pickRandom(pool));
+      void recordUseAndMaybeGrow({ location, year, place });
+      return response;
+    }
   }
 
   try {
-    const narratives = await generateSinNarratives({ year, location });
-    void seedCatalogEntry(catalog, location, { variants: [narratives], useCount: 1 });
+    const narratives = await generateSinNarratives({ year, location, place });
+    const variant = withPeriod(narratives, year);
+    void (entry ? appendSinCatalogVariant(location, variant) : insertSinCatalogEntry({ location, variants: [variant], useCount: 1 }));
     return NextResponse.json(narratives);
   } catch (error) {
     console.error(error);

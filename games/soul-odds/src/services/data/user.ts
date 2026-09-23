@@ -35,6 +35,11 @@ export const addPoints = async (address: string, delta: number): Promise<void> =
   await apiClient.post(`/api/user/${address}/points`, { delta });
 };
 
+/** Adds `delta` to a user's lifetime winnings, server-side, so the leaderboard's "Winnings" column survives a refresh and shows for every player. */
+export const addWinnings = async (address: string, delta: number): Promise<void> => {
+  await apiClient.post(`/api/user/${address}/winnings`, { delta });
+};
+
 /** Spends one of the user's free redraws server-side. Rejects when none are left. */
 export const consumeFreeRedraw = async (address: string): Promise<{ freeRedraws: number }> => {
   return (await apiClient.post(`/api/user/${address}/free-redraw`)).data;
