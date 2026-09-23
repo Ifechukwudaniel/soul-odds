@@ -1,15 +1,19 @@
 import type { InferSelectModel } from 'drizzle-orm';
 import {
   boolean,
+  doublePrecision,
   index,
   integer,
   jsonb,
   numeric,
   pgTable,
+  primaryKey,
   serial,
+  text,
   timestamp,
   varchar,
 } from 'drizzle-orm/pg-core';
+import type { BetHistoryBet } from '@/lib/mortal-odds/bet-history';
 import type { SinNarratives } from '@/lib/mortal-odds/openrouter';
 
 export const userSchema = pgTable('user', {
@@ -100,3 +104,39 @@ export const sinCatalogSchema = pgTable(
 
 export type SinCatalogRow = InferSelectModel<typeof sinCatalogSchema>;
 export type NewSinCatalogRow = typeof sinCatalogSchema.$inferInsert;
+
+// ---------------------------------------------------------------------------
+// Bet history
+// ---------------------------------------------------------------------------
+// One row per settled round, keyed by the wallet that played it and the round's
+// session key. The AI-written `story` and `name` land after the row is first
+// written (see `patchBetHistoryStory`), so they start as the local story / null.
+
+export const betHistorySchema = pgTable(
+  'bet_history',
+  {
+    address: varchar('address', { length: 42 }).notNull(),
+    id: varchar('id', { length: 128 }).notNull(),
+    settledAt: timestamp('settled_at', { mode: 'date' }).notNull(),
+    placeName: varchar('place_name', { length: 255 }).notNull(),
+    lat: doublePrecision('lat').notNull(),
+    lon: doublePrecision('lon').notNull(),
+    name: varchar('name', { length: 60 }),
+    story: text('story').notNull(),
+    bornYear: integer('born_year').notNull(),
+    deathYear: integer('death_year').notNull(),
+    age: integer('age').notNull(),
+    sex: varchar('sex', { length: 4 }).notNull(),
+    sin: text('sin'),
+    wager: doublePrecision('wager').notNull(),
+    fees: doublePrecision('fees').notNull(),
+    net: doublePrecision('net').notNull(),
+    roundNet: doublePrecision('round_net').notNull(),
+    skill: doublePrecision('skill').notNull(),
+    bets: jsonb('bets').$type<BetHistoryBet[]>().notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.address, table.id] })],
+);
+
+export type BetHistoryRow = InferSelectModel<typeof betHistorySchema>;
+export type NewBetHistoryRow = typeof betHistorySchema.$inferInsert;
