@@ -17,12 +17,6 @@ export async function findAllSinCatalogRows(): Promise<SinCatalogRow[]> {
   return db.select().from(sinCatalogSchema);
 }
 
-/** Every location that already has a row - lets the generator script skip finished places. */
-export async function findSinCatalogLocations(): Promise<Set<string>> {
-  const rows = await db.selectDistinct({ location: sinCatalogSchema.location }).from(sinCatalogSchema);
-  return new Set(rows.map((row) => row.location));
-}
-
 export async function insertSinVariant(row: NewSinCatalogRow): Promise<void> {
   await db.insert(sinCatalogSchema).values(row);
 }
