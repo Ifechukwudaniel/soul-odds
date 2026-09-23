@@ -72,6 +72,9 @@ pnpm run db:seed
 echo "Seeding Cliopatria places..."
 pnpm run db:seed:cliopatria:zip || echo "Skipping: cliopatria.geojson/cliopatria_polities_only.zip not found."
 
+echo "Seeding sin catalog..."
+pnpm run db:seed:sin-catalog || echo "Skipping: sin-catalog/sin-catalog.json not found."
+
 echo "Starting Socket.io..."
 pnpm run game:socket-server &
 PIDS+=("$!")

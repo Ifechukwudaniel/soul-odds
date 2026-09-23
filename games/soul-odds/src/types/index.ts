@@ -85,6 +85,8 @@ export type Life = {
   sin: Sin | null;
   /** Every sin the chain recorded (the contract allows two). Absent on lives drawn by the local flavor model. */
   sins?: Sin[];
+  /** A random cause of death fitting the soul's age and era; null while still living or when a shock killed them. Absent on lives drawn by the local flavor model. */
+  cause?: string | null;
 };
 
 export type BetResult = {

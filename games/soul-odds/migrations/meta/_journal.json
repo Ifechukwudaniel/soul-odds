@@ -36,6 +36,13 @@
       "when": 1790183590678,
       "tag": "0004_drop_boost",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790184943462,
+      "tag": "0005_sin_catalog",
+      "breakpoints": true
     }
   ]
 }

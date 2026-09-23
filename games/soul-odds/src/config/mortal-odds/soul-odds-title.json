@@ -10,7 +10,7 @@
       "femaleWeight": 488,
       "rtpWad": "0.95",
       "lifespans": [
-        { "minYears": 0, "maxYears": 4, "weight": 4446, "noCrimeWeight": 9900 },
+        { "minYears": 0, "maxYears": 4, "weight": 4446, "noCrimeWeight": 10000 },
         { "minYears": 5, "maxYears": 29, "weight": 1714, "noCrimeWeight": 6000 },
         { "minYears": 30, "maxYears": 59, "weight": 3300, "noCrimeWeight": 5000 },
         { "minYears": 60, "maxYears": 105, "weight": 540, "noCrimeWeight": 7500 }
@@ -31,7 +31,7 @@
       "femaleWeight": 488,
       "rtpWad": "0.95",
       "lifespans": [
-        { "minYears": 0, "maxYears": 4, "weight": 4319, "noCrimeWeight": 9900 },
+        { "minYears": 0, "maxYears": 4, "weight": 4319, "noCrimeWeight": 10000 },
         { "minYears": 5, "maxYears": 29, "weight": 1545, "noCrimeWeight": 6000 },
         { "minYears": 30, "maxYears": 59, "weight": 3462, "noCrimeWeight": 5000 },
         { "minYears": 60, "maxYears": 105, "weight": 673, "noCrimeWeight": 7500 }
@@ -52,7 +52,7 @@
       "femaleWeight": 488,
       "rtpWad": "0.95",
       "lifespans": [
-        { "minYears": 0, "maxYears": 4, "weight": 4184, "noCrimeWeight": 9900 },
+        { "minYears": 0, "maxYears": 4, "weight": 4184, "noCrimeWeight": 10000 },
         { "minYears": 5, "maxYears": 29, "weight": 1378, "noCrimeWeight": 6000 },
         { "minYears": 30, "maxYears": 59, "weight": 3616, "noCrimeWeight": 5000 },
         { "minYears": 60, "maxYears": 105, "weight": 822, "noCrimeWeight": 7500 }
@@ -73,7 +73,7 @@
       "femaleWeight": 488,
       "rtpWad": "0.95",
       "lifespans": [
-        { "minYears": 0, "maxYears": 4, "weight": 4147, "noCrimeWeight": 9900 },
+        { "minYears": 0, "maxYears": 4, "weight": 4147, "noCrimeWeight": 10000 },
         { "minYears": 5, "maxYears": 29, "weight": 1186, "noCrimeWeight": 6000 },
         { "minYears": 30, "maxYears": 59, "weight": 3680, "noCrimeWeight": 5000 },
         { "minYears": 60, "maxYears": 105, "weight": 987, "noCrimeWeight": 7500 }
@@ -94,7 +94,7 @@
       "femaleWeight": 488,
       "rtpWad": "0.95",
       "lifespans": [
-        { "minYears": 0, "maxYears": 4, "weight": 4001, "noCrimeWeight": 9900 },
+        { "minYears": 0, "maxYears": 4, "weight": 4001, "noCrimeWeight": 10000 },
         { "minYears": 5, "maxYears": 29, "weight": 1038, "noCrimeWeight": 6000 },
         { "minYears": 30, "maxYears": 59, "weight": 3773, "noCrimeWeight": 5000 },
         { "minYears": 60, "maxYears": 105, "weight": 1187, "noCrimeWeight": 7500 }
@@ -115,7 +115,7 @@
       "femaleWeight": 488,
       "rtpWad": "0.95",
       "lifespans": [
-        { "minYears": 0, "maxYears": 4, "weight": 3306, "noCrimeWeight": 9900 },
+        { "minYears": 0, "maxYears": 4, "weight": 3306, "noCrimeWeight": 10000 },
         { "minYears": 5, "maxYears": 29, "weight": 624, "noCrimeWeight": 6000 },
         { "minYears": 30, "maxYears": 59, "weight": 3909, "noCrimeWeight": 5000 },
         { "minYears": 60, "maxYears": 105, "weight": 2161, "noCrimeWeight": 7500 }
@@ -136,7 +136,7 @@
       "femaleWeight": 488,
       "rtpWad": "0.95",
       "lifespans": [
-        { "minYears": 0, "maxYears": 4, "weight": 1448, "noCrimeWeight": 9900 },
+        { "minYears": 0, "maxYears": 4, "weight": 1448, "noCrimeWeight": 10000 },
         { "minYears": 5, "maxYears": 29, "weight": 116, "noCrimeWeight": 6000 },
         { "minYears": 30, "maxYears": 59, "weight": 3288, "noCrimeWeight": 5000 },
         { "minYears": 60, "maxYears": 105, "weight": 5149, "noCrimeWeight": 7500 }
@@ -157,7 +157,7 @@
       "femaleWeight": 488,
       "rtpWad": "0.95",
       "lifespans": [
-        { "minYears": 0, "maxYears": 4, "weight": 551, "noCrimeWeight": 9900 },
+        { "minYears": 0, "maxYears": 4, "weight": 551, "noCrimeWeight": 10000 },
         { "minYears": 5, "maxYears": 29, "weight": 20, "noCrimeWeight": 6000 },
         { "minYears": 30, "maxYears": 59, "weight": 2027, "noCrimeWeight": 5000 },
         { "minYears": 60, "maxYears": 105, "weight": 7402, "noCrimeWeight": 7500 }

@@ -40,6 +40,7 @@ export async function GET(request: NextRequest) {
       age,
       deathYear,
       sinPhrase: params.get("sinPhrase"),
+      cause: params.get("cause"),
     });
     console.log(`[life-story] request handled in ${Date.now() - startedAt}ms`);
     return NextResponse.json(narrative);
