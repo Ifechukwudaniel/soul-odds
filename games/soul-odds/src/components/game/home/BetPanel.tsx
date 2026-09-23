@@ -107,8 +107,8 @@ export const BetPanel = (props: {
                 className="flex items-center justify-between text-sm"
               >
                 <span className="text-white/60">{charge.label}</span>
-                <span className="font-semibold text-[#F5B83D]">
-                  −{charge.amount.toFixed(2)} {props.currency}
+                <span className="flex items-center gap-1 font-semibold text-[#F5B83D]">
+                  −{charge.amount.toFixed(2)} <CurrencyCoinIcon width={14} height="14" />
                 </span>
               </motion.div>
             ))}

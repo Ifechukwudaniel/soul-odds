@@ -1,3 +1,4 @@
+import { apiClient } from "@/libs/ApiClient";
 import type { EraConfig } from "@/lib/mortal-odds/config";
 
 /**
@@ -9,7 +10,6 @@ export type EraApiResponse = EraConfig & { era: string };
 
 /** Fetches the demographic era and the on-chain SoulEra name for a birth year from the backend. */
 export async function fetchEra(year: number): Promise<EraApiResponse> {
-  const response = await fetch(`/api/mortal-odds/era?year=${year}`);
-  if (!response.ok) throw new Error(`Failed to fetch era for year ${year}`);
-  return (await response.json()) as EraApiResponse;
+  const response = await apiClient.get<EraApiResponse>(`/api/mortal-odds/era?year=${year}`);
+  return response.data;
 }

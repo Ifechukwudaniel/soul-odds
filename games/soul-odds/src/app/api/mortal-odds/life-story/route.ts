@@ -31,6 +31,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ message: 'Missing or invalid "deathYear" query parameter.' }, { status: 400 });
   }
 
+  const startedAt = Date.now();
   try {
     const narrative = await generateLifeStory({
       sex,
@@ -40,9 +41,10 @@ export async function GET(request: NextRequest) {
       deathYear,
       sinPhrase: params.get("sinPhrase"),
     });
+    console.log(`[life-story] request handled in ${Date.now() - startedAt}ms`);
     return NextResponse.json(narrative);
   } catch (error) {
-    console.error(error);
+    console.error(`[life-story] request failed after ${Date.now() - startedAt}ms`, error);
     return NextResponse.json({ message: "Could not generate a life story." }, { status: 502 });
   }
 }

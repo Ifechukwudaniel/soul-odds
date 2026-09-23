@@ -19,6 +19,7 @@ async function completeJson(systemPrompt: string, userPrompt: string): Promise<u
     throw new Error("OPENROUTER_API_KEY is not configured");
   }
 
+  const startedAt = Date.now();
   const response = await fetch(OPENROUTER_URL, {
     method: "POST",
     headers: {
@@ -34,6 +35,7 @@ async function completeJson(systemPrompt: string, userPrompt: string): Promise<u
       ],
     }),
   });
+  console.log(`[openrouter] ${MODEL} responded in ${Date.now() - startedAt}ms (status ${response.status})`);
 
   if (!response.ok) {
     throw new Error(`OpenRouter request failed: ${response.status} ${await response.text()}`);

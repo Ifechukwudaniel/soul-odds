@@ -1,3 +1,4 @@
+import { apiClient } from "@/libs/ApiClient";
 import type { Place } from "@/types";
 
 type PlaceApiResponse =
@@ -28,8 +29,6 @@ export function toPlace(response: PlaceApiResponse): Place {
 
 /** Fetches the place for a birth year from the backend — real Cliopatria data when it covers that year, else the synthetic fallback. */
 export async function fetchPlace(year: number): Promise<Place> {
-  const response = await fetch(`/api/mortal-odds/place?year=${year}`);
-  if (!response.ok) throw new Error(`Failed to fetch place for year ${year}`);
-  const data = (await response.json()) as PlaceApiResponse;
-  return toPlace(data);
+  const response = await apiClient.get<PlaceApiResponse>(`/api/mortal-odds/place?year=${year}`);
+  return toPlace(response.data);
 }

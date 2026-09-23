@@ -17,7 +17,7 @@ import type { Place, RoundCharge } from "@/types";
 
 const STAMP_DELAY_MS = 1500;
 
-export const RevealPanel = (props: { reveal: RevealResult; place: Place; currentYear: number; currency: string; charges: RoundCharge[]; onNext: () => void; drawCost: number; canAffordDraw: boolean }) => {
+export const RevealPanel = (props: { reveal: RevealResult; place: Place; currentYear: number; currency: string; charges: RoundCharge[]; onNext: () => void; drawCost: number; canAffordDraw: boolean; sessionKey: string | null }) => {
   const { life, results, net, skill, story, epitaph } = props.reveal;
   const [stampReady, setStampReady] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -47,7 +47,7 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
         <RevealHeader fate={fate} placeName={props.place.name} bornYear={life.year} deathYear={life.deathYear} epitaph={epitaph} alive={alive} />
 
         <div className="grid gap-4 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-          <SoulStory story={story} />
+          <SoulStory story={story} life={life} placeName={props.place.name} sessionKey={props.sessionKey} />
           <SoulRecord life={life} placeName={props.place.name} alive={alive} />
         </div>
 

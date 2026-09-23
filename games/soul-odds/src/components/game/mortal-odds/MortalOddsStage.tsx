@@ -128,6 +128,7 @@ export const MortalOddsStage = (props: {
               onNext={props.onDraw}
               drawCost={props.drawCost}
               canAffordDraw={props.canAffordDraw}
+              sessionKey={round.sessionKey}
             />
           )}
         </div>
