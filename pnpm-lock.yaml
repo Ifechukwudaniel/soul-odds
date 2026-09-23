@@ -342,14 +342,14 @@ importers:
     dependencies:
       viem:
         specifier: ^2.52.2
-        version: 2.56.8(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
+        version: 2.56.8(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.6.5)
     devDependencies:
       '@chain/casino-sdk':
         specifier: file:..
         version: 'file:'
       '@nomicfoundation/hardhat-toolbox-viem':
         specifier: ^5.0.5
-        version: 5.0.7(aa01776053f8a87213cdad460e3d08c4)
+        version: 5.0.7(628915769e0a513e1c7038faf0097fee)
       '@openzeppelin/contracts':
         specifier: 5.4.0
         version: 5.4.0
@@ -391,14 +391,14 @@ importers:
     dependencies:
       viem:
         specifier: ^2.52.2
-        version: 2.56.8(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.6.5)
+        version: 2.56.8(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
     devDependencies:
       '@chain/casino-sdk':
         specifier: file:..
         version: 'file:'
       '@nomicfoundation/hardhat-toolbox-viem':
         specifier: ^5.0.5
-        version: 5.0.7(628915769e0a513e1c7038faf0097fee)
+        version: 5.0.7(aa01776053f8a87213cdad460e3d08c4)
       '@openzeppelin/contracts':
         specifier: 5.4.0
         version: 5.4.0

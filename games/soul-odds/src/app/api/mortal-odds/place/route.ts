@@ -35,8 +35,6 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  // Cliopatria has nothing for this year (or isn't loaded on this machine) - fall back to the
-  // hand-curated regions in placesConfig, same weighted pick the birth-draw flow itself uses.
   const era = eraFor({ year, erasConfig });
   const regionIds = Object.keys(era.shares) as RegionId[];
   const region = pickWeighted({ items: regionIds, weight: (id) => era.shares[id], rng });
