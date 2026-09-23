@@ -29,6 +29,7 @@ export const DrawSequence = (props: {
   onAdvance: () => void;
   onRetreat: () => void;
   onRedraw: () => void;
+  onRedrawLocation: () => void;
   drawCost: number;
   canAffordDraw: boolean;
 }) => {
@@ -44,7 +45,14 @@ export const DrawSequence = (props: {
 
       <StageSlide slideKey={props.step} direction={isWhere ? 1 : -1} reserveGutter>
         {isWhere ? (
-          <WhereSlide year={props.draw.year} place={props.draw.place} local={props.context.local} />
+          <WhereSlide
+            year={props.draw.year}
+            place={props.draw.place}
+            local={props.context.local}
+            onRedraw={props.onRedrawLocation}
+            drawCost={props.drawCost}
+            canAffordDraw={props.canAffordDraw}
+          />
         ) : (
           <WhenSlide
             year={props.draw.year}

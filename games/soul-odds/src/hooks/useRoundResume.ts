@@ -27,7 +27,7 @@ export function useRoundResume(options: {
     if (!key || checked) return;
     const stored = readRound(key);
     if (stored) {
-      round.restore(stored);
+      void round.restore(stored);
       slip.replace(stored.bets);
       setCharges(stored.charges);
       setChipSize(stored.chipSize);

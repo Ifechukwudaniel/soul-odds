@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { GiPlainCircle } from "react-icons/gi";
 import { InfoDialog } from "@/components/game/InfoDialog";
 import { AGE_INFO } from "@/components/game/mortal-odds/stage/draw/slide-info";
 import { PopulationChart } from "@/components/game/mortal-odds/stage/draw/PopulationChart";
@@ -29,7 +30,7 @@ export const WhenSlide = (props: {
   const reelYear = props.isSpinning ? (props.displayYear ?? props.currentYear) : props.year;
 
   return (
-    <div className="flex min-h-full flex-col items-center  gap-5 text-center">
+    <div className="flex min-h-full flex-col items-center gap-3 text-center lg:gap-4">
       <div className="flex items-center justify-center gap-3">
         <h2 className={`${serifFont.className} font-bold text-3xl text-[#F1D6AE] sm:text-4xl leading-[0.55] pt-[0.5rem]`}>In which age?</h2>
         <InfoDialog {...AGE_INFO} />
@@ -46,7 +47,7 @@ export const WhenSlide = (props: {
       </div>
 
       {/* Screen readers skip the rolling digits and hear the settled answer once, when the region updates. */}
-      <div aria-live="polite" className="flex flex-col items-center gap-5">
+      <div aria-live="polite" className="flex flex-col items-center gap-1 lg:gap-2">
         <motion.div
           initial={false}
           animate={props.isSpinning ? "spinning" : "locked"}
@@ -54,7 +55,7 @@ export const WhenSlide = (props: {
           role={props.isSpinning ? undefined : "img"}
           aria-label={props.isSpinning ? undefined : fmtYear(props.year)}
           aria-hidden={props.isSpinning || undefined}
-          className={`${serifFont.className} font-bold text-4xl tabular-nums transition-colors duration-500 sm:text-5xl ${props.isSpinning ? "text-white/50" : "text-white"}`}
+          className={`${serifFont.className} font-bold text-4xl leading-none tabular-nums transition-colors duration-500 sm:text-5xl ${props.isSpinning ? "text-white/50" : "text-white"}`}
         >
           <YearReel year={reelYear} landing={reelYear === props.year} />
         </motion.div>
@@ -66,10 +67,11 @@ export const WhenSlide = (props: {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.35, delay: 0.1 }}
-            className={`${serifFont.className} flex flex-col items-center justify-center px-2 text-center font-bold text-xl text-white`}
+            className={`${serifFont.className} flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-2 text-center font-bold text-xl text-white`}
           >
             <span>{fmtNumber(yearsAgo)} years ago</span>
-            <span className="mt-1 text-[0.9rem] text-[#DEAE56]">the {periodName(props.year).toLowerCase()}</span>
+            <GiPlainCircle aria-hidden className="h-1.5 w-1.5 text-white/30" />
+            <span className="text-[#DEAE56] text-[0.9rem]">the {periodName(props.year).toLowerCase()}</span>
           </motion.p>
         )}
       </div>

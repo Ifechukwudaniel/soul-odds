@@ -4,7 +4,7 @@ import { mulberry32 } from "@/lib/mortal-odds/rng";
 import { tellStory } from "@/lib/mortal-odds/story";
 import type { Life, Place } from "@/types";
 
-const PLACE: Place = { name: "the Ganges Plain", continent: "Asia", share: 0.2, lat: 26, lon: 82 };
+const PLACE: Place = { name: "the Ganges Plain, Asia", share: 0.2, lat: 26, lon: 82 };
 
 function life(overrides: Partial<Life>): Life {
   return { year: 1900, region: "sas", sex: "boy", age: 40, deathYear: 1940, shock: null, literate: true, city: true, sin: null, ...overrides };

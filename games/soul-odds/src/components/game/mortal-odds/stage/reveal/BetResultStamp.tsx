@@ -31,7 +31,7 @@ export const BetResultStamp = (props: { results: BetResult[]; skill: number; rou
       >
         <span className="-top-2.5 -translate-x-1/2 absolute left-1/2 h-5 w-5 rounded-full border-2 border-black/30 bg-[#4C6FD1] shadow" />
 
-        <p className="text-center font-bold text-[#33353D]/70 text-xs uppercase tracking-[0.2em]">The scales are read</p>
+        <p className="text-center font-bold text-[#33353D]/70 text-xs uppercase tracking-[0.2em]">The scales have spoken</p>
 
         {results.length === 0 ? (
           <p className="mt-4 text-center text-[#33353D]/70 text-sm">No bets this round. Just watching.</p>

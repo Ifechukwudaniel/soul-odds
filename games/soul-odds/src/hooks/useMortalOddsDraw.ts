@@ -16,14 +16,18 @@ import {
   shocksConfig,
   SIMS,
   sinsConfig,
+  worldPopCurve,
 } from "@/lib/mortal-odds/config";
-import { drawBirth, pickPlace } from "@/lib/mortal-odds/draw";
+import { drawBirth, pickPlace, placeContext } from "@/lib/mortal-odds/draw";
+import { fetchEra } from "@/lib/mortal-odds/era";
+import { eraFor } from "@/lib/mortal-odds/geo";
+import { fetchPlace } from "@/lib/mortal-odds/place";
 import { buildLifespanHistogram, medianAge } from "@/lib/mortal-odds/lifespan";
 import type { LifespanHistogram } from "@/lib/mortal-odds/lifespan";
 import type { BookieLife, FullModelConfig } from "@/lib/mortal-odds/model";
 import { sampleLife, simulateFull } from "@/lib/mortal-odds/model";
 import { deathYearP, priceFromP } from "@/lib/mortal-odds/pricing";
-import { createRng, randomSeed } from "@/lib/mortal-odds/rng";
+import { createRng, pickWeighted, randomSeed } from "@/lib/mortal-odds/rng";
 import { deriveRoundData } from "@/lib/mortal-odds/round-data";
 import type { StoredRound } from "@/lib/mortal-odds/round-storage";
 import { resolveBets } from "@/lib/mortal-odds/settle";
@@ -45,7 +49,7 @@ import { tellStory } from "@/lib/mortal-odds/story";
 import { pickTimeStory } from "@/lib/mortal-odds/time-story";
 import { useCasinoHost } from "@/hooks/useCasinoHost";
 import { playSound } from "@/utils/playSound";
-import type { Bet, BetResult, Draw, EraFilter, Life, MarketPrices, PlaceContext, Price, Sex } from "@/types";
+import type { Bet, BetResult, Draw, EraFilter, Life, MarketPrices, PlaceContext, Price, RegionId, Sex } from "@/types";
 
 const CURRENT_YEAR = new Date().getFullYear();
 const RECENT_EPITAPHS_KEPT = 8;
@@ -105,6 +109,7 @@ type Action =
   | { type: "restore"; stored: StoredRound; context: PlaceContext; samples: BookieLife[]; prices: MarketPrices; defaultDeathGuess: number }
   | { type: "tick"; year: number }
   | { type: "finish" }
+  | { type: "redraw-place"; draw: Draw; context: PlaceContext }
   | { type: "advance" }
   | { type: "retreat" }
   | { type: "await-settlement" }
@@ -148,6 +153,8 @@ function reducer(state: State, action: Action): State {
       return { ...state, displayYear: action.year };
     case "finish":
       return { ...state, phase: "when", displayYear: null };
+    case "redraw-place":
+      return { ...state, draw: action.draw, context: action.context };
     case "advance":
       return { ...state, phase: stepSequence(state.phase, 1) };
     case "retreat":
@@ -202,9 +209,10 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   sessionKey: string | null;
   wagerWei: string | null;
   samplesSeed: number | null;
-  restore: (stored: StoredRound) => void;
+  restore: (stored: StoredRound) => Promise<void>;
   setEra: (era: EraFilter) => void;
   drawHuman: (chipSize: number) => void;
+  redrawLocation: () => void;
   advance: () => void;
   retreat: () => void;
   placeBets: (bets: Record<string, Bet>) => void;
@@ -223,15 +231,21 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
 
   useEffect(() => () => spin.current?.stop(), []);
 
-  const startDrawSequence = (wagerWei: bigint) => {
+  const startDrawSequence = async (wagerWei: bigint) => {
     const rng = createRng();
     const { year, region } = drawBirth({ era: state.era, rng, erasConfig, currentYear: CURRENT_YEAR });
-    const place = pickPlace({ region, rng, placesConfig });
+    // Prefer the backend's real data for this year (Cliopatria place, and the on-chain SoulEra
+    // name for its era); fall back to the local synthetic model if a request fails, so a network
+    // hiccup never blocks the round.
+    const [place, era] = await Promise.all([
+      fetchPlace(year).catch(() => pickPlace({ region, rng, placesConfig })),
+      fetchEra(year).catch(() => eraFor({ year, erasConfig })),
+    ]);
     const draw: Draw = { year, region, place };
     const timeStory = pickTimeStory({ year, rng, recent: recentTimeStories.current });
     recentTimeStories.current = [timeStory.id, ...recentTimeStories.current].slice(0, RECENT_TIME_STORIES_KEPT);
     const samplesSeed = randomSeed();
-    const { context, samples, prices, defaultDeathGuess } = deriveRoundData({ draw, wagerWei, samplesSeed, story: timeStory.text, currentYear: CURRENT_YEAR });
+    const { context, samples, prices, defaultDeathGuess } = deriveRoundData({ draw, era, wagerWei, samplesSeed, story: timeStory.text, currentYear: CURRENT_YEAR });
 
     dispatch({ type: "start-draw", draw, context, samples, prices, defaultDeathGuess, samplesSeed });
 
@@ -242,7 +256,8 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
 
     // One timeline drives the reel (year events), the tick sounds and the lock; the clock runs in milliseconds.
     // The chart draws itself in only on a round's first draw (it mounts then); a redraw finds it already on screen.
-    const isRedraw = state.phase === "when" || state.phase === "where";
+    // "where" never reaches here — redrawing the land alone is `redrawLocation`, which keeps the year fixed.
+    const isRedraw = state.phase === "when";
     const timeline = buildSpinTimeline({ targetYear: year, minYear: SPIN_MIN_YEAR, maxYear: CURRENT_YEAR, rng, introMs: isRedraw ? 0 : CHART_INTRO_MS });
     const playSpinEvent = (event: SpinEvent) => {
       if (event.type === "year") {
@@ -270,9 +285,28 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     });
   };
 
-  const restore = (stored: StoredRound) => {
+  /**
+   * Rerolls only the land, holding the year fixed — "who else was alive in this same year", not
+   * a new year. The region rerolls with it (a place belongs to a region, and the local fallback
+   * needs one to pick from), but the era, the story and every year-derived number stay untouched.
+   */
+  const redrawLocation = async () => {
+    if (state.phase !== "where" || !state.draw || !state.context) return;
+    const { year } = state.draw;
+    const rng = createRng();
+    const era = await fetchEra(year).catch(() => eraFor({ year, erasConfig }));
+    const regionIds = Object.keys(era.shares) as RegionId[];
+    const region = pickWeighted({ items: regionIds, weight: (id) => era.shares[id], rng });
+    const place = await fetchPlace(year).catch(() => pickPlace({ region, rng, placesConfig }));
+    const draw: Draw = { year, region, place };
+    const context: PlaceContext = { ...placeContext({ draw, era, worldPopCurve, currentYear: CURRENT_YEAR }), story: state.context.story };
+    dispatch({ type: "redraw-place", draw, context });
+  };
+
+  const restore = async (stored: StoredRound) => {
     const wagerWei = BigInt(stored.wagerWei);
-    const data = deriveRoundData({ draw: stored.draw, wagerWei, samplesSeed: stored.samplesSeed, story: stored.story, currentYear: CURRENT_YEAR });
+    const era = await fetchEra(stored.draw.year).catch(() => eraFor({ year: stored.draw.year, erasConfig }));
+    const data = deriveRoundData({ draw: stored.draw, era, wagerWei, samplesSeed: stored.samplesSeed, story: stored.story, currentYear: CURRENT_YEAR });
     const submitted = stored.phase === "settling" || stored.phase === "revealed";
     setSession({ key: stored.sessionKey, wagerWei });
     pendingBets.current = stored.phase === "settling" ? stored.bets : null;
@@ -288,7 +322,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     const isRedraw = state.phase === "when" || state.phase === "where";
     if (isRedraw && session) {
       playSound({ name: "spend", amount: REDRAW_COST });
-      startDrawSequence(session.wagerWei);
+      void startDrawSequence(session.wagerWei);
       return;
     }
 
@@ -298,10 +332,10 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     setIsOpeningSession(true);
     void hostApi
       .openSession({ wager: wagerWei.toString(), gameData: "0x" })
-      .then(({ sessionKey }) => {
+      .then(async ({ sessionKey }) => {
         setSession({ key: sessionKey, wagerWei });
         playSound({ name: "spend", amount: chipSize });
-        startDrawSequence(wagerWei);
+        await startDrawSequence(wagerWei);
       })
       .catch((cause) => {
         dispatch({ type: "fail", error: cause instanceof Error ? cause.message : "Failed to open the round." });
@@ -421,6 +455,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     restore,
     setEra: (era) => dispatch({ type: "set-era", era }),
     drawHuman,
+    redrawLocation: () => void redrawLocation(),
     advance: () => dispatch({ type: "advance" }),
     retreat: () => dispatch({ type: "retreat" }),
     placeBets,

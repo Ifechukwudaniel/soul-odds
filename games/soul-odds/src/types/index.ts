@@ -28,7 +28,13 @@ export type UserTask = {
 export type RegionId = "ssa" | "mena" | "eur" | "sas" | "eas" | "sea" | "ame";
 export type EraFilter = "all" | "ce" | "modern";
 
-export type Place = { name: string; continent: string; share: number; lat: number; lon: number };
+/**
+ * `share` (this place's weighted fraction of its region's population) only applies to the
+ * synthetic `places.json` model. `fromYear`/`toYear` (the date range a real polity is attested
+ * for) only apply to a real historical place from the Cliopatria dataset. A place carries
+ * exactly one of the two pairs, never both — see `lib/mortal-odds/place.ts`'s `toPlace`.
+ */
+export type Place = { name: string; lat: number; lon: number; share?: number; fromYear?: number; toYear?: number };
 export type Draw = { year: number; region: RegionId; place: Place };
 export type PlaceContext = { where: string; local: string; when: string; story: string };
 

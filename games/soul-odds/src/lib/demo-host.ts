@@ -4,10 +4,11 @@ import {
   decodePrediction,
   generateSoul,
   matchBreakdown,
+  pickConfigurationIndex,
   predictionPayout,
   validatePrediction,
 } from "@chain/soul-odds-engine/soul";
-import { settledGameStateAbi, soulOddsConfiguration } from "@/lib/mortal-odds/soul-odds-contract";
+import { settledGameStateAbi, soulOddsConfigurations } from "@/lib/mortal-odds/soul-odds-contract";
 
 type Session = HostSnapshotV1["sessions"]["items"][number];
 
@@ -135,9 +136,15 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
       push();
 
       const wager = BigInt(session.wager ?? "0");
-      const result = generateSoul(soulOddsConfiguration, randomHex32());
+      // Mirrors the real engine's own first step: the session's randomness also picks which era
+      // configuration governs the round, before that same randomness generates the soul within it.
+      const randomness = randomHex32();
+      const configurationIndex = pickConfigurationIndex(randomness, soulOddsConfigurations.length);
+      const configuration = soulOddsConfigurations[configurationIndex] ?? soulOddsConfigurations[0];
+      if (!configuration) throw new Error("Mortal Odds title has no era configurations to draw from.");
+      const result = generateSoul(configuration, randomness);
       const breakdown = matchBreakdown(prediction, result);
-      const payout = predictionPayout(soulOddsConfiguration, wager, prediction, result);
+      const payout = predictionPayout(configuration, wager, prediction, result);
       const now = Math.floor(Date.now() / 1000);
 
       // A demo player who busts gets a fresh bankroll instead of a dead end.

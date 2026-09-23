@@ -4,8 +4,8 @@
     {
       "name": "paleolithic",
       "era": "Paleolithic",
-      "minBirthYear": -32768,
-      "maxBirthYear": -8000,
+      "minBirthYear": -6000,
+      "maxBirthYear": -3000,
       "maleWeight": 512,
       "femaleWeight": 488,
       "rtpWad": "0.95",
@@ -25,7 +25,7 @@
     {
       "name": "agrarian",
       "era": "Agrarian",
-      "minBirthYear": -8000,
+      "minBirthYear": -3000,
       "maxBirthYear": 1,
       "maleWeight": 512,
       "femaleWeight": 488,

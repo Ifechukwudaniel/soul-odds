@@ -9,7 +9,7 @@ const round = (overrides: Partial<StoredRound> = {}): StoredRound => ({
   wagerWei: "10000000000000000000",
   phase: "predicting",
   era: "all",
-  draw: { year: 1850, region: "eur", place: { name: "Lyon", continent: "Europe", share: 0.1, lat: 45.7, lon: 4.8 } },
+  draw: { year: 1850, region: "eur", place: { name: "Lyon, Europe", share: 0.1, lat: 45.7, lon: 4.8 } },
   story: "A story.",
   samplesSeed: 7,
   bets: { sex: { marketId: "sex", kind: "choice", optionId: "girl", stake: 3 } },

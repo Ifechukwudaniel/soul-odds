@@ -22,6 +22,7 @@ export const MortalOddsStage = (props: {
   onSetChoice: MortalOddsBets["setChoice"];
   onPlaceBet: () => void;
   onRevealLocation: () => void;
+  onRedrawLocation: () => void;
   drawCost: number;
   canAffordDraw: boolean;
   charges: RoundCharge[];
@@ -81,6 +82,7 @@ export const MortalOddsStage = (props: {
               onAdvance={round.phase === "when" ? props.onRevealLocation : round.advance}
               onRetreat={round.retreat}
               onRedraw={props.onDraw}
+              onRedrawLocation={props.onRedrawLocation}
               drawCost={props.drawCost}
               canAffordDraw={props.canAffordDraw}
             />

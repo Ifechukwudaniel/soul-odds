@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { mulberry32 } from "@/lib/mortal-odds/rng";
-import { lintTimeStories, lintTimeStory, pickTimeStory, renderTimeStory, timeStories } from "@/lib/mortal-odds/time-story";
+import { FIRST_YEAR, lintTimeStories, lintTimeStory, pickTimeStory, renderTimeStory, timeStories } from "@/lib/mortal-odds/time-story";
 import type { TimeStory } from "@/lib/mortal-odds/time-story";
 
 const story = (id: string, from: number, to: number, text = "A quiet stretch of history, much like the rest."): TimeStory => ({ id, from, to, text });
@@ -104,7 +104,7 @@ describe("time-stories.json", () => {
   });
 
   it("gives every year in the game a line", () => {
-    for (let year = -50000; year <= new Date().getFullYear(); year += 13) {
+    for (let year = FIRST_YEAR; year <= new Date().getFullYear(); year += 13) {
       expect(pick(year, timeStories).id, `year ${year}`).not.toBe("fallback");
     }
   });

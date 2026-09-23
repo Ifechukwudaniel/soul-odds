@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { erasConfig, placesConfig, worldPopCurve } from "@/lib/mortal-odds/config";
 import { drawBirth, pickPlace, placeContext, regionShare } from "@/lib/mortal-odds/draw";
+import { eraFor } from "@/lib/mortal-odds/geo";
 import { mulberry32 } from "@/lib/mortal-odds/rng";
 import type { EraFilter } from "@/types";
 
@@ -21,7 +22,7 @@ describe("drawBirth", () => {
     const rng = mulberry32(7);
     for (let i = 0; i < 50; i++) {
       const { year } = drawBirth({ era, rng, erasConfig, currentYear: CURRENT_YEAR });
-      expect(year).toBeGreaterThanOrEqual(floor === -Infinity ? -50000 : floor);
+      expect(year).toBeGreaterThanOrEqual(floor === -Infinity ? -6000 : floor);
     }
   });
 
@@ -37,7 +38,7 @@ describe("drawBirth", () => {
 describe("pickPlace", () => {
   it("returns a place from the requested region with a share between 0 and 1", () => {
     const place = pickPlace({ region: "eur", rng: mulberry32(5), placesConfig });
-    const names = placesConfig.eur.map((p) => p.name);
+    const names = placesConfig.eur.map((p) => `${p.name}, ${p.continent}`);
     expect(names).toContain(place.name);
     expect(place.share).toBeGreaterThan(0);
     expect(place.share).toBeLessThanOrEqual(1);
@@ -60,8 +61,9 @@ describe("regionShare", () => {
 
 describe("placeContext", () => {
   it("produces the expected sentences for a fixed draw", () => {
-    const draw = { year: 1000, region: "eur" as const, place: { name: "Iberia", continent: "Europe", share: 0.2, lat: 40, lon: -4 } };
-    const context = placeContext({ draw, erasConfig, worldPopCurve, currentYear: CURRENT_YEAR });
+    const draw = { year: 1000, region: "eur" as const, place: { name: "Iberia, Europe", share: 0.2, lat: 40, lon: -4 } };
+    const era = eraFor({ year: draw.year, erasConfig });
+    const context = placeContext({ draw, era, worldPopCurve, currentYear: CURRENT_YEAR });
     expect(context.where).toBe("Iberia, Europe");
     expect(context.local).toMatch(/^About .+ people lived there then\.$/);
     expect(context.when).toMatch(/^1,024 years ago, Middle Ages\. About .+ people were alive, \d+\.\d{3}% of all humans ever\.$/);

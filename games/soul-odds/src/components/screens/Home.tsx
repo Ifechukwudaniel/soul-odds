@@ -48,6 +48,14 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
     round.advance();
   };
 
+  // Holds the year fixed and only rerolls the land — a separate action from redrawing the year
+  // itself, and the same flat fee either way.
+  const onRedrawLocation = () => {
+    if (!player.spend(REDRAW_COST)) return;
+    setCharges([...charges, { id: `redraw-${charges.length}`, label: "Redraw", amount: REDRAW_COST, kind: "fee" }]);
+    round.redrawLocation();
+  };
+
   const onPlaceBet = () => {
     round.placeBets(slip.bets);
   };
@@ -89,6 +97,7 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
           onSetChoice={slip.setChoice}
           onPlaceBet={onPlaceBet}
           onRevealLocation={onRevealLocation}
+          onRedrawLocation={onRedrawLocation}
           drawCost={drawCost}
           canAffordDraw={player.canAfford(drawCost) && !round.isOpeningSession}
           charges={charges}

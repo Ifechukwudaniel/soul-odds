@@ -1,15 +1,19 @@
 import { describe, expect, it } from "vitest";
+import { erasConfig } from "@/lib/mortal-odds/config";
+import { eraFor } from "@/lib/mortal-odds/geo";
 import { deriveRoundData } from "@/lib/mortal-odds/round-data";
 import type { Draw } from "@/types";
 
 const DRAW: Draw = {
   year: 1850,
   region: "eur",
-  place: { name: "Lyon", continent: "Europe", share: 0.1, lat: 45.7, lon: 4.8 },
+  place: { name: "Lyon, Europe", share: 0.1, lat: 45.7, lon: 4.8 },
 };
+const ERA = eraFor({ year: DRAW.year, erasConfig });
 const WAGER = 10n * 10n ** 18n;
 
-const derive = (samplesSeed: number, story = "A story.") => deriveRoundData({ draw: DRAW, wagerWei: WAGER, samplesSeed, story, currentYear: 2026 });
+const derive = (samplesSeed: number, story = "A story.") =>
+  deriveRoundData({ draw: DRAW, era: ERA, wagerWei: WAGER, samplesSeed, story, currentYear: 2026 });
 
 describe("deriveRoundData", () => {
   it("rebuilds identical samples, prices and guess from the same seed", () => {

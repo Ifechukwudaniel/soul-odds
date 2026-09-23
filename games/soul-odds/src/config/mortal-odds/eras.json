@@ -1,6 +1,6 @@
 [
-  { "from": -50000, "to": -8000, "births": 1.14, "skew": 1.2, "shares": { "ssa": 40, "mena": 15, "eur": 10, "sas": 10, "eas": 10, "sea": 10, "ame": 5 } },
-  { "from": -8000, "to": 1, "births": 46.0, "skew": 3, "shares": { "ssa": 12, "mena": 15, "eur": 13, "sas": 25, "eas": 22, "sea": 7, "ame": 6 } },
+  { "from": -6000, "to": -3000, "births": 1.14, "skew": 1.2, "shares": { "ssa": 40, "mena": 15, "eur": 10, "sas": 10, "eas": 10, "sea": 10, "ame": 5 } },
+  { "from": -3000, "to": 1, "births": 46.0, "skew": 3, "shares": { "ssa": 12, "mena": 15, "eur": 13, "sas": 25, "eas": 22, "sea": 7, "ame": 6 } },
   { "from": 1, "to": 1200, "births": 26.6, "skew": 1.3, "shares": { "ssa": 10, "mena": 10, "eur": 13, "sas": 28, "eas": 28, "sea": 6, "ame": 5 } },
   { "from": 1200, "to": 1650, "births": 12.8, "skew": 1.2, "shares": { "ssa": 10, "mena": 7, "eur": 18, "sas": 25, "eas": 28, "sea": 6, "ame": 6 } },
   { "from": 1650, "to": 1750, "births": 3.17, "skew": 1.1, "shares": { "ssa": 9, "mena": 5, "eur": 20, "sas": 22, "eas": 35, "sea": 5, "ame": 4 } },

@@ -6,7 +6,7 @@ import { fmtPeople } from "@/lib/mortal-odds/format";
 import { pickWeighted } from "@/lib/mortal-odds/rng";
 import type { Rng } from "@/lib/mortal-odds/rng";
 
-export const FIRST_YEAR = -50000;
+export const FIRST_YEAR = -6000;
 export const LAST_YEAR = 2100;
 
 const timeStorySchema = z.strictObject({

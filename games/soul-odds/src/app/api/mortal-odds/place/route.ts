@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
   const place = pickPlace({ region, rng, placesConfig });
 
   return NextResponse.json({
-    name: `${place.name}, ${place.continent}`,
+    name: place.name,
     lat: place.lat,
     lon: place.lon,
     fromYear: era.from,

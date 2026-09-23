@@ -23,10 +23,17 @@ import type { SinCategoryId } from "@/lib/mortal-odds/config";
 import titleFile from "@/config/mortal-odds/soul-odds-title.json";
 import type { Bet, Price } from "@/types";
 
-const definition = titleFile.betConfigurations[0] as SoulConfigurationDefinition;
+const definitions = titleFile.betConfigurations as SoulConfigurationDefinition[];
 
-/** The single deployed SoulOddsEngine configuration Mortal Odds predicts against — see `soul-odds-title.json`. */
-export const soulOddsConfiguration: SoulConfiguration = toConfiguration(toConfigurationInput(definition));
+/**
+ * Every era configuration the deployed title carries — see `soul-odds-title.json`. The engine
+ * picks one of these uniformly at random per session (`pickConfigurationIndex`), so a single
+ * prediction's real odds depend on which era it lands in; the preview below averages across all
+ * of them instead of assuming a specific one.
+ */
+export const soulOddsConfigurations: SoulConfiguration[] = definitions.map((definition) =>
+  toConfiguration(toConfigurationInput(definition)),
+);
 
 /** Index-aligned with `soul-odds-title.json`'s `lifespans`, and with the "age" market's option order. */
 export const AGE_BUCKET_ORDER = ["u5", "y", "m", "o"] as const;
@@ -119,9 +126,18 @@ export function categoryFromCrimeMask(crimeMask: number): SinCategoryId | null {
   return index === -1 ? null : (SIN_CATEGORIES[index]?.id ?? null);
 }
 
-function toPrice(probabilityWad: bigint, payout: bigint, wager: bigint): Price {
-  const p = Number(probabilityWad) / 1e18;
-  const odds = wager === 0n ? null : Number(payout) / Number(wager);
+/**
+ * The preview price for one option, averaged equally across every era configuration: since the
+ * engine picks a configuration uniformly at random before it samples anything, the expected
+ * probability of an outcome — and the expected payout a wager earns for it — are each the plain
+ * average of what every era would independently give. This is a preview only; whichever era the
+ * chain actually draws decides the real, on-chain payout at settlement.
+ */
+function averagePrice(wager: bigint, perConfigurationOdds: { probabilityWad: bigint; payout: bigint }[]): Price {
+  const count = perConfigurationOdds.length;
+  const p = perConfigurationOdds.reduce((sum, odds) => sum + Number(odds.probabilityWad) / 1e18, 0) / count;
+  const odds =
+    wager === 0n ? null : perConfigurationOdds.reduce((sum, o) => sum + Number(o.payout) / Number(wager), 0) / count;
   return { p, odds, tag: chanceTag(p) };
 }
 
@@ -135,16 +151,22 @@ function toPrice(probabilityWad: bigint, payout: bigint, wager: bigint): Price {
 export function previewSinsPrices(wager: bigint, lifespanBucket: number): Record<string, Price> {
   const previewWager = wager > 0n ? wager : WAD;
   const sins: Record<string, Price> = {};
-  const noneOdds = crimeOdds(soulOddsConfiguration, previewWager, lifespanBucket, 0);
-  sins.none = toPrice(noneOdds.probabilityWad, noneOdds.payout, previewWager);
+  sins.none = averagePrice(
+    previewWager,
+    soulOddsConfigurations.map((configuration) => crimeOdds(configuration, previewWager, lifespanBucket, 0)),
+  );
   SIN_CATEGORIES.forEach((category, index) => {
-    const odds = crimeOdds(soulOddsConfiguration, previewWager, lifespanBucket, 1 << index);
-    sins[category.id] = toPrice(odds.probabilityWad, odds.payout, previewWager);
+    sins[category.id] = averagePrice(
+      previewWager,
+      soulOddsConfigurations.map((configuration) =>
+        crimeOdds(configuration, previewWager, lifespanBucket, 1 << index),
+      ),
+    );
   });
   return sins;
 }
 
-/** Live odds preview for each of the three predictable categories, straight from the deployed configuration. */
+/** Live odds preview for each of the three predictable categories, averaged across every era configuration. */
 export function previewCategoryPrices(
   wager: bigint,
   lifespanBucket = 0,
@@ -153,14 +175,18 @@ export function previewCategoryPrices(
 
   const sex: Record<string, Price> = {};
   for (const [optionId, gender] of [["girl", 1] as const, ["boy", 0] as const]) {
-    const odds = genderOdds(soulOddsConfiguration, previewWager, gender);
-    sex[optionId] = toPrice(odds.probabilityWad, odds.payout, previewWager);
+    sex[optionId] = averagePrice(
+      previewWager,
+      soulOddsConfigurations.map((configuration) => genderOdds(configuration, previewWager, gender)),
+    );
   }
 
   const age: Record<string, Price> = {};
   AGE_BUCKET_ORDER.forEach((optionId, index) => {
-    const odds = lifespanOdds(soulOddsConfiguration, previewWager, index);
-    age[optionId] = toPrice(odds.probabilityWad, odds.payout, previewWager);
+    age[optionId] = averagePrice(
+      previewWager,
+      soulOddsConfigurations.map((configuration) => lifespanOdds(configuration, previewWager, index)),
+    );
   });
 
   return { sex, age, sins: previewSinsPrices(previewWager, lifespanBucket) };
