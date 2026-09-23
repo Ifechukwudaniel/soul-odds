@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireApiSecret } from "@/libs/ApiAuth";
 import { erasConfig, placesConfig } from "@/lib/mortal-odds/config";
-import { pickPlace, regionShare } from "@/lib/mortal-odds/draw";
+import { continentNear, pickPlace, regionShare } from "@/lib/mortal-odds/draw";
 import { eraFor } from "@/lib/mortal-odds/geo";
+import { estimatePopulation } from "@/lib/mortal-odds/population-estimate";
 import { createRng, pickWeighted } from "@/lib/mortal-odds/rng";
 import { pickCliopatriaPlace } from "@/services/db/cliopatria";
 import type { RegionId } from "@/types";
@@ -36,6 +37,9 @@ export async function GET(request: NextRequest) {
       lon: cliopatriaPlace.lon,
       fromYear: cliopatriaPlace.fromYear,
       toYear: cliopatriaPlace.toYear,
+      continent: continentNear({ lat: cliopatriaPlace.lat, lon: cliopatriaPlace.lon, placesConfig }),
+      // The high end of the estimate range: the middle figure reads too small for a whole polity.
+      population: estimatePopulation({ empire: cliopatriaPlace.name, year })?.high,
       year,
       source: "cliopatria",
     });

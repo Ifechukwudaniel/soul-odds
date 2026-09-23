@@ -1,7 +1,7 @@
 import type { EraConfig, PlaceConfig } from "@/lib/mortal-odds/config";
 import { HUMANS_EVER, MODES } from "@/lib/mortal-odds/config";
 import { interpolate } from "@/lib/mortal-odds/curves";
-import { fmtNumber, fmtPeople, fmtYear, periodName } from "@/lib/mortal-odds/format";
+import { fmtNumber, fmtPeople, fmtPeopleRounded, fmtYear, periodName } from "@/lib/mortal-odds/format";
 import { eraFor } from "@/lib/mortal-odds/geo";
 import { pickWeighted } from "@/lib/mortal-odds/rng";
 import type { Rng } from "@/lib/mortal-odds/rng";
@@ -67,6 +67,15 @@ export function pickPlace(options: { region: RegionId; rng: Rng; placesConfig: R
   return { name: `${picked.name}, ${picked.continent}`, share: picked.weight / total, lat: picked.lat, lon: picked.lon };
 }
 
+/** The continent of the configured place nearest a point, for a polity that comes without one. */
+export function continentNear(options: { lat: number; lon: number; placesConfig: Record<RegionId, PlaceConfig[]> }): string {
+  const { lat, lon, placesConfig } = options;
+  const rad = Math.PI / 180;
+  // Haversine's `a` grows with distance, which is all that's needed to find the nearest.
+  const closeness = (p: PlaceConfig) => Math.sin(((p.lat - lat) * rad) / 2) ** 2 + Math.cos(lat * rad) * Math.cos(p.lat * rad) * Math.sin(((p.lon - lon) * rad) / 2) ** 2;
+  return Object.values(placesConfig).flat().reduce((nearest, p) => (closeness(p) < closeness(nearest) ? p : nearest)).continent;
+}
+
 /** A region's share of births in an already-resolved era, relative to all regions that era. */
 export function regionShareInEra(options: { region: RegionId; era: EraConfig }): number {
   const { region, era } = options;
@@ -86,9 +95,10 @@ export function regionShare(options: { year: number; region: RegionId; erasConfi
  * fallback — see `useMortalOddsDraw.ts`) rather than looking it up itself, so this function stays
  * agnostic to where that data came from.
  *
- * The "where" line differs by what the place actually is: a synthetic pick (`share` set) gets an
- * estimated local population; a real historical polity (`fromYear`/`toYear` set, from Cliopatria)
- * gets its real attested date range instead — there's no population share to estimate for it.
+ * `where` is the header line ("the North China Plain · Asia · 1675 CE") and `local` says how many
+ * people lived there. A synthetic pick (`share` set) gets an estimate from its share of the region;
+ * a real historical polity (from Cliopatria) gets its own estimate, or, when it has none, the date
+ * range it is attested for.
  */
 export function placeContext(options: {
   draw: Draw;
@@ -104,6 +114,8 @@ export function placeContext(options: {
   if (draw.place.share !== undefined) {
     const share = regionShareInEra({ region: draw.region, era });
     local = `About ${fmtPeople(world * share * draw.place.share)} people lived there then.`;
+  } else if (draw.place.population !== undefined) {
+    local = `About ${fmtPeopleRounded(draw.place.population)} people lived there then.`;
   } else if (draw.place.fromYear !== undefined && draw.place.toYear !== undefined) {
     local =
       draw.place.toYear >= CLIOPATRIA_DATA_CUTOFF_YEAR
@@ -111,8 +123,13 @@ export function placeContext(options: {
         : pickRandom(ENDURED_TEMPLATES, rng)(fmtYear(draw.place.fromYear), fmtYear(draw.place.toYear));
   }
 
+  // A synthetic place's name already ends in its continent ("City, Continent"); a polity's doesn't.
+  // `fmtYear` leaves "CE" off recent years; the header always spells it out.
+  const yearLabel = draw.year > 0 ? `${draw.year} CE` : fmtYear(draw.year);
+  const where = [...(draw.place.continent ? [draw.place.name, draw.place.continent] : draw.place.name.split(", ")), yearLabel].join(" · ");
+
   return {
-    where: draw.place.name,
+    where,
     local,
     when: `${fmtNumber(currentYear - draw.year)} years ago, ${periodName(draw.year)}. About ${fmtPeople(world)} people were alive, ${((world / HUMANS_EVER) * 100).toFixed(3)}% of all humans ever.`,
   };

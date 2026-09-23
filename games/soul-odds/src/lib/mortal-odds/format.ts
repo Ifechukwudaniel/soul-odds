@@ -28,6 +28,19 @@ export function fmtPeople(n: number): string {
   return `${Math.round(n)}`;
 }
 
+/**
+ * Formats an estimated population as a round figure, since the estimates are only good to about a
+ * factor of two: rounded to the nearest half of its leading unit, so 574,000 reads "550 thousand",
+ * 1,430,000 reads "1.5 million" and 68,000,000 reads "70 million".
+ */
+export function fmtPeopleRounded(n: number): string {
+  if (n < 1000) return `${Math.round(n)}`;
+  const step = 10 ** Math.floor(Math.log10(n)) / 2;
+  const rounded = Math.round(n / step) * step;
+  const [unit, label] = rounded >= 1e9 ? [1e9, "billion"] : rounded >= 1e6 ? [1e6, "million"] : [1e3, "thousand"];
+  return `${Number((rounded / unit).toFixed(1))} ${label}`;
+}
+
 /** Lowercases the first letter, for embedding a standalone sentence (e.g. an OpenRouter sin phrase) mid-clause. */
 export function lowercaseFirst(text: string): string {
   return text.charAt(0).toLowerCase() + text.slice(1);

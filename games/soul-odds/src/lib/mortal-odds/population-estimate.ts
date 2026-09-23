@@ -1,3 +1,4 @@
+import overridesFile from "../../../cliopatria.geojson/cliopatria-population-overrides.json";
 import populationFile from "../../../cliopatria.geojson/cliopatria-population.json";
 import { worldPopCurve } from "@/lib/mortal-odds/config";
 import { interpolate } from "@/lib/mortal-odds/curves";
@@ -9,11 +10,16 @@ import { fmtPeople, fmtYear } from "@/lib/mortal-odds/format";
 // at a nearby date, scaled to this row's territory), "imputed" (typical density of nearby polities
 // in time and place, capped and kept under the world population) or "llm" (a model's estimate for
 // a fixed window of years, checked against the territory's area and the world population; built by
-// `scripts/regenerate-cliopatria-population.ts`).
+// `scripts/regenerate-cliopatria-population.ts`). A "manual" row is one corrected by hand in
+// `cliopatria.geojson/cliopatria-population-overrides.json`, a list of
+// `{ "name": "Principality of Peremyshl", "fromYear": 1031, "toYear": 1146, "population": 150000 }`
+// entries applied on top of whatever was generated, so regenerating never loses a correction.
+// `low` and `high` are optional and default to `population`; `fromYear`/`toYear` are optional
+// and default to every row of that name; an entry corrects each row of that name it overlaps.
 
-export type PopulationMethod = "seshat" | "seshat_scaled" | "imputed" | "llm";
+export type PopulationMethod = "seshat" | "seshat_scaled" | "imputed" | "llm" | "manual";
 
-type PopulationRow = {
+export type PopulationRow = {
   name: string;
   fromYear: number;
   toYear: number;
@@ -45,7 +51,7 @@ const LONG_ROW_YEARS = 50;
 const MAX_TIME_SCALE = 4;
 
 function isMethod(value: unknown): value is PopulationMethod {
-  return value === "seshat" || value === "seshat_scaled" || value === "imputed" || value === "llm";
+  return value === "seshat" || value === "seshat_scaled" || value === "imputed" || value === "llm" || value === "manual";
 }
 
 function toRow(values: (string | number)[]): PopulationRow[] {
@@ -67,7 +73,19 @@ function toRow(values: (string | number)[]): PopulationRow[] {
   return [];
 }
 
-const ROWS = populationFile.rows.flatMap(toRow);
+export type PopulationOverride = { name: string; fromYear?: number; toYear?: number; population: number; low?: number; high?: number };
+
+/** Replaces the figures of every row an override names and overlaps with the hand-corrected ones. */
+export function applyOverrides(rows: PopulationRow[], overrides: PopulationOverride[]): PopulationRow[] {
+  return rows.map((row) => {
+    const match = overrides.findLast(
+      (o) => o.name.trim().toLowerCase() === row.name.trim().toLowerCase() && (o.fromYear ?? -Infinity) <= row.toYear && (o.toYear ?? Infinity) >= row.fromYear,
+    );
+    return match ? { ...row, population: match.population, low: match.low ?? match.population, high: match.high ?? match.population, method: "manual" } : row;
+  });
+}
+
+const ROWS = applyOverrides(populationFile.rows.flatMap(toRow), overridesFile);
 
 /** Rows drawn in parentheses ("(Holy Roman Empire)") repeat another row's territory. */
 const isDuplicate = (row: PopulationRow) => row.name.startsWith("(");

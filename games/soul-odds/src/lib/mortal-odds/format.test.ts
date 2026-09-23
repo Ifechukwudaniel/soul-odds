@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fmtNumber, fmtPeople, fmtYear, lowercaseFirst, periodName, yearReelParts } from "@/lib/mortal-odds/format";
+import { fmtNumber, fmtPeople, fmtPeopleRounded, fmtYear, lowercaseFirst, periodName, yearReelParts } from "@/lib/mortal-odds/format";
 
 describe("lowercaseFirst", () => {
   it("lowercases only the first letter", () => {
@@ -89,5 +89,19 @@ describe("yearReelParts", () => {
       const number = value >= 10000 ? fmtNumber(value) : String(value);
       expect(`${number}${suffix}`).toBe(fmtYear(year));
     }
+  });
+});
+
+describe("fmtPeopleRounded", () => {
+  it.each<[number, string]>([
+    [574_000, "550 thousand"],
+    [27_000, "25 thousand"],
+    [1_430_000, "1.5 million"],
+    [4_000_000, "4 million"],
+    [68_000_000, "70 million"],
+    [1_640_000_000, "1.5 billion"],
+    [830, "830"],
+  ])("rounds %d to %s", (n, expected) => {
+    expect(fmtPeopleRounded(n)).toBe(expected);
   });
 });

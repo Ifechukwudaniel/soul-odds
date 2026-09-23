@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { erasConfig, placesConfig, worldPopCurve } from "@/lib/mortal-odds/config";
-import { drawBirth, pickPlace, placeContext, regionShare } from "@/lib/mortal-odds/draw";
+import { continentNear, drawBirth, pickPlace, placeContext, regionShare } from "@/lib/mortal-odds/draw";
 import { eraFor } from "@/lib/mortal-odds/geo";
 import { mulberry32 } from "@/lib/mortal-odds/rng";
 import type { EraFilter } from "@/types";
@@ -64,7 +64,7 @@ describe("placeContext", () => {
     const draw = { year: 1000, region: "eur" as const, place: { name: "Iberia, Europe", share: 0.2, lat: 40, lon: -4 } };
     const era = eraFor({ year: draw.year, erasConfig });
     const context = placeContext({ draw, era, worldPopCurve, currentYear: CURRENT_YEAR, rng: mulberry32(1234) });
-    expect(context.where).toBe("Iberia, Europe");
+    expect(context.where).toBe("Iberia · Europe · 1000 CE");
     expect(context.local).toMatch(/^About .+ people lived there then\.$/);
     expect(context.when).toMatch(/^1,024 years ago, Middle Ages\. About .+ people were alive, \d+\.\d{3}% of all humans ever\.$/);
   });
@@ -90,6 +90,44 @@ describe("placeContext", () => {
         Array.from({ length: 20 }, (_, seed) => placeContext({ draw, era, worldPopCurve, currentYear: CURRENT_YEAR, rng: mulberry32(seed) }).local),
       );
       expect(phrasings.size).toBeGreaterThan(1);
+    });
+  });
+
+  describe("a polity with a population estimate", () => {
+    const draw = { year: 100, region: "eur" as const, place: { name: "Roman Empire", fromYear: -27, toYear: 476, lat: 41.9, lon: 12.5, population: 4_000_000, continent: "Europe" } };
+    const era = eraFor({ year: draw.year, erasConfig });
+
+    it("heads the slide with its name, continent and year", () => {
+      expect(placeContext({ draw, era, worldPopCurve, currentYear: CURRENT_YEAR, rng: mulberry32(1) }).where).toBe("Roman Empire · Europe · 100 CE");
+    });
+
+    it("says how many people lived there, rounded", () => {
+      expect(placeContext({ draw, era, worldPopCurve, currentYear: CURRENT_YEAR, rng: mulberry32(1) }).local).toBe("About 4 million people lived there then.");
+    });
+
+    it("falls back to the years it is attested for when there is no estimate", () => {
+      const { local } = placeContext({ draw: { ...draw, place: { ...draw.place, population: undefined } }, era, worldPopCurve, currentYear: CURRENT_YEAR, rng: mulberry32(1) });
+      expect(local).toContain("476");
+      expect(local).not.toContain("people lived");
+    });
+  });
+
+  describe("a synthetic place", () => {
+    it("heads the slide with its name, continent and year, split by dots", () => {
+      const draw = { year: 1675, region: "eas" as const, place: { name: "the North China Plain, Asia", lat: 36, lon: 115, share: 0.3 } };
+      const era = eraFor({ year: draw.year, erasConfig });
+      expect(placeContext({ draw, era, worldPopCurve, currentYear: CURRENT_YEAR, rng: mulberry32(1) }).where).toBe("the North China Plain · Asia · 1675 CE");
+    });
+  });
+
+  describe("continentNear", () => {
+    it.each([
+      ["Rome", 41.9, 12.5, "Europe"],
+      ["Xi'an", 34.3, 108.9, "Asia"],
+      ["Nairobi", -1.3, 36.8, "Africa"],
+      ["Mexico City", 19.4, -99.1, "North America"],
+    ])("puts %s in %s", (_name, lat, lon, continent) => {
+      expect(continentNear({ lat, lon, placesConfig })).toBe(continent);
     });
   });
 

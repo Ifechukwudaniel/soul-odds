@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { describePopulation, estimatePopulation, estimatesAt } from "@/lib/mortal-odds/population-estimate";
+import { applyOverrides, describePopulation, estimatePopulation, estimatesAt } from "@/lib/mortal-odds/population-estimate";
 
 describe("estimatePopulation", () => {
   it("returns the researched figure for a polity in a year it has one", () => {
@@ -53,3 +53,23 @@ describe("describePopulation", () => {
     expect(describePopulation({ empire: "Roman Empire", year: 1800 })).toBeNull();
   });
 });
+
+describe("applyOverrides", () => {
+  const row = (name: string, fromYear: number, toYear: number) => ({ name, fromYear, toYear, wikidata: "", seshatId: "", areaKm2: 1000, population: 900, low: 500, high: 1200, method: "llm" as const });
+
+  it("replaces the figures of an overlapping row and marks it manual", () => {
+    const [fixed] = applyOverrides([row("Peremyshl", 1031, 1146)], [{ name: "peremyshl", fromYear: 1100, toYear: 1200, population: 150 }]);
+    expect(fixed).toMatchObject({ population: 150, low: 150, high: 150, method: "manual" });
+  });
+
+  it("uses the low and high it was given", () => {
+    const [fixed] = applyOverrides([row("Besalú", 1000, 1111)], [{ name: "Besalú", population: 60, low: 40, high: 80 }]);
+    expect(fixed).toMatchObject({ population: 60, low: 40, high: 80 });
+  });
+
+  it("leaves rows of other names or other years alone", () => {
+    const rows = [row("Other", 1000, 1111), row("Peremyshl", 1200, 1300)];
+    expect(applyOverrides(rows, [{ name: "Peremyshl", fromYear: 1031, toYear: 1146, population: 150 }])).toEqual(rows);
+  });
+});
+
