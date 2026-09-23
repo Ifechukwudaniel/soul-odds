@@ -1,4 +1,4 @@
-import { encodeAbiParameters, type Hex, parseUnits, toHex } from "viem";
+import { decodeAbiParameters, encodeAbiParameters, type Hex, parseUnits, toHex } from "viem";
 import { type HostApiV1, type HostSnapshotV1, SessionPhase } from "@chain/casino-sdk/guest";
 import {
   decodePrediction,
@@ -123,6 +123,8 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
 
       const sessionId = String(nextSessionId++);
       const sessionKey = randomHex32();
+      // Like the real engine, the era configuration is fixed when the session starts, before any prediction.
+      const configurationIndex = pickConfigurationIndex(randomHex32(), soulOddsConfigurations.length);
       const now = Math.floor(Date.now() / 1000);
       balance -= wager;
       sessions = [
@@ -137,7 +139,7 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
           isSettled: false,
           openedAt: now,
           lastEventTimestamp: now,
-          raw: { gameData: "0x", gameState: encodeAbiParameters([{ type: "uint256" }], [0n]) },
+          raw: { gameData: "0x", gameState: encodeAbiParameters([{ type: "uint256" }], [BigInt(configurationIndex)]) },
         },
         ...sessions,
       ];
@@ -157,11 +159,9 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
       push();
 
       const wager = BigInt(session.wager ?? "0");
-      // Mirrors the real engine's own first step: the session's randomness also picks which era
-      // configuration governs the round, before that same randomness generates the soul within it.
       const randomness = randomHex32();
-      const configurationIndex = pickConfigurationIndex(randomness, soulOddsConfigurations.length);
-      const configuration = soulOddsConfigurations[configurationIndex] ?? soulOddsConfigurations[0];
+      const [configurationIndex] = decodeAbiParameters([{ type: "uint256" }], session.raw.gameState as Hex);
+      const configuration = soulOddsConfigurations[Number(configurationIndex)] ?? soulOddsConfigurations[0];
       if (!configuration) throw new Error("Mortal Odds title has no era configurations to draw from.");
       const result = generateSoul(configuration, randomness);
       const breakdown = matchBreakdown(prediction, result);

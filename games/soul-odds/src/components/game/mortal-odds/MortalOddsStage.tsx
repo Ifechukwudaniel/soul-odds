@@ -58,6 +58,7 @@ export const MortalOddsStage = (props: {
             canPlaceBet={round.phase === "predicting"}
             isLocked={round.phase === "confirming" || round.phase === "settling"}
             requiredBets={marketsConfig.length}
+            sinNarratives={round.sinNarratives}
           />
         </div>
 
@@ -95,6 +96,7 @@ export const MortalOddsStage = (props: {
               bets={props.bets}
               onSetChoice={props.onSetChoice}
               onBack={round.retreat}
+              sinNarratives={round.sinNarratives}
               key={`${round.draw.year}-${round.draw.region}-${round.draw.place.name}`}
             />
           )}
@@ -109,12 +111,13 @@ export const MortalOddsStage = (props: {
               currency={props.currency}
               onBack={round.retreat}
               onConfirm={props.onPlaceBet}
+              sinNarratives={round.sinNarratives}
             />
           )}
 
           {round.phase === "settling" && (
             <GameCard className="flex min-h-0 flex-1 items-center justify-center" containerClassName="flex h-full w-full flex-col">
-              <p className="animate-pulse text-sm text-white/60">Reading the omens…</p>
+              <p className="animate-pulse text-sm text-white/60">{round.awaitingSinNarrative ? "Consulting the record of sins…" : "Reading the omens…"}</p>
             </GameCard>
           )}
 

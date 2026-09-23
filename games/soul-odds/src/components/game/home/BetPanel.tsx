@@ -10,6 +10,7 @@ import { SlipRow } from "@/components/game/home/SlipRow";
 import { Scroller } from "@/components/Scroller";
 import { betOdds } from "@/lib/mortal-odds/bets";
 import { serifFont } from "@/styles/serif-font";
+import type { SinNarratives } from "@/lib/mortal-odds/openrouter";
 import type { Bet, MarketPrices, Price, RoundCharge } from "@/types";
 
 export const BetPanel = (props: {
@@ -27,6 +28,7 @@ export const BetPanel = (props: {
   canPlaceBet: boolean;
   isLocked: boolean;
   requiredBets: number;
+  sinNarratives: SinNarratives | null;
 }) => {
   const minWager = Math.min(...props.quickAmounts);
   // Buffered locally so the field can be cleared or mid-typed (e.g. "1." while entering "1.5") without a
@@ -126,6 +128,7 @@ export const BetPanel = (props: {
                 bet={bet}
                 potentialWin={potentialWins[index] ?? null}
                 onRemove={props.isLocked ? undefined : () => props.onRemoveBet(bet.marketId)}
+                sinNarratives={props.sinNarratives}
               />
             ))}
           </div>

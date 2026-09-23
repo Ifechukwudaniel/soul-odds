@@ -8,7 +8,7 @@ import { useAppStore } from "@/services/store/store";
 export const connectQuestsLists: QuestList = {
   id: "wallet",
   title: "Wallet Connect Fun",
-  desc: "Connect Touchswap to your ton wallet, be careful! Once connected, any rewards would be sent to the connected wallet.",
+  desc: "Connect Soul Odds to your ton wallet, be careful! Once connected, any rewards would be sent to the connected wallet.",
   tasks: [
     {
       title: "Connect Wallet",
@@ -28,7 +28,7 @@ export const ConnectQuestScreen = () => {
   
 
   const totalReward = calculateTotalReward(connectQuestsLists);
-  const handleClaim = () => {};
+  const handleClaim = async () => false;
 
   const handleTaskOpen = (index: number) => {
       console.log(index)

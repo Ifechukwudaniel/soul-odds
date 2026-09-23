@@ -1,7 +1,7 @@
 export type LinkTask = {
   title: string;
   completed: boolean;
-  reward: number;
+  reward?: number;
   link: string;
 };
 
@@ -18,7 +18,6 @@ export type UserTask = {
   id:number,
   title: string;
   link: string;
-  reward:number;
   completed:boolean
 }
 
@@ -82,7 +81,10 @@ export type Life = {
   shock: Shock | null;
   literate: boolean;
   city: boolean;
+  /** The first sin recorded, which drives the story and epitaph flavor. */
   sin: Sin | null;
+  /** Every sin the chain recorded (the contract allows two). Absent on lives drawn by the local flavor model. */
+  sins?: Sin[];
 };
 
 export type BetResult = {

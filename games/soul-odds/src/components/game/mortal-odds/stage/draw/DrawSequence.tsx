@@ -89,8 +89,8 @@ export const DrawSequence = (props: {
               Redraw
               <span className="flex items-center gap-1 text-white/50 group-hover:text-white/80">
                 <span className="h-3 w-px bg-white/20" />
-                <CurrencyCoinIcon width={16} height="16" />
-                {props.drawCost}
+                {props.drawCost > 0 && <CurrencyCoinIcon width={16} height="16" />}
+                {props.drawCost > 0 ? props.drawCost : "Free"}
               </span>
             </>
           )}

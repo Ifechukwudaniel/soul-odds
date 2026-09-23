@@ -21,10 +21,11 @@ export function deriveRoundData(options: { draw: Draw; era: EraConfig; wagerWei:
   defaultDeathGuess: number;
 } {
   const { draw, era, wagerWei, samplesSeed, story, currentYear } = options;
-  const samples = simulateBookie({ year: draw.year, rng: createRng(samplesSeed), curves: bookieCurves, sins: sinsConfig, sims: SIMS });
+  const rng = createRng(samplesSeed);
+  const samples = simulateBookie({ year: draw.year, rng, curves: bookieCurves, sins: sinsConfig, sims: SIMS });
 
   return {
-    context: { ...placeContext({ draw, era, worldPopCurve, currentYear }), story },
+    context: { ...placeContext({ draw, era, worldPopCurve, currentYear, rng }), story },
     samples,
     prices: previewCategoryPrices(wagerWei),
     defaultDeathGuess: medianDeathYear(samples),

@@ -60,6 +60,30 @@ describe("tellStory", () => {
     expect(story).not.toMatch(/works as/);
   });
 
+  it("mentions the sin even for a life that never grows up", () => {
+    const story = tellStory({
+      life: life({ age: 10, deathYear: 1910, sin: { id: "violence", label: "Violence", phrase: "started a fight that turned deadly", from: 1900, to: null } }),
+      place: PLACE,
+      currentYear: 2024,
+      childDeathShare: 0.1,
+      jobs: jobsConfig,
+      rng: mulberry32(1),
+    });
+    expect(story).toMatch(/started a fight that turned deadly/);
+  });
+
+  it("lowercases a capitalized sin phrase to embed it mid-sentence", () => {
+    const story = tellStory({
+      life: life({ sin: { id: "violence", label: "Violence", phrase: "Slashed the rival's throat in a dark alley", from: 1900, to: null } }),
+      place: PLACE,
+      currentYear: 2024,
+      childDeathShare: 0.1,
+      jobs: jobsConfig,
+      rng: mulberry32(1),
+    });
+    expect(story).toMatch(/Along the way, he slashed the rival's throat in a dark alley\./);
+  });
+
   it("includes a job sentence for a grown adult", () => {
     const story = tellStory({
       life: life({ age: 40, deathYear: 1940 }),

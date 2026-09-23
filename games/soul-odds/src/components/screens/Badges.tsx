@@ -9,7 +9,7 @@ import { OrcaBadge } from "../assets/badges/OrcaBadge";
 import { PlanktonBadge } from "../assets/badges/PlanktonBadge";
 import { SharkBadge } from "../assets/badges/SharkBadge";
 import { WhaleBadge } from "../assets/badges/WhaleBadge";
-import { BadgeCard } from "../touchswap/BadgeCard";
+import { BadgeCard } from "../soulodds/BadgeCard";
 import { useAppStore } from "@/services/store/store";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 

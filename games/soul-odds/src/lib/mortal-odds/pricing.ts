@@ -1,4 +1,5 @@
 import type { BookieLife } from "@/lib/mortal-odds/model";
+import { sinOptionId, sinsOf } from "@/lib/mortal-odds/sin-selection";
 import type { ChanceTag, Life, MarketConfig, MarketPrices, Price } from "@/types";
 
 export type PricingConfig = { houseEdge: number; maxOdds: number; minP: number };
@@ -79,7 +80,7 @@ export function medianDeathYear(samples: ReadonlyArray<{ deathYear: number }>): 
 export const LIFE_RESOLVERS: Record<string, (life: Life) => string> = {
   sex: (life) => life.sex,
   age: (life) => (life.age < 5 ? "u5" : life.age < 30 ? "y" : life.age < 60 ? "m" : "o"),
-  sins: (life) => life.sin?.id ?? "none",
+  sins: (life) => sinOptionId(sinsOf(life).map((sin) => sin.id)),
 };
 
 /** Real probabilities per market/option from the full model's truth samples (region, sex, catastrophes). */

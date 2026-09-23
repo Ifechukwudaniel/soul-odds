@@ -1,16 +1,17 @@
 import React, { useState,  } from "react";
-import { ClaimReward } from "../touchswap/ClaimReward";
+import { ClaimReward } from "../soulodds/ClaimReward";
 import { useAppStore } from "@/services/store/store";
 import { LinkTask, QuestList } from "@/types";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
+import { GameButton } from "@/components/game/GameButton";
 import { playClickSound } from "@/utils/playClickSound";
 
 type Props = {
   quest: QuestList;
-  handleClaim: () => void;
+  handleClaim: () => Promise<boolean>;
   handleTaskOpen: (index: number) => void;
   claimed: boolean;
-  reward: number;
+  reward: number | string;
   walletTask:boolean;
 };
 
@@ -48,21 +49,16 @@ const Tasks = ({
 }: {
   tasks: LinkTask[];
   onTaskOpen: (index: number) => void;
-  onClaim: () => void;
+  onClaim: () => Promise<boolean>;
   claimed: boolean;
-  reward: number;
+  reward: number | string;
   walletTask:boolean
 }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const balance = useAppStore(state => state.user.balance);
-  const updateBalance = useAppStore(state => state.updateBalance);
 
-  const openModal = () => {
+  const openModal = async () => {
     if (claimed) return;
-    playClickSound();
-    setIsModalOpen(true);
-    updateBalance(balance + reward);
-    onClaim();
+    if (await onClaim()) setIsModalOpen(true);
   };
 
   const closeModal = () => {
@@ -75,15 +71,9 @@ const Tasks = ({
     }
   
     return (
-      <button
-        onClick={() => {
-          playClickSound();
-          onTaskOpen(index);
-        }}
-        className="text-sm bg-white text-black py-2 px-2 rounded-lg font-medium"
-      >
+      <GameButton variant="papyrus" onClick={() => onTaskOpen(index)} className="px-4 py-1.5 text-sm">
         Start
-      </button>
+      </GameButton>
     );
   }
   
@@ -112,17 +102,14 @@ const Tasks = ({
       </div>
 
       <ClaimReward onClose={closeModal} isOpen={isModalOpen} reward={reward} />
-      {allTasksCompleted && claimed == false ? (
-        <button
-          onClick={openModal}
-          className="btn bg-white w-full text-black py-4 font-[500] rounded-lg align-baseline"
-        >
+      {allTasksCompleted && !claimed ? (
+        <GameButton variant="papyrus" onClick={openModal} className="w-full py-4 text-base">
           Claim Reward
-        </button>
+        </GameButton>
       ) : (
-        <button disabled className="btn bg-[#A7A7A7] w-full text-black py-4 font-[500] rounded-lg align-baseline">
-           All Claimed
-        </button>
+        <GameButton variant="papyrus" disabled onClick={openModal} className="w-full py-4 text-base">
+          {claimed ? "Claimed" : "Complete all tasks"}
+        </GameButton>
       )}
     </div>
   );

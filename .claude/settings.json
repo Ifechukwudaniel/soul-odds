@@ -1,8 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(pnpm install *)",
-      "Bash(grep -v \"BoostCard.tsx$\")"
+      "Bash(pnpm install *)"
     ]
   }
 }

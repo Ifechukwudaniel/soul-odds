@@ -9,9 +9,10 @@ import { ROAM_DURATION, WorldMap } from "@/components/game/mortal-odds/stage/map
 import { fmtYear } from "@/lib/mortal-odds/format";
 import type { Place } from "@/types";
 import { serifFont } from "@/styles/serif-font";
+const MAP_SOURCES =
+  "Sources: Klein Goldewijk et al. (S06); United Nations DESA (RH05); Reba (RH32); GeoNames geographical database (RH33); McEvedy (RH11); Bae (RH16); Model-supplied gap-fill (Claude Fable 5 and Claude Opus 5 (RH109)";
 
-
-export const WhereSlide = (props: { year: number; place: Place; local: string; onRedraw: () => void; drawCost: number; canAffordDraw: boolean }) => (
+export const WhereSlide =(props: { year: number; place: Place; local: string; onRedraw: () => void; drawCost: number; canAffordDraw: boolean }) => (
   <div className="flex h-full flex-col items-center gap-3 overflow-hidden text-center">
     <div className="shrink-0">
       <div className="flex items-center justify-center gap-3">
@@ -32,6 +33,9 @@ export const WhereSlide = (props: { year: number; place: Place; local: string; o
       >
 
         <WorldMap year={props.year} marker={{ lat: props.place.lat, lon: props.place.lon }} />
+        <p className="pointer-events-none absolute inset-x-0 bottom-0 bg-black/50 px-2 py-0.5 text-left text-[0.5rem] leading-tight text-[#f1f1f2a0] sm:text-[0.6rem]">
+          {MAP_SOURCES}
+        </p>
       </motion.div>
     </div>
 
@@ -45,15 +49,15 @@ export const WhereSlide = (props: { year: number; place: Place; local: string; o
         <p className="font-bold text-white text-xl">{props.place.name}</p>
         <button
           type="button"
-          aria-label={`Redraw the land for ${props.drawCost} deben`}
-          title={`Redraw the land for ${props.drawCost} deben`}
+          aria-label={props.drawCost > 0 ? `Redraw the land for ${props.drawCost} deben` : "Redraw the land for free"}
+          title={props.drawCost > 0 ? `Redraw the land for ${props.drawCost} deben` : "Redraw the land for free"}
           disabled={!props.canAffordDraw}
           onClick={props.onRedraw}
           className="group flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-2 py-1 text-[#DEAE56] text-xs disabled:opacity-30"
         >
           <PiArrowsClockwise className="h-3.5 w-3.5 transition-transform duration-150 group-hover:rotate-180" />
-          <CurrencyCoinIcon width={12} height="12" />
-          {props.drawCost}
+          {props.drawCost > 0 && <CurrencyCoinIcon width={12} height="12" />}
+          {props.drawCost > 0 ? props.drawCost : "Free"}
         </button>
       </div>
       <p className="mt-0.5 text-[0.8rem] text-[#f1f1f2c0]">{props.local}</p>

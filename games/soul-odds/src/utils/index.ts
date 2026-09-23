@@ -28,7 +28,7 @@ export  const getPreviousDay = () => {
 export const calculateTotalReward = (quest:QuestList) => {
     let totalReward = 0;
     for (const task of quest.tasks) {
-      totalReward += task.reward;
+      totalReward += task.reward ?? 0;
     }
     return totalReward;
 };

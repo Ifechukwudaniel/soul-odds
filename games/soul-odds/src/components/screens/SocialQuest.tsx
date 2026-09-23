@@ -1,77 +1,79 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { OpenQuestDetailScreen } from "./OpenQuestDetails";
-import {  QuestList } from "@/types";
-import { calculateTotalReward } from "@/utils";
-import { getUserTasks, postUserTasks } from "@/services/data/task";
+import type { QuestList, UserTask } from "@/types";
+import { SOCIAL_TASKS } from "@/lib/social-quests";
+import { claimSocialReward, getUserTasks, postUserTasks } from "@/services/data/task";
+import { getUser } from "@/services/data/user";
 import { useAppStore } from "@/services/store/store";
+import { notification } from "@/utils/notifications";
 import { Loader } from "../Loader";
 
-
-
-
-export const socialQuestsLists: QuestList = {
-  id: "social",
-  title: "Social Media Madness!",
-  desc: "Our Social media accounts are amazing places! Check them out, follow us!",
-  tasks: [],
-  claimed: false,
-};
-
+const initialTasks: UserTask[] = SOCIAL_TASKS.map((task) => ({ ...task, completed: false }));
 
 export const SocialQuestScreen = () => {
-  const user = useAppStore(state=> state.user)
-  const [claimed, setClaimed] = useState(socialQuestsLists.claimed);
+  const address = useAppStore((state) => state.user.address);
+  const updateUser = useAppStore((state) => state.updateUser);
+  const [tasks, setTasks] = useState(initialTasks);
+  const [claimed, setClaimed] = useState(false);
   const [loading, setLoading] = useState(true);
-  const balance = useAppStore(state=> state.user!.balance)
-  const updateBalance = useAppStore(state=> state.updateBalance)
-
-  const handleClaim = () => {
-    const tasksCompleted = socialQuestsLists.tasks.every(task => task.completed);
-    if (tasksCompleted) {
-      setClaimed(true);
-    }
-  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-       let userTask =  await getUserTasks(user.address);
-       socialQuestsLists.tasks = userTask;
-       setLoading(false)
+        const [userTasks, user] = await Promise.all([getUserTasks(address), getUser(address)]);
+        setTasks(userTasks);
+        setClaimed(user.socialClaimed);
       } catch (error) {
-        socialQuestsLists.tasks = [];
         console.error("Error fetching user tasks:", error);
-        setLoading(false)
       }
+      setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [address]);
 
-  const totalReward = calculateTotalReward(socialQuestsLists);
+  const quest: QuestList = {
+    id: "social",
+    title: "Social Media Madness!",
+    desc: "Follow us on X and join our Discord to earn 1 free redraw.",
+    tasks,
+    claimed,
+  };
 
-  const handleTaskOpen = async (index: number) => {
-    if(window !== null) {
-      window.open(socialQuestsLists.tasks[index].link,"_blank");
-      socialQuestsLists.tasks[index].completed = true
-      await postUserTasks(user.address,index)
+  const handleTaskOpen = (index: number) => {
+    const task = tasks[index];
+    if (!task) return;
+    window.open(task.link, "_blank", "noopener,noreferrer");
+    setTasks(tasks.map((item) => (item.id === task.id ? { ...item, completed: true } : item)));
+    postUserTasks(address, task.id).catch((error) => console.error("Could not save task:", error));
+  };
+
+  const handleClaim = async () => {
+    try {
+      const result = await claimSocialReward(address);
+      updateUser({ freeRedraws: result.freeRedraws });
+      setClaimed(true);
+      return true;
+    } catch {
+      notification.error("Reward unavailable");
+      return false;
     }
   };
 
-  if(loading) {
-     return (
+  if (loading) {
+    return (
       <section className="flex flex-col h-screen justify-center items-center">
         <Loader />
-    </section>
-     )
+      </section>
+    );
   }
-  return (
 
+  return (
     <OpenQuestDetailScreen
-      quest={socialQuestsLists}
+      quest={quest}
       handleClaim={handleClaim}
       handleTaskOpen={handleTaskOpen}
       claimed={claimed}
-      reward={totalReward}
+      reward="1 free redraw"
       walletTask={false}
     />
   );

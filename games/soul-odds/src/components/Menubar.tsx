@@ -5,7 +5,7 @@ import { TScreens, useAppStore } from "@/services/store/store";
 import { playClickSound } from "@/utils/playClickSound";
 import {Pyramid} from "./assets/Pyramid";
 import  { Hieroglyph } from "./assets/Hieroglyph";
-import  { Ankh } from "./assets/Ankh";
+import { Sarcophagus } from "./assets/Sarcophagus";
 import { Share } from "./assets/Share";
 
 type MenuLink = {
@@ -31,9 +31,9 @@ export const menuLinks: MenuLink[] = [
     activeIcon: <Pyramid active />,
   },
   {
-    label: "boost",
-    icon: <Ankh active={false} />,
-    activeIcon: <Ankh active />,
+    label: "history",
+    icon: <Sarcophagus active={false} />,
+    activeIcon: <Sarcophagus active />,
   },
   {
     label: "quests",

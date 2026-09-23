@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { Env } from "@/libs/Env";
 import { SIN_CATEGORIES } from "@/lib/mortal-odds/config";
-import { fmtYear } from "@/lib/mortal-odds/format";
+import { fmtYear, lowercaseFirst } from "@/lib/mortal-odds/format";
 import type { SinCategoryId } from "@/lib/mortal-odds/config";
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
@@ -83,11 +83,10 @@ function keyNarrativesByCategory(content: unknown): unknown {
 
 /**
  * Asks an OpenRouter model for one era-and-place-specific sin narrative per on-chain crime
- * category — flavor text only, generated fresh per (year, location) instead of drawn from
- * `sins.json`'s static catalog. All four categories are generated up front, in one call, because
- * the contract itself never knows which sin was committed: it only rolls a `crimeMask` (which
- * category slot(s) matched) on-chain, and the matching category's flavor text is picked
- * afterward — same as `pickCategoryFlavorSin` already does against the static catalog.
+ * category — flavor text only, generated fresh per (year, location). All four categories are
+ * generated up front, in one call, because the contract itself never knows which sin was
+ * committed: it only rolls a `crimeMask` (which category slot(s) matched) on-chain, and the
+ * matching category's narrative is picked afterward, once settlement decodes it.
  * Throws on a missing key, request failure, or a response that doesn't fit the expected shape.
  */
 export async function generateSinNarratives(options: { year: number; location: string }): Promise<SinNarratives> {
@@ -119,7 +118,7 @@ export async function generateSinNarratives(options: { year: number; location: s
   return narratives;
 }
 
-const lifeStorySchema = z.object({ story: z.string().min(1).max(1200) });
+const lifeStorySchema = z.object({ story: z.string().min(1).max(1200), name: z.string().min(1).max(60) });
 
 export type LifeStoryNarrative = z.infer<typeof lifeStorySchema> & { birthYear: number };
 
@@ -136,14 +135,14 @@ export async function generateLifeStory(options: {
 
   const facts = [
     `Born ${sex === "girl" ? "a girl" : "a boy"} in ${location}, ${fmtYear(year)}.`,
-    sinPhrase ? `Along the way, ${sinPhrase}.` : null,
+    sinPhrase ? `Along the way, ${lowercaseFirst(sinPhrase)}.` : null,
     age === 0 ? "Died before turning one." : `Died at age ${age} in ${fmtYear(deathYear)}.`,
   ]
     .filter((line): line is string => line !== null)
     .join(" ");
 
   const content = await completeJson(
-    'You write short, period-accurate prose life stories for a historical fortune-telling game, expanding a bare list of facts into 3-5 flowing sentences. Reply with strict JSON: {"story": string}. Stay third person, past tense, no invented names, no dialogue, period-appropriate detail for the given era and place. Do not contradict or omit any given fact.',
+    'You write short, period-accurate prose life stories for a historical fortune-telling game, expanding a bare list of facts into 3-5 flowing sentences. Reply with strict JSON: {"story": string, "name": string}. `name` is a single given name fitting the era, place and sex; use that same name throughout `story` in place of "the girl"/"the boy". Stay third person, past tense, no dialogue, period-appropriate detail for the given era and place. Do not contradict or omit any given fact.',
     facts,
   );
 

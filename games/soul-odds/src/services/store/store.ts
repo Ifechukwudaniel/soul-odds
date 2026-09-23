@@ -2,16 +2,7 @@ import { DEFAULT_AVATAR_ID } from "@/components/assets/characters/avatars";
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
-export type TScreens = "badges" | "boost" | "home" | "refs" | "stats" | "quests" | "social" | "wallet" | "ranks";
-
-export type TBoost = {
-  type: string;
-  boostId: number;
-  level?: number;
-  maximumLevel?: number;
-  cost?: number;
-  userAddress: string;
-};
+export type TScreens = "badges" | "history" | "home" | "refs" | "stats" | "quests" | "social" | "wallet" | "ranks";
 
 export type TScreenPayload = {
   data?: string;
@@ -25,6 +16,7 @@ export type TUser = {
   skill: number;
   connectionId: string;
   avatarId: string;
+  freeRedraws: number;
 };
 
 export const STORE_NAME = "Soul_Odds_Store";
@@ -41,12 +33,12 @@ export const emptyUser: TUser = {
   skill: 0,
   connectionId: "",
   avatarId: DEFAULT_AVATAR_ID,
+  freeRedraws: 0,
 };
 
 export type TAppStore = {
   hasData: boolean;
   defaultData: boolean;
-  paidBoosts: TBoost[];
   screen: TScreens;
   user: TUser;
   wallet:string;
@@ -54,9 +46,7 @@ export type TAppStore = {
   setScreen: (newValue: TScreens, payload?: TScreenPayload | null) => void;
   updateBalance: (newBalance: number) => void;
   applyBalanceDelta: (delta: number) => void;
-  updatePaidBoostLevel: (boostId: number, newLevel: number) => void;
   updateUser: (updatedFields: Partial<TUser>) => void;
-  setPaidBoosts: (boostFields: TBoost[]) => void;
   updateDefaultData: () => void;
   claimRank: (rankId: number) => void;
   resetState: () => void;
@@ -65,7 +55,6 @@ export type TAppStore = {
 export const initialState = {
   hasData: false,
   defaultData: true,
-  paidBoosts: [],
   screen: "home" as TScreens,
   user: emptyUser,
   wallet:"",
@@ -97,16 +86,6 @@ export const useAppStore = create<TAppStore>()(
             },
           }));
         },
-        updatePaidBoostLevel: (boostId: number, newLevel: number): void => {
-          const { paidBoosts } = get();
-          const updatedBoosts = paidBoosts.map(boost => {
-            if (boost.boostId === boostId) {
-              return { ...boost, level: newLevel, cost: (boost.cost ?? 0) * 4 };
-            }
-            return boost;
-          });
-          set(() => ({ paidBoosts: updatedBoosts }));
-        },
         updateUser: (updatedFields: Partial<TUser>): void => {
           const { user } = get();
           set(() => ({
@@ -116,7 +95,6 @@ export const useAppStore = create<TAppStore>()(
             },
           }));
         },
-        setPaidBoosts: (boosts: TBoost[]): void => set(() => ({ paidBoosts: boosts })),
         updateDefaultData: (): void => set(() => ({ defaultData: false })),
         claimRank: (rankId: number) => {
           const { user } = get();

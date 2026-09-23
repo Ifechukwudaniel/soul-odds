@@ -11,6 +11,9 @@ import { RevealHeader } from "@/components/game/mortal-odds/stage/reveal/RevealH
 import { RevealStamp } from "@/components/game/mortal-odds/stage/reveal/RevealStamp";
 import { SoulRecord } from "@/components/game/mortal-odds/stage/reveal/SoulRecord";
 import { SoulStory } from "@/components/game/mortal-odds/stage/reveal/SoulStory";
+import { useCasinoHost } from "@/hooks/useCasinoHost";
+import { useLifeStory } from "@/hooks/useLifeStory";
+import { historyStorageKey, patchRound } from "@/lib/mortal-odds/bet-history";
 import { playClickSound } from "@/utils/playClickSound";
 import type { RevealResult } from "@/hooks/useMortalOddsDraw";
 import type { Place, RoundCharge } from "@/types";
@@ -21,6 +24,16 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
   const { life, results, net, skill, story, epitaph } = props.reveal;
   const [stampReady, setStampReady] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const lifeStory = useLifeStory({ sessionKey: props.sessionKey, life, placeName: props.place.name, fallbackStory: story });
+
+  const { snapshot } = useCasinoHost();
+  const historyKey = snapshot ? historyStorageKey(snapshot) : null;
+
+  // The round is recorded in the history the moment it settles, with the local story; swap in the AI-written one (and its name) once it lands.
+  useEffect(() => {
+    if (!lifeStory.ready || !historyKey || !props.sessionKey) return;
+    patchRound(historyKey, props.sessionKey, { story: lifeStory.payload.story, name: lifeStory.payload.name });
+  }, [lifeStory.ready, historyKey, props.sessionKey]);
 
   useEffect(() => {
     const timer = setTimeout(() => setStampReady(true), STAMP_DELAY_MS);
@@ -37,7 +50,10 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
   const roundNet = net - fees;
 
   const alive = life.deathYear >= props.currentYear;
-  const sexLabel = life.sex === "girl" ? "A girl" : "A boy";
+  // The name only exists once OpenRouter's narrative lands; until then (or if it never does),
+  // the header falls back to the plain sex label rather than waiting on it.
+  const soulName = lifeStory.ready ? lifeStory.payload.name : null;
+  const sexLabel = soulName ?? (life.sex === "girl" ? "A girl" : "A boy");
   const fate = alive ? `${sexLabel}, still living` : life.age === 0 ? `${sexLabel}, gone within a year` : `${sexLabel}, dead at ${life.age}`;
 
   return (
@@ -47,7 +63,7 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
         <RevealHeader fate={fate} placeName={props.place.name} bornYear={life.year} deathYear={life.deathYear} epitaph={epitaph} alive={alive} />
 
         <div className="grid gap-4 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-          <SoulStory story={story} life={life} placeName={props.place.name} sessionKey={props.sessionKey} />
+          <SoulStory state={lifeStory} />
           <SoulRecord life={life} placeName={props.place.name} alive={alive} />
         </div>
 

@@ -11,7 +11,8 @@ import { Scroller } from "@/components/Scroller";
 import { useCasinoHostContext } from "@/components/provider/AppWalletProvider";
 import {
   BadgesScreen,
-  BoostScreen,
+  badgesLists,
+  BetHistoryScreen,
   ConnectQuestScreen,
   HomeScreen,
   QuestScreen,
@@ -21,9 +22,7 @@ import {
   RankScreen
 } from "@/components/screens";
 import { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
-import { badgesLists } from "@/services/data/badgeData";
-import { getNoLevelBoost, getPayedBoost, toTBoost } from "@/services/data/boost";
-import { registerUser } from "@/services/data/user";
+import { getUser, registerUser } from "@/services/data/user";
 import { socketInstance } from "@/services/socket";
 import { useAppStore } from "@/services/store/store";
 import { formatAddress } from "@/utils";
@@ -36,7 +35,6 @@ export default function GamePage() {
   const screen = useAppStore((state) => state.screen);
   const setScreen = useAppStore((state) => state.setScreen);
   const updateUser = useAppStore((state) => state.updateUser);
-  const setPaidBoosts = useAppStore((state) => state.setPaidBoosts);
   const user = useAppStore((state) => state.user);
   const player = useMortalOddsPlayer();
   const { snapshot } = useCasinoHostContext();
@@ -45,7 +43,7 @@ export default function GamePage() {
 
   const screens = {
     badges: <BadgesScreen />,
-    boost: <BoostScreen />,
+    history: <BetHistoryScreen />,
     home: <HomeScreen player={player} />,
     refs: <RefsScreen />,
     stats: <StatsScreen />,
@@ -71,7 +69,7 @@ export default function GamePage() {
 
   /**
    * Registers the connected wallet as a user, mirrors its address into the
-   * store, and loads their boosts. Runs once per wallet address per app entry
+   * store. Runs once per wallet address per app entry
    * (not gated on the store's persisted address) so a returning user's
    * balance is re-synced to their wallet on every login, not just on
    * first-ever signup.
@@ -80,23 +78,13 @@ export default function GamePage() {
     if (!walletAddress || syncedAddressRef.current === walletAddress) return;
     syncedAddressRef.current = walletAddress;
     updateUser({ address: walletAddress });
-    registerUser(walletAddress, undefined, hostBalance).catch(() => {
-      // Already logged in registerUser; a failed registration here just leaves the row unwritten.
-    });
-
-    const loadBoosts = async () => {
-      try {
-        const [paidBoosts, noLevelBoosts] = await Promise.all([
-          getPayedBoost(walletAddress),
-          getNoLevelBoost(walletAddress),
-        ]);
-        setPaidBoosts([...paidBoosts, ...noLevelBoosts].map(toTBoost));
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    loadBoosts();
-  }, [walletAddress, hostBalance, updateUser, setPaidBoosts]);
+    registerUser(walletAddress, undefined, hostBalance)
+      .then(() => getUser(walletAddress))
+      .then((dbUser) => updateUser({ freeRedraws: dbUser.freeRedraws }))
+      .catch(() => {
+        // Already logged in by the data layer; a failed sync just leaves free redraws at their last known count.
+      });
+  }, [walletAddress, hostBalance, updateUser]);
 
   useEffect(() => {
     const handleConnect = () => {

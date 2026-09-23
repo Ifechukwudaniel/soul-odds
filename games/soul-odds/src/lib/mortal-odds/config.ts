@@ -138,6 +138,9 @@ export const SIN_CATEGORIES = [
 ] as const;
 export type SinCategoryId = (typeof SIN_CATEGORIES)[number]["id"];
 
+/** Joins the categories of a multi-sin pick into one option id, e.g. "violence+greed". */
+export const SIN_ID_SEPARATOR = "+";
+
 /**
  * The bettable sin catalog. Hand-edited: add an entry here and it becomes a possible outcome
  * for every life whose crime category matches, no other file to touch. `to: null` means the sin
@@ -202,10 +205,17 @@ export const jobsConfig: JobsConfig = jobsConfigSchema.parse(jobsJson);
 export const regionModifiersConfig: RegionModifiersConfig = regionModifiersConfigSchema.parse(regionModifiersJson);
 
 /**
- * The "sins" market's options are the four on-chain crime categories, plus "Clean" for none
- * recorded. Predicting a category is what settles on-chain; the specific sin revealed within it
- * (drawn from `sins.json`) is flavor only — see `pickSin`.
+ * The "sins" market's options mirror every crime state the contract accepts: "Clean" for none,
+ * each of the four crime categories on its own, and every pair of two (the contract allows at
+ * most two, and only an exact match pays). The specific sin revealed within a category (drawn
+ * from `sins.json`) is flavor only — see `pickSin`.
  */
+const sinPairOptions = SIN_CATEGORIES.flatMap((first, index) =>
+  SIN_CATEGORIES.slice(index + 1).map(
+    (second): MarketOption => ({ id: `${first.id}${SIN_ID_SEPARATOR}${second.id}`, label: `${first.label} + ${second.label}` }),
+  ),
+);
+
 const sinsMarket: MarketConfig = {
   id: "sins",
   kind: "choice",
@@ -214,6 +224,7 @@ const sinsMarket: MarketConfig = {
   options: [
     { id: "none", label: "Clean" },
     ...SIN_CATEGORIES.map((category): MarketOption => ({ id: category.id, label: category.label })),
+    ...sinPairOptions,
   ],
 };
 

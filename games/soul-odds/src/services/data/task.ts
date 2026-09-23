@@ -23,3 +23,8 @@ export const postUserTasks = async ( address:string, taskId:number) => {
       throw new Error("Could not post data");
   }
 }
+
+/** Claims the social quest's free redraw. Rejects when the quest is incomplete or already claimed. */
+export const claimSocialReward = async (address: string): Promise<{ freeRedraws: number }> => {
+  return (await apiClient.post("/api/tasks/claim", { address })).data;
+};

@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { BookieOdds } from "@/components/game/mortal-odds/stage/markets/BookieOdds";
 import { getMarketIcon } from "@/lib/mortal-odds/market-icons";
 import { playClickSound } from "@/utils/playClickSound";
 import type { MarketConfig, MarketOption, Price } from "@/types";
@@ -12,12 +13,9 @@ export const ChoiceMarket = (props: {
   prices: Record<string, Price>;
   selectedOptionId: string | undefined;
   onSelect: (optionId: string) => void;
-  /** Oracle's Whisper: reveals every option's pre-round likelihood tag instead of only the selected one's odds. */
-  showHints?: boolean;
 }) => {
   const Icon = getMarketIcon(props.market.id);
-  const selectedPrice = props.selectedOptionId ? props.prices[props.selectedOptionId] : undefined;
-  const selectedOdds = selectedPrice?.odds;
+  const selectedOdds = props.selectedOptionId ? props.prices[props.selectedOptionId]?.odds : undefined;
   const options = props.market.options.filter((option) => option.id in props.prices);
   const optionRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
@@ -57,16 +55,12 @@ export const ChoiceMarket = (props: {
         <Icon size={32} className="text-[#3FB6A8]" />
         <h3 className="font-bold text-white text-xl">{props.market.title}</h3>
         {props.market.note && <p className="max-w-xs text-white/40 text-xs">{props.market.note}</p>}
-        <p className="mt-1 text-white/40 text-[11px]">Bookie odds</p>
-        <p className="font-bold text-2xl text-[#F5B83D] leading-tight">
-          {selectedOdds === null || selectedOdds === undefined ? "—" : selectedOdds.toFixed(2)}
-        </p>
+        <BookieOdds odds={selectedOdds} />
       </div>
 
       <div role="radiogroup" aria-label={props.market.title} className="grid w-full max-w-xl grid-cols-2 gap-3">
         {options.map((option, index) => {
           const isSelected = props.selectedOptionId === option.id;
-          const tag = props.showHints ? props.prices[option.id]?.tag : undefined;
           return (
             <button
               key={option.id}
@@ -95,7 +89,6 @@ export const ChoiceMarket = (props: {
               }`}
             >
               {option.label}
-              {tag && <span className="mt-1 block text-xs opacity-70">{tag}</span>}
             </button>
           );
         })}

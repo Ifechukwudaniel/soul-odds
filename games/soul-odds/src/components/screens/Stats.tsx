@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Loader } from "../Loader";
 import { CrownIcon } from "../assets/CrownIcon";
 import { DoubleCoinIcon } from "../assets/DoubleCoinIcon";
-import { StatsCard } from "../touchswap/StatsCard";
+import { StatsCard } from "../soulodds/StatsCard";
 import { RefeshInterval } from "@/constants";
 import { getStats } from "@/services/data/stats";
 import numeral from "numeral";

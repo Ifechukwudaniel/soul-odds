@@ -22,6 +22,20 @@
       "when": 1790092105377,
       "tag": "0002_numerous_lilandra",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790176060683,
+      "tag": "0003_certain_la_nuit",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790183590678,
+      "tag": "0004_drop_boost",
+      "breakpoints": true
     }
   ]
 }

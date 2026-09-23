@@ -19,8 +19,7 @@
     "clean": "hardhat clean",
     "start": "hardhat compile && tsx scripts/stack.ts",
     "e2e:simulator": "hardhat compile && tsx e2e/simulator.ts",
-    "deploy-mortal-odds-title": "hardhat compile && tsx scripts/deploy-mortal-odds-title.ts",
-    "deploy-boost-shop": "hardhat compile && tsx scripts/deploy-boost-shop.ts"
+    "deploy-mortal-odds-title": "hardhat compile && tsx scripts/deploy-mortal-odds-title.ts"
   },
   "dependencies": {
     "viem": "^2.52.2"

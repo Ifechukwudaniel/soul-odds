@@ -1,7 +1,6 @@
-import { desc, eq, sql } from 'drizzle-orm';
+import { and, desc, eq, gt, sql } from 'drizzle-orm';
 import { db } from '.';
 import { type User, userSchema } from './Schema';
-import { createUserBoost } from './boost';
 
 export type { User };
 
@@ -41,8 +40,6 @@ export async function createUser(address: string, referredBy?: string, balance?:
     })
     .returning();
 
-  await createUserBoost(created!.address);
-
   return created!;
 }
 
@@ -58,11 +55,54 @@ export async function updateTasks(address: string, ids: number[]): Promise<void>
     .where(eq(userSchema.address, normalizeAddress(address)));
 }
 
+/**
+ * Grants the social quest's one free redraw, once per user, and only when every required task is done.
+ * @param address The claiming user's address.
+ * @param requiredTaskIds The task ids that must all be in the user's completed list.
+ * @returns The updated user, or undefined when the user is ineligible or already claimed.
+ */
+export async function claimSocialReward(address: string, requiredTaskIds: number[]): Promise<User | undefined> {
+  const required = sql.join(
+    requiredTaskIds.map((id) => sql`${id}`),
+    sql`, `,
+  );
+  const [user] = await db
+    .update(userSchema)
+    .set({ socialClaimed: true, freeRedraws: sql`${userSchema.freeRedraws} + 1` })
+    .where(
+      and(
+        eq(userSchema.address, normalizeAddress(address)),
+        eq(userSchema.socialClaimed, false),
+        sql`${userSchema.tasksCompleted} @> ARRAY[${required}]::int[]`,
+      ),
+    )
+    .returning();
+  return user;
+}
+
+/** Spends one free redraw atomically. Returns the remaining count, or undefined when the user had none. */
+export async function consumeFreeRedraw(address: string): Promise<number | undefined> {
+  const [row] = await db
+    .update(userSchema)
+    .set({ freeRedraws: sql`${userSchema.freeRedraws} - 1` })
+    .where(and(eq(userSchema.address, normalizeAddress(address)), gt(userSchema.freeRedraws, 0)))
+    .returning({ freeRedraws: userSchema.freeRedraws });
+  return row?.freeRedraws;
+}
+
 export async function updateUser(user: Partial<User> & { address: string }): Promise<void> {
   const { address, ...fields } = user;
   await db
     .update(userSchema)
     .set(fields)
+    .where(eq(userSchema.address, normalizeAddress(address)));
+}
+
+/** Adds to (never replaces) a user's leaderboard score — an atomic increment, so concurrent rounds can't clobber each other. */
+export async function addPoints(address: string, delta: number): Promise<void> {
+  await db
+    .update(userSchema)
+    .set({ points: sql`${userSchema.points} + ${Math.round(delta)}` })
     .where(eq(userSchema.address, normalizeAddress(address)));
 }
 

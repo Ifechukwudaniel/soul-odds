@@ -50,7 +50,7 @@ function outerRing(geometry: CliopatriaFeature["geometry"]): number[][] {
 }
 
 /** A representative point for a feature: the plain average of its outer ring's vertices. */
-function centroidOf(feature: CliopatriaFeature): { lat: number; lon: number } {
+export function centroidOf(feature: CliopatriaFeature): { lat: number; lon: number } {
   const ring = outerRing(feature.geometry);
   const sum = ring.reduce((acc, [lon, lat]) => ({ lon: acc.lon + (lon ?? 0), lat: acc.lat + (lat ?? 0) }), {
     lon: 0,

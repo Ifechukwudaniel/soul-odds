@@ -1,7 +1,7 @@
 import * as z from "zod";
 import epitaphsJson from "@/config/mortal-odds/epitaphs.json";
 import { placesConfig, shocksConfig, SIN_CATEGORIES } from "@/lib/mortal-odds/config";
-import { fmtYear, periodName } from "@/lib/mortal-odds/format";
+import { fmtYear, lowercaseFirst, periodName } from "@/lib/mortal-odds/format";
 import { pickWeighted } from "@/lib/mortal-odds/rng";
 import type { Rng } from "@/lib/mortal-odds/rng";
 import type { Life } from "@/types";
@@ -160,7 +160,7 @@ function tokensFor(life: Life, placeName: string): Record<TokenName, string> {
     Cause: capitalize(life.shock?.phrase ?? ""),
     sin: life.sin?.label.toLowerCase() ?? "",
     Sin: life.sin?.label ?? "",
-    sinPhrase: life.sin?.phrase ?? "",
+    sinPhrase: life.sin ? lowercaseFirst(life.sin.phrase) : "",
   };
 }
 

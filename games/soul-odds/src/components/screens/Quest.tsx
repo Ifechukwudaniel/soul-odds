@@ -1,4 +1,4 @@
-import { OpenQuests } from "../touchswap/quests/OpenQuests";
+import { OpenQuests } from "../soulodds/quests/OpenQuests";
 
 export const QuestScreen = () => {
   return (

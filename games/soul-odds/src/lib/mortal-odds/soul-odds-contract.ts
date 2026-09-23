@@ -11,6 +11,7 @@ import {
   crimeOdds,
   genderOdds,
   lifespanOdds,
+  validCrimeMasks,
 } from "@chain/soul-odds-engine/soul";
 import {
   toConfiguration,
@@ -18,8 +19,7 @@ import {
   type SoulConfigurationDefinition,
 } from "@chain/soul-odds-engine/configuration";
 import { chanceTag } from "@/lib/mortal-odds/pricing";
-import { SIN_CATEGORIES } from "@/lib/mortal-odds/config";
-import type { SinCategoryId } from "@/lib/mortal-odds/config";
+import { categoriesOfCrimeMask, crimeMaskOfSinOption, sinOptionId } from "@/lib/mortal-odds/sin-selection";
 import titleFile from "@/config/mortal-odds/soul-odds-title.json";
 import type { Bet, Price } from "@/types";
 
@@ -35,6 +35,26 @@ export const soulOddsConfigurations: SoulConfiguration[] = definitions.map((defi
   toConfiguration(toConfigurationInput(definition)),
 );
 
+/**
+ * The era configuration the contract fixed for a session, read from its `gameState` while the
+ * session waits for the player's prediction (the contract picks it at session start, before the
+ * player predicts anything). Null when the state doesn't hold one.
+ */
+export function configurationIndexFromGameState(gameState: Hex): number | null {
+  try {
+    const [index] = decodeAbiParameters([{ type: "uint256" }], gameState);
+    return index < BigInt(soulOddsConfigurations.length) ? Number(index) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** The one configuration a session is pinned to, or every era when it isn't known yet. */
+function configurationsFor(configurationIndex: number | null): SoulConfiguration[] {
+  const pinned = configurationIndex === null ? undefined : soulOddsConfigurations[configurationIndex];
+  return pinned ? [pinned] : soulOddsConfigurations;
+}
+
 /** Index-aligned with `soul-odds-title.json`'s `lifespans`, and with the "age" market's option order. */
 export const AGE_BUCKET_ORDER = ["u5", "y", "m", "o"] as const;
 
@@ -43,12 +63,6 @@ const WAD = 10n ** 18n;
 export function ageBucketIndex(optionId: string): number {
   const index = AGE_BUCKET_ORDER.indexOf(optionId as (typeof AGE_BUCKET_ORDER)[number]);
   if (index === -1) throw new Error(`Unknown age bucket "${optionId}"`);
-  return index;
-}
-
-function crimeCategoryIndex(categoryId: SinCategoryId): number {
-  const index = SIN_CATEGORIES.findIndex((category) => category.id === categoryId);
-  if (index === -1) throw new Error(`Unknown sin category "${categoryId}"`);
   return index;
 }
 
@@ -63,7 +77,7 @@ export function buildPrediction(bets: Record<string, Bet>): SoulPrediction {
 
   const gender = sexBet.optionId === "girl" ? 1 : 0;
   const lifespanBucket = ageBucketIndex(ageBet.optionId);
-  const crimeMask = sinsBet.optionId === "none" ? 0 : 1 << crimeCategoryIndex(sinsBet.optionId as SinCategoryId);
+  const crimeMask = crimeMaskOfSinOption(sinsBet.optionId);
 
   return { gender, lifespanBucket, sins: crimeMask !== 0, crimeMask };
 }
@@ -120,64 +134,57 @@ export function decodeSettledSoul(gameState: Hex): SettledSoul {
   return { result, won, breakdown };
 }
 
-/** The category a matched crimeMask bit belongs to, or null when no crime slot is set. */
-export function categoryFromCrimeMask(crimeMask: number): SinCategoryId | null {
-  const index = SIN_CATEGORIES.findIndex((_category, bitIndex) => (crimeMask & (1 << bitIndex)) !== 0);
-  return index === -1 ? null : (SIN_CATEGORIES[index]?.id ?? null);
-}
+/** The contract stakes an equal third of the wager on each of the three categories. */
+const CATEGORY_COUNT = 3n;
 
 /**
- * The preview price for one option, averaged equally across every era configuration: since the
- * engine picks a configuration uniformly at random before it samples anything, the expected
- * probability of an outcome — and the expected payout a wager earns for it — are each the plain
- * average of what every era would independently give. This is a preview only; whichever era the
- * chain actually draws decides the real, on-chain payout at settlement.
+ * The price for one option. Each category stakes a third of the wager and pays `payout` when it
+ * hits, so the multiplier on that stake is `payout / (wager / 3)` — exactly `rtp / p`. With the
+ * session's era known there is one configuration and the price is exact; before that it is the
+ * plain average across every era, since the contract picks one uniformly at random.
  */
 function averagePrice(wager: bigint, perConfigurationOdds: { probabilityWad: bigint; payout: bigint }[]): Price {
   const count = perConfigurationOdds.length;
   const p = perConfigurationOdds.reduce((sum, odds) => sum + Number(odds.probabilityWad) / 1e18, 0) / count;
   const odds =
-    wager === 0n ? null : perConfigurationOdds.reduce((sum, o) => sum + Number(o.payout) / Number(wager), 0) / count;
+    wager === 0n
+      ? null
+      : perConfigurationOdds.reduce((sum, o) => sum + Number(o.payout * CATEGORY_COUNT) / Number(wager), 0) / count;
   return { p, odds, tag: chanceTag(p) };
 }
 
 /**
- * Live crime-category odds for one specific lifespan bucket: each bucket carries its own
- * `noCrimeWeight` (a child is far likelier to be "Clean" than an adult), so "Sins committed"
- * odds are only meaningful once an age bucket is actually picked — passing the wrong one wildly
- * over- or under-states the payout (a bucket-0/child default made "Heresy" preview at ~1000x
- * regardless of the age the player went on to pick).
+ * Live odds for every crime state the contract accepts (none, each category, each pair) for one
+ * specific lifespan bucket: each bucket carries its own `noCrimeWeight` (a child is far likelier
+ * to be "Clean" than an adult), so these odds are only meaningful once an age bucket is picked.
  */
-export function previewSinsPrices(wager: bigint, lifespanBucket: number): Record<string, Price> {
+export function previewSinsPrices(wager: bigint, lifespanBucket: number, configurationIndex: number | null = null): Record<string, Price> {
   const previewWager = wager > 0n ? wager : WAD;
+  const configurations = configurationsFor(configurationIndex);
   const sins: Record<string, Price> = {};
-  sins.none = averagePrice(
-    previewWager,
-    soulOddsConfigurations.map((configuration) => crimeOdds(configuration, previewWager, lifespanBucket, 0)),
-  );
-  SIN_CATEGORIES.forEach((category, index) => {
-    sins[category.id] = averagePrice(
+  for (const crimeMask of validCrimeMasks()) {
+    sins[sinOptionId(categoriesOfCrimeMask(crimeMask))] = averagePrice(
       previewWager,
-      soulOddsConfigurations.map((configuration) =>
-        crimeOdds(configuration, previewWager, lifespanBucket, 1 << index),
-      ),
+      configurations.map((configuration) => crimeOdds(configuration, previewWager, lifespanBucket, crimeMask)),
     );
-  });
+  }
   return sins;
 }
 
-/** Live odds preview for each of the three predictable categories, averaged across every era configuration. */
+/** Live odds preview for each of the three predictable categories, for the session's era when known and averaged across every era otherwise. */
 export function previewCategoryPrices(
   wager: bigint,
   lifespanBucket = 0,
+  configurationIndex: number | null = null,
 ): { sex: Record<string, Price>; age: Record<string, Price>; sins: Record<string, Price> } {
   const previewWager = wager > 0n ? wager : WAD;
+  const configurations = configurationsFor(configurationIndex);
 
   const sex: Record<string, Price> = {};
   for (const [optionId, gender] of [["girl", 1] as const, ["boy", 0] as const]) {
     sex[optionId] = averagePrice(
       previewWager,
-      soulOddsConfigurations.map((configuration) => genderOdds(configuration, previewWager, gender)),
+      configurations.map((configuration) => genderOdds(configuration, previewWager, gender)),
     );
   }
 
@@ -185,11 +192,11 @@ export function previewCategoryPrices(
   AGE_BUCKET_ORDER.forEach((optionId, index) => {
     age[optionId] = averagePrice(
       previewWager,
-      soulOddsConfigurations.map((configuration) => lifespanOdds(configuration, previewWager, index)),
+      configurations.map((configuration) => lifespanOdds(configuration, previewWager, index)),
     );
   });
 
-  return { sex, age, sins: previewSinsPrices(previewWager, lifespanBucket) };
+  return { sex, age, sins: previewSinsPrices(previewWager, lifespanBucket, configurationIndex) };
 }
 
 /** Reshapes a `previewCategoryPrices` result into the plain-probability records `resolveBets` scores skill against. */

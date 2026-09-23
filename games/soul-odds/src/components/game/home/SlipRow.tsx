@@ -2,10 +2,11 @@ import { PiXBold } from "react-icons/pi";
 import { CurrencyCoinIcon } from "@/components/assets/CurrencyCoinIcon";
 import { betLabel } from "@/lib/mortal-odds/bets";
 import { playClickSound } from "@/utils/playClickSound";
+import type { SinNarratives } from "@/lib/mortal-odds/openrouter";
 import type { Bet } from "@/types";
 
-export const SlipRow = (props: { bet: Bet; potentialWin: number | null; onRemove?: () => void }) => {
-  const label = betLabel(props.bet);
+export const SlipRow = (props: { bet: Bet; potentialWin: number | null; onRemove?: () => void; sinNarratives: SinNarratives | null }) => {
+  const label = betLabel(props.bet, props.sinNarratives);
 
   return (
     <div className="flex items-center justify-between gap-2 rounded-lg border mystic-glass border-white/10 bg-black/60 px-3 py-2 shadow-[inset_0_1px_0_0_#ffffff0d]">

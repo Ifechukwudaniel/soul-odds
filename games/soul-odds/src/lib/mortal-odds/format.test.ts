@@ -1,5 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { fmtNumber, fmtPeople, fmtYear, periodName, yearReelParts } from "@/lib/mortal-odds/format";
+import { fmtNumber, fmtPeople, fmtYear, lowercaseFirst, periodName, yearReelParts } from "@/lib/mortal-odds/format";
+
+describe("lowercaseFirst", () => {
+  it("lowercases only the first letter", () => {
+    expect(lowercaseFirst("Slashed the rival's throat")).toBe("slashed the rival's throat");
+  });
+
+  it("leaves an already-lowercase string unchanged", () => {
+    expect(lowercaseFirst("held up a traveler")).toBe("held up a traveler");
+  });
+
+  it("survives an empty string", () => {
+    expect(lowercaseFirst("")).toBe("");
+  });
+});
 
 describe("fmtNumber", () => {
   it("adds thousands separators and rounds to 2 decimals", () => {

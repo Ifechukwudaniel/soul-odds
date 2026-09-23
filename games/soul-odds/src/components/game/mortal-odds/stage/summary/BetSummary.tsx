@@ -10,6 +10,7 @@ import { betLabel, betOdds } from "@/lib/mortal-odds/bets";
 import { fmtYear } from "@/lib/mortal-odds/format";
 import { getMarketIcon } from "@/lib/mortal-odds/market-icons";
 import { serifFont } from "@/styles/serif-font";
+import type { SinNarratives } from "@/lib/mortal-odds/openrouter";
 import type { Bet, Draw, MarketPrices, Price, RoundCharge } from "@/types";
 
 const COUNT_WORDS = ["No", "One", "Two", "Three", "Four", "Five", "Six"];
@@ -23,10 +24,11 @@ export const BetSummary = (props: {
   currency: string;
   onBack: () => void;
   onConfirm: () => void;
+  sinNarratives: SinNarratives | null;
 }) => {
   const rows = Object.values(props.bets).map((bet) => {
     const odds = betOdds({ bet, prices: props.prices, priceDeathYear: props.priceDeathYear });
-    return { bet, label: betLabel(bet), odds, payout: odds === null ? 0 : bet.stake * odds };
+    return { bet, label: betLabel(bet, props.sinNarratives), odds, payout: odds === null ? 0 : bet.stake * odds };
   });
   const totalStake = rows.reduce((sum, row) => sum + row.bet.stake, 0);
   const maxPayout = rows.reduce((sum, row) => sum + row.payout, 0);

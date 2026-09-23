@@ -7,13 +7,11 @@ import { StageSlide } from "@/components/game/mortal-odds/stage/StageSlide";
 import { ChoiceMarket } from "@/components/game/mortal-odds/stage/markets/ChoiceMarket";
 import { SinsMarket } from "@/components/game/mortal-odds/stage/markets/SinsMarket";
 import { marketsConfig } from "@/lib/mortal-odds/config";
-import { useAppStore } from "@/services/store/store";
+import type { SinNarratives } from "@/lib/mortal-odds/openrouter";
 import { playClickSound } from "@/utils/playClickSound";
 import type { Bet, MarketPrices } from "@/types";
 
 const LAST_STEP = marketsConfig.length - 1;
-/** boostId 4, "Oracle's Whisper" (see boostCardLists in the Boost screen). */
-const ORACLE_WHISPER_BOOST_ID = 4;
 
 /** Every required market gets picked before a bet can be placed, so the locked chip size splits evenly across all of them. */
 const stakePerMarket = (chipSize: number) => chipSize / marketsConfig.length;
@@ -24,10 +22,10 @@ export const PredictionsPanel = (props: {
   bets: Record<string, Bet>;
   onSetChoice: (marketId: string, optionId: string, stake: number) => void;
   onBack: () => void;
+  sinNarratives: SinNarratives | null;
 }) => {
   const [slide, setSlide] = useState({ step: 0, direction: 0 });
   const { step, direction } = slide;
-  const hasOracleWhisper = useAppStore((state) => state.paidBoosts.some((boost) => boost.boostId === ORACLE_WHISPER_BOOST_ID));
 
   const market = marketsConfig[step];
   const bet = market ? props.bets[market.id] : undefined;
@@ -62,6 +60,7 @@ export const PredictionsPanel = (props: {
                 <SinsMarket
                   market={market}
                   prices={props.prices[market.id] ?? {}}
+                  narratives={props.sinNarratives}
                   selectedOptionId={bet?.kind === "choice" ? bet.optionId : undefined}
                   onSelect={(optionId) => {
                     props.onSetChoice(market.id, optionId, stakePerMarket(props.chipSize));
@@ -75,7 +74,6 @@ export const PredictionsPanel = (props: {
                   onSelect={(optionId) => {
                     props.onSetChoice(market.id, optionId, stakePerMarket(props.chipSize));
                   }}
-                  showHints={hasOracleWhisper}
                 />
               ))}
           </StageSlide>

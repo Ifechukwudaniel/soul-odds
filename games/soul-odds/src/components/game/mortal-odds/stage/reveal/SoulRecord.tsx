@@ -14,6 +14,7 @@ import {
 import { RevealSection } from "@/components/game/mortal-odds/stage/reveal/RevealSection";
 
 import { fmtYear } from "@/lib/mortal-odds/format";
+import { sinsOf } from "@/lib/mortal-odds/sin-selection";
 
 import type { Life } from "@/types";
 
@@ -107,8 +108,8 @@ export const SoulRecord = (props: {
     [
       {
         icon: GiSkullSignet,
-        label: "Sin",
-        value: life.sin ? life.sin.label : "Clean",
+        label: sinsOf(life).length > 1 ? "Sins" : "Sin",
+        value: sinsOf(life).length > 0 ? sinsOf(life).map((sin) => sin.phrase).join("; ") : "Clean",
       },
       {
         icon: GiHeartBeats,

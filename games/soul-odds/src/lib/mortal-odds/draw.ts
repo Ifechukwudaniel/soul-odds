@@ -7,6 +7,38 @@ import { pickWeighted } from "@/lib/mortal-odds/rng";
 import type { Rng } from "@/lib/mortal-odds/rng";
 import type { Draw, EraFilter, Place, PlaceContext, RegionId } from "@/types";
 
+/**
+ * The Cliopatria dataset's own last-updated year: a polity whose attested range ends here wasn't
+ * necessarily dissolved that year — the dataset simply stops tracking it there, and borders and
+ * empires keep changing in the real world after every snapshot. Treated as "still standing" rather
+ * than a hard end date.
+ */
+const CLIOPATRIA_DATA_CUTOFF_YEAR = 2023;
+
+/** Phrasings for a real historical polity's attested date range — picked randomly so it doesn't read identically every draw. */
+const ENDURED_TEMPLATES: ((from: string, to: string) => string)[] = [
+  (from, to) => `This place endured from ${from} to ${to}.`,
+  (from, to) => `Its name held on maps from ${from} to ${to}.`,
+  (from, to) => `Records name this place from ${from} until ${to}.`,
+  (from, to) => `From ${from} to ${to}, this land carried that name.`,
+  (from, to) => `History remembers this place standing from ${from} to ${to}.`,
+];
+
+/** Phrasings for a polity whose attested range runs past the dataset's own cutoff — still standing, not ended. */
+const ENDURES_STILL_TEMPLATES: ((from: string) => string)[] = [
+  (from) => `This place has endured since ${from}.`,
+  (from) => `Its name has held since ${from}.`,
+  (from) => `From ${from} to the present day, this land has kept its name.`,
+  (from) => `This place has stood since ${from}.`,
+  (from) => `Records have named this place since ${from}.`,
+];
+
+function pickRandom<T>(items: readonly T[], rng: Rng): T {
+  const item = items[Math.floor(rng() * items.length)];
+  if (item === undefined) throw new Error("pickRandom: items must not be empty");
+  return item;
+}
+
 /** Weighted-picks an era and year within it, then a region from that era's shares. */
 export function drawBirth(options: { era: EraFilter; rng: Rng; erasConfig: EraConfig[]; currentYear: number }): {
   year: number;
@@ -63,8 +95,9 @@ export function placeContext(options: {
   era: EraConfig;
   worldPopCurve: ReadonlyArray<readonly [number, number]>;
   currentYear: number;
+  rng: Rng;
 }): Omit<PlaceContext, "story"> {
-  const { draw, era, worldPopCurve, currentYear } = options;
+  const { draw, era, worldPopCurve, currentYear, rng } = options;
   const world = interpolate({ points: worldPopCurve, x: draw.year });
 
   let local = "";
@@ -72,7 +105,10 @@ export function placeContext(options: {
     const share = regionShareInEra({ region: draw.region, era });
     local = `About ${fmtPeople(world * share * draw.place.share)} people lived there then.`;
   } else if (draw.place.fromYear !== undefined && draw.place.toYear !== undefined) {
-    local = `This place endured from ${fmtYear(draw.place.fromYear)} to ${fmtYear(draw.place.toYear)}.`;
+    local =
+      draw.place.toYear >= CLIOPATRIA_DATA_CUTOFF_YEAR
+        ? pickRandom(ENDURES_STILL_TEMPLATES, rng)(fmtYear(draw.place.fromYear))
+        : pickRandom(ENDURED_TEMPLATES, rng)(fmtYear(draw.place.fromYear), fmtYear(draw.place.toYear));
   }
 
   return {

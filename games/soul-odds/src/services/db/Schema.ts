@@ -1,39 +1,13 @@
 import type { InferSelectModel } from 'drizzle-orm';
 import {
+  boolean,
   integer,
   numeric,
-  pgEnum,
   pgTable,
   serial,
   timestamp,
   varchar,
 } from 'drizzle-orm/pg-core';
-
-// This file defines the structure of your database tables using the Drizzle ORM.
-
-// To modify the database schema:
-// 1. Update this file with your desired changes.
-// 2. Generate a new migration by running: `npm run db:generate`
-
-// The generated migration file will reflect your schema changes.
-// It automatically run the command `db-server:file`, which apply the migration before Next.js starts in development mode,
-// Alternatively, if your database is running, you can run `npm run db:migrate` and there is no need to restart the server.
-
-// Need a database for production? Check out https://get.neon.com/BMFYNtx
-// Tested and compatible with Next.js Boilerplate
-
-// ---------------------------------------------------------------------------
-// Users
-// ---------------------------------------------------------------------------
-// A user is identified only by their wallet address (lowercase 0x-prefixed
-// hex, 42 chars) - there is no app-assigned id. `username` is optional and
-// chosen after signup (a fresh user has none yet), `points` is the
-// leaderboard score, `balance` is the spendable amount and `totalProfit` is
-// the lifetime net win/loss (can be negative). `referredBy` is the address
-// of whoever referred this user, set once at signup. `rank` is the highest
-// coin-tier badge they've claimed (Plankton, Minnow, ...), not a leaderboard
-// position - see `badgesLists` in Badges.tsx. `tasksCompleted` holds the ids
-// of the `task` rows below that this user has finished.
 
 export const userSchema = pgTable('user', {
   address: varchar('address', { length: 42 }).primaryKey(),
@@ -46,6 +20,8 @@ export const userSchema = pgTable('user', {
     .default(0)
     .notNull(),
   tasksCompleted: integer('tasks_completed').array().notNull().default([]),
+  socialClaimed: boolean('social_claimed').default(false).notNull(),
+  freeRedraws: integer('free_redraws').default(0).notNull(),
   updatedAt: timestamp('updated_at', { mode: 'date' })
     .defaultNow()
     .$onUpdate(() => new Date())
@@ -72,35 +48,6 @@ export const taskSchema = pgTable('task', {
 
 export type Task = InferSelectModel<typeof taskSchema>;
 export type NewTask = typeof taskSchema.$inferInsert;
-
-// ---------------------------------------------------------------------------
-// Boosts
-// ---------------------------------------------------------------------------
-
-export const boostTypeEnum = pgEnum('boost_type', ['paid', 'paid-no-levels']);
-
-export const boostSchema = pgTable('boost', {
-  id: serial('id').primaryKey(),
-  type: boostTypeEnum('type').notNull(),
-  // Catalog id (1-6 in the seed data), NOT the row id. Each user has one
-  // row per boostId, so lookups must always filter on (userAddress, boostId)
-  // together - boostId alone is not unique across users.
-  boostId: integer('boost_id').notNull(),
-  userAddress: varchar('user_address', { length: 42 })
-    .notNull()
-    .references(() => userSchema.address),
-  level: integer('level'),
-  maximumLevel: integer('maximum_level'),
-  cost: integer('cost'),
-  updatedAt: timestamp('updated_at', { mode: 'date' })
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
-  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
-});
-
-export type Boost = InferSelectModel<typeof boostSchema>;
-export type NewBoost = typeof boostSchema.$inferInsert;
 
 // ---------------------------------------------------------------------------
 // Cliopatria places

@@ -3,7 +3,6 @@ import { createServer } from "node:http";
 import next from "next";
 import { Server } from "socket.io";
 import { updateUser } from "@/services/db/user";
-import { updatePaidUserBoost } from '@/services/db/boost';
 
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "localhost";
@@ -24,7 +23,6 @@ app.prepare().then(() => {
       const data =  JSON.parse(message)
       if(data.address == undefined) return
       if(data.user) updateUser(data.user)
-      if(data.paidBoosts) updatePaidUserBoost(data.address,data.paidBoosts)
     }); 
 
     socket.on('disconnect', async() => {

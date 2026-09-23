@@ -1,5 +1,5 @@
 import type { JobsConfig } from "@/lib/mortal-odds/config";
-import { fmtYear } from "@/lib/mortal-odds/format";
+import { fmtYear, lowercaseFirst } from "@/lib/mortal-odds/format";
 import type { Rng } from "@/lib/mortal-odds/rng";
 import type { Life, Place } from "@/types";
 
@@ -38,8 +38,11 @@ export function tellStory(options: {
     parts.push(
       `${she} works as ${pickRandom(pool, rng)}, ${life.literate ? "can read" : "never learns to read"}, and ${life.city ? "spends years in a city" : "lives on the land"}.`,
     );
-    if (life.sin) parts.push(`Along the way, ${she.toLowerCase()} ${life.sin.phrase}.`);
   }
+
+  // The crime category is settled on-chain independently of age, so a life can carry a sin even
+  // when it never reached adulthood — this has to stay outside the `grownUp` gate above it.
+  if (life.sin) parts.push(`Along the way, ${she.toLowerCase()} ${lowercaseFirst(life.sin.phrase)}.`);
 
   if (alive) {
     parts.push(`${she} is alive today, with a projected lifespan of ${life.age} years.`);

@@ -29,3 +29,13 @@ export const registerUser = async (address: string, referredBy?: string, balance
     throw new Error("Could not register user");
   }
 };
+
+/** Adds `delta` to a user's leaderboard score (points), server-side, so it survives a refresh and can't be spoofed by editing local state. */
+export const addPoints = async (address: string, delta: number): Promise<void> => {
+  await apiClient.post(`/api/user/${address}/points`, { delta });
+};
+
+/** Spends one of the user's free redraws server-side. Rejects when none are left. */
+export const consumeFreeRedraw = async (address: string): Promise<{ freeRedraws: number }> => {
+  return (await apiClient.post(`/api/user/${address}/free-redraw`)).data;
+};

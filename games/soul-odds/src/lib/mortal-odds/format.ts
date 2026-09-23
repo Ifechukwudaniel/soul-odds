@@ -28,6 +28,11 @@ export function fmtPeople(n: number): string {
   return `${Math.round(n)}`;
 }
 
+/** Lowercases the first letter, for embedding a standalone sentence (e.g. an OpenRouter sin phrase) mid-clause. */
+export function lowercaseFirst(text: string): string {
+  return text.charAt(0).toLowerCase() + text.slice(1);
+}
+
 /** Maps a year to its named historical period. */
 export function periodName(year: number): string {
   if (year < -10000) return "Old Stone Age";

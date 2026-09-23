@@ -3,10 +3,12 @@
 import { useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { MortalOddsStage } from "@/components/game/mortal-odds/MortalOddsStage";
+import { useCasinoHost } from "@/hooks/useCasinoHost";
 import { useMortalOddsBets } from "@/hooks/useMortalOddsBets";
 import { useMortalOddsDraw } from "@/hooks/useMortalOddsDraw";
 import { useRoundResume } from "@/hooks/useRoundResume";
 import type { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
+import { historyStorageKey, recordRound, toHistoryEntry } from "@/lib/mortal-odds/bet-history";
 import { CHIP_SIZES, REDRAW_COST } from "@/lib/mortal-odds/config";
 import { ageBucketIndex } from "@/lib/mortal-odds/soul-odds-contract";
 import { notification } from "@/utils/notifications";
@@ -22,20 +24,29 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
   const round = useMortalOddsDraw({ reducedMotion });
   const slip = useMortalOddsBets();
   const { player } = props;
+  const { snapshot } = useCasinoHost();
   const { restoredReveal } = useRoundResume({ round, slip, charges, setCharges, chipSize, setChipSize });
 
   // Chip size is the round's whole stake: locked the moment a soul is summoned, freed up again once it's revealed.
   const chipLocked = round.phase !== "idle" && round.phase !== "revealed";
   const isRedraw = round.phase === "when" || round.phase === "where";
-  const drawCost = isRedraw ? REDRAW_COST : chipSize;
+  const drawCost = isRedraw ? (player.freeRedraws > 0 ? 0 : REDRAW_COST) : chipSize;
+
+  // Pays for a redraw with a free redraw if one is banked (no charge line), otherwise the flat fee.
+  const payRedraw = () => {
+    const paid = player.payRedraw(REDRAW_COST);
+    if (paid === "paid") {
+      setCharges([...charges, { id: `redraw-${charges.length}`, label: "Redraw", amount: REDRAW_COST, kind: "fee" }]);
+    }
+    return paid !== null;
+  };
 
   // A redraw is a local, chain-unaware fee (spent up front); the round's stake instead moves
   // for real once `round.drawHuman` escrows it into the on-chain session — only affordability
   // is checked here, the debit itself comes from the host's own pushed balance afterwards.
   const onDraw = () => {
     if (isRedraw) {
-      if (!player.spend(REDRAW_COST)) return;
-      setCharges([...charges, { id: `redraw-${charges.length}`, label: "Redraw", amount: REDRAW_COST, kind: "fee" }]);
+      if (!payRedraw()) return;
     } else {
       if (!player.canAfford(chipSize)) return;
       setCharges([{ id: "stake", label: "Stake", amount: chipSize, kind: "stake" }]);
@@ -51,8 +62,7 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
   // Holds the year fixed and only rerolls the land — a separate action from redrawing the year
   // itself, and the same flat fee either way.
   const onRedrawLocation = () => {
-    if (!player.spend(REDRAW_COST)) return;
-    setCharges([...charges, { id: `redraw-${charges.length}`, label: "Redraw", amount: REDRAW_COST, kind: "fee" }]);
+    if (!payRedraw()) return;
     round.redrawLocation();
   };
 
@@ -78,6 +88,10 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
       net: round.reveal.net, skill: round.reveal.skill,
       totalStake: 0
     });
+    const historyKey = snapshot ? historyStorageKey(snapshot) : null;
+    if (historyKey && round.sessionKey && round.draw) {
+      recordRound(historyKey, toHistoryEntry({ sessionKey: round.sessionKey, reveal: round.reveal, draw: round.draw, charges, settledAt: Date.now() }));
+    }
     slip.reset();
   }, [round.reveal]);
 

@@ -21,6 +21,8 @@ export type StoredRound = {
   bets: Record<string, Bet>;
   charges: RoundCharge[];
   chipSize: number;
+  /** The era configuration the contract fixed for the round; absent on rounds saved before it was tracked. */
+  configurationIndex?: number | null;
   reveal: RevealResult | null;
 };
 

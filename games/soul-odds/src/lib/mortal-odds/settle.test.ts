@@ -98,4 +98,27 @@ describe("resolveBets", () => {
     expect(net).toBe(0);
     expect(skill).toBe(0);
   });
+
+  it("wins a sins bet only on the exact set of sins the chain recorded", () => {
+    const sin = (id: string) => ({ id, label: id, phrase: id, from: 1900, to: null });
+    const life: Life = { ...LIFE, sin: sin("violence"), sins: [sin("violence"), sin("greed")] };
+    const prices: MarketPrices = {
+      sins: {
+        violence: { p: 0.1, odds: 9, tag: "Unlikely" },
+        "violence+greed": { p: 0.02, odds: 45, tag: "Long shot" },
+      },
+    };
+    const settle = (optionId: string) =>
+      resolveBets({
+        life,
+        bets: { sins: { marketId: "sins", kind: "choice", optionId, stake: 10 } },
+        prices,
+        priceDeathYear,
+        trueProbabilities: { sins: { violence: 0.1, "violence+greed": 0.02 } },
+        truthSamples: [],
+      }).results[0];
+
+    expect(settle("violence+greed")?.won).toBe(true);
+    expect(settle("violence")?.won).toBe(false);
+  });
 });
