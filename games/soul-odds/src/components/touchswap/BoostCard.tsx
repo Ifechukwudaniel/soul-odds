@@ -43,7 +43,7 @@ export const BoostCard: React.FC<BoostCardProps> = ({ title, icon, desc, initial
       const { cost, level, maximumLevel, boostId } = currentBoost;
       const totalCost = cost!;
 
-      if (boostId === 6) {
+      if (boostId === 3) {
         updateBalance(balance - totalCost);
         closeModal();
         return;

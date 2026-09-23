@@ -12,6 +12,8 @@ export const ChoiceMarket = (props: {
   prices: Record<string, Price>;
   selectedOptionId: string | undefined;
   onSelect: (optionId: string) => void;
+  /** Oracle's Whisper: reveals every option's pre-round likelihood tag instead of only the selected one's odds. */
+  showHints?: boolean;
 }) => {
   const Icon = getMarketIcon(props.market.id);
   const selectedPrice = props.selectedOptionId ? props.prices[props.selectedOptionId] : undefined;
@@ -64,6 +66,7 @@ export const ChoiceMarket = (props: {
       <div role="radiogroup" aria-label={props.market.title} className="grid w-full max-w-xl grid-cols-2 gap-3">
         {options.map((option, index) => {
           const isSelected = props.selectedOptionId === option.id;
+          const tag = props.showHints ? props.prices[option.id]?.tag : undefined;
           return (
             <button
               key={option.id}
@@ -92,6 +95,7 @@ export const ChoiceMarket = (props: {
               }`}
             >
               {option.label}
+              {tag && <span className="mt-1 block text-xs opacity-70">{tag}</span>}
             </button>
           );
         })}
