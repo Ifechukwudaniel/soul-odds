@@ -66,7 +66,7 @@ export function sampleLifeBookie(options: { year: number; rng: Rng; curves: Book
     deathYear,
     literate: age >= 10 && rng() < Math.min(0.99, interpolate({ points: curves.literacy, x: year })),
     city: rng() < Math.min(0.95, interpolate({ points: curves.urban, x: year })),
-    sin: pickSin({ year, deathYear, region: null, rng, sins })?.id ?? null,
+    sin: pickSin({ year, age, deathYear, region: null, rng, sins })?.id ?? null,
   };
 }
 
@@ -156,7 +156,7 @@ export function sampleLife(options: {
   }
 
   const deathYear = year + age;
-  const sin = pickSin({ year, deathYear, region, rng, sins: config.sins });
+  const sin = pickSin({ year, age, deathYear, region, rng, sins: config.sins });
 
   return {
     year,

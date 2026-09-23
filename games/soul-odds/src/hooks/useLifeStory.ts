@@ -21,6 +21,8 @@ async function fetchLifeStory(options: { life: Life; placeName: string }): Promi
     age: String(life.age),
     deathYear: String(life.deathYear),
   });
+  const cause = life.shock?.label ?? life.cause;
+  if (cause) params.set("cause", cause);
   const sins = sinsOf(life);
   if (sins.length > 0) {
     params.set("sinPhrase", sins.map((sin) => sin.phrase).join(", and "));

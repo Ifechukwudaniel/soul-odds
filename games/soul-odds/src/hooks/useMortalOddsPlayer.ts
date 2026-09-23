@@ -2,15 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { accumulateSkill } from "@/lib/mortal-odds/skill";
-import { addPoints, consumeFreeRedraw, getUser } from "@/services/data/user";
+import { addPoints, addWinnings, consumeFreeRedraw, getUser } from "@/services/data/user";
 import { useAppStore } from "@/services/store/store";
 
-export type MortalOddsPlayerStats = { bankroll: number; rounds: number; bestRound: number; streak: number; skill: number; totalWinnings: number };
+export type MortalOddsPlayerStats = { bankroll: number; rounds: number; bestRound: number; streak: number; skill: number };
 
 type RoundStats = Omit<MortalOddsPlayerStats, "bankroll" | "skill">;
 
 const STORAGE_KEY = "mortal-odds-player:v1";
-const DEFAULT_ROUND_STATS: RoundStats = { rounds: 0, bestRound: 0, streak: 0, totalWinnings: 0 };
+const DEFAULT_ROUND_STATS: RoundStats = { rounds: 0, bestRound: 0, streak: 0 };
 
 function readRoundStats(): RoundStats {
   try {
@@ -87,23 +87,24 @@ export function useMortalOddsPlayer(): {
 
   /**
    * The round's stake/payout already moved on-chain, so this only accumulates the stats that have
-   * no chain equivalent: skill and streaks. The delta is still computed client-side (not yet
-   * validated server-side), but it's now also persisted to the user's DB `points` column — the
-   * same column the leaderboard already sorts by — so skill survives a refresh and shows up
-   * there, instead of living only in this browser's localStorage.
+   * no chain equivalent: skill and streaks. The deltas are still computed client-side (not yet
+   * validated server-side), but skill is also persisted to the user's DB `points` column and a
+   * winning round's net to their lifetime winnings — the columns the leaderboard reads — so both
+   * survive a refresh and show up there, instead of living only in this browser's localStorage.
+   * A losing round adds nothing to winnings rather than subtracting.
    */
   const commitRound = (options: { net: number; skill: number }) => {
     updateUser({ skill: accumulateSkill(skill, options.skill) });
     if (address && options.skill !== 0) {
       addPoints(address, options.skill).catch((error) => console.error("Could not persist skill points:", error));
     }
+    if (address && options.net > 0) {
+      addWinnings(address, options.net).catch((error) => console.error("Could not persist winnings:", error));
+    }
     persistRoundStats({
       rounds: roundStats.rounds + 1,
       bestRound: Math.max(roundStats.bestRound, options.net),
       streak: options.net > 0 ? roundStats.streak + 1 : options.net < 0 ? 0 : roundStats.streak,
-      // A losing round adds nothing here rather than subtracting — this is a lifetime "how much have
-      // you won" tally for the leaderboard, not a profit/loss running total (see LeaderboardTable.tsx).
-      totalWinnings: roundStats.totalWinnings + Math.max(0, options.net),
     });
   };
 

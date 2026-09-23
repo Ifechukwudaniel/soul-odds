@@ -26,6 +26,7 @@ import { buildLifespanHistogram, medianAge } from "@/lib/mortal-odds/lifespan";
 import type { LifespanHistogram } from "@/lib/mortal-odds/lifespan";
 import type { BookieLife, FullModelConfig } from "@/lib/mortal-odds/model";
 import { sampleLife, simulateFull } from "@/lib/mortal-odds/model";
+import { pickCauseOfDeath } from "@/lib/mortal-odds/cause-of-death";
 import { deathYearP, priceFromP } from "@/lib/mortal-odds/pricing";
 import { createRng, pickWeighted, randomSeed } from "@/lib/mortal-odds/rng";
 import { deriveRoundData } from "@/lib/mortal-odds/round-data";
@@ -54,7 +55,7 @@ import { tellStory } from "@/lib/mortal-odds/story";
 import { pickTimeStory } from "@/lib/mortal-odds/time-story";
 import { useCasinoHost } from "@/hooks/useCasinoHost";
 import { playSound } from "@/utils/playSound";
-import type { Bet, BetResult, Draw, EraFilter, Life, MarketPrices, PlaceContext, Price, RegionId, Sex } from "@/types";
+import type { Bet, BetResult, Draw, EraFilter, Life, MarketPrices, Place, PlaceContext, Price, RegionId, Sex } from "@/types";
 
 const CURRENT_YEAR = new Date().getFullYear();
 const RECENT_EPITAPHS_KEPT = 8;
@@ -241,11 +242,11 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   const [configurationIndex, setConfigurationIndex] = useState<number | null>(null);
   const openingSession = useRef(false);
   const decimals = snapshot?.token.decimals ?? 18;
-  const latestSinsDraw = useRef<{ year: number; placeName: string } | null>(null);
+  const latestSinsDraw = useRef<{ year: number; placeName: string; place: Place } | null>(null);
   const sinNarrativesLoader = useRef<SinNarrativesLoader | null>(null);
   if (!sinNarrativesLoader.current) {
     sinNarrativesLoader.current = new SinNarrativesLoader({
-      fetchNarratives: () => fetchSinNarratives({ year: latestSinsDraw.current!.year, location: latestSinsDraw.current!.placeName }),
+      fetchNarratives: () => fetchSinNarratives({ year: latestSinsDraw.current!.year, location: latestSinsDraw.current!.placeName, place: latestSinsDraw.current!.place }),
     });
   }
   const [sinNarrativesState, setSinNarrativesState] = useState<{ key: string; state: SinNarrativesState } | null>(null);
@@ -261,7 +262,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   useEffect(() => {
     if (!state.draw || !AWAITING_SINS_PHASES.has(state.phase)) return;
     const { year, place } = state.draw;
-    latestSinsDraw.current = { year, placeName: place.name };
+    latestSinsDraw.current = { year, placeName: place.name, place };
     const key = sinNarrativesKeyFor(year, place.name);
     const result = sinNarrativesLoader.current!.request(key, genericSinNarratives(), (narratives) =>
       setSinNarrativesState({ key, state: { ready: true, narratives } }),
@@ -461,6 +462,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
       const flavor = sampleLife({ year: draw.year, region: draw.region, sex, withHistory: true, rng, config: fullModelConfig });
       const sins = sinNarratives ? categories.map((category) => sinFromNarrative(category, sinNarratives[category], draw.year)) : [];
       const life: Life = { ...flavor, sex, age: result.age, deathYear, sin: sins[0] ?? null, sins };
+      life.cause = pickCauseOfDeath({ life, currentYear: CURRENT_YEAR, rng });
 
       // Crime-category odds are conditioned on the bucket the player's own prediction paired
       // them with, not the soul's actual result bucket — see `previewSinsPrices`.

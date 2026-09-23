@@ -114,9 +114,7 @@ export const SoulRecord = (props: {
       {
         icon: GiHeartBeats,
         label: "Cause",
-        value: life.shock
-          ? life.shock.label
-          : "Ordinary life and death",
+        value: props.alive ? "Still living" : life.shock ? life.shock.label : (life.cause ?? "Ordinary life and death"),
       },
     ],
   ];

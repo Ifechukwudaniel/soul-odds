@@ -48,6 +48,8 @@ export function tellStory(options: {
     parts.push(`${she} is alive today, with a projected lifespan of ${life.age} years.`);
   } else if (life.shock) {
     parts.push(`${she} dies at ${life.age} in ${fmtYear(life.deathYear)}, a victim of ${life.shock.phrase}.`);
+  } else if (life.cause) {
+    parts.push(`${she} dies at ${life.age} in ${fmtYear(life.deathYear)}; cause of death: ${lowercaseFirst(life.cause)}.`);
   } else if (life.age === 0) {
     parts.push(`${she} dies before turning one.`);
   } else {
