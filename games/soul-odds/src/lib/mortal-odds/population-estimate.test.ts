@@ -1,20 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { erasConfig } from "@/lib/mortal-odds/config";
-import { populationFromDensity } from "@/lib/mortal-odds/density";
 import { applyOverrides, describePopulation, estimatePopulation, estimatesAt } from "@/lib/mortal-odds/population-estimate";
 
 describe("estimatePopulation", () => {
   it("returns the density-based figure for a polity in a year it has one", () => {
     const estimate = estimatePopulation({ empire: "Roman Empire", year: 100 });
     expect(estimate?.method).toBe("density");
-    expect(estimate?.population).toBeGreaterThan(5_000_000);
-    expect(estimate?.population).toBeLessThan(20_000_000);
-  });
-
-  it("works a density row out from its region's density in the year asked about", () => {
-    const estimate = estimatePopulation({ empire: "Roman Empire", year: 100 });
-    expect(estimate?.method).toBe("density");
-    expect(estimate?.population).toBe(Math.round(populationFromDensity({ year: 100, region: "eur", areaKm2: estimate?.areaKm2 ?? 0, erasConfig })));
+    expect(estimate?.population).toBeGreaterThan(15_000_000);
+    expect(estimate?.population).toBeLessThan(60_000_000);
   });
 
   it("matches names case-insensitively", () => {

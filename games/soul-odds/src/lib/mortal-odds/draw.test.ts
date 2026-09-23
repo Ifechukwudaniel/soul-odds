@@ -65,7 +65,7 @@ describe("placeContext", () => {
     const era = eraFor({ year: draw.year, erasConfig });
     const context = placeContext({ draw, era, worldPopCurve, currentYear: CURRENT_YEAR, rng: mulberry32(1234) });
     expect(context.where).toBe("Iberia · Europe · 1000 CE");
-    expect(context.local).toMatch(/^About .+ people lived there then\.$/);
+    expect(context.local).toMatch(/^Estimated population: .+\.$/);
     expect(context.when).toMatch(/^1,024 years ago, Middle Ages\. About .+ people were alive, \d+\.\d{3}% of all humans ever\.$/);
   });
 
@@ -101,14 +101,14 @@ describe("placeContext", () => {
       expect(placeContext({ draw, era, worldPopCurve, currentYear: CURRENT_YEAR, rng: mulberry32(1) }).where).toBe("Roman Empire · Europe · 100 CE");
     });
 
-    it("says how many people lived there, rounded", () => {
-      expect(placeContext({ draw, era, worldPopCurve, currentYear: CURRENT_YEAR, rng: mulberry32(1) }).local).toBe("About 4 million people lived there then.");
+    it("gives the estimated population, rounded", () => {
+      expect(placeContext({ draw, era, worldPopCurve, currentYear: CURRENT_YEAR, rng: mulberry32(1) }).local).toBe("Estimated population: 4 million.");
     });
 
     it("falls back to the years it is attested for when there is no estimate", () => {
       const { local } = placeContext({ draw: { ...draw, place: { ...draw.place, population: undefined } }, era, worldPopCurve, currentYear: CURRENT_YEAR, rng: mulberry32(1) });
       expect(local).toContain("476");
-      expect(local).not.toContain("people lived");
+      expect(local).not.toContain("Estimated population");
     });
   });
 
