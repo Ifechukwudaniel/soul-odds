@@ -18,7 +18,7 @@ const OUT_FILE = path.join(process.cwd(), "sin-catalog", "sin-catalog.next.json"
 const CONCURRENCY = 30;
 const SAVE_EVERY = 25;
 
-type Catalog = Record<string, { variants: SinVariant[]; useCount: number }>;
+type Catalog = Record<string, { variants: SinVariant[] }>;
 
 async function main() {
   const jobs = await buildWindowJobs();
@@ -37,7 +37,7 @@ async function main() {
     for (let job = queue.shift(); job; job = queue.shift()) {
       try {
         const narratives = await generateSinNarratives({ year: job.year, location: job.name, place: job.place });
-        const entry = (catalog[job.name] ??= { variants: [], useCount: 0 });
+        const entry = (catalog[job.name] ??= { variants: [] });
         entry.variants.push(withPeriod(narratives, job.year));
       } catch (error) {
         failed += 1;

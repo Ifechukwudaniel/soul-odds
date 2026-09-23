@@ -1,0 +1,1 @@
+ALTER TABLE "sin_variant" DROP COLUMN "use_count";

@@ -38,8 +38,8 @@ export async function GET(request: NextRequest) {
       fromYear: cliopatriaPlace.fromYear,
       toYear: cliopatriaPlace.toYear,
       continent: continentNear({ lat: cliopatriaPlace.lat, lon: cliopatriaPlace.lon, placesConfig }),
-      // The high end of the estimate range: the middle figure reads too small for a whole polity.
-      population: estimatePopulation({ empire: cliopatriaPlace.name, year })?.high,
+      // Worked out from the region's density in this exact year times the polity's area.
+      population: estimatePopulation({ empire: cliopatriaPlace.name, year })?.population,
       year,
       source: "cliopatria",
     });

@@ -12,7 +12,7 @@ const BATCH_SIZE = 500;
 // Where the exported catalog lives, next to `cliopatria.geojson/` at the project root.
 const DEFAULT_CATALOG_FILE = 'sin-catalog/sin-catalog.json';
 
-type SeedEntry = { variants: SinVariant[]; useCount: number };
+type SeedEntry = { variants: SinVariant[] };
 
 /**
  * `dev` fills in places the table has no rows for yet and skips the rest. `prod` also merges into

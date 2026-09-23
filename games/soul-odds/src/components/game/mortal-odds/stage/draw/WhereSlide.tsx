@@ -12,7 +12,7 @@ import { serifFont } from "@/styles/serif-font";
 const MAP_SOURCES =
   "Sources: Klein Goldewijk et al. (S06); United Nations DESA (RH05); Reba (RH32); GeoNames geographical database (RH33); McEvedy (RH11); Bae (RH16); Model-supplied gap-fill (Claude Fable 5 and Claude Opus 5 (RH109)";
 
-export const WhereSlide =(props: { year: number; place: Place; local: string; onRedraw: () => void; drawCost: number; canAffordDraw: boolean }) => (
+export const WhereSlide =(props: { year: number; place: Place; where: string; local: string; onRedraw: () => void; drawCost: number; canAffordDraw: boolean }) => (
   <div className="flex h-full flex-col items-center gap-3 overflow-hidden text-center">
     <div className="shrink-0">
       <div className="flex items-center justify-center gap-3">
@@ -46,7 +46,7 @@ export const WhereSlide =(props: { year: number; place: Place; local: string; on
       className="shrink-0"
     >
       <div className="flex items-center justify-center gap-2">
-        <p className="font-bold text-white text-xl">{props.place.name}</p>
+        <p className="font-bold text-white text-xl">{props.where}</p>
         <button
           type="button"
           aria-label={props.drawCost > 0 ? `Redraw the land for ${props.drawCost} deben` : "Redraw the land for free"}

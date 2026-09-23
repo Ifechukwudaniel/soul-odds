@@ -1,5 +1,5 @@
 import type { EraConfig, PlaceConfig } from "@/lib/mortal-odds/config";
-import { HUMANS_EVER, MODES } from "@/lib/mortal-odds/config";
+import { HUMANS_EVER, MODES, REGION_IDS } from "@/lib/mortal-odds/config";
 import { interpolate } from "@/lib/mortal-odds/curves";
 import { fmtNumber, fmtPeople, fmtPeopleRounded, fmtYear, periodName } from "@/lib/mortal-odds/format";
 import { eraFor } from "@/lib/mortal-odds/geo";
@@ -67,13 +67,24 @@ export function pickPlace(options: { region: RegionId; rng: Rng; placesConfig: R
   return { name: `${picked.name}, ${picked.continent}`, share: picked.weight / total, lat: picked.lat, lon: picked.lon };
 }
 
-/** The continent of the configured place nearest a point, for a polity that comes without one. */
-export function continentNear(options: { lat: number; lon: number; placesConfig: Record<RegionId, PlaceConfig[]> }): string {
+/** The configured place nearest a point, with the region it belongs to. */
+function nearestPlace(options: { lat: number; lon: number; placesConfig: Record<RegionId, PlaceConfig[]> }): { region: RegionId; place: PlaceConfig } {
   const { lat, lon, placesConfig } = options;
   const rad = Math.PI / 180;
   // Haversine's `a` grows with distance, which is all that's needed to find the nearest.
   const closeness = (p: PlaceConfig) => Math.sin(((p.lat - lat) * rad) / 2) ** 2 + Math.cos(lat * rad) * Math.cos(p.lat * rad) * Math.sin(((p.lon - lon) * rad) / 2) ** 2;
-  return Object.values(placesConfig).flat().reduce((nearest, p) => (closeness(p) < closeness(nearest) ? p : nearest)).continent;
+  const candidates = REGION_IDS.flatMap((region) => placesConfig[region].map((place) => ({ region, place })));
+  return candidates.reduce((nearest, candidate) => (closeness(candidate.place) < closeness(nearest.place) ? candidate : nearest));
+}
+
+/** The continent of the configured place nearest a point, for a polity that comes without one. */
+export function continentNear(options: { lat: number; lon: number; placesConfig: Record<RegionId, PlaceConfig[]> }): string {
+  return nearestPlace(options).place.continent;
+}
+
+/** The region of the configured place nearest a point, for a polity that comes without one. */
+export function regionNear(options: { lat: number; lon: number; placesConfig: Record<RegionId, PlaceConfig[]> }): RegionId {
+  return nearestPlace(options).region;
 }
 
 /** A region's share of births in an already-resolved era, relative to all regions that era. */

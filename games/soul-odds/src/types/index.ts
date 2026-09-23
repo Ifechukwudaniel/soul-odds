@@ -32,8 +32,10 @@ export type EraFilter = "all" | "ce" | "modern";
  * synthetic `places.json` model. `fromYear`/`toYear` (the date range a real polity is attested
  * for) only apply to a real historical place from the Cliopatria dataset. A place carries
  * exactly one of the two pairs, never both — see `lib/mortal-odds/place.ts`'s `toPlace`.
+ * `population` is the estimated number of people the polity had in the drawn year, when an estimate exists.
+ * `continent` is filled in for a polity, whose name doesn't carry one the way a synthetic place's ("City, Continent") does.
  */
-export type Place = { name: string; lat: number; lon: number; share?: number; fromYear?: number; toYear?: number };
+export type Place = { name: string; lat: number; lon: number; share?: number; fromYear?: number; toYear?: number; population?: number; continent?: string };
 export type Draw = { year: number; region: RegionId; place: Place };
 export type PlaceContext = { where: string; local: string; when: string; story: string };
 

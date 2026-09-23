@@ -48,6 +48,7 @@ export const DrawSequence = (props: {
           <WhereSlide
             year={props.draw.year}
             place={props.draw.place}
+            where={props.context.where}
             local={props.context.local}
             onRedraw={props.onRedrawLocation}
             drawCost={props.drawCost}

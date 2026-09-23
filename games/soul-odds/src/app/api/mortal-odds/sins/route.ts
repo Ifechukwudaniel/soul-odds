@@ -4,23 +4,21 @@ import { sinsConfig } from "@/lib/mortal-odds/config";
 import { generateSinNarratives } from "@/lib/mortal-odds/openrouter";
 import type { SinPlaceContext } from "@/lib/mortal-odds/openrouter";
 import { periodOf } from "@/lib/mortal-odds/sin-variants";
-import { findSinVariantsCovering, incrementSinVariantUseCount, insertSinVariant } from "@/services/db/sin-catalog";
+import { findSinVariantsCovering, insertSinVariant } from "@/services/db/sin-catalog";
 import type { SinCatalogRow } from "@/services/db/sin-catalog";
 
-/** Every this-many-th time a variant is served from the catalog, ask OpenRouter to grow its period's pool by one. */
-const GROWTH_INTERVAL = 3;
+/** On average one in this many times a variant is served from the catalog, ask OpenRouter to grow its period's pool by one. */
+const GROWTH_ONE_IN = 3;
 
 /**
- * Records this use and, every `GROWTH_INTERVAL`th time, asks OpenRouter for one more variant for
- * the same period — fire-and-forget from the caller's point of view, so a place already in the
- * catalog never waits on this. Runs after the response has already gone out; safe here because
- * this app runs as a persistent `next start` process, not a serverless function that gets frozen
- * post-response.
+ * Now and then asks OpenRouter for one more variant for the same period — fire-and-forget from
+ * the caller's point of view, so a place already in the catalog never waits on this. Runs after
+ * the response has already gone out; safe here because this app runs as a persistent
+ * `next start` process, not a serverless function that gets frozen post-response.
  */
-async function recordUseAndMaybeGrow(options: { served: SinCatalogRow; year: number; place?: SinPlaceContext }): Promise<void> {
+async function maybeGrow(options: { served: SinCatalogRow; year: number; place?: SinPlaceContext }): Promise<void> {
   const { served, year, place } = options;
-  const useCount = await incrementSinVariantUseCount(served.id);
-  if (useCount === undefined || useCount % GROWTH_INTERVAL !== 0) return;
+  if (Math.random() * GROWTH_ONE_IN >= 1) return;
 
   try {
     const narratives = await generateSinNarratives({ year, location: served.location, place });
@@ -72,13 +70,13 @@ export async function GET(request: NextRequest) {
   if (covering.length > 0) {
     const served = pickRandom(covering);
     const response = NextResponse.json(served.narratives);
-    void recordUseAndMaybeGrow({ served, year, place });
+    void maybeGrow({ served, year, place });
     return response;
   }
 
   try {
     const narratives = await generateSinNarratives({ year, location, place });
-    void insertSinVariant({ location, ...periodOf(year), narratives, useCount: 1 });
+    void insertSinVariant({ location, ...periodOf(year), narratives });
     return NextResponse.json(narratives);
   } catch (error) {
     console.error(error);

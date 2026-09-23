@@ -3,14 +3,15 @@
 import { useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { MortalOddsStage } from "@/components/game/mortal-odds/MortalOddsStage";
-import { useCasinoHost } from "@/hooks/useCasinoHost";
 import { useMortalOddsBets } from "@/hooks/useMortalOddsBets";
 import { useMortalOddsDraw } from "@/hooks/useMortalOddsDraw";
 import { useRoundResume } from "@/hooks/useRoundResume";
 import type { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
-import { historyStorageKey, recordRound, toHistoryEntry } from "@/lib/mortal-odds/bet-history";
+import { toHistoryEntry } from "@/lib/mortal-odds/bet-history";
 import { CHIP_SIZES, REDRAW_COST } from "@/lib/mortal-odds/config";
 import { ageBucketIndex } from "@/lib/mortal-odds/soul-odds-contract";
+import { recordBetHistory } from "@/services/data/bet-history";
+import { useAppStore } from "@/services/store/store";
 import { notification } from "@/utils/notifications";
 import type { MarketPrices, RoundCharge } from "@/types";
 
@@ -24,7 +25,7 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
   const round = useMortalOddsDraw({ reducedMotion });
   const slip = useMortalOddsBets();
   const { player } = props;
-  const { snapshot } = useCasinoHost();
+  const address = useAppStore((state) => state.user.address);
   const { restoredReveal } = useRoundResume({ round, slip, charges, setCharges, chipSize, setChipSize });
 
   // Chip size is the round's whole stake: locked the moment a soul is summoned, freed up again once it's revealed.
@@ -88,9 +89,9 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
       net: round.reveal.net, skill: round.reveal.skill,
       totalStake: 0
     });
-    const historyKey = snapshot ? historyStorageKey(snapshot) : null;
-    if (historyKey && round.sessionKey && round.draw) {
-      recordRound(historyKey, toHistoryEntry({ sessionKey: round.sessionKey, reveal: round.reveal, draw: round.draw, charges, settledAt: Date.now() }));
+    if (address && round.sessionKey && round.draw) {
+      const entry = toHistoryEntry({ sessionKey: round.sessionKey, reveal: round.reveal, draw: round.draw, charges, settledAt: Date.now() });
+      recordBetHistory(address, [entry]).catch((error) => console.error("Could not save the round to history:", error));
     }
     slip.reset();
   }, [round.reveal]);

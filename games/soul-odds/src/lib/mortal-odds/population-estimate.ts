@@ -1,8 +1,10 @@
 import overridesFile from "../../../cliopatria.geojson/cliopatria-population-overrides.json";
 import populationFile from "../../../cliopatria.geojson/cliopatria-population.json";
-import { worldPopCurve } from "@/lib/mortal-odds/config";
+import { erasConfig, REGION_IDS, worldPopCurve } from "@/lib/mortal-odds/config";
 import { interpolate } from "@/lib/mortal-odds/curves";
+import { populationFromDensity } from "@/lib/mortal-odds/density";
 import { fmtPeople, fmtYear } from "@/lib/mortal-odds/format";
+import type { RegionId } from "@/types";
 
 // The estimates are built by `scripts/build-cliopatria-population.ts`: one row per Cliopatria polity
 // over the years it held one territory. `method` says where the number came from: "seshat" (a
@@ -10,14 +12,15 @@ import { fmtPeople, fmtYear } from "@/lib/mortal-odds/format";
 // at a nearby date, scaled to this row's territory), "imputed" (typical density of nearby polities
 // in time and place, capped and kept under the world population) or "llm" (a model's estimate for
 // a fixed window of years, checked against the territory's area and the world population; built by
-// `scripts/regenerate-cliopatria-population.ts`). A "manual" row is one corrected by hand in
+// `scripts/regenerate-cliopatria-population.ts`) or "density" (its region's density that year times its area, from `lib/mortal-odds/density.ts`; written by
+// `scripts/apply-density-to-cliopatria-population.ts`). A "manual" row is one corrected by hand in
 // `cliopatria.geojson/cliopatria-population-overrides.json`, a list of
 // `{ "name": "Principality of Peremyshl", "fromYear": 1031, "toYear": 1146, "population": 150000 }`
 // entries applied on top of whatever was generated, so regenerating never loses a correction.
 // `low` and `high` are optional and default to `population`; `fromYear`/`toYear` are optional
 // and default to every row of that name; an entry corrects each row of that name it overlaps.
 
-export type PopulationMethod = "seshat" | "seshat_scaled" | "imputed" | "llm" | "manual";
+export type PopulationMethod = "seshat" | "seshat_scaled" | "imputed" | "llm" | "density" | "manual";
 
 export type PopulationRow = {
   name: string;
@@ -30,6 +33,8 @@ export type PopulationRow = {
   low: number;
   high: number;
   method: PopulationMethod;
+  /** The region whose density a "density" row is worked out from; absent on rows that only carry a figure. */
+  region?: RegionId;
 };
 
 export type PopulationEstimate = {
@@ -51,11 +56,13 @@ const LONG_ROW_YEARS = 50;
 const MAX_TIME_SCALE = 4;
 
 function isMethod(value: unknown): value is PopulationMethod {
-  return value === "seshat" || value === "seshat_scaled" || value === "imputed" || value === "llm" || value === "manual";
+  return value === "seshat" || value === "seshat_scaled" || value === "imputed" || value === "llm" || value === "density" || value === "manual";
 }
 
+const isRegion = (value: unknown): value is RegionId => REGION_IDS.some((region) => region === value);
+
 function toRow(values: (string | number)[]): PopulationRow[] {
-  const [name, fromYear, toYear, wikidata, seshatId, areaKm2, population, low, high, method] = values;
+  const [name, fromYear, toYear, wikidata, seshatId, areaKm2, population, low, high, method, region] = values;
   if (
     typeof name === "string" &&
     typeof fromYear === "number" &&
@@ -68,7 +75,7 @@ function toRow(values: (string | number)[]): PopulationRow[] {
     typeof high === "number" &&
     isMethod(method)
   ) {
-    return [{ name, fromYear, toYear, wikidata, seshatId, areaKm2, population, low, high, method }];
+    return [{ name, fromYear, toYear, wikidata, seshatId, areaKm2, population, low, high, method, ...(isRegion(region) && { region }) }];
   }
   return [];
 }
@@ -99,14 +106,25 @@ function scaleForYear(row: PopulationRow, year: number): number {
   return Math.min(MAX_TIME_SCALE, Math.max(1 / MAX_TIME_SCALE, atYear / atRowMiddle));
 }
 
-function toEstimate(row: PopulationRow, year: number): PopulationEstimate {
+/**
+ * The row's figures for one year. A density row is worked out from its region's density in that exact
+ * year times its area, keeping the spread its low and high had around the stored figure; any other row
+ * (researched, hand-corrected, or without a region) scales its stored figure with world population.
+ */
+function figuresFor(row: PopulationRow, year: number): Pick<PopulationEstimate, "population" | "low" | "high"> {
+  if (row.method === "density" && row.region && row.population > 0) {
+    const population = populationFromDensity({ year, region: row.region, areaKm2: row.areaKm2, erasConfig });
+    return { population: Math.round(population), low: Math.round((population * row.low) / row.population), high: Math.round((population * row.high) / row.population) };
+  }
   const scale = scaleForYear(row, year);
+  return { population: Math.round(row.population * scale), low: Math.round(row.low * scale), high: Math.round(row.high * scale) };
+}
+
+function toEstimate(row: PopulationRow, year: number): PopulationEstimate {
   return {
     empire: row.name,
     year,
-    population: Math.round(row.population * scale),
-    low: Math.round(row.low * scale),
-    high: Math.round(row.high * scale),
+    ...figuresFor(row, year),
     method: row.method,
     areaKm2: row.areaKm2,
     fromYear: row.fromYear,

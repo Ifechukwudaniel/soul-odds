@@ -33,12 +33,12 @@ const isDuplicate = (row: CalibratedRow) => row.name.startsWith("(");
 
 /**
  * Scales estimated rows down wherever the polities alive in their middle year would outnumber
- * everyone alive then. Researched (Seshat) rows are never touched.
+ * everyone alive then. Researched (Seshat) and hand-corrected rows are never touched.
  */
 export function calibrateToWorld<T extends CalibratedRow>(rows: T[], worldAt: (year: number) => number): T[] {
   const counted = rows.filter((row) => !isDuplicate(row));
   return rows.map((row) => {
-    if (row.method !== "llm") return row;
+    if (row.method !== "llm" && row.method !== "density") return row;
     const midYear = (row.fromYear + row.toYear) / 2;
     const total = counted.filter((other) => other.fromYear <= midYear && midYear <= other.toYear).reduce((sum, other) => sum + other.population, 0);
     const world = worldAt(midYear);

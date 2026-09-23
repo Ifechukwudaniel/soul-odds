@@ -11,9 +11,9 @@ import { RevealHeader } from "@/components/game/mortal-odds/stage/reveal/RevealH
 import { RevealStamp } from "@/components/game/mortal-odds/stage/reveal/RevealStamp";
 import { SoulRecord } from "@/components/game/mortal-odds/stage/reveal/SoulRecord";
 import { SoulStory } from "@/components/game/mortal-odds/stage/reveal/SoulStory";
-import { useCasinoHost } from "@/hooks/useCasinoHost";
 import { useLifeStory } from "@/hooks/useLifeStory";
-import { historyStorageKey, patchRound } from "@/lib/mortal-odds/bet-history";
+import { patchBetHistoryStory } from "@/services/data/bet-history";
+import { useAppStore } from "@/services/store/store";
 import { playClickSound } from "@/utils/playClickSound";
 import type { RevealResult } from "@/hooks/useMortalOddsDraw";
 import type { Place, RoundCharge } from "@/types";
@@ -26,14 +26,15 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
   const [dismissed, setDismissed] = useState(false);
   const lifeStory = useLifeStory({ sessionKey: props.sessionKey, life, placeName: props.place.name, fallbackStory: story });
 
-  const { snapshot } = useCasinoHost();
-  const historyKey = snapshot ? historyStorageKey(snapshot) : null;
+  const address = useAppStore((state) => state.user.address);
 
   // The round is recorded in the history the moment it settles, with the local story; swap in the AI-written one (and its name) once it lands.
   useEffect(() => {
-    if (!lifeStory.ready || !historyKey || !props.sessionKey) return;
-    patchRound(historyKey, props.sessionKey, { story: lifeStory.payload.story, name: lifeStory.payload.name });
-  }, [lifeStory.ready, historyKey, props.sessionKey]);
+    if (!lifeStory.ready || !address || !props.sessionKey) return;
+    patchBetHistoryStory(address, { id: props.sessionKey, story: lifeStory.payload.story, name: lifeStory.payload.name }).catch((error) =>
+      console.error("Could not save the life story to history:", error),
+    );
+  }, [lifeStory.ready, address, props.sessionKey]);
 
   useEffect(() => {
     const timer = setTimeout(() => setStampReady(true), STAMP_DELAY_MS);
