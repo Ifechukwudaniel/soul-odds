@@ -1,4 +1,4 @@
-const CACHE_PREFIX = 'mortal-odds-life-story:v2:';
+import { LIFE_STORY_CACHE_PREFIX } from '@/constants/storage';
 
 export type LifeStoryPayload = { story: string; name: string | null };
 
@@ -18,7 +18,7 @@ export function createLocalStorageLifeStoryCache(): LifeStoryCache {
   return {
     read(key) {
       try {
-        const raw = localStorage.getItem(CACHE_PREFIX + key);
+        const raw = localStorage.getItem(LIFE_STORY_CACHE_PREFIX + key);
         if (!raw) return null;
         const parsed: unknown = JSON.parse(raw);
         return isLifeStoryPayload(parsed) ? parsed : null;
@@ -28,7 +28,7 @@ export function createLocalStorageLifeStoryCache(): LifeStoryCache {
     },
     write(key, payload) {
       try {
-        localStorage.setItem(CACHE_PREFIX + key, JSON.stringify(payload));
+        localStorage.setItem(LIFE_STORY_CACHE_PREFIX + key, JSON.stringify(payload));
       } catch {
         /* ✦ storage unavailable: the AI story just won't survive a refresh */
       }

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { GameButton } from '@/components/game/GameButton';
-import { RefeshInterval } from '@/constants';
+import { RefeshInterval } from '@/constants/app';
 import { useIsGuest } from '@/hooks/useIsGuest';
 import { getUserRefers } from '@/services/data/refers';
 import { User } from '@/services/db/user';

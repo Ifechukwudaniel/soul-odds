@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { DEFAULT_AVATAR_ID } from '@/components/assets/characters/avatars';
+import { STORE_NAME } from '@/constants/storage';
 
 export type TScreens =
   | 'badges'
@@ -27,8 +28,6 @@ export type TUser = {
   avatarId: string;
   freeRedraws: number;
 };
-
-export const STORE_NAME = 'Soul_Odds_Store';
 
 export const hasState = () => {
   return typeof window === 'undefined' ? false : localStorage.getItem(STORE_NAME) !== null;

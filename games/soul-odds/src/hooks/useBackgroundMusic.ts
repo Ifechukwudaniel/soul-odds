@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { isSoundMuted, MUTED_STORAGE_KEY } from '@/utils/soundPreferences';
+import { MUTED_STORAGE_KEY, VOLUME_STORAGE_KEY } from '@/constants/storage';
+import { isSoundMuted } from '@/utils/soundPreferences';
 
 const BG_MUSIC_SRC = '/sound/bg.mp3';
-const VOLUME_STORAGE_KEY = 'game-bg-music-volume:v1';
 const DEFAULT_VOLUME = 0.5;
 
 let sharedAudio: HTMLAudioElement | null = null;

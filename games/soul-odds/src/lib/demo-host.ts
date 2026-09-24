@@ -7,28 +7,27 @@ import {
   predictionPayout,
   validatePrediction,
 } from '@chain/soul-odds-engine/soul';
-import { decodeAbiParameters, encodeAbiParameters, type Hex, parseUnits, toHex } from 'viem';
+import { decodeAbiParameters, encodeAbiParameters, type Hex, toHex } from 'viem';
+import {
+  DEMO_DECIMALS,
+  DEMO_GAME,
+  DEMO_MAX_SAVED_SESSIONS,
+  DEMO_OPEN_LATENCY_MS,
+  DEMO_SETTLE_LATENCY_MS,
+  DEMO_SMALLEST_CHIP,
+  DEMO_STARTING_BALANCE,
+} from '@/constants/demo-host';
+import { DEMO_HOST_STORAGE_KEY, DEMO_HOST_WALLET_STORAGE_KEY } from '@/constants/storage';
 import { settledGameStateAbi, soulOddsConfigurations } from '@/lib/mortal-odds/soul-odds-contract';
 
 type Session = HostSnapshotV1['sessions']['items'][number];
-
-const DECIMALS = 18;
-const STARTING_BALANCE = parseUnits('1000', DECIMALS);
-const SMALLEST_CHIP = parseUnits('1', DECIMALS);
-const OPEN_LATENCY_MS = 250;
-const SETTLE_LATENCY_MS = 800;
-const DEMO_GAME = '0x0000000000000000000000000000000000000002';
-
-const STORAGE_KEY = 'soul-odds-demo-host:v1';
-const WALLET_STORAGE_KEY = 'soul-odds-demo-host:wallet';
-const MAX_SAVED_SESSIONS = 20;
 
 const randomAddress = (): `0x${string}` => toHex(crypto.getRandomValues(new Uint8Array(20)));
 
 /** Every guest gets their own demo wallet, persisted per browser instead of a shared constant. */
 function loadOrCreateWallet(): `0x${string}` {
   try {
-    const saved = localStorage.getItem(WALLET_STORAGE_KEY);
+    const saved = localStorage.getItem(DEMO_HOST_WALLET_STORAGE_KEY);
     if (saved && /^0x[0-9a-f]{40}$/.test(saved)) return saved as `0x${string}`;
   } catch {
     // ✦ storage unavailable: fall through to a wallet that just won't persist across reloads
@@ -36,7 +35,7 @@ function loadOrCreateWallet(): `0x${string}` {
 
   const address = randomAddress();
   try {
-    localStorage.setItem(WALLET_STORAGE_KEY, address);
+    localStorage.setItem(DEMO_HOST_WALLET_STORAGE_KEY, address);
   } catch {
     // ✦ storage unavailable: the demo still plays, it just gets a new identity on refresh
   }
@@ -50,7 +49,7 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 
 function loadSaved(): SavedDemoHost | null {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(DEMO_HOST_STORAGE_KEY);
     if (!raw) return null;
     const parsed: unknown = JSON.parse(raw);
     if (!isRecord(parsed)) return null;
@@ -68,7 +67,7 @@ function loadSaved(): SavedDemoHost | null {
 
 function save(state: SavedDemoHost): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStorage.setItem(DEMO_HOST_STORAGE_KEY, JSON.stringify(state));
   } catch {
     /* ✦ storage unavailable: the demo still plays, it just resets on refresh */
   }
@@ -98,7 +97,7 @@ function buildSnapshot(
       },
     },
     wallet: { address: wallet, smartVaultAddress: wallet, status: 'ready' },
-    token: { symbol: 'chUSD', decimals: DECIMALS },
+    token: { symbol: 'chUSD', decimals: DEMO_DECIMALS },
     balances: { smartVaultBalance: balance.toString() },
     sessions: { items: sessions },
     ui: { locale: 'en', theme: 'dark' },
@@ -113,7 +112,7 @@ function buildSnapshot(
 export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Promise<HostApiV1> {
   const wallet = loadOrCreateWallet();
   const saved = loadSaved();
-  let balance = saved ? BigInt(saved.balance) : STARTING_BALANCE;
+  let balance = saved ? BigInt(saved.balance) : DEMO_STARTING_BALANCE;
   let nextSessionId = saved?.nextSessionId ?? 1;
   let sessions: Session[] = saved?.sessions ?? [];
 
@@ -122,7 +121,7 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
     save({
       balance: balance.toString(),
       nextSessionId,
-      sessions: sessions.slice(0, MAX_SAVED_SESSIONS),
+      sessions: sessions.slice(0, DEMO_MAX_SAVED_SESSIONS),
     });
 
   const patchSession = (sessionId: string, patch: Partial<Session>) => {
@@ -133,7 +132,7 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
 
   const hostApi: HostApiV1 = {
     async openSession(input) {
-      await delay(OPEN_LATENCY_MS);
+      await delay(DEMO_OPEN_LATENCY_MS);
       const wager = BigInt(input.wager);
       if (wager <= 0n || wager > balance)
         throw new Error('Not enough demo balance for that wager.');
@@ -202,7 +201,7 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
 
       // ✦ A demo player who busts gets a fresh bankroll instead of a dead end.
       balance += payout;
-      if (balance < SMALLEST_CHIP) balance = STARTING_BALANCE;
+      if (balance < DEMO_SMALLEST_CHIP) balance = DEMO_STARTING_BALANCE;
 
       patchSession(session.sessionId, {
         phase: SessionPhase.SETTLED,
@@ -224,7 +223,7 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
       // ✦ Saved before the settle delay, so a refresh mid-wait comes back to an already-settled round.
       persist();
 
-      await delay(SETTLE_LATENCY_MS);
+      await delay(DEMO_SETTLE_LATENCY_MS);
       push();
       return { transactionHash: randomHex32() };
     },

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { PLAYER_STORAGE_KEY } from '@/constants/storage';
 import { accumulateSkill } from '@/lib/mortal-odds/skill';
 import { addPoints, addWinnings, consumeFreeRedraw, getUser } from '@/services/data/user';
 import { useAppStore } from '@/services/store/store';
@@ -15,12 +16,11 @@ export type MortalOddsPlayerStats = {
 
 type RoundStats = Omit<MortalOddsPlayerStats, 'bankroll' | 'skill'>;
 
-const STORAGE_KEY = 'mortal-odds-player:v1';
 const DEFAULT_ROUND_STATS: RoundStats = { rounds: 0, bestRound: 0, streak: 0 };
 
 function readRoundStats(): RoundStats {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(PLAYER_STORAGE_KEY);
     return raw ? { ...DEFAULT_ROUND_STATS, ...JSON.parse(raw) } : DEFAULT_ROUND_STATS;
   } catch {
     return DEFAULT_ROUND_STATS;
@@ -56,7 +56,7 @@ export function useMortalOddsPlayer(): {
   const persistRoundStats = (next: RoundStats) => {
     setRoundStats(next);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(next));
     } catch {
       /* ✦ storage unavailable: round stats continue in memory */
     }

@@ -1,6 +1,6 @@
 import numeral from 'numeral';
 import React, { useEffect, useState } from 'react';
-import { RefeshInterval } from '@/constants';
+import { RefeshInterval } from '@/constants/app';
 import { getStats } from '@/services/data/stats';
 import { CrownIcon } from '../assets/CrownIcon';
 import { DoubleCoinIcon } from '../assets/DoubleCoinIcon';
