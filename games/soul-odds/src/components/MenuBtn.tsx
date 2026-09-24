@@ -41,14 +41,13 @@ export const MenuBtn: React.FC<MenuLink> = ({
           alt=""
           width={64}
           height={64}
-          className="max-md:h-12 max-md:w-12"
         />
       </div>
 
       <div
         className={` ${
           isActive ? 'purple-gradient menu-shadow text-white' : 'bg-[#262433] text-[#AFAFAF]'
-        } " relative" z-10 mt-[-1rem] rounded-full border border-black px-[8px] py-[0.5px] text-[0.8rem] font-[500] max-md:mt-[-0.75rem] max-md:text-[0.7rem]`}
+        } " relative" z-10 mt-[-1rem] rounded-full border border-black px-[8px] py-[0.5px] text-[0.8rem] font-[500]`}
       >
         {label}
       </div>

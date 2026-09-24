@@ -3,11 +3,16 @@ import { routing } from '@/libs/I18nRouting';
 
 /**
  * Resolves the public base URL of the application.
- * @returns The configured public app URL or the local development URL.
+ * @returns The configured public app URL, else the URL the page is served from, else the local development URL.
  */
 export const getBaseUrl = () => {
   if (Env.NEXT_PUBLIC_APP_URL) {
     return Env.NEXT_PUBLIC_APP_URL;
+  }
+
+  // ✦ Unset in production means invite links would point at localhost; the live page's own origin is always right.
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
   }
 
   return 'http://localhost:3000';

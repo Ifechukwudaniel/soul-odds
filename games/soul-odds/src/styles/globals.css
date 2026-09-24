@@ -64,7 +64,7 @@ main {
 :root {
   /* ✦ Phone chrome heights; the stage height on small screens is computed from these (unused at md+). */
   --hud-h: 3.5rem;
-  --nav-h: 4.75rem;
+  --nav-h: 6.25rem;
   --slip-h: 3.25rem;
   --anubis-gold: #f5b83d;
   --anubis-gold-leaf: #d4af37;
@@ -316,6 +316,16 @@ main {
   /* ✦ Toasts drop below the HUD row so they never cover the sound, balance and profile buttons. */
   .Toastify__toast-container.Toastify__toast-container--top-center {
     top: calc(var(--hud-h) + env(safe-area-inset-top));
+  }
+}
+
+/*
+ * ✦ The Chain Jam badge (injected by jam.chain.wtf/widget.js, fixed bottom-right) sits on top of the
+ *   nav on narrow phones. Hiding it is visual only; the script's view and playtime pings still run.
+ */
+@media (max-width: 599.98px) {
+  #chain-jam-badge {
+    display: none !important;
   }
 }
 
