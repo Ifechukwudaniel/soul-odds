@@ -35,8 +35,12 @@ const EXIT_DURATION_S = 0.5;
  * (so a wait that resolves instantly doesn't just flash on and off) and dissolves out under its own
  * timing before calling `onExit`, instead of being yanked off screen the instant the caller is done.
  * Without them it just renders until the caller stops mounting it (e.g. the Suspense fallback case).
+ *
+ * It fills the viewport by default; pass `className="h-full"` to fill a sized parent instead (e.g. a screen
+ * inside the game's scroll area, where a viewport-tall loader would overflow and flash a scrollbar).
  */
 export const Loader = (props: {
+  className?: string;
   label?: string;
   hint?: string;
   ready?: boolean;
@@ -153,7 +157,7 @@ export const Loader = (props: {
   return (
     <div
       ref={rootRef}
-      className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-[#0b0a08]"
+      className={`relative flex ${props.className ?? 'h-screen'} w-full flex-col items-center justify-center overflow-hidden bg-[#0b0a08]`}
     >
       <Image
         src={backdrop}

@@ -67,11 +67,7 @@ export const StatsScreen = () => {
   }, []);
 
   if (loading) {
-    return (
-      <section className="flex h-screen flex-col items-center justify-center">
-        <Loader />
-      </section>
-    );
+    return <Loader className="h-full" />;
   }
 
   return (

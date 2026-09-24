@@ -80,6 +80,9 @@ export default async function RootLayout(props: {
 
   return (
     <html lang={locale}>
+      <head>
+        <script async src="https://jam.chain.wtf/widget.js" />
+      </head>
       <body>
         <NextIntlClientProvider>{props.children}</NextIntlClientProvider>
       </body>

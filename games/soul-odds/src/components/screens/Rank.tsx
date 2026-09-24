@@ -39,11 +39,7 @@ export const RankScreen = () => {
   }, [address]);
 
   if (loading) {
-    return (
-      <section className="flex h-screen flex-col items-center justify-center">
-        <Loader />
-      </section>
-    );
+    return <Loader className="h-full" />;
   }
 
   const currentUser = users.find((entry) => entry.id === address);

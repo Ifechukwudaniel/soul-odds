@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import type { SetStateAction } from 'react';
 import { formatUnits } from 'viem';
 import { getAvatarById } from '@/components/assets/characters/avatars';
-import { GuestNotice } from '@/components/game/GuestNotice';
 import { GameHeader } from '@/components/game/home/GameHeader';
 import { ProfileModal } from '@/components/game/home/profile/ProfileModal';
 import { Menubar } from '@/components/Menubar';
@@ -34,7 +33,6 @@ export default function GamePage() {
   const [, setIsConnected] = useState(false);
   const [, setTransport] = useState('N/A');
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [guestNoticeDismissed, setGuestNoticeDismissed] = useState(false);
   const isGuest = useIsGuest();
   const screen = useAppStore((state) => state.screen);
   const setScreen = useAppStore((state) => state.setScreen);
@@ -132,12 +130,9 @@ export default function GamePage() {
         balance={user.balance}
         currency={snapshot?.token.symbol ?? 'deben'}
         avatar={<AvatarIcon width={24} height="24" />}
+        isDemo={isGuest}
         onOpenProfile={() => setIsProfileOpen(true)}
       />
-
-      {isGuest && !guestNoticeDismissed && (
-        <GuestNotice address={user.address} onDismiss={() => setGuestNoticeDismissed(true)} />
-      )}
 
       <Scroller className="min-h-0 flex-1">{screenRender}</Scroller>
       <div className="container mx-auto px-6">

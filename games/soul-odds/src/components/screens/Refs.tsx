@@ -71,11 +71,7 @@ export const RefsScreen: React.FC = () => {
   }, [address]);
 
   if (loading) {
-    return (
-      <section className="flex h-screen flex-col items-center justify-center">
-        <Loader />
-      </section>
-    );
+    return <Loader className="h-full" />;
   }
 
   const refsList = referredUsers.length > 0 ? referredUsers : [];
