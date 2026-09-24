@@ -128,7 +128,7 @@ export default function GamePage() {
     <div className="flex h-screen w-full flex-col">
       <GameHeader
         balance={user.balance}
-        currency={snapshot?.token.symbol ?? 'deben'}
+        currency={snapshot?.token.symbol ?? 'chUSD'}
         avatar={<AvatarIcon width={24} height="24" />}
         isDemo={isGuest}
         onOpenProfile={() => setIsProfileOpen(true)}

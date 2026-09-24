@@ -1,6 +1,6 @@
-/** Rank points per deben staked, earned whether the bet wins or loses — playing itself always counts for something. */
+/** Rank points per token staked, earned whether the bet wins or loses — playing itself always counts for something. */
 const PARTICIPATION_RATE = 0.5;
-/** Extra rank points per deben won, on top of participation. Kept at 1 so the bonus equals the bet's own net win. */
+/** Extra rank points per token won, on top of participation. Kept at 1 so the bonus equals the bet's own net win. */
 const WIN_BONUS_RATE = 1;
 
 /**

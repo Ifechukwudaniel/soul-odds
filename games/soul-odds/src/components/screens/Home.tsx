@@ -14,11 +14,14 @@ import { recordBetHistory } from '@/services/data/bet-history';
 import { useAppStore } from '@/services/store/store';
 import type { MarketPrices, RoundCharge } from '@/types';
 import { notification } from '@/utils/notifications';
+import { useCasinoHost } from '@/hooks/useCasinoHost';
 
-const CURRENCY = 'deben';
+
 
 export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlayer> }) => {
+  const {  snapshot } = useCasinoHost();
   const [chipSize, setChipSize] = useState(10);
+  const CURRENCY = snapshot?.token.symbol || 'chUSD';
   const [charges, setCharges] = useState<RoundCharge[]>([]);
 
   const reducedMotion = useReducedMotion() ?? false;

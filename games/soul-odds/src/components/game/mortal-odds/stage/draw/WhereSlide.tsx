@@ -20,6 +20,7 @@ export const WhereSlide = (props: {
   onRedraw: () => void;
   drawCost: number;
   canAffordDraw: boolean;
+  currency: string;
 }) => (
   <div className="flex h-full flex-col items-center gap-3 overflow-hidden text-center">
     <div className="shrink-0">
@@ -62,12 +63,12 @@ export const WhereSlide = (props: {
           type="button"
           aria-label={
             props.drawCost > 0
-              ? `Redraw the land for ${props.drawCost} deben`
+              ? `Redraw the land for ${props.drawCost} ${props.currency}`
               : 'Redraw the land for free'
           }
           title={
             props.drawCost > 0
-              ? `Redraw the land for ${props.drawCost} deben`
+              ? `Redraw the land for ${props.drawCost} ${props.currency}`
               : 'Redraw the land for free'
           }
           disabled={!props.canAffordDraw}

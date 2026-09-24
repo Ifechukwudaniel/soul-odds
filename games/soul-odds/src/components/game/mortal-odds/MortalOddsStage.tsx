@@ -32,6 +32,7 @@ export const MortalOddsStage = (props: {
   prices: MarketPrices | null;
   priceDeathYear: (guessYear: number) => Price;
   onRemoveBet: MortalOddsBets['remove'];
+  
 }) => {
   const { round } = props;
   const inDrawSequence =
@@ -70,6 +71,7 @@ export const MortalOddsStage = (props: {
               onDraw={props.onDraw}
               drawCost={props.drawCost}
               canAfford={props.canAffordDraw}
+              currency={props.currency}
             />
           )}
 
@@ -87,6 +89,7 @@ export const MortalOddsStage = (props: {
               onRedrawLocation={props.onRedrawLocation}
               drawCost={props.drawCost}
               canAffordDraw={props.canAffordDraw}
+              currency={props.currency}
             />
           )}
 

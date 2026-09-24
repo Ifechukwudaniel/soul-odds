@@ -9,6 +9,7 @@ export const DrawHero = (props: {
   onDraw: () => void;
   drawCost: number;
   canAfford: boolean;
+  currency: string;
 }) => (
   <GameCard
     scrollable
@@ -28,14 +29,6 @@ export const DrawHero = (props: {
       Choose one
     </p>
 
-    {/* <button
-      type="button"
-      disabled={!props.canAfford}
-      onClick={props.onDraw}
-      className="cursor-pointer rounded-full bg-[#F5B83D] px-8 py-3 font-bold text-slate-950 hover:bg-[#f0ad24] disabled:cursor-not-allowed disabled:opacity-40"
-    >
-      Summon a soul
-    </button> */}
     <button
       type="button"
       disabled={!props.canAfford}
@@ -45,7 +38,7 @@ export const DrawHero = (props: {
     >
       <ButtonDemo />
     </button>
-    <p className="text-xs text-white/40">Locks in a {props.drawCost} deben stake for this soul</p>
+    <p className="text-xs text-white/40">Locks in a {props.drawCost} {props.currency} stake for this soul</p>
     {!props.canAfford && <p className="text-xs text-[#B7410E]">Not enough chips</p>}
 
     <p className="mt-4 max-w-sm text-xs leading-[1.5] text-[#b0aeb5]">

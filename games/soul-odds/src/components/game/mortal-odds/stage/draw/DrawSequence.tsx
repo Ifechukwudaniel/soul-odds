@@ -29,6 +29,7 @@ export const DrawSequence = (props: {
   onRedrawLocation: () => void;
   drawCost: number;
   canAffordDraw: boolean;
+  currency: string;
 }) => {
   const activeIndex = STEPS.findIndex((entry) => entry.key === props.step);
   const isWhere = props.step === 'where';
@@ -50,6 +51,7 @@ export const DrawSequence = (props: {
             onRedraw={props.onRedrawLocation}
             drawCost={props.drawCost}
             canAffordDraw={props.canAffordDraw}
+            currency={props.currency}
           />
         ) : (
           <WhenSlide

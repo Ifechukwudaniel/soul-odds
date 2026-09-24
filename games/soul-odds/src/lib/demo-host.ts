@@ -98,7 +98,7 @@ function buildSnapshot(
       },
     },
     wallet: { address: wallet, smartVaultAddress: wallet, status: 'ready' },
-    token: { symbol: 'DEMO', decimals: DECIMALS },
+    token: { symbol: 'chUSD', decimals: DECIMALS },
     balances: { smartVaultBalance: balance.toString() },
     sessions: { items: sessions },
     ui: { locale: 'en', theme: 'dark' },

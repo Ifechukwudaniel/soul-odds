@@ -26,7 +26,7 @@ export const AGE_INFO: SlideInfo = {
     {
       icon: GiCycle,
       title: 'Not the age you wanted?',
-      text: `Redraw for ${REDRAW_COST} deben to summon a different soul. Your stake stays locked in.`,
+      text: `Redraw for ${REDRAW_COST} chUSD to summon a different soul. Your stake stays locked in.`,
     },
   ],
 };
