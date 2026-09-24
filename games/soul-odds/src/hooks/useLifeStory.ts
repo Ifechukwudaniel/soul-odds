@@ -13,7 +13,7 @@ import type { Life } from '@/types';
 // The server bounds its own OpenRouter call (see OPENROUTER_TIMEOUT_MS in lib/mortal-odds/openrouter.ts)
 // and should always respond well within this; it's a backstop for a hung request or a dropped
 // response, so a network hiccup can't leave the player staring at the loader indefinitely.
-const REQUEST_TIMEOUT_MS = 10_000;
+const REQUEST_TIMEOUT_MS = 15_000;
 
 async function fetchLifeStory(options: {
   life: Life;

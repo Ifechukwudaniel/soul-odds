@@ -1,6 +1,7 @@
 'use client';
 
 import { useId } from 'react';
+import { CurrencyCoinIcon } from '@/components/assets/CurrencyCoinIcon';
 import { GameDialog } from '@/components/game/GameDialog';
 import { ModalCloseButton, ModalHeader } from '@/components/game/GameModalParts';
 import {
@@ -27,10 +28,15 @@ const Section = (props: { title: string; children: React.ReactNode }) => (
   </section>
 );
 
-const Row = (props: { label: string; value: string; valueClass?: string }) => (
+const Row = (props: { label: string; value: string; valueClass?: string; coin?: boolean }) => (
   <div className="flex items-center justify-between gap-3">
     <dt className="text-[11px] tracking-[0.15em] text-white/50 uppercase">{props.label}</dt>
-    <dd className={`text-right text-xs text-white ${props.valueClass ?? ''}`}>{props.value}</dd>
+    <dd
+      className={`flex items-center justify-end gap-1 text-right text-xs text-white ${props.valueClass ?? ''}`}
+    >
+      {props.coin && <CurrencyCoinIcon width={12} height={12} />}
+      {props.value}
+    </dd>
   </div>
 );
 
@@ -46,7 +52,7 @@ export const HistoryRoundModal = (props: { entry: BetHistoryEntry; onClose: () =
   const titleId = useId();
 
   return (
-    <GameDialog isOpen onClose={props.onClose} labelledBy={titleId} className="w-full max-w-lg">
+    <GameDialog isOpen onClose={props.onClose} labelledBy={titleId} className="w-full max-w-lg md:min-w-[600px] overflow-y-hidden">
       <div className="relative flex max-h-[calc(100dvh-2rem)] flex-col gap-5 overflow-y-auto rounded-2xl p-6 text-left">
         <ModalCloseButton onClick={props.onClose} />
 
@@ -97,11 +103,16 @@ export const HistoryRoundModal = (props: { entry: BetHistoryEntry; onClose: () =
                   <div className="flex shrink-0 items-center gap-3 text-right">
                     <div>
                       <p className="text-xs font-[600] text-[#F5B83D]">×{bet.odds.toFixed(2)}</p>
-                      <p className="text-[11px] text-white/40">stake {bet.stake.toFixed(2)}</p>
+                      <p className="flex items-center justify-end gap-1 text-[11px] text-white/40">
+                        stake
+                        <CurrencyCoinIcon width={10} height={10} />
+                        {bet.stake.toFixed(2)}
+                      </p>
                     </div>
                     <p
-                      className={`w-16 text-sm font-bold ${bet.won ? 'text-[#6BA84F]' : 'text-[#B7410E]'}`}
+                      className={`flex w-20 items-center justify-end gap-1 text-sm font-bold ${bet.won ? 'text-[#6BA84F]' : 'text-[#B7410E]'}`}
                     >
+                      <CurrencyCoinIcon width={12} height={12} />
                       {fmtSigned(bet.net)}
                     </p>
                   </div>
@@ -113,22 +124,25 @@ export const HistoryRoundModal = (props: { entry: BetHistoryEntry; onClose: () =
 
         <Section title="The ledger">
           <dl className="flex flex-col gap-2">
-            <Row label="Wager locked" value={entry.wager.toFixed(2)} />
+            <Row label="Wager locked" value={entry.wager.toFixed(2)} coin />
             <Row
               label="Bets returned"
               value={fmtSigned(entry.net)}
               valueClass={entry.net >= 0 ? 'text-[#6BA84F]' : 'text-[#B7410E]'}
+              coin
             />
             <Row
               label="Paid to the scribe"
               value={entry.fees > 0 ? `−${entry.fees.toFixed(2)}` : 'None'}
               valueClass={entry.fees > 0 ? 'text-[#F5B83D]' : undefined}
+              coin={entry.fees > 0}
             />
             <div className="flex items-center justify-between gap-3 border-t border-white/10 pt-2">
               <dt className="text-sm font-[600] text-white">This round</dt>
               <dd
-                className={`text-lg font-bold ${entry.roundNet >= 0 ? 'text-[#6BA84F]' : 'text-[#B7410E]'}`}
+                className={`flex items-center gap-1 text-lg font-bold ${entry.roundNet >= 0 ? 'text-[#6BA84F]' : 'text-[#B7410E]'}`}
               >
+                <CurrencyCoinIcon width={16} height={16} />
                 {fmtSigned(entry.roundNet)}
               </dd>
             </div>

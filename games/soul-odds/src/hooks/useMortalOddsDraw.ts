@@ -400,6 +400,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
    */
   const redrawLocation = async () => {
     if (state.phase !== 'where' || !state.draw || !state.context) return;
+    playSound({ name: 'spend', amount: REDRAW_COST });
     const { year } = state.draw;
     const rng = createRng();
     const era = await fetchEra(year).catch(() => eraFor({ year, erasConfig }));

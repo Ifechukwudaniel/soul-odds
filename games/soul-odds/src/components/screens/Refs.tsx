@@ -14,7 +14,7 @@ import { Loader } from '../Loader';
 export const InviteComponent = ({ copyInvite }: { copyInvite: () => void }) => {
   return (
     <div className="my-6 mt-8 flex h-[70%] flex-col items-center justify-center text-center">
-      <p className="text-[0.8rem]">You currently have zero referrals, Damn</p>
+      <p className="text-[0.8rem]">No souls recruited yet.</p>
 
       <div className="my-4">
         <div className="flex flex-col items-center">
@@ -77,8 +77,7 @@ export const RefsScreen: React.FC = () => {
   const refsList = referredUsers.length > 0 ? referredUsers : [];
 
   return (
-    <Loader className="h-full" />
-  /*   <section className="flex flex-col overflow-hidden">
+    <section className="flex flex-col overflow-hidden">
       <div className="container mx-auto my-4 px-4 pb-16">
         <div className="flex items-center justify-between">
           <div>
@@ -120,6 +119,6 @@ export const RefsScreen: React.FC = () => {
           </div>
         )}
       </div>
-    </section> */
+    </section> 
   );
 };
