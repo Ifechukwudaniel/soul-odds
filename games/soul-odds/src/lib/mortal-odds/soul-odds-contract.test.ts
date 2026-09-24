@@ -29,9 +29,15 @@ describe("previewSinsPrices", () => {
 
   it("pins to one era's odds instead of averaging every era", () => {
     const perEra = soulOddsConfigurations.map((_configuration, index) => previewSinsPrices(WAGER, 2, index).heresy!.odds!);
-    const average = previewSinsPrices(WAGER, 2).heresy!.odds!;
     expect(Math.max(...perEra)).toBeGreaterThan(Math.min(...perEra) * 2);
-    expect(average).toBeCloseTo(perEra.reduce((sum, odds) => sum + odds, 0) / perEra.length, 6);
+  });
+
+  it("before the era is known, pays the multiplier that goes with the average chance, not the average multiplier", () => {
+    const rtp = Number(soulOddsConfigurations[0]!.rtpWad) / 1e18;
+    const perEra = soulOddsConfigurations.map((_configuration, index) => previewSinsPrices(WAGER, 2, index).heresy!.odds!);
+    const average = previewSinsPrices(WAGER, 2).heresy!;
+    expect(average.odds).toBeCloseTo(rtp / average.p, 6);
+    expect(average.odds).toBeLessThan(perEra.reduce((sum, odds) => sum + odds, 0) / perEra.length);
   });
 
   it("prices a pair below the odds of naming only one of its sins wrong", () => {
@@ -41,6 +47,20 @@ describe("previewSinsPrices", () => {
 });
 
 describe("previewCategoryPrices", () => {
+  it("prices a 5 to 29 death near 8x before the era is known, and no era pays a silly amount for it", () => {
+    const { age } = previewCategoryPrices(WAGER);
+    expect(age.y!.odds).toBeCloseTo(8, 0);
+    const perEra = soulOddsConfigurations.map((_configuration, index) => previewCategoryPrices(WAGER, 0, index).age.y!.odds!);
+    expect(Math.max(...perEra)).toBeLessThan(40);
+  });
+
+  it("makes the youngest and oldest ages likelier to be missed in the era they are rare", () => {
+    const first = previewCategoryPrices(WAGER, 0, 0).age;
+    const last = previewCategoryPrices(WAGER, 0, soulOddsConfigurations.length - 1).age;
+    expect(last.o!.p).toBeGreaterThan(first.o!.p);
+    expect(last.u5!.p).toBeLessThan(first.u5!.p);
+  });
+
   it("pins sex and age to the same era as the sins", () => {
     const pinned = previewCategoryPrices(WAGER, 2, 3);
     expect(pinned.sins).toEqual(previewSinsPrices(WAGER, 2, 3));

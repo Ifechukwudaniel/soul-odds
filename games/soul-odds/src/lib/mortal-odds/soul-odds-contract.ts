@@ -140,16 +140,17 @@ const CATEGORY_COUNT = 3n;
 /**
  * The price for one option. Each category stakes a third of the wager and pays `payout` when it
  * hits, so the multiplier on that stake is `payout / (wager / 3)` — exactly `rtp / p`. With the
- * session's era known there is one configuration and the price is exact; before that it is the
- * plain average across every era, since the contract picks one uniformly at random.
+ * session's era known there is one configuration and the price is exact. Before that the contract
+ * picks an era uniformly at random, so the chance is the average across eras and the multiplier is
+ * the one that goes with it: each era's multiplier weighted by its chance, over the average chance
+ * (which works out to `rtp / p`). Averaging the multipliers themselves would let one rare era
+ * (a 475x payout at 0.2%) dominate a bet that is 9.5% likely on average.
  */
 function averagePrice(wager: bigint, perConfigurationOdds: { probabilityWad: bigint; payout: bigint }[]): Price {
-  const count = perConfigurationOdds.length;
-  const p = perConfigurationOdds.reduce((sum, odds) => sum + Number(odds.probabilityWad) / 1e18, 0) / count;
-  const odds =
-    wager === 0n
-      ? null
-      : perConfigurationOdds.reduce((sum, o) => sum + Number(o.payout * CATEGORY_COUNT) / Number(wager), 0) / count;
+  const chances = perConfigurationOdds.map((odds) => Number(odds.probabilityWad) / 1e18);
+  const p = chances.reduce((sum, chance) => sum + chance, 0) / chances.length;
+  const returned = perConfigurationOdds.reduce((sum, odds, i) => sum + (chances[i] ?? 0) * (Number(odds.payout * CATEGORY_COUNT) / Number(wager)), 0);
+  const odds = wager === 0n || p === 0 ? null : returned / chances.length / p;
   return { p, odds, tag: chanceTag(p) };
 }
 
