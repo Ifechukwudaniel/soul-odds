@@ -8,6 +8,8 @@
   },
   "scripts": {
     "start": "./start-dev.sh",
+    "start:dev": "./start-dev.sh",
+    "start:prod": "./start-prod.sh",
     "dev:next": "next dev",
     "dev:spotlight": "npx @spotlightjs/spotlight",
     "build": "run-s db:migrate build:next",

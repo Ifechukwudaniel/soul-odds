@@ -167,6 +167,8 @@ Run from `games/soul-odds/`:
 | Command | What it does |
 | --- | --- |
 | `pnpm run start` | `start-dev.sh` — Postgres + migrate + seed + combined dev server. |
+| `pnpm run start:dev` | Same as `start` (`start-dev.sh`). From the repo root, runs just the Soul Odds app this way. |
+| `pnpm run start:prod` | `start-prod.sh` — migrate, seed reference data, build and serve for production. Needs `DATABASE_URL` and `NEXT_PUBLIC_API_SECRET`; `--check` verifies the environment only. |
 | `pnpm run dev:next` | Next.js dev server only (no DB/socket bootstrap). |
 | `pnpm run game:socket-server` | The combined Next.js + Socket.io server (what `start` boots). |
 | `pnpm run build` | Migrate DB, then production build. |
