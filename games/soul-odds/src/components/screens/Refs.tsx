@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Loader } from "../Loader";
 import { GameButton } from "@/components/game/GameButton";
 import {  RefeshInterval } from "@/constants";
+import { useIsGuest } from "@/hooks/useIsGuest";
 import { getUserRefers } from "@/services/data/refers";
 import { User } from "@/services/db/user";
 import { useAppStore } from "@/services/store/store";
@@ -49,19 +50,20 @@ export const InviteComponent = ({ copyInvite }: { copyInvite: () => void }) => {
 
 export const RefsScreen: React.FC = () => {
   const [referredUsers, setReferredUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const address = useAppStore(state => state.user.address);
+  const isGuest = useIsGuest();
 
-  const user = useAppStore(state => state.user);
 
   const copyInvite = () => {
+    if (!address) return;
     navigator.clipboard.writeText(`${getBaseUrl()}?ref=${address}`);
     notification.success("link copied");
   };
 
   const fetchReferredUsers = async () => {
     try {
-      const users = await getUserRefers(user!.address);
+      const users = await getUserRefers(address);
       setReferredUsers(users);
     } catch (error) {
       console.error("Failed to fetch referred users", error);
@@ -71,15 +73,11 @@ export const RefsScreen: React.FC = () => {
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetchReferredUsers();
-    }, RefeshInterval);
-
-    if (loading) {
-      fetchReferredUsers();
-    }
+    if (!address) return;
+    fetchReferredUsers();
+    const interval = setInterval(fetchReferredUsers, RefeshInterval);
     return () => clearInterval(interval);
-  }, []);
+  }, [address]);
 
   if (loading) {
     return (
@@ -99,6 +97,11 @@ export const RefsScreen: React.FC = () => {
             <h2 className="text-2xl font-bold mb-3">Referrals</h2>
             <p className="text-[0.8rem] text-white font-[500]">Refer a friend</p>
             <p className="text-[#AFAFAF] text-[0.8rem] my-3">{refsList.length} referrals</p>
+            {isGuest && (
+              <p className="text-[#AFAFAF] text-[0.8rem] mb-3">
+                You&apos;re on a guest account, so your invite link only counts while this browser keeps its data.
+              </p>
+            )}
           </div>
           <GameButton variant="papyrus" onClick={copyInvite} className="px-3 py-3 text-[13px]">
             Invite a Friend!

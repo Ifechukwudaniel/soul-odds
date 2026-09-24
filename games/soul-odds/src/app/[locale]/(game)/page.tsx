@@ -5,6 +5,7 @@ import type { SetStateAction } from "react";
 import { formatUnits } from "viem";
 import { getAvatarById } from "@/components/assets/characters/avatars";
 import { GameHeader } from "@/components/game/home/GameHeader";
+import { GuestNotice } from "@/components/game/GuestNotice";
 import { ProfileModal } from "@/components/game/home/profile/ProfileModal";
 import { Menubar } from "@/components/Menubar";
 import { Scroller } from "@/components/Scroller";
@@ -21,6 +22,7 @@ import {
   StatsScreen,
   RankScreen
 } from "@/components/screens";
+import { useIsGuest } from "@/hooks/useIsGuest";
 import { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
 import { getUser, registerUser } from "@/services/data/user";
 import { socketInstance } from "@/services/socket";
@@ -32,6 +34,8 @@ export default function GamePage() {
   const [, setIsConnected] = useState(false);
   const [, setTransport] = useState("N/A");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [guestNoticeDismissed, setGuestNoticeDismissed] = useState(false);
+  const isGuest = useIsGuest();
   const screen = useAppStore((state) => state.screen);
   const setScreen = useAppStore((state) => state.setScreen);
   const updateUser = useAppStore((state) => state.updateUser);
@@ -78,7 +82,9 @@ export default function GamePage() {
     if (!walletAddress || syncedAddressRef.current === walletAddress) return;
     syncedAddressRef.current = walletAddress;
     updateUser({ address: walletAddress });
-    registerUser(walletAddress, undefined, hostBalance)
+    // An invite link is the app's URL with `?ref=<inviter's address>`; only a brand-new user's first registration records it.
+    const referrer = new URLSearchParams(window.location.search).get("ref") ?? undefined;
+    registerUser(walletAddress, referrer, hostBalance)
       .then(() => getUser(walletAddress))
       .then((dbUser) => updateUser({ freeRedraws: dbUser.freeRedraws }))
       .catch(() => {
@@ -125,6 +131,8 @@ export default function GamePage() {
         avatar={<AvatarIcon width={24} height="24" />}
         onOpenProfile={() => setIsProfileOpen(true)}
       />
+
+      {isGuest && !guestNoticeDismissed && <GuestNotice address={user.address} onDismiss={() => setGuestNoticeDismissed(true)} />}
 
       <Scroller className="min-h-0 flex-1">{screenRender}</Scroller>
       <div className="container mx-auto px-6">
