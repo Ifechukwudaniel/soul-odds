@@ -10,8 +10,13 @@ import { cn } from '@/utils';
 
 const COLUMNS = ['Soul', 'Bets', 'Net', 'Date'] as const;
 
+// ✦ On phones Bets and Date fold under the soul's name, so only Soul and Net keep a column.
+const PHONE_HIDDEN = ['Bets', 'Date'];
+
 // ✦ Same grid-not-<tr> approach as the leaderboard table; each body row is a button that opens the round's details.
-const ROW_GRID = 'grid grid-cols-[minmax(0,1fr)_5rem_6rem_5rem] items-center gap-4 px-4';
+// ✦ Phones drop the Date column (it joins the born line under the soul) so the row fits without sideways scrolling.
+const ROW_GRID =
+  'grid grid-cols-[minmax(0,1fr)_5rem_6rem_5rem] items-center gap-4 px-4 max-md:grid-cols-[minmax(0,1fr)_auto] max-md:gap-2 max-md:px-3';
 
 const NET_COLOR = (net: number) =>
   net > 0 ? 'text-[#6BA84F]' : net < 0 ? 'text-[#B7410E]' : 'text-white';
@@ -21,14 +26,18 @@ export const HistoryTable = (props: {
   onSelect: (entry: BetHistoryEntry) => void;
 }) => (
   <GameCard containerClassName="w-full">
-    <Scroller className="max-h-[20rem]">
-      <div role="table" className="flex min-w-[26rem] flex-col gap-2">
+    <Scroller className="max-h-[20rem] max-md:max-h-none">
+      <div role="table" className="flex flex-col gap-2 md:min-w-[26rem]">
         <div
           role="row"
           className={cn(ROW_GRID, 'sticky top-0 z-10 bg-[#132126] py-2 text-sm text-[#AFAFAF]')}
         >
           {COLUMNS.map((column) => (
-            <div key={column} role="columnheader" className="font-[500]">
+            <div
+            key={column}
+            role="columnheader"
+            className={cn('font-[500]', PHONE_HIDDEN.includes(column) && 'max-md:hidden')}
+          >
               {column}
             </div>
           ))}
@@ -45,23 +54,30 @@ export const HistoryTable = (props: {
             )}
           >
             <span role="cell" className="flex min-w-0 items-center gap-3">
-              <span className="accent-gradient flex h-12 w-12 shrink-0 items-center justify-center rounded-full p-[2px] ring-offset-2 ring-offset-[#18131F]">
+              <span className="accent-gradient flex h-12 w-12 shrink-0 items-center justify-center rounded-full p-[2px] ring-offset-2 ring-offset-[#18131F] max-md:h-9 max-md:w-9">
                 <span className="flex h-full w-full items-center justify-center rounded-full border border-black/70 bg-slate-950">
                   <GiSkullCrossedBones size={22} className="text-[#F5B83D]" />
                 </span>
               </span>
               <span className="min-w-0">
                 <span
-                  className={`${serifFont.className} block truncate text-sm font-bold text-[#F3D38F]`}
+                  className={`${serifFont.className} block truncate text-sm font-bold text-[#F3D38F] max-md:overflow-visible max-md:whitespace-normal`}
                 >
                   {fateLine(entry)}
                 </span>
                 <span className="block truncate text-xs text-white/50">
                   Born {fmtYear(entry.bornYear)}
                 </span>
+                <span className="block truncate text-xs text-white/50 md:hidden">
+                  {entry.bets.length === 0
+                    ? 'No bets'
+                    : `${entry.bets.filter((bet) => bet.won).length} / ${entry.bets.length} won`}
+                  {' · '}
+                  {fmtShortDate(entry.settledAt)}
+                </span>
               </span>
             </span>
-            <span role="cell" className="text-sm text-white">
+            <span role="cell" className="text-sm text-white max-md:hidden">
               {entry.bets.length === 0
                 ? '–'
                 : `${entry.bets.filter((bet) => bet.won).length} / ${entry.bets.length}`}
@@ -76,7 +92,7 @@ export const HistoryTable = (props: {
                 <CurrencyCoinIcon width={16} height="16" /> {fmtSigned(entry.roundNet)}
               </span>
             </span>
-            <span role="cell" className="text-sm text-white/70">
+            <span role="cell" className="text-sm text-white/70 max-md:hidden">
               {fmtShortDate(entry.settledAt)}
             </span>
           </button>

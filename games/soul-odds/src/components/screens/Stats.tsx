@@ -71,7 +71,7 @@ export const StatsScreen = () => {
   }
 
   return (
-    <section className="flex h-screen flex-col overflow-hidden">
+    <section className="flex h-screen flex-col overflow-hidden max-md:h-auto">
       <div className="container mx-auto my-5 px-4">
         <h2 className="mb-3 text-2xl font-bold tracking-tight">Statistics</h2>
         <p className="my-3 text-sm font-medium text-white">This are our application stats</p>

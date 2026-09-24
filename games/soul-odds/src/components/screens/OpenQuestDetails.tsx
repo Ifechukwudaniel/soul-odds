@@ -124,7 +124,7 @@ export const OpenQuestDetailScreen: React.FC<Props> = ({
     setScreen('quests');
   };
   return (
-    <section className="overflow-y-auto pb-32">
+    <section className="overflow-y-auto pb-32 max-md:pb-4">
       <div className="container mx-auto my-8 px-5">
         <div className="container mb-6 flex h-10">
           <button onClick={goBack} className="rounded-lg bg-[#293641] p-3 hover:bg-[#182027]">

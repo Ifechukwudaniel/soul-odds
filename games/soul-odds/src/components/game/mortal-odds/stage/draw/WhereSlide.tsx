@@ -45,11 +45,15 @@ export const WhereSlide = (props: {
         className="relative aspect-2/1 h-full max-w-full overflow-hidden rounded-lg border border-[#FDE991]/15"
       >
         <WorldMap year={props.year} marker={{ lat: props.place.lat, lon: props.place.lon }} />
-        <p className="pointer-events-none absolute inset-x-0 bottom-0 bg-black/50 px-2 py-0.5 text-left text-[0.5rem] leading-tight text-[#f1f1f2a0] sm:text-[0.6rem]">
+        <p className="pointer-events-none absolute inset-x-0 bottom-0 bg-black/50 px-2 py-0.5 text-left text-[0.5rem] leading-tight text-[#f1f1f2a0] max-md:hidden sm:text-[0.6rem]">
           {MAP_SOURCES}
         </p>
       </motion.div>
     </div>
+
+    <p className="shrink-0 px-1 text-left text-[0.5rem] leading-tight text-[#f1f1f2a0] md:hidden">
+      {MAP_SOURCES}
+    </p>
 
     <motion.div
       initial={{ opacity: 0, y: 6 }}
@@ -57,8 +61,8 @@ export const WhereSlide = (props: {
       transition={{ duration: 0.35, delay: ROAM_DURATION + 0.15 }}
       className="shrink-0"
     >
-      <div className="flex items-center justify-center gap-2">
-        <p className="text-xl font-bold text-white">{props.where}</p>
+      <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+        <p className="text-xl font-bold text-white max-md:text-lg">{props.where}</p>
         <button
           type="button"
           aria-label={

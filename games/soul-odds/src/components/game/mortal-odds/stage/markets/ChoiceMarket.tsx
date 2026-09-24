@@ -63,7 +63,7 @@ export const ChoiceMarket = (props: {
   };
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-5 text-center">
+    <div className="flex min-h-full flex-col items-center justify-center gap-5 text-center max-md:gap-3">
       <div className="flex flex-col items-center gap-1">
         <Icon size={32} className="text-[#3FB6A8]" />
         <h3 className="text-xl font-bold text-white">{props.market.title}</h3>
@@ -99,7 +99,7 @@ export const ChoiceMarket = (props: {
                 playClickSound();
                 props.onSelect(option.id);
               }}
-              className={`rounded-lg border px-4 py-4 text-base font-semibold disabled:opacity-40 ${
+              className={`rounded-lg border px-4 py-4 text-base max-md:py-3 font-semibold disabled:opacity-40 ${
                 isSelected
                   ? 'accent-gradient border-black text-slate-950 shadow-[inset_1px_1px_1.5px_0px_#FFFFFF66]'
                   : 'border-black bg-[#262433] text-[#AFAFAF]'

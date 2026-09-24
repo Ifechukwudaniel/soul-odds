@@ -132,8 +132,8 @@ export default function GamePage() {
         onOpenProfile={() => setIsProfileOpen(true)}
       />
 
-      <Scroller className="min-h-0 flex-1">{screenRender}</Scroller>
-      <div className="container mx-auto px-6">
+      <Scroller className="min-h-0 flex-1 max-md:relative max-md:z-20">{screenRender}</Scroller>
+      <div className="container mx-auto px-6 max-md:px-3">
         <Menubar />
       </div>
 

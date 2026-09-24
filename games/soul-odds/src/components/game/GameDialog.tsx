@@ -62,7 +62,7 @@ export const GameDialog = (props: {
           last?.focus();
         }
       }}
-      className={`game-dialog game-modal-panel fixed inset-0 m-auto h-fit overflow-visible rounded-2xl p-0 text-white backdrop:bg-black/60 ${props.className ?? ''}`}
+      className={`game-dialog game-modal-panel fixed inset-0 m-auto h-fit overflow-visible rounded-2xl p-0 text-white backdrop:bg-black/60 max-md:w-[calc(100%-1.5rem)] ${props.className ?? ''}`}
     >
       {props.children}
     </dialog>

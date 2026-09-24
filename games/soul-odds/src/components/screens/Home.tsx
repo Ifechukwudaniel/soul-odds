@@ -142,7 +142,7 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
   // =====================================
   return (
     <div className="flex h-full w-full flex-col">
-      <div className="container mx-auto flex flex-1 flex-col gap-4 px-4 pb-[10dvh] lg:flex-row">
+      <div className="container mx-auto flex flex-1 flex-col gap-4 max-lg:min-h-0 px-3 pb-2 md:px-4 md:pb-[10dvh] lg:flex-row">
         <MortalOddsStage
           round={round}
           bets={slip.bets}

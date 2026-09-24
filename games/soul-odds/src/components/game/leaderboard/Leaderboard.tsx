@@ -36,16 +36,16 @@ export function Leaderboard({ users, currentUser, resetAt }: LeaderboardProps) {
 
   return (
     <div className="container mx-auto px-4 py-4">
-      <h2 className="mb-3 text-2xl font-[500] mt-[4rem] md:mt-0">Leaderboard</h2>
+      <h2 className="mb-3 text-2xl font-[500] max-md:text-xl">Leaderboard</h2>
       <p className="text-sm leading-[1.7] text-white">
         See how you stack up against everyone else this week and climb the ranks.
       </p>
 
-      <div className="mt-8">
+      <div className="mt-8 max-md:mt-4">
         <WeeklyCountdown resetAt={resetAt} />
       </div>
 
-      <div className="mt-10">
+      <div className="mt-10 max-md:mt-5 max-md:pb-4">
         <LeaderboardTable
           users={users}
           currentUserId={currentUser?.id}

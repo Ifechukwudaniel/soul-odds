@@ -62,6 +62,10 @@ main {
 
 /* ✦ Egyptian funerary art: gold leaf, faience turquoise, lapis and carnelian on obsidian. */
 :root {
+  /* ✦ Phone chrome heights; the stage height on small screens is computed from these (unused at md+). */
+  --hud-h: 3.5rem;
+  --nav-h: 4.75rem;
+  --slip-h: 3.25rem;
   --anubis-gold: #f5b83d;
   --anubis-gold-leaf: #d4af37;
   --anubis-faience: #3fb6a8;
@@ -299,13 +303,19 @@ main {
     display: none;
   }
 
+  /* ✦ revert-layer hands padding back to the element's own utility classes (px-4, p-4) instead of forcing 0. */
   [data-os-overflow-y] > [data-overlayscrollbars-viewport] > *,
   [data-os-gutter='reserved'] > [data-overlayscrollbars-viewport] > * {
-    padding-inline: 0;
+    padding-inline: revert-layer;
   }
 
   [data-os-overflow-x] > [data-overlayscrollbars-viewport] > * {
     margin-bottom: 0;
+  }
+
+  /* ✦ Toasts drop below the HUD row so they never cover the sound, balance and profile buttons. */
+  .Toastify__toast-container.Toastify__toast-container--top-center {
+    top: calc(var(--hud-h) + env(safe-area-inset-top));
   }
 }
 

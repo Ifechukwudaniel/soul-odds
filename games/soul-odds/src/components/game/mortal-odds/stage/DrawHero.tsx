@@ -13,11 +13,11 @@ export const DrawHero = (props: {
 }) => (
   <GameCard
     scrollable
-    className="flex flex-col items-center justify-center gap-3 py-10 text-center"
+    className="flex flex-col items-center justify-center gap-3 py-10 text-center max-md:gap-2 max-md:py-3"
     containerClassName="flex h-full w-full flex-col"
   >
-    <GiAnubis size={104} className="text-[#F5B83D]" />
-    <p className="max-w-lg text-lg font-bold text-white">
+    <GiAnubis size={104} className="text-[#F5B83D] max-md:h-16 max-md:w-16" />
+    <p className="max-w-lg text-lg font-bold text-white max-md:text-base">
       Over {fmtNumber(HUMANS_EVER)} people have ever lived.
     </p>
     <p className="max-w-sm text-sm text-white/60">
@@ -39,7 +39,7 @@ export const DrawHero = (props: {
     <p className="text-xs text-white/40">Locks in a {props.drawCost} {props.currency} stake for this soul</p>
     {!props.canAfford && <p className="text-xs text-[#B7410E]">Not enough chips</p>}
 
-    <p className="mt-4 max-w-sm text-xs leading-[1.5] text-[#b0aeb5]">
+    <p className="mt-4 max-w-sm text-xs leading-[1.5] text-[#b0aeb5] max-md:mt-1 max-md:text-[0.7rem]">
       The Duat gives up a soul in stages: an age, a land, then the life itself — each drawn at
       random from real data.
     </p>

@@ -129,21 +129,21 @@ export const BadgesScreen = () => {
   };
 
   return (
-    <section className="overflow-y flex h-screen flex-col">
-      <div className="container mx-auto my-8 px-4 pb-32">
-        <div className="fixed top-0 right-0 left-0 z-40 container mb-5 flex h-20 p-5">
+    <section className="overflow-y flex h-screen flex-col max-md:h-auto">
+      <div className="container mx-auto my-8 px-4 pb-32 max-md:my-4 max-md:pb-4">
+        <div className="fixed top-0 right-0 left-0 z-40 container mb-5 flex h-20 p-5 max-md:static max-md:mb-3 max-md:h-auto max-md:p-0">
           <button onClick={goBack} className="rounded-lg bg-[#293641] p-3 hover:bg-[#182027]">
             <ChevronLeftIcon width={20} />
           </button>
         </div>
-        <div className="mt-10">
-          <h2 className="mb-3 text-2xl font-[500]">Ranks</h2>
+        <div className="mt-10 max-md:mt-2">
+          <h2 className="mb-3 text-2xl font-[500] max-md:text-xl">Ranks</h2>
           <p className="sf-pro-medium text-sm leading-[1.7]">
             Consistently show up, climb up the ladder and unlock all the ranks! Your skill points
             determine the rank you are in.
           </p>
           <div className="mt-8">
-            <div className="my-6 grid grid-cols-3 gap-x-1 gap-y-10">
+            <div className="my-6 grid grid-cols-3 gap-x-1 gap-y-10 max-md:gap-y-6">
               {badgeUserData.map(
                 (
                   { title, reward, unlockedIcon, lockedIcon, isUnlocked, requiredCoin, claimed },

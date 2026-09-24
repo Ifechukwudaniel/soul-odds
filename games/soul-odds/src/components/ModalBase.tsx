@@ -87,7 +87,7 @@ export const Modal: React.FC<ModalProps> = ({
             animate={sheetVariants.animate}
             exit={sheetVariants.exit}
             transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
-            className="fixed bottom-0 left-0 z-[20] flex max-h-[90vh] w-full flex-col items-center justify-between overflow-y-scroll rounded-t-2xl bg-[#18131FE5] px-3 py-6 pt-1 text-center md:top-1/2 md:bottom-auto md:left-1/2 md:max-h-[85vh] md:w-full md:max-w-md md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-2xl"
+            className="fixed bottom-0 left-0 z-[20] flex max-h-[90dvh] w-full flex-col items-center justify-between overflow-y-scroll rounded-t-2xl bg-[#18131FE5] px-3 py-6 pt-1 text-center md:top-1/2 md:bottom-auto md:left-1/2 md:max-h-[85vh] md:w-full md:max-w-md md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-2xl"
             style={{
               backdropFilter: 'blur(10px)',
               WebkitBackdropFilter: 'blur(10px)',

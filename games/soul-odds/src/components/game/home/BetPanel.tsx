@@ -8,7 +8,7 @@ import { PlaceBetButton } from '@/components/game/home/PlaceBetButton';
 import { PotentialWinSummary } from '@/components/game/home/PotentialWinSummary';
 import { SlipRow } from '@/components/game/home/SlipRow';
 import { Scroller } from '@/components/Scroller';
-import { betOdds } from '@/lib/mortal-odds/bets';
+import { slipTotals } from '@/lib/mortal-odds/bets';
 import type { SinNarratives } from '@/lib/mortal-odds/sin-variants';
 import { serifFont } from '@/styles/serif-font';
 import type { Bet, MarketPrices, Price, RoundCharge } from '@/types';
@@ -48,23 +48,20 @@ export const BetPanel = (props: {
     }
   };
 
-  const bets = Object.values(props.bets);
-  const potentialWins = bets.map((bet) => {
-    if (!props.prices) return null;
-    const odds = betOdds({ bet, prices: props.prices, priceDeathYear: props.priceDeathYear });
-    return odds === null ? null : bet.stake * odds;
+  const { bets, potentialWins, totalPotentialWin, atRisk, unpicked } = slipTotals({
+    bets: props.bets,
+    prices: props.prices,
+    priceDeathYear: props.priceDeathYear,
+    charges: props.charges,
+    requiredBets: props.requiredBets,
   });
-  const totalPotentialWin = potentialWins.reduce((sum: number, win) => sum + (win ?? 0), 0);
-  // ✦ Bet stakes are a breakdown of the "stake" charge already locked in at summon, not additional spend.
-  const atRisk = props.charges.reduce((sum, charge) => sum + charge.amount, 0);
-  const unpicked = Math.max(0, props.requiredBets - bets.length);
 
   return (
     <GameCard
       className="flex min-h-0 flex-1 flex-col gap-4"
       containerClassName="flex h-full w-full flex-col"
     >
-      <h2 className={`${serifFont.className} text-white" font-bold`}>Your wager</h2>
+      <h2 className={`${serifFont.className} font-bold text-white`}>Your wager</h2>
 
       {props.chipLocked ? (
         <GameTooltip text="You can't change your stake when a round is in progress." className="w-full">

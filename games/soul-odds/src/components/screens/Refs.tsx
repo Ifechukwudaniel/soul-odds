@@ -13,7 +13,7 @@ import { Loader } from '../Loader';
 
 export const InviteComponent = ({ copyInvite }: { copyInvite: () => void }) => {
   return (
-    <div className="my-6 mt-8 flex h-[70%] flex-col items-center justify-center text-center">
+    <div className="my-6 mt-8 flex h-[70%] flex-col items-center justify-center text-center max-md:mt-2">
       <p className="text-[0.8rem]">No souls recruited yet.</p>
 
       <div className="my-4">
@@ -78,10 +78,10 @@ export const RefsScreen: React.FC = () => {
 
   return (
     <section className="flex flex-col overflow-hidden">
-      <div className="container mx-auto my-4 px-4 pb-16">
-        <div className="flex items-center justify-between">
+      <div className="container mx-auto my-4 px-4 pb-16 max-md:pb-4">
+        <div className="flex items-center justify-between max-md:flex-col max-md:items-stretch max-md:gap-3">
           <div>
-            <h2 className="mb-3 text-2xl font-bold">Referrals</h2>
+            <h2 className="mb-3 text-2xl font-bold max-md:text-xl">Referrals</h2>
             <p className="text-[0.8rem] font-[500] text-white">Refer a friend</p>
             <p className="my-3 text-[0.8rem] text-[#AFAFAF]">{refsList.length} referrals</p>
             {isGuest && (
@@ -91,7 +91,7 @@ export const RefsScreen: React.FC = () => {
               </p>
             )}
           </div>
-          <GameButton variant="papyrus" onClick={copyInvite} className="px-3 py-3 text-[13px]">
+          <GameButton variant="papyrus" onClick={copyInvite} className="px-3 py-3 text-[13px] max-md:w-full">
             Invite a Soul!
           </GameButton>
         </div>

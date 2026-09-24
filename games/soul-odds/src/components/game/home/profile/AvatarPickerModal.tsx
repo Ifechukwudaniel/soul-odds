@@ -69,7 +69,7 @@ export const AvatarPickerModal = (props: { isOpen: boolean; onClose: () => void 
       labelledBy={titleId}
       className="w-full max-w-md"
     >
-      <div className="relative flex flex-col gap-5 p-6">
+      <div className="relative flex flex-col gap-5 p-6 max-md:max-h-[calc(100dvh-2rem)] max-md:gap-4 max-md:overflow-y-auto max-md:p-4">
         <ModalCloseButton onClick={props.onClose} />
 
         <ModalHeader title="Choose your avatar" titleId={titleId} />

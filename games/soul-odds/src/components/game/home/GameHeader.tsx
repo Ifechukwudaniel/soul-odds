@@ -11,12 +11,12 @@ export const GameHeader = (props: {
   isDemo?: boolean;
   onOpenProfile?: () => void;
 }) => (
-  <header className="container mx-auto flex h-[10dvh] shrink-0 flex-wrap items-center justify-between gap-4 px-4">
+  <header className="container mx-auto flex h-[calc(var(--hud-h)+env(safe-area-inset-top))] shrink-0 items-center justify-between gap-2 px-3 pt-[env(safe-area-inset-top)] md:h-[10dvh] md:flex-wrap md:gap-4 md:px-4 md:pt-0">
     <div className="flex items-center gap-2">
       <GameLogo />
       {props.isDemo && <DemoBadge />}
     </div>
-    <div className="flex items-center gap-3">
+    <div className="ml-auto flex items-center gap-2 md:gap-3">
       <SoundToggleButton />
       <WalletBalanceBadge amount={props.balance} currency={props.currency} />
       <ProfileMenuButton avatar={props.avatar} onClick={props.onOpenProfile} />

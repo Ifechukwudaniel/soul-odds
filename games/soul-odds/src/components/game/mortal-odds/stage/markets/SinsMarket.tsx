@@ -40,7 +40,7 @@ export const SinsMarket = (props: {
 
   if (!heartIsHeavy) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-5 text-center">
+      <div className="flex min-h-full flex-col items-center justify-center gap-5 text-center max-md:gap-3">
         <div className="flex flex-col items-center gap-1">
           <GiFeather size={32} className="text-[#3FB6A8]" />
           <h3 className="text-xl font-bold text-white">The Weighing of the Heart</h3>
@@ -59,7 +59,7 @@ export const SinsMarket = (props: {
               playClickSound();
               props.onSelect('none');
             }}
-            className={`rounded-lg border px-4 py-4 text-base font-semibold ${
+            className={`rounded-lg border px-4 py-4 text-base max-md:py-3 font-semibold ${
               props.selectedOptionId === 'none'
                 ? 'accent-gradient border-black text-slate-950 shadow-[inset_1px_1px_1.5px_0px_#FFFFFF66]'
                 : 'border-black bg-[#262433] text-[#AFAFAF]'
@@ -73,7 +73,7 @@ export const SinsMarket = (props: {
               playClickSound();
               setHeartIsHeavy(true);
             }}
-            className="rounded-lg border border-black bg-[#262433] px-4 py-4 text-base font-semibold text-[#AFAFAF]"
+            className="rounded-lg border border-black bg-[#262433] px-4 py-4 text-base max-md:py-3 font-semibold text-[#AFAFAF]"
           >
             The heart is heavy
             <span className="mt-1 block text-xs opacity-70">name the sins</span>
@@ -84,7 +84,7 @@ export const SinsMarket = (props: {
   }
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-5 text-center">
+    <div className="flex min-h-full flex-col items-center justify-center gap-5 text-center max-md:gap-3">
       <div className="flex flex-col items-center gap-1">
         <GiFeather size={32} className="text-[#3FB6A8]" />
         <h3 className="text-xl font-bold text-white">Which sin tipped the scale?</h3>
@@ -107,7 +107,7 @@ export const SinsMarket = (props: {
                 disabled={!isSelected && atSinLimit}
                 aria-pressed={isSelected}
                 onClick={() => toggleSin(category.id)}
-                className={`rounded-lg border px-4 py-4 text-sm leading-snug font-semibold disabled:opacity-40 ${
+                className={`rounded-lg border px-4 py-4 text-sm leading-snug font-semibold max-md:px-2.5 max-md:py-3 max-md:text-[0.8rem] disabled:opacity-40 ${
                   isSelected
                     ? 'accent-gradient border-black text-slate-950 shadow-[inset_1px_1px_1.5px_0px_#FFFFFF66]'
                     : 'border-black bg-[#262433] text-[#AFAFAF]'

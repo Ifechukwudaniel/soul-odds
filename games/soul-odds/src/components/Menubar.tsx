@@ -80,10 +80,7 @@ export const Menubar = () => {
 
   return (
     <div
-      className="gold-gradient fixed bottom-4 left-[50%] my-3 mt-16 translate-x-[-50%] rounded-3xl p-px md:max-w-md"
-      style={{
-        width: 'calc(100% - 2rem)',
-      }}
+      className="gold-gradient fixed bottom-4 left-[50%] my-3 mt-16 w-[calc(100%-2rem)] translate-x-[-50%] rounded-3xl p-px max-md:static max-md:mx-auto max-md:my-0 max-md:mb-[max(0.5rem,env(safe-area-inset-bottom))] max-md:w-full max-md:translate-x-0 md:max-w-md"
     >
       <div
         role="tablist"

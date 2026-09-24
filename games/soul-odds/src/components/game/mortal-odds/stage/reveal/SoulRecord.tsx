@@ -29,14 +29,14 @@ function lifespanLabel(age: number): string {
 const RecordGroup = (props: { rows: RecordRow[] }) => (
   <dl className="record-group flex flex-col gap-2 py-3">
     {props.rows.map((row) => (
-      <div key={row.label} className="flex items-center justify-between gap-3">
+      <div key={row.label} className="flex items-center justify-between gap-3 max-md:flex-wrap">
         <dt className="flex items-center gap-2 text-[11px] tracking-[0.15em] text-white/50 uppercase">
           <row.icon size={16} className="shrink-0 text-[#F5B83D]" />
 
           {row.label}
         </dt>
 
-        <dd className="text-right text-xs text-white">{row.value}</dd>
+        <dd className="text-right text-xs text-white max-md:text-left">{row.value}</dd>
       </div>
     ))}
   </dl>

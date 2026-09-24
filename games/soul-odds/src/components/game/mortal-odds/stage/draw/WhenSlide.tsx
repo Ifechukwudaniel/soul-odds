@@ -35,7 +35,7 @@ export const WhenSlide = (props: {
     <div className="flex min-h-full flex-col items-center gap-3 text-center lg:gap-4">
       <div className="flex items-center justify-center gap-3">
         <h2
-          className={`${serifFont.className} pt-[0.5rem] text-3xl leading-[0.55] font-bold text-[#F1D6AE] sm:text-4xl`}
+          className={`${serifFont.className} pt-[0.5rem] text-3xl leading-[0.55] font-bold text-[#F1D6AE] max-md:text-2xl sm:text-4xl`}
         >
           In which age?
         </h2>

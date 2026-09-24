@@ -1,8 +1,10 @@
 'use client';
 
 import { MotionConfig } from 'framer-motion';
+import { useId, useState } from 'react';
 import { BetPanel } from '@/components/game/home/BetPanel';
 import { GameCard } from '@/components/game/home/GameCard';
+import { SlipBar, SlipSheetHandle } from '@/components/game/home/SlipBar';
 import { DrawSequence } from '@/components/game/mortal-odds/stage/draw/DrawSequence';
 import { DrawHero } from '@/components/game/mortal-odds/stage/DrawHero';
 import { PredictionsPanel } from '@/components/game/mortal-odds/stage/markets/PredictionsPanel';
@@ -10,6 +12,7 @@ import { RevealPanel } from '@/components/game/mortal-odds/stage/reveal/RevealPa
 import { BetSummary } from '@/components/game/mortal-odds/stage/summary/BetSummary';
 import type { MortalOddsBets } from '@/hooks/useMortalOddsBets';
 import type { MortalOddsRound } from '@/hooks/useMortalOddsDraw';
+import { slipTotals } from '@/lib/mortal-odds/bets';
 import { marketsConfig } from '@/lib/mortal-odds/config';
 import type { MarketPrices, Price, RoundCharge } from '@/types';
 
@@ -35,16 +38,39 @@ export const MortalOddsStage = (props: {
   
 }) => {
   const { round } = props;
+  const [slipOpen, setSlipOpen] = useState(false);
+  const slipId = useId();
+  const totals = slipTotals({
+    bets: props.bets,
+    prices: props.prices,
+    priceDeathYear: props.priceDeathYear,
+    charges: props.charges,
+    requiredBets: marketsConfig.length,
+  });
   const inDrawSequence =
     round.phase === 'drawing' || round.phase === 'when' || round.phase === 'where';
 
   return (
     <MotionConfig reducedMotion="user">
       <div
-        className="flex w-full flex-1 flex-col gap-4 lg:h-[min(calc(100dvh-14rem),44rem)] lg:flex-row"
+        className="flex w-full flex-1 flex-col gap-4 max-lg:min-h-0 max-lg:gap-2 lg:h-[min(calc(100dvh-14rem),44rem)] lg:flex-row"
         aria-live="polite"
       >
-        <div className="order-last shrink-0 lg:order-first lg:h-full lg:w-80">
+        {slipOpen && (
+          <button
+            type="button"
+            aria-label="Close wager slip"
+            onClick={() => setSlipOpen(false)}
+            className="fixed inset-0 z-20 cursor-default bg-black/50 lg:hidden"
+          />
+        )}
+
+        {/* ✦ Phones: the wager panel is a bottom sheet opened from the slip bar. lg+: the side panel. */}
+        <div
+          id={slipId}
+          className={`order-last shrink-0 max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-30 max-lg:max-h-[75dvh] max-lg:overflow-y-auto max-lg:overscroll-contain max-lg:rounded-t-2xl max-lg:bg-[#0b1512] max-lg:p-2 max-lg:pb-[max(0.5rem,env(safe-area-inset-bottom))] md:max-lg:pb-28 max-lg:shadow-[0_-12px_40px_rgba(0,0,0,0.6)] max-lg:transition-[transform,visibility] max-lg:duration-200 motion-reduce:transition-none lg:order-first lg:h-full lg:w-80 ${slipOpen ? '' : 'max-lg:invisible max-lg:translate-y-full'}`}
+        >
+          <SlipSheetHandle onClose={() => setSlipOpen(false)} />
           <BetPanel
             currency={props.currency}
             chipSize={props.chipSize}
@@ -64,7 +90,7 @@ export const MortalOddsStage = (props: {
           />
         </div>
 
-        <div className="flex min-w-0 flex-1 flex-col lg:h-full">
+        <div className="flex min-w-0 flex-1 flex-col max-lg:min-h-0 lg:h-full">
           {round.phase === 'idle' && (
             <DrawHero
               currentYear={round.currentYear}
@@ -159,6 +185,17 @@ export const MortalOddsStage = (props: {
             />
           )}
         </div>
+
+        <SlipBar
+          stake={props.chipLocked ? totals.atRisk : props.chipSize}
+          potentialWin={totals.totalPotentialWin}
+          pickCount={totals.bets.length}
+          requiredBets={marketsConfig.length}
+          currency={props.currency}
+          isOpen={slipOpen}
+          controlsId={slipId}
+          onToggle={() => setSlipOpen(!slipOpen)}
+        />
       </div>
     </MotionConfig>
   );

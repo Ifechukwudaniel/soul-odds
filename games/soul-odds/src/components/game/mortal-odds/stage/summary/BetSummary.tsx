@@ -12,6 +12,9 @@ import type { SinNarratives } from '@/lib/mortal-odds/sin-variants';
 import { serifFont } from '@/styles/serif-font';
 import type { Bet, Draw, MarketPrices, Price, RoundCharge } from '@/types';
 
+// ✦ Phones drop the column header row, so each number carries its own small label instead.
+const CELL_LABEL = 'text-[0.6rem] font-normal tracking-[0.15em] text-white/40 uppercase md:hidden';
+
 const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
 
 export const BetSummary = (props: {
@@ -63,9 +66,9 @@ export const BetSummary = (props: {
       </div>
 
       <div className="gold-gradient mt-auto rounded-2xl p-px">
-        <div className="flex flex-col gap-4 rounded-2xl bg-[#0A1412] p-4">
+        <div className="flex flex-col gap-4 rounded-2xl bg-[#0A1412] p-4 max-md:p-3">
           <div className="flex flex-col gap-2">
-            <div className="grid grid-cols-[1fr_auto_auto_auto] gap-4 px-1 text-[10px] tracking-[0.15em] text-white/40 uppercase">
+            <div className="grid grid-cols-[1fr_auto_auto_auto] gap-4 px-1 text-[10px] tracking-[0.15em] text-white/40 uppercase max-md:hidden">
               <span>Your picks</span>
               <span className="text-right">Odds</span>
               <span className="text-right">Stake</span>
@@ -80,9 +83,9 @@ export const BetSummary = (props: {
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25, delay: index * 0.08 }}
-                  className="grid grid-cols-[1fr_auto_auto_auto] items-center gap-4 rounded-xl border border-white/10 bg-black/40 px-4 py-3"
+                  className="grid grid-cols-3 items-center gap-x-3 gap-y-2 rounded-xl border border-white/10 bg-black/40 px-3 py-3 md:grid-cols-[1fr_auto_auto_auto] md:gap-4 md:px-4"
                 >
-                  <div className="flex min-w-0 items-center gap-3">
+                  <div className="col-span-3 flex min-w-0 items-center gap-3 md:col-span-1">
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#F5B83D]/30 bg-[#F5B83D]/10 text-[#F5B83D]">
                       <Icon size={16} />
                     </span>
@@ -91,16 +94,23 @@ export const BetSummary = (props: {
                       <p className="truncate text-sm font-semibold text-white">{row.label.pick}</p>
                     </div>
                   </div>
-                  <span className="text-right text-sm text-white/70">
+                  <span className="flex flex-col text-sm text-white/70 md:text-right">
+                    <span className={CELL_LABEL}>Odds</span>
                     {row.odds === null ? '—' : row.odds.toFixed(2)}
                   </span>
-                  <span className="flex items-center justify-end gap-1 text-right text-sm text-white/70">
-                    <CurrencyCoinIcon width={14} height="14" />
-                    {row.bet.stake.toFixed(2)}
+                  <span className="flex flex-col text-sm text-white/70 md:flex-row md:items-center md:justify-end md:gap-1 md:text-right">
+                    <span className={CELL_LABEL}>Stake</span>
+                    <span className="flex items-center gap-1">
+                      <CurrencyCoinIcon width={14} height="14" />
+                      {row.bet.stake.toFixed(2)}
+                    </span>
                   </span>
-                  <span className="flex items-center justify-end gap-1 text-right text-sm font-bold text-[#F5B83D]">
-                    <CurrencyCoinIcon width={14} height="14" />
-                    {row.payout.toFixed(2)}
+                  <span className="flex flex-col text-sm font-bold text-[#F5B83D] md:flex-row md:items-center md:justify-end md:gap-1 md:text-right">
+                    <span className={CELL_LABEL}>Payout</span>
+                    <span className="flex items-center gap-1">
+                      <CurrencyCoinIcon width={14} height="14" />
+                      {row.payout.toFixed(2)}
+                    </span>
                   </span>
                 </motion.div>
               );
@@ -120,7 +130,7 @@ export const BetSummary = (props: {
             </dl>
           )}
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid gap-2 sm:grid-cols-2 sm:gap-3">
             <div className="mystic-glass flex items-center justify-between gap-2 rounded-xl border bg-black/80 px-4 py-2.5">
               <span className="text-[12px] tracking-[0.15em] text-white/50">Total stake</span>
               <span className="flex items-center gap-1 text-sm font-bold text-white">
@@ -137,7 +147,11 @@ export const BetSummary = (props: {
             </div>
           </div>
 
-          <GameButton variant="papyrus" onClick={props.onConfirm} className="px-6 py-2 text-base">
+          <GameButton
+            variant="papyrus"
+            onClick={props.onConfirm}
+            className="px-6 py-2 text-base max-md:sticky max-md:bottom-0 max-md:z-10 max-md:py-3"
+          >
             Let the scale decide
           </GameButton>
         </div>

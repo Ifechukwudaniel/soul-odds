@@ -19,7 +19,9 @@ interface LeaderboardTableProps {
 const COLUMNS = ['Rank', 'User name', 'Point', 'Winnings'] as const;
 
 // ✦ Rows are a grid (not <tr>) so the current user's row can carry the mystic-glass border and radius; ARIA roles keep the table semantics.
-const ROW_GRID = 'grid grid-cols-[3.5rem_minmax(0,1fr)_5rem_6rem] items-center gap-4 px-4';
+// ✦ Phones drop the Point column (it moves under the name) so the row fits without sideways scrolling.
+const ROW_GRID =
+  'grid grid-cols-[3.5rem_minmax(0,1fr)_5rem_6rem] items-center gap-4 px-4 max-md:grid-cols-[2rem_minmax(0,1fr)_auto] max-md:gap-3 max-md:px-3';
 
 const RANK_BADGES: Record<number, typeof GoldBadge> = {
   1: GoldBadge,
@@ -40,15 +42,26 @@ export function LeaderboardTable({
 }: LeaderboardTableProps) {
   return (
     <GameCard containerClassName="w-full">
-      <Scroller className="max-h-[20rem]">
-        <div role="table" className="flex min-w-[26rem] flex-col gap-2">
+      <Scroller className="max-h-[20rem] max-md:max-h-none">
+        <div role="table" className="flex flex-col gap-2 md:min-w-[26rem]">
           <div
             role="row"
             className={cn(ROW_GRID, 'sticky top-0 z-10 bg-[#132126] py-2 text-sm text-[#AFAFAF]')}
           >
             {COLUMNS.map((column) => (
-              <div key={column} role="columnheader" className="font-[500]">
-                {column}
+              <div
+                key={column}
+                role="columnheader"
+                className={cn('font-[500]', column === 'Point' && 'max-md:hidden')}
+              >
+                {column === 'Rank' ? (
+                  <>
+                    <span className="max-md:hidden">Rank</span>
+                    <span className="md:hidden">#</span>
+                  </>
+                ) : (
+                  column
+                )}
               </div>
             ))}
           </div>
@@ -76,7 +89,7 @@ export function LeaderboardTable({
                 <div role="cell" className="flex min-w-0 items-center gap-3">
                   <div
                     className={cn(
-                      'accent-gradient flex h-12 w-12 shrink-0 items-center justify-center rounded-full p-[2px] ring-offset-2 ring-offset-[#18131F]',
+                      'accent-gradient flex h-12 w-12 shrink-0 items-center justify-center rounded-full p-[2px] ring-offset-2 ring-offset-[#18131F] max-md:h-9 max-md:w-9',
                       RANK_AVATAR_RING[user.rank],
                     )}
                   >
@@ -84,9 +97,12 @@ export function LeaderboardTable({
                       <AvatarIcon className="h-[68%] w-[68%]" />
                     </div>
                   </div>
-                  <p className="truncate font-[500] text-white">@{user.handle}</p>
+                  <div className="min-w-0">
+                    <p className="truncate font-[500] text-white">@{user.handle}</p>
+                    <p className="text-xs text-white/50 md:hidden">{user.points.toLocaleString()} pts</p>
+                  </div>
                 </div>
-                <div role="cell" className="text-white">
+                <div role="cell" className="text-white max-md:hidden">
                   {user.points.toLocaleString()}
                 </div>
                 <div role="cell">

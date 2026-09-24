@@ -25,7 +25,7 @@ export const ModalCloseButton = (props: { onClick: () => void }) => (
       playClickSound();
       props.onClick();
     }}
-    className="absolute top-3 right-3 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 transition-colors hover:text-white"
+    className="absolute top-3 right-3 flex h-7 w-7 cursor-pointer max-md:h-9 max-md:w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 transition-colors hover:text-white"
   >
     <PiXBold className="h-3.5 w-3.5" />
   </button>

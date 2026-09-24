@@ -104,7 +104,7 @@ export const PredictionsPanel = (props: {
                     playClickSound();
                     goTo(index);
                   }}
-                  className={`h-1.5 w-1.5 rounded-full ${props.bets[entry.id] ? 'bg-[#F5B83D]' : 'bg-white/20'} ${
+                  className={`h-1.5 w-1.5 rounded-full max-md:relative max-md:after:absolute max-md:after:-inset-2.5 max-md:after:content-[''] ${props.bets[entry.id] ? 'bg-[#F5B83D]' : 'bg-white/20'} ${
                     index === step ? 'ring-2 ring-white/30' : ''
                   }`}
                 />

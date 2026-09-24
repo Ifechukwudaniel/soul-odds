@@ -157,7 +157,7 @@ export const RevealPanel = (props: {
             variant="papyrus"
             disabled={!props.canAffordDraw}
             onClick={props.onNext}
-            className="px-6 py-3 text-base"
+            className="px-6 py-3 text-base max-md:sticky max-md:bottom-0 max-md:z-10"
           >
             Summon another soul
             <span className="flex items-center gap-1 text-slate-950/60">
