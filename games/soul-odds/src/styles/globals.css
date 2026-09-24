@@ -290,6 +290,26 @@ main {
 }
 
 /*
+ * Mobile: the framed bar and its arrow buttons cost more width than they earn on a touch screen,
+ * which scrolls by swipe anyway — so drop the bar and collapse the gutters it reserves, giving the
+ * content the full width. OverlayScrollbars still owns scrolling; only its visuals are hidden.
+ */
+@media (max-width: 767.98px) {
+  .soul-odds.os-scrollbar {
+    display: none;
+  }
+
+  [data-os-overflow-y] > [data-overlayscrollbars-viewport] > *,
+  [data-os-gutter='reserved'] > [data-overlayscrollbars-viewport] > * {
+    padding-inline: 0;
+  }
+
+  [data-os-overflow-x] > [data-overlayscrollbars-viewport] > * {
+    margin-bottom: 0;
+  }
+}
+
+/*
  * A scroll area that's a keyboard tab stop only so it can be scrolled (no interactive content of its own,
  * e.g. the leaderboard list) intentionally shows no focus ring in normal mode — a ring around content that
  * isn't itself a control read as a stray box, not a control being "selected". Windows high-contrast mode

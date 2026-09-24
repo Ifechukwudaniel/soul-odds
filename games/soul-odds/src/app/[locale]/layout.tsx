@@ -40,6 +40,11 @@ export async function generateMetadata(props: {
       {
         rel: 'icon',
         type: 'image/png',
+        url: '/img/favicon.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
         sizes: '32x32',
         url: '/favicon-32x32.png',
       },
