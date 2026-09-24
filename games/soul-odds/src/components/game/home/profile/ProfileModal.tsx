@@ -21,7 +21,6 @@ export const ProfileModal = (props: {
   username: string;
   handle: string;
   rank: string;
-  leaderboardRank: number;
   onViewRankPage?: () => void;
 }) => {
   const avatarId = useAppStore((state) => state.user.avatarId);
@@ -95,7 +94,7 @@ export const ProfileModal = (props: {
               avatarId={avatarId}
               onEditAvatar={() => setIsAvatarPickerOpen(true)}
             />
-            <LeaderboardRankRow rank={props.leaderboardRank} onClick={goToRankPage} />
+            <LeaderboardRankRow rank="" onClick={goToRankPage} />
             <hr className="border-white/10" />
             <ProfileMenuList actions={menuActions} />
           </motion.div>

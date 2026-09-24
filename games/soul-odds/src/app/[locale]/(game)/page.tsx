@@ -145,7 +145,6 @@ export default function GamePage() {
         username={displayName}
         handle={displayName}
         rank={rankTitle}
-        leaderboardRank={42881}
         onViewRankPage={() => setScreen('ranks')}
       />
     </div>
