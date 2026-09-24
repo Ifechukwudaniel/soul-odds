@@ -21,24 +21,10 @@ const LORE_LINES = [
 const LORE_HOLD_S = 2.2;
 const HINT_DELAY_S = 8;
 
-// A wait that resolves before this always reads as a flash, not a load — held past it, then dissolved,
-// it reads as deliberate instead.
+
 const MIN_VISIBLE_MS = 900;
 const EXIT_DURATION_S = 0.5;
 
-/**
- * Full-screen Anubis-themed loading state: used as the app's Suspense fallback and, with a `hint`,
- * as the casino-host connection gate. There's no real progress signal for either wait, so the bar
- * trickles toward a hold point instead of faking completion.
- *
- * Pass `ready`/`onExit` to let the loader own its own exit: it holds for at least `MIN_VISIBLE_MS`
- * (so a wait that resolves instantly doesn't just flash on and off) and dissolves out under its own
- * timing before calling `onExit`, instead of being yanked off screen the instant the caller is done.
- * Without them it just renders until the caller stops mounting it (e.g. the Suspense fallback case).
- *
- * It fills the viewport by default; pass `className="h-full"` to fill a sized parent instead (e.g. a screen
- * inside the game's scroll area, where a viewport-tall loader would overflow and flash a scrollbar).
- */
 export const Loader = (props: {
   className?: string;
   label?: string;
@@ -173,23 +159,43 @@ export const Loader = (props: {
       />
       <div className="absolute inset-0 bg-gradient-to-b from-[#0b0a08]/40 via-[#0b0a08]/75 to-[#0b0a08]" />
 
-      <div ref={introRef} className="relative z-10 flex flex-col items-center gap-8 px-6">
+      <div ref={introRef} className="-translate-y-6  relative z-10 flex flex-col items-center gap-4 px-6">
         <Image
           src={logo}
           alt="Soul Odds"
           width={200}
           height={67}
           priority
-          className="drop-shadow-[0_0_18px_rgba(245,184,61,0.35)]"
         />
 
         <div ref={scaleRef} className="relative flex items-center justify-center">
           <div className="absolute h-28 w-28 rounded-full bg-[#f5b83d]/20 blur-2xl" />
-          <GiScales className="relative h-16 w-16 text-[#f5b83d]" />
+          <svg width="0" height="0" className="absolute">
+  <defs>
+    <linearGradient
+      id="gold-gradient"
+      x1="0%"
+      y1="0%"
+      x2="0%"
+      y2="100%"
+    >
+      <stop offset="0%" stopColor="#FFF4B0" />
+      <stop offset="25%" stopColor="#FFD966" />
+      <stop offset="50%" stopColor="#F5B83D" />
+      <stop offset="75%" stopColor="#D89A24" />
+      <stop offset="100%" stopColor="#8F5B12" />
+    </linearGradient>
+  </defs>
+</svg>
+
+<GiScales
+  className="relative h-16 w-16"
+  style={{ fill: 'url(#gold-gradient)' }}
+/>
         </div>
 
         <div className="flex w-64 flex-col items-center gap-3">
-          <div className="loader-track h-3 w-full">
+          <div className="loader-track h-5 w-full">
             <div ref={fillRef} className="loader-track-fill" style={{ width: '0%' }} />
           </div>
           <p className="text-[0.7rem] tracking-wide text-[#e8dcc0]/80">
@@ -197,7 +203,7 @@ export const Loader = (props: {
           </p>
           <p
             ref={loreRef}
-            className={`${serifFont.className} text-center text-[0.7rem] text-[#3fb6a8]`}
+            className={`${serifFont.className} text-center text-[0.7rem] text-[#f5b83d]`}
           >
             {LORE_LINES[0]}
           </p>

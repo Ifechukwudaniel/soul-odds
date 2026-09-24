@@ -77,7 +77,8 @@ export const RefsScreen: React.FC = () => {
   const refsList = referredUsers.length > 0 ? referredUsers : [];
 
   return (
-    <section className="flex flex-col overflow-hidden">
+    <Loader className="h-full" />
+  /*   <section className="flex flex-col overflow-hidden">
       <div className="container mx-auto my-4 px-4 pb-16">
         <div className="flex items-center justify-between">
           <div>
@@ -119,6 +120,6 @@ export const RefsScreen: React.FC = () => {
           </div>
         )}
       </div>
-    </section>
+    </section> */
   );
 };

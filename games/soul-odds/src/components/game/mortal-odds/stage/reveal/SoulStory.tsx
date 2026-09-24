@@ -4,14 +4,24 @@ import { motion } from 'framer-motion';
 import { LuBookOpen, LuChevronDown } from 'react-icons/lu';
 import { RevealSection } from '@/components/game/mortal-odds/stage/reveal/RevealSection';
 import type { LifeStoryState } from '@/hooks/useLifeStory';
+import { div } from 'framer-motion/client';
 
 const SKELETON_LINE_WIDTHS = ['w-full', 'w-11/12', 'w-full', 'w-4/5'];
 
 const StoryLoading = () => (
-  <div className="flex flex-col gap-3" aria-label="Writing this soul's story…" role="status">
-    {SKELETON_LINE_WIDTHS.map((width, index) => (
-      <div key={width + index} className={`h-4 ${width} animate-pulse rounded-full bg-white/10`} />
-    ))}
+  <div
+    className="story-loading  flex w-full flex-col items-center"
+    aria-label="Writing this soul's story…"
+    role="status"
+  >
+    <div className="story-loading__bar">
+      <div className="story-loading__fill" />
+      <div className="story-loading__shine" />
+    </div>
+
+    <span className="story-loading__text">
+      Writing this soul's story…
+    </span>
   </div>
 );
 
@@ -36,7 +46,9 @@ export const SoulStory = (props: { state: LifeStoryState }) => (
         ))}
       </motion.div>
     ) : (
-      <StoryLoading />
+      <div className="my-10">
+  <StoryLoading />
+      </div>   
     )}
 
     <button

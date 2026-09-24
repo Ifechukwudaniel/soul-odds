@@ -125,11 +125,23 @@ export const MortalOddsStage = (props: {
               className="flex min-h-0 flex-1 items-center justify-center"
               containerClassName="flex h-full w-full flex-col"
             >
-              <p className="animate-pulse text-sm text-white/60">
-                {round.awaitingSinNarrative
+             
+              <div
+    className="story-loading"
+    aria-label="Writing this soul's story…"
+    role="status"
+  >
+    <div className="story-loading__bar">
+      <div className="story-loading__fill" />
+      <div className="story-loading__shine" />
+    </div>
+
+    <span className="story-loading__text">
+    {round.awaitingSinNarrative
                   ? 'Consulting the record of sins…'
                   : 'Reading the omens…'}
-              </p>
+    </span>
+  </div>
             </GameCard>
           )}
 
