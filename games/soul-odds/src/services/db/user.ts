@@ -147,7 +147,8 @@ export async function useTokens(address: string, amount: number): Promise<void> 
  * @param limit The maximum number of users to return.
  * @param address When given, guarantees this user is included even if their
  * rank falls outside `limit` - inserted at the position their own score
- * would place them, not tacked onto the end.
+ * would place them, not tacked onto the end. Users with no points are never ranked by points, so
+ * this doesn't add them.
  * @returns The ranked users.
  */
 export async function getLeaderboard(
@@ -157,7 +158,14 @@ export async function getLeaderboard(
 ): Promise<User[]> {
   const key = sortBy === 'balance' ? 'balance' : 'points';
   const column = userSchema[key];
-  const users = await db.select().from(userSchema).orderBy(desc(column)).limit(limit);
+  // ✦ A points ranking only lists people who have actually played; visitors sitting on 0 don't belong on it.
+  const ranked = sortBy === 'balance' ? undefined : gt(userSchema.points, 0);
+  const users = await db
+    .select()
+    .from(userSchema)
+    .where(ranked)
+    .orderBy(desc(column))
+    .limit(limit);
 
   if (!address) {
     return users;
@@ -169,7 +177,7 @@ export async function getLeaderboard(
   }
 
   const currentUser = await findUser(normalized);
-  if (!currentUser) {
+  if (!currentUser || (ranked && currentUser.points <= 0)) {
     return users;
   }
 

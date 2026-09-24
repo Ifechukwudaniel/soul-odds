@@ -65,6 +65,11 @@ export function LeaderboardTable({
               </div>
             ))}
           </div>
+          {users.length === 0 && (
+            <p className="px-4 py-6 text-center text-sm text-white/50">
+              No ranked players yet. Settle a round to take the first spot.
+            </p>
+          )}
           {users.map((user) => {
             const isCurrentUser = user.id === currentUserId;
             const RankBadge = RANK_BADGES[user.rank];
