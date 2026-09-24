@@ -100,11 +100,23 @@ function sampleGender(configuration: SoulConfiguration, random: bigint): number 
   return roll < configuration.maleWeight ? 0 : 1;
 }
 
+function lifespanAt(configuration: SoulConfiguration, bucket: number): SoulLifespan {
+  const lifespan = configuration.lifespans[bucket];
+  if (!lifespan) throw new RangeError(`Lifespan bucket out of range: ${bucket}`);
+  return lifespan;
+}
+
+function crimeAt(configuration: SoulConfiguration, index: number): SoulCrime {
+  const crime = configuration.crimes[index];
+  if (!crime) throw new RangeError(`Crime index out of range: ${index}`);
+  return crime;
+}
+
 function sampleLifespan(configuration: SoulConfiguration, random: bigint): number {
   const roll = random % configuration.lifespanTotalWeight;
   let cumulative = 0n;
   for (let i = 0; i < LIFESPAN_COUNT; i++) {
-    cumulative += configuration.lifespans[i].weight;
+    cumulative += lifespanAt(configuration, i).weight;
     if (roll < cumulative) return i;
   }
   return 3;
@@ -129,13 +141,13 @@ function sampleBirthYear(configuration: SoulConfiguration, random: bigint): numb
 
 function sampleCrimes(configuration: SoulConfiguration, random: bigint): number {
   let selectionTotal = 0n;
-  for (let i = 0; i < CRIME_COUNT; i++) selectionTotal += configuration.crimes[i].selectionWeight;
+  for (let i = 0; i < CRIME_COUNT; i++) selectionTotal += crimeAt(configuration, i).selectionWeight;
 
   let mask = 0;
   const first = random % selectionTotal;
   let cumulative = 0n;
   for (let i = 0; i < CRIME_COUNT; i++) {
-    cumulative += configuration.crimes[i].selectionWeight;
+    cumulative += crimeAt(configuration, i).selectionWeight;
     if (first < cumulative) {
       mask |= 1 << i;
       break;
@@ -148,7 +160,7 @@ function sampleCrimes(configuration: SoulConfiguration, random: bigint): number 
     const second = secondRandom % selectionTotal;
     cumulative = 0n;
     for (let i = 0; i < CRIME_COUNT; i++) {
-      cumulative += configuration.crimes[i].selectionWeight;
+      cumulative += crimeAt(configuration, i).selectionWeight;
       if (second < cumulative && (mask & (1 << i)) === 0) {
         mask |= 1 << i;
         break;
@@ -163,7 +175,7 @@ export function generateSoul(configuration: SoulConfiguration, randomness: Hex):
   const random = hexToBigInt(randomness);
   const gender = sampleGender(configuration, random);
   const lifespanBucket = sampleLifespan(configuration, random >> 32n);
-  const lifespan = configuration.lifespans[lifespanBucket];
+  const lifespan = lifespanAt(configuration, lifespanBucket);
   const age = sampleAge(lifespan, random >> 64n);
   const noCrime = sampleNoCrime(lifespan, random >> 96n);
   const crimeMask = noCrime ? 0 : sampleCrimes(configuration, random >> 128n);
@@ -203,7 +215,7 @@ function singleCrimeProbabilityWad(
   selectionTotal: bigint,
   index: number,
 ): bigint {
-  const probabilityWad = mulDivFloor(configuration.crimes[index].selectionWeight, WAD, selectionTotal);
+  const probabilityWad = mulDivFloor(crimeAt(configuration, index).selectionWeight, WAD, selectionTotal);
   let stayedSingleWad = mulDivFloor(probabilityWad, 3n, 4n);
   if (index === CRIME_COUNT - 1) {
     stayedSingleWad += mulDivFloor(mulDivFloor(probabilityWad, probabilityWad, WAD), 1n, 4n);
@@ -217,8 +229,8 @@ function pairCrimeProbabilityWad(
   first: number,
   second: number,
 ): bigint {
-  const probabilityA = mulDivFloor(configuration.crimes[first].selectionWeight, WAD, selectionTotal);
-  const probabilityB = mulDivFloor(configuration.crimes[second].selectionWeight, WAD, selectionTotal);
+  const probabilityA = mulDivFloor(crimeAt(configuration, first).selectionWeight, WAD, selectionTotal);
+  const probabilityB = mulDivFloor(crimeAt(configuration, second).selectionWeight, WAD, selectionTotal);
   let numeratorWad = mulDivFloor(probabilityA, probabilityB, WAD) * 2n;
   if (second === first + 1) numeratorWad += mulDivFloor(probabilityA, probabilityA, WAD);
   return numeratorWad / 4n;
@@ -230,6 +242,7 @@ function crimeMaskProbabilityWad(
   crimeMask: number,
 ): bigint {
   const [first, second] = crimeMaskIndices(crimeMask);
+  if (first === undefined) throw new RangeError(`Crime mask has no crimes: ${crimeMask}`);
   return second === undefined
     ? singleCrimeProbabilityWad(configuration, selectionTotal, first)
     : pairCrimeProbabilityWad(configuration, selectionTotal, first, second);
@@ -243,7 +256,7 @@ function crimeStateProbabilityWad(
   if (crimeMask === 0) return mulDivFloor(lifespan.noCrimeWeight, WAD, BPS);
   const hasCrimeProbabilityWad = WAD - mulDivFloor(lifespan.noCrimeWeight, WAD, BPS);
   let selectionTotal = 0n;
-  for (let i = 0; i < CRIME_COUNT; i++) selectionTotal += configuration.crimes[i].selectionWeight;
+  for (let i = 0; i < CRIME_COUNT; i++) selectionTotal += crimeAt(configuration, i).selectionWeight;
   const maskProbabilityWad = crimeMaskProbabilityWad(configuration, selectionTotal, crimeMask);
   return mulDivFloor(hasCrimeProbabilityWad, maskProbabilityWad, WAD);
 }
@@ -263,7 +276,7 @@ function categoryProbabilities(
   const genderTotal = configuration.maleWeight + configuration.femaleWeight;
   const genderProbabilityWad = mulDivFloor(genderWeight, WAD, genderTotal);
 
-  const lifespan = configuration.lifespans[prediction.lifespanBucket];
+  const lifespan = lifespanAt(configuration, prediction.lifespanBucket);
   const lifespanProbabilityWad = mulDivFloor(lifespan.weight, WAD, configuration.lifespanTotalWeight);
 
   const crimeProbabilityWad = crimeStateProbabilityWad(configuration, lifespan, prediction.crimeMask);
@@ -309,7 +322,7 @@ export function lifespanOdds(
   wager: bigint,
   lifespanBucket: number,
 ): CategoryOdds {
-  const lifespan = configuration.lifespans[lifespanBucket];
+  const lifespan = lifespanAt(configuration, lifespanBucket);
   const probabilityWad = mulDivFloor(lifespan.weight, WAD, configuration.lifespanTotalWeight);
   return { probabilityWad, payout: categoryPayout(configuration, wager, probabilityWad) };
 }
@@ -321,7 +334,7 @@ export function crimeOdds(
   lifespanBucket: number,
   crimeMask: number,
 ): CategoryOdds {
-  const lifespan = configuration.lifespans[lifespanBucket];
+  const lifespan = lifespanAt(configuration, lifespanBucket);
   const probabilityWad = crimeStateProbabilityWad(configuration, lifespan, crimeMask);
   return { probabilityWad, payout: categoryPayout(configuration, wager, probabilityWad) };
 }
@@ -442,6 +455,7 @@ export function varianceWad(configuration: SoulConfiguration): bigint {
 export function worstCaseConfiguration(configurations: SoulConfiguration[]): SoulConfiguration {
   let bestPayoutAtRefWager = -1n;
   let worst = configurations[0];
+  if (!worst) throw new RangeError('worstCaseConfiguration requires at least one configuration');
   for (const configuration of configurations) {
     const payoutAtRefWager = maxPayout(configuration, WAD);
     if (payoutAtRefWager >= bestPayoutAtRefWager) {
