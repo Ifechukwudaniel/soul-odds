@@ -101,7 +101,7 @@ export const SinsMarket = (props: {
       </div>
 
       {props.narratives ? (
-        <div className="grid w-full max-w-xl grid-cols-2 gap-3">
+        <div className="grid w-full max-w-2xl grid-cols-2 gap-3">
           {SIN_CATEGORIES.map((category) => {
             const isSelected = selectedSins.includes(category.id);
             const phrase = narrativeFor(props.narratives, category.id)?.phrase ?? category.label;

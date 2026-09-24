@@ -1,9 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { LuBookOpen, LuChevronDown } from 'react-icons/lu';
+import { LuChevronDown } from 'react-icons/lu';
 import { RevealSection } from '@/components/game/mortal-odds/stage/reveal/RevealSection';
 import type { LifeStoryState } from '@/hooks/useLifeStory';
+import { GiScrollUnfurled } from 'react-icons/gi';
 
 
 const StoryLoading = () => (
@@ -30,13 +31,13 @@ const StoryLoading = () => (
  * request has definitively failed.
  */
 export const SoulStory = (props: { state: LifeStoryState }) => (
-  <RevealSection icon={LuBookOpen} title="The life of this soul">
+  <RevealSection icon={ GiScrollUnfurled } title="The life of this soul">
     {props.state.ready ? (
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="flex flex-col gap-3 text-base leading-relaxed text-white"
+        className="!text-white flex flex-col gap-3 text-sm leading-relaxed "
         style={{ color: `#ffffff !important` }}
       >
         {props.state.payload.story.split('\n\n').map((paragraph) => (

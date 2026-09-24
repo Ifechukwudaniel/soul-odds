@@ -145,10 +145,11 @@ export function placeContext(options: {
   let local = '';
   if (draw.place.share !== undefined) {
     const share = regionShareInEra({ region: draw.region, era });
-    local = `Estimated population: ${fmtPeople(world * share * draw.place.share)}.`;
+    local = `This land was home to around ${fmtPeople(world * share * draw.place.share)} people.`;
   } else if (draw.place.population !== undefined) {
-    local = `Estimated population: ${fmtPeopleRounded(draw.place.population)}.`;
-  } else if (draw.place.fromYear !== undefined && draw.place.toYear !== undefined) {
+    local = `This land was home to around ${fmtPeopleRounded(draw.place.population)} people.`;
+  }
+   else if (draw.place.fromYear !== undefined && draw.place.toYear !== undefined) {
     local =
       draw.place.toYear >= CLIOPATRIA_DATA_CUTOFF_YEAR
         ? pickRandom(ENDURES_STILL_TEMPLATES, rng)(fmtYear(draw.place.fromYear))

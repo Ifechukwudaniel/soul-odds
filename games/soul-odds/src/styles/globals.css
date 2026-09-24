@@ -999,8 +999,8 @@ a[href][aria-disabled='true'],
 @layer base {
   p {
     line-height: 1.5;
-    color: #b0aeb5;
-  }
+/*     color: #b0aeb5;
+ */  }
 }
 
 .tab-active {
