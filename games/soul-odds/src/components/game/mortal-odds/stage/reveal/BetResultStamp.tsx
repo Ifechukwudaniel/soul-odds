@@ -35,7 +35,7 @@ export const BetResultStamp = (props: {
         transition={{ type: 'spring', stiffness: 260, damping: 20 }}
         className="relative w-full max-w-sm rounded-2xl border border-[#d4af37] bg-gradient-to-b from-[#f3ead2] to-[#e8dcc0] px-6 py-7 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.6)]"
       >
-        <span className="absolute -top-2.5 left-1/2 h-5 w-5 -translate-x-1/2 rounded-full border-2 border-black/30 bg-[#4C6FD1] shadow" />
+        <span className="absolute -top-2.5 left-1/2 h-5 w-5 -translate-x-1/2 rounded-full border-2  gold shadow" />
 
         <p className="text-center text-xs font-bold tracking-[0.2em] text-[#33353D]/70 uppercase">
           The scales have spoken

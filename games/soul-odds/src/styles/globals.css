@@ -1128,6 +1128,18 @@ a[href][aria-disabled='true'],
   animation: soul-loading 2.2s ease-in-out infinite;
 }
 
+.gold{
+  background:
+  linear-gradient(
+    180deg,
+    #ffe28a 0%,
+    #f3c452 16%,
+    #c98a27 48%,
+    #9a6119 78%,
+    #704313 100%
+  );
+}
+
 .story-loading__shine {
   position: absolute;
   top: -50%;
@@ -1146,6 +1158,8 @@ a[href][aria-disabled='true'],
   filter: blur(1px);
   animation: soul-shine 2.2s ease-in-out infinite;
 }
+
+
 
 .story-loading__text {
   color: rgba(245, 184, 61, 0.8);

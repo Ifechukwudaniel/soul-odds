@@ -4,9 +4,7 @@ import { motion } from 'framer-motion';
 import { LuBookOpen, LuChevronDown } from 'react-icons/lu';
 import { RevealSection } from '@/components/game/mortal-odds/stage/reveal/RevealSection';
 import type { LifeStoryState } from '@/hooks/useLifeStory';
-import { div } from 'framer-motion/client';
 
-const SKELETON_LINE_WIDTHS = ['w-full', 'w-11/12', 'w-full', 'w-4/5'];
 
 const StoryLoading = () => (
   <div

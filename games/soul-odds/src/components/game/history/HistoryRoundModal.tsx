@@ -34,7 +34,7 @@ const Row = (props: { label: string; value: string; valueClass?: string; coin?: 
     <dd
       className={`flex items-center justify-end gap-1 text-right text-xs text-white ${props.valueClass ?? ''}`}
     >
-      {props.coin && <CurrencyCoinIcon width={12} height={12} />}
+      {props.coin && <CurrencyCoinIcon width={12} height={"12"} />}
       {props.value}
     </dd>
   </div>
@@ -105,14 +105,14 @@ export const HistoryRoundModal = (props: { entry: BetHistoryEntry; onClose: () =
                       <p className="text-xs font-[600] text-[#F5B83D]">×{bet.odds.toFixed(2)}</p>
                       <p className="flex items-center justify-end gap-1 text-[11px] text-white/40">
                         stake
-                        <CurrencyCoinIcon width={10} height={10} />
+                        <CurrencyCoinIcon width={10} height={"10"} />
                         {bet.stake.toFixed(2)}
                       </p>
                     </div>
                     <p
                       className={`flex w-20 items-center justify-end gap-1 text-sm font-bold ${bet.won ? 'text-[#6BA84F]' : 'text-[#B7410E]'}`}
                     >
-                      <CurrencyCoinIcon width={12} height={12} />
+                      <CurrencyCoinIcon width={12} height={"12"} />
                       {fmtSigned(bet.net)}
                     </p>
                   </div>
@@ -142,7 +142,7 @@ export const HistoryRoundModal = (props: { entry: BetHistoryEntry; onClose: () =
               <dd
                 className={`flex items-center gap-1 text-lg font-bold ${entry.roundNet >= 0 ? 'text-[#6BA84F]' : 'text-[#B7410E]'}`}
               >
-                <CurrencyCoinIcon width={16} height={16} />
+                <CurrencyCoinIcon width={16} height={"16"} />
                 {fmtSigned(entry.roundNet)}
               </dd>
             </div>
