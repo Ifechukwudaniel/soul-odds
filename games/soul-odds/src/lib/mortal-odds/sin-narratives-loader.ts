@@ -8,14 +8,12 @@ export function sinNarrativesKeyFor(year: number, placeName: string): string {
 }
 
 /**
- * Fetches the four era-specific sin narratives for a draw's (year, place) at most once, and makes
- * sure a slow response for a draw the player has abandoned (retreated past "where" and redrew the
- * land) can never land as if it were the current one. `#latestKey` is the single source of truth
- * for which draw is still "current" — a resolved fetch only calls `onResolved` when its key still
- * matches it.
+ * Fetches the four era-specific sin narratives for a draw's (year, place) at most once, and drops a
+ * slow response for a draw the player has abandoned (retreated past "where" and redrew the land).
+ * `#latestKey` decides which draw is current.
  *
- * On failure, resolves with `fallback` instead of staying stuck forever — there's no local
- * catalog to fall back to anymore, so the round needs some terminal answer to reveal with.
+ * On failure it resolves with `fallback`, since no local catalog remains and the round needs some
+ * terminal answer to reveal with.
  */
 export class SinNarrativesLoader {
   #fetchNarratives: (key: string) => Promise<SinNarratives>;

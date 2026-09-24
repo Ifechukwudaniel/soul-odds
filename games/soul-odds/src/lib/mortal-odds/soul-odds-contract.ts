@@ -3,9 +3,9 @@ import {
   toConfigurationInput,
   type SoulConfigurationDefinition,
 } from '@chain/soul-odds-engine/configuration';
-// Imported from the specific `soul`/`configuration` subpaths, not the package root: the root
-// barrel also re-exports `title.ts`, which reads title files via `node:fs` — fine server-side,
-// but it drags a Node built-in into this file's browser bundle and Turbopack refuses to chunk it.
+// ✦ Imported from the `soul`/`configuration` subpaths, not the package root: the root barrel
+//   re-exports `title.ts`, which reads title files via `node:fs` and would drag a Node built-in into
+//   the browser bundle, where Turbopack refuses to chunk it.
 import {
   encodePrediction,
   type SoulConfiguration,
@@ -27,22 +27,23 @@ import {
 } from '@/lib/mortal-odds/sin-selection';
 import type { Bet, Price } from '@/types';
 
+// =====================================
+// ⬢ Era configurations
+// =====================================
 const definitions = titleFile.betConfigurations as SoulConfigurationDefinition[];
 
 /**
- * Every era configuration the deployed title carries — see `soul-odds-title.json`. The engine
- * picks one of these uniformly at random per session (`pickConfigurationIndex`), so a single
- * prediction's real odds depend on which era it lands in; the preview below averages across all
- * of them instead of assuming a specific one.
+ * Every era configuration the deployed title carries (see `soul-odds-title.json`). The engine picks
+ * one uniformly at random per session (`pickConfigurationIndex`), so the preview averages across
+ * all of them instead of assuming one.
  */
 export const soulOddsConfigurations: SoulConfiguration[] = definitions.map((definition) =>
   toConfiguration(toConfigurationInput(definition)),
 );
 
 /**
- * The era configuration the contract fixed for a session, read from its `gameState` while the
- * session waits for the player's prediction (the contract picks it at session start, before the
- * player predicts anything). Null when the state doesn't hold one.
+ * The era configuration the contract fixed for a session, read from its `gameState` while it waits
+ * for the player's prediction. Null when the state doesn't hold one.
  */
 export function configurationIndexFromGameState(gameState: Hex): number | null {
   try {
@@ -59,6 +60,10 @@ function configurationsFor(configurationIndex: number | null): SoulConfiguration
     configurationIndex === null ? undefined : soulOddsConfigurations[configurationIndex];
   return pinned ? [pinned] : soulOddsConfigurations;
 }
+
+// =====================================
+// ⬢ Prediction
+// =====================================
 
 /** Index-aligned with `soul-odds-title.json`'s `lifespans`, and with the "age" market's option order. */
 export const AGE_BUCKET_ORDER = ['u5', 'y', 'm', 'o'] as const;
@@ -91,6 +96,9 @@ export function encodeMortalOddsPrediction(bets: Record<string, Bet>): Hex {
   return encodePrediction(buildPrediction(bets));
 }
 
+// =====================================
+// ⬢ Settlement
+// =====================================
 export const settledGameStateAbi = [
   {
     type: 'tuple',
@@ -122,7 +130,7 @@ export const settledGameStateAbi = [
   },
 ] as const;
 
-// SessionPhase enum from ICasinoGameV2.sol
+// ✦ SessionPhase enum from ICasinoGameV2.sol
 const PHASE_SETTLED = 3;
 const PHASE_FORFEITED = 4;
 const PHASE_CANCELLED = 5;
@@ -139,17 +147,21 @@ export function decodeSettledSoul(gameState: Hex): SettledSoul {
   return { result, won, breakdown };
 }
 
+// =====================================
+// ⬢ Pricing
+// =====================================
+
 /** The contract stakes an equal third of the wager on each of the three categories. */
 const CATEGORY_COUNT = 3n;
 
 /**
- * The price for one option. Each category stakes a third of the wager and pays `payout` when it
- * hits, so the multiplier on that stake is `payout / (wager / 3)` — exactly `rtp / p`. With the
- * session's era known there is one configuration and the price is exact. Before that the contract
- * picks an era uniformly at random, so the chance is the average across eras and the multiplier is
- * the one that goes with it: each era's multiplier weighted by its chance, over the average chance
- * (which works out to `rtp / p`). Averaging the multipliers themselves would let one rare era
- * (a 475x payout at 0.2%) dominate a bet that is 9.5% likely on average.
+ * The price for one option. Each category stakes a third of the wager and pays `payout` on a hit,
+ * so the multiplier is `payout / (wager / 3)`, exactly `rtp / p`.
+ *
+ * With the session's era known there is one configuration and the price is exact. Before that the
+ * era is picked uniformly at random, so the multiplier is each era's multiplier weighted by its
+ * chance, over the average chance. Averaging the multipliers directly would let one rare era (475x
+ * at 0.2%) dominate a bet that is 9.5% likely on average.
  */
 function averagePrice(
   wager: bigint,
@@ -168,8 +180,8 @@ function averagePrice(
 
 /**
  * Live odds for every crime state the contract accepts (none, each category, each pair) for one
- * specific lifespan bucket: each bucket carries its own `noCrimeWeight` (a child is far likelier
- * to be "Clean" than an adult), so these odds are only meaningful once an age bucket is picked.
+ * lifespan bucket. Each bucket has its own `noCrimeWeight` (a child is far likelier to be "Clean"),
+ * so these only mean something once an age bucket is picked.
  */
 export function previewSinsPrices(
   wager: bigint,

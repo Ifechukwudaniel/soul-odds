@@ -95,7 +95,7 @@ describe('SinNarrativesLoader', () => {
       const onResolvedNew = vi.fn();
 
       loader.request('328:Wusun', fallback, onResolvedOld);
-      // The player retreats past "where", redraws the land, and confirms a new one.
+      // ✦ The player retreats past "where", redraws the land, and confirms a new one.
       loader.request('1150:Angkor', fallback, onResolvedNew);
 
       oldRequest.resolve(narratives('stale'));

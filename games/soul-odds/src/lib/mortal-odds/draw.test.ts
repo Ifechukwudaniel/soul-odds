@@ -223,7 +223,7 @@ describe('placeContext', () => {
   });
 
   describe("a polity whose attested range reaches the Cliopatria dataset's cutoff", () => {
-    // The dataset stops tracking at 2023; a range ending there means "still standing", not "dissolved in 2023".
+    // ✦ The dataset stops tracking at 2023; a range ending there means "still standing", not "dissolved in 2023".
     const draw = {
       year: 1500,
       region: 'eur' as const,

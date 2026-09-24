@@ -6,10 +6,10 @@ import { findMidYearByPlaceName } from '@/services/db/cliopatria';
 import { findAllSinCatalogRows, insertSinVariants } from '@/services/db/sin-catalog';
 import type { NewSinCatalogRow } from '@/services/db/sin-catalog';
 
-// Each row has 5 columns, so this stays well under Postgres' 65535 bound-parameter cap per statement.
+// ✦ Each row has 5 columns, so this stays well under Postgres' 65535 bound-parameter cap per statement.
 const BATCH_SIZE = 500;
 
-// Where the exported catalog lives, next to `cliopatria.geojson/` at the project root.
+// ✦ Where the exported catalog lives, next to `cliopatria.geojson/` at the project root.
 const DEFAULT_CATALOG_FILE = 'sin-catalog/sin-catalog.json';
 
 type SeedEntry = { variants: SinVariant[] };

@@ -30,9 +30,8 @@ const CLIOPATRIA_PATH = path.join(
 let cached: Promise<CliopatriaFeature[]> | null = null;
 
 /**
- * Reads and parses the Cliopatria polities dataset (~150MB, ~15k records) once per process,
- * caching the parsed features so every later call is free. The first call pays the full
- * read+parse cost, so callers that only need this occasionally should call it lazily.
+ * Reads and parses the Cliopatria polities dataset (~150MB, ~15k records) once per process and
+ * caches it. The first call pays the full cost, so call it lazily.
  */
 export function loadCliopatria(): Promise<CliopatriaFeature[]> {
   if (!cached) {
@@ -77,9 +76,8 @@ export type CliopatriaPlace = {
 };
 
 /**
- * Reduces a raw feature to what `cliopatria_place` stores: its name, date range, a representative
- * point instead of the full polygon, and its Wikidata id. Picking is a SQL query against that
- * table (see `services/db/cliopatria.ts`) — this is only used to seed it, not at request time.
+ * Reduces a raw feature to what `cliopatria_place` stores (name, date range, representative point,
+ * Wikidata id). Only used to seed that table, not at request time.
  */
 export function toCliopatriaPlace(feature: CliopatriaFeature): CliopatriaPlace {
   const { lat, lon } = centroidOf(feature);

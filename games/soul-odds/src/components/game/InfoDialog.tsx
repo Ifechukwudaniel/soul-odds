@@ -10,8 +10,8 @@ import { playClickSound } from '@/utils/playClickSound';
 export type InfoPoint = { icon: IconType; title: string; text: string; soon?: boolean };
 
 /**
- * A small "i" button that opens a themed dialog explaining why a step of the round matters.
- * Built on the native <dialog>, so focus is trapped, Escape closes it, and focus returns to the button.
+ * A small "i" button that opens a themed dialog explaining why a round step matters. Built on the
+ * native <dialog>, so focus is trapped and returned for free.
  */
 export const InfoDialog = (props: { title: string; intro: string; points: InfoPoint[] }) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -38,7 +38,7 @@ export const InfoDialog = (props: { title: string; intro: string; points: InfoPo
         ref={dialogRef}
         aria-labelledby={titleId}
         onClick={(event) => {
-          // A click on the dimmed backdrop lands on the <dialog> itself; clicks inside land on its children.
+          // ✦ A click on the dimmed backdrop lands on the <dialog> itself; clicks inside land on its children.
           if (event.target === event.currentTarget) {
             close();
           }

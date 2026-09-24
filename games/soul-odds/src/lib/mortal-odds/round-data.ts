@@ -10,9 +10,8 @@ import type { Draw, MarketPrices, PlaceContext } from '@/types';
 
 /**
  * Everything about a round that follows from its drawn birth, its wager and one stored seed, so a
- * refreshed page can rebuild the exact same odds and samples instead of persisting thousands of
- * them. `era` is the birth year's era, already resolved by the caller (the backend when reachable,
- * else the local fallback — see `useMortalOddsDraw.ts`), not looked up again here.
+ * refreshed page rebuilds the same odds and samples. `era` is resolved by the caller (see
+ * `useMortalOddsDraw.ts`), not looked up here.
  */
 export function deriveRoundData(options: {
   draw: Draw;

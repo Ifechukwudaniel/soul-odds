@@ -15,10 +15,10 @@ interface LeaderboardTableProps {
   currentUserRowRef?: RefObject<HTMLDivElement | null>;
 }
 
-// "Winnings" is a lifetime total, not profit/loss — it only ever goes up, so a losing streak never shows as a negative number.
+// ✦ "Winnings" is a lifetime total, not profit/loss — it only ever goes up, so a losing streak never shows as a negative number.
 const COLUMNS = ['Rank', 'User name', 'Point', 'Winnings'] as const;
 
-// Rows are a grid (not <tr>) so the current user's row can carry the mystic-glass border and radius; ARIA roles keep the table semantics.
+// ✦ Rows are a grid (not <tr>) so the current user's row can carry the mystic-glass border and radius; ARIA roles keep the table semantics.
 const ROW_GRID = 'grid grid-cols-[3.5rem_minmax(0,1fr)_5rem_6rem] items-center gap-4 px-4';
 
 const RANK_BADGES: Record<number, typeof GoldBadge> = {

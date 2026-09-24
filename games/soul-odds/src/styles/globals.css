@@ -32,15 +32,6 @@ body {
   user-select: none;
 }
 
-/* p,
-div,
-span {
-  -khtml-user-select: none;
-  -o-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-} */
 main {
   height: 100vh;
   height: 100dvh;
@@ -65,7 +56,11 @@ main {
   background: radial-gradient(40.91% 67.55% at 28.81% 50%, #9181f0 0%, #6752ef 100%);
 }
 
-/* Anubis palette: Egyptian funerary art — gold leaf, faience turquoise, lapis, carnelian on obsidian. */
+/* =====================================
+   ⬢ Palette
+   ===================================== */
+
+/* ✦ Egyptian funerary art: gold leaf, faience turquoise, lapis and carnelian on obsidian. */
 :root {
   --anubis-gold: #f5b83d;
   --anubis-gold-leaf: #d4af37;
@@ -77,12 +72,14 @@ main {
   --anubis-obsidian: #0b0a08;
 }
 
+/* =====================================
+   ⬢ Toasts
+   ===================================== */
+
 /*
- * react-toastify skin (utils/notifications.tsx): the papyrus-banner card, and the built-in
- * progress bar recolored per status — no hand-rolled countdown. Selectors are double-classed to
- * out-specificity the imported base stylesheet regardless of merge order, and colors are set as
- * literal values rather than by overriding react-toastify's own CSS variables, since Tailwind's
- * build can flatten those at build time before any runtime specificity would get a say.
+ * ✦ react-toastify skin (utils/notifications.tsx): the papyrus-banner card with the built-in progress
+ *   bar recolored per status. Selectors are double-classed to out-specificity the base stylesheet,
+ *   and colors are literals since Tailwind's build can flatten react-toastify's own CSS variables.
  */
 .Toastify__toast.Toastify__toast {
   width: 24rem;
@@ -124,10 +121,14 @@ main {
   background: var(--anubis-carnelian);
 }
 
+/* =====================================
+   ⬢ Scrollbar
+   ===================================== */
+
 /*
- * OverlayScrollbars theme (see components/Scroller.tsx): framed game scrollbar - gold frame, black
- * recessed track, beveled arrow buttons, and a beveled gold thumb with a grip. Built from CSS
- * bevels in the Anubis gold ramp (heading #F1D6AE, era label #DEAE56), not sprites.
+ * ✦ OverlayScrollbars theme (components/Scroller.tsx): gold frame, black recessed track, beveled
+ *   arrow buttons and a beveled gold thumb with a grip. Built from CSS bevels in the Anubis gold ramp
+ *   (heading #F1D6AE, era label #DEAE56), not sprites.
  */
 .soul-odds.os-scrollbar {
   transition:
@@ -171,7 +172,7 @@ main {
   background: transparent;
 }
 
-/* Thumb: solid beveled body, so its length reads clearly against the black track. */
+/* ✦ Thumb: solid beveled body, so its length reads clearly against the black track. */
 .soul-odds .os-scrollbar-handle,
 .soul-odds .os-scrollbar-handle:hover {
   background: var(--sb-mid);
@@ -185,7 +186,7 @@ main {
   background: var(--sb-light);
 }
 
-/* Grip square, centered on the vertical thumb. */
+/* ✦ Grip square, centered on the vertical thumb. */
 .soul-odds.os-scrollbar-vertical .os-scrollbar-handle::after {
   content: '';
   position: absolute;
@@ -201,7 +202,7 @@ main {
     inset 0 0 0 2px var(--sb-mid);
 }
 
-/* Arrow buttons, injected by Scroller.tsx. */
+/* ✦ Arrow buttons, injected by Scroller.tsx. */
 .soul-odds .os-arrow {
   position: absolute;
   left: 2px;
@@ -243,7 +244,7 @@ main {
   transform: scaleY(-1);
 }
 
-/* Sparkle pixels on the bevel. */
+/* ✦ Sparkle pixels on the bevel. */
 .soul-odds .os-arrow::after {
   content: '';
   position: absolute;
@@ -271,16 +272,16 @@ main {
 }
 
 /*
- * Reserve a gutter for the bar only while it shows, so short content keeps its full width.
- * Scroller.tsx sets data-os-overflow-x/y on the host. OverlayScrollbars owns the viewport's padding
- * (inline), so the content element is padded instead. --os-gutter is its total right padding, and
- * --os-inset-x/-y (default 4px) set how far the bar sits from the scroll area's edges.
+ * ✦ Reserve a gutter for the bar only while it shows. Scroller.tsx sets data-os-overflow-x/y on the
+ *   host; OverlayScrollbars owns the viewport's inline padding, so the content element is padded
+ *   instead. --os-gutter is its total right padding and --os-inset-x/-y (default 4px) set how far the
+ *   bar sits from the edges.
  */
 [data-os-overflow-y] > [data-overlayscrollbars-viewport] > * {
   padding-right: var(--os-gutter, 36px);
 }
 
-/* Reserved: the same gutter on both sides even with no overflow, so centred content stays put when the bar fades in. */
+/* ✦ Reserved: the same gutter on both sides even with no overflow, so centred content stays put when the bar fades in. */
 [data-os-gutter='reserved'] > [data-overlayscrollbars-viewport] > * {
   padding-inline: var(--os-gutter, 36px);
 }
@@ -290,9 +291,8 @@ main {
 }
 
 /*
- * Mobile: the framed bar and its arrow buttons cost more width than they earn on a touch screen,
- * which scrolls by swipe anyway — so drop the bar and collapse the gutters it reserves, giving the
- * content the full width. OverlayScrollbars still owns scrolling; only its visuals are hidden.
+ * ✦ Mobile: drop the framed bar and collapse the gutters it reserves, since touch screens scroll by
+ *   swipe. OverlayScrollbars still owns scrolling; only its visuals are hidden.
  */
 @media (max-width: 767.98px) {
   .soul-odds.os-scrollbar {
@@ -309,17 +309,21 @@ main {
   }
 }
 
+/* =====================================
+   ⬢ Focus
+   ===================================== */
+
 /*
- * A scroll area that's a keyboard tab stop only so it can be scrolled (no interactive content of its own,
- * e.g. the leaderboard list) intentionally shows no focus ring in normal mode — a ring around content that
- * isn't itself a control read as a stray box, not a control being "selected". Windows high-contrast mode
- * still gets one below: there, it's the only sign focus moved at all, so it's a hard requirement, not taste.
+ * ✦ A scroll area that is a tab stop only so it can scroll (no interactive content, e.g. the
+ *   leaderboard list) shows no focus ring in normal mode: a ring around non-control content reads as
+ *   a stray box. Windows high-contrast still gets one below, since there it is the only sign focus
+ *   moved.
  */
 
 /*
- * Every other keyboard-focused control gets the same gold ring (mouse/touch focus stays ring-free via
- * :focus-visible). `.chamfer-btn`/`.stat-card`/`.game-nav-btn` clip or reshape their own box (clip-path, or a
- * ring that should follow a round emblem instead of the whole pill), so they get their own treatment below.
+ * ✦ Every other keyboard-focused control gets the same gold ring (`:focus-visible` keeps mouse and
+ *   touch ring-free). `.chamfer-btn`, `.stat-card` and `.game-nav-btn` clip or reshape their own box,
+ *   so they get their own treatment below.
  */
 a:focus-visible,
 button:focus-visible,
@@ -340,9 +344,9 @@ summary:focus-visible,
 }
 
 /*
- * Bottom nav (components/MenuBtn.tsx): the button's own box is a tall rectangle (round emblem, pill label
- * below), so a ring around the whole thing reads as a stray box rather than "this icon is selected". Instead
- * the ring wraps just the round emblem, like a glowing medallion — .nav-bubble marks that inner circle.
+ * ✦ Bottom nav (components/MenuBtn.tsx): the button is a tall rectangle (round emblem, pill label),
+ *   so the ring wraps just the emblem like a glowing medallion. `.nav-bubble` marks that inner
+ *   circle.
  */
 .game-nav-btn:focus-visible {
   outline: none;
@@ -363,7 +367,7 @@ summary:focus-visible,
   }
 }
 
-/* Windows high-contrast: author colors and shadows are dropped, so redraw with system colors. */
+/* ✦ Windows high-contrast: author colors and shadows are dropped, so redraw with system colors. */
 @media (forced-colors: active) {
   .soul-odds.os-scrollbar,
   .soul-odds.os-scrollbar * {
@@ -404,8 +408,8 @@ summary:focus-visible,
   }
 
   /*
-   * The scroll-viewport ring is suppressed above for normal mode (see the comment near line 238); forced-colors
-   * users still need one, since color/box-shadow cues elsewhere on the page are gone here too.
+   * ✦ The scroll-viewport ring is suppressed above in normal mode; forced-colors users still need
+   *   one, since the color and box-shadow cues elsewhere are gone too.
    */
   [data-overlayscrollbars] > [data-overlayscrollbars-viewport]:focus-visible {
     outline: 2px solid Highlight;
@@ -413,10 +417,15 @@ summary:focus-visible,
   }
 }
 
+/* =====================================
+   ⬢ Cursors
+   ===================================== */
+
 /*
- * Game cursors (public/cursors): Kenney Cursor Pack (CC0) shapes recolored to the Anubis gold. SVG masters
- * live in public/cursors/svg; the PNGs are 32px plus a 64px @2x. Each cursor is declared three ways so a
- * browser that lacks a newer form falls back to the previous one; the numbers are the click hotspot.
+ * ✦ Game cursors (public/cursors): Kenney Cursor Pack (CC0) shapes recolored to Anubis gold. SVG
+ *   masters live in public/cursors/svg; PNGs are 32px plus a 64px @2x. Each cursor is declared three
+ *   ways so a browser lacking a newer form falls back to the previous one; the numbers are the click
+ *   hotspot.
  */
 html {
   cursor:
@@ -480,7 +489,7 @@ textarea:not(:disabled),
     text;
 }
 
-/* After the pointer rule so a disabled control wins over a `cursor-pointer` class. */
+/* ✦ After the pointer rule so a disabled control wins over a `cursor-pointer` class. */
 :disabled,
 [aria-disabled='true'],
 a[href][aria-disabled='true'],
@@ -508,9 +517,13 @@ a[href][aria-disabled='true'],
     crosshair;
 }
 
+/* =====================================
+   ⬢ Modal
+   ===================================== */
+
 /*
- * Shared modal surface (InfoDialog, SettingsModal): the mystic-glass gold border on a slightly see-through dark card
- * (about 90% opaque) that blurs whatever is behind it. Pair it with a `bg-black/60` overlay for the dimmed page.
+ * ✦ Shared modal surface (InfoDialog, SettingsModal): a mystic-glass gold border on a ~90% opaque
+ *   dark card that blurs what is behind it. Pair it with a `bg-black/60` overlay for the dimmed page.
  */
 .game-modal-panel {
   border: 1px solid transparent;
@@ -533,7 +546,7 @@ a[href][aria-disabled='true'],
     0 8px 22px rgba(0, 0, 0, 0.35);
 }
 
-/* Toast auto-dismiss countdown (utils/notifications.tsx): the gold bar shrinks left-to-right over the toast's duration. */
+/* ✦ Toast auto-dismiss countdown (utils/notifications.tsx): the gold bar shrinks left-to-right over the toast's duration. */
 @keyframes toast-countdown {
   from {
     transform: scaleX(1);
@@ -543,7 +556,7 @@ a[href][aria-disabled='true'],
   }
 }
 
-/* Shared modal entrance (components/game/GameDialog.tsx): rises in over a fading backdrop. */
+/* ✦ Shared modal entrance (components/game/GameDialog.tsx): rises in over a fading backdrop. */
 @keyframes info-dialog-in {
   from {
     opacity: 0;
@@ -579,7 +592,7 @@ a[href][aria-disabled='true'],
   }
 }
 
-/* Cartouche: the oval name-ring of Egyptian inscription — a pill with flat end bars. */
+/* ✦ Cartouche: the oval name-ring of Egyptian inscription — a pill with flat end bars. */
 .cartouche {
   --bar: 3px;
   position: relative;
@@ -611,7 +624,7 @@ a[href][aria-disabled='true'],
   background: linear-gradient(180deg, #14224a 0%, var(--anubis-lapis-deep) 100%);
 }
 
-/* Faint hieroglyphic rule used between card sections. */
+/* ✦ Faint hieroglyphic rule used between card sections. */
 .glyph-rule {
   height: 1px;
   background: repeating-linear-gradient(
@@ -623,15 +636,18 @@ a[href][aria-disabled='true'],
   );
 }
 
-/* Selected/active fill: gold leaf. Pairs with dark text. */
+/* ✦ Selected/active fill: gold leaf. Pairs with dark text. */
 .accent-gradient {
   background: linear-gradient(180deg, #ffb359 0%, #fbbb3f 100%);
 }
 
+/* =====================================
+   ⬢ Chamfered buttons
+   ===================================== */
+
 /*
- * Chamfered (octagon-cut) button, used by the Mortal Odds "Draw a human" CTA.
- * The border is a second, inset clip-path layer (not a CSS `border`), which stays crisp
- * at the diagonal corners instead of mitring the way a real border would.
+ * ✦ Chamfered (octagon-cut) button for the "Draw a human" CTA. The border is a second inset clip-path
+ *   layer, not a CSS `border`, which stays crisp at the diagonal corners.
  */
 .chamfer-btn {
   --shape-offset: 10px;
@@ -660,7 +676,7 @@ a[href][aria-disabled='true'],
   z-index: -1;
 }
 
-/* Same chamfered technique as .chamfer-btn, sized for the birth-year/region stat card. */
+/* ✦ Same chamfered technique as .chamfer-btn, sized for the birth-year/region stat card. */
 .stat-card {
   --shape-offset: 18px;
   --inset: 2px;
@@ -693,10 +709,14 @@ a[href][aria-disabled='true'],
     drop-shadow(0 0 16px rgba(251, 187, 63, 0.45));
 }
 
+/* =====================================
+   ⬢ Loader
+   ===================================== */
+
 /*
- * Game loader (components/Loader.tsx): chamfered progress track, same octagon-clip technique as
- * .chamfer-btn, sized for a thin bar. The fill is a separate absolutely-positioned element so its
- * width can be tweened without re-clipping the frame.
+ * ✦ Game loader (components/Loader.tsx): a chamfered progress track using the .chamfer-btn technique.
+ *   The fill is a separate absolutely-positioned element so its width can tween without re-clipping
+ *   the frame.
  */
 .loader-track {
   --shape-offset: 6px;
@@ -993,14 +1013,14 @@ a[href][aria-disabled='true'],
   );
 }
 
-/* Layered so Tailwind's utilities (in @layer utilities) can still override this default -
-   an unlayered rule here would always win over any Tailwind color class on a <p>, regardless
-   of specificity. */
+/*
+ * ✦ Layered so Tailwind utilities can still override this default; an unlayered rule would always
+ *   beat a color class on a <p>.
+ */
 @layer base {
   p {
     line-height: 1.5;
-/*     color: #b0aeb5;
- */  }
+  }
 }
 
 .tab-active {
@@ -1029,10 +1049,6 @@ a[href][aria-disabled='true'],
 .button-animation {
   animation: buttonAnimation 1s infinite ease-in-out;
 }
-/* 
-.coin-glow {
-  backdrop-filter: drop-shadow(100px -10px 200px pink);
-} */
 
 @layer components {
   .mystic-glass {
@@ -1097,7 +1113,9 @@ a[href][aria-disabled='true'],
   }
 }
 
-/* story loader */
+/* =====================================
+   ⬢ Story loader
+   ===================================== */
 .story-loading {
   display: flex;
   flex-direction: column;
@@ -1178,8 +1196,6 @@ a[href][aria-disabled='true'],
   filter: blur(1px);
   animation: soul-shine 2.2s ease-in-out infinite;
 }
-
-
 
 .story-loading__text {
   color: rgba(245, 184, 61, 0.8);

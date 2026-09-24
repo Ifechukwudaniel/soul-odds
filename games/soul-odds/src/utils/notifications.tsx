@@ -42,9 +42,8 @@ const DEFAULT_DURATION = 3000;
 const DEFAULT_POSITION: TPositions = 'top-center';
 
 /**
- * The papyrus banner's row: a seal icon, the message, and a close button. This is the only piece
- * we render — the card chrome (border/gradient, see globals.css) and the countdown itself are
- * react-toastify's own, which is the whole reason for building on it instead of a hand-rolled bar.
+ * The papyrus banner's row: seal icon, message and close button. Only this is rendered by us; the
+ * card chrome (see globals.css) and the countdown are react-toastify's own.
  */
 function bannerRow(status: NotificationStatus, content: React.ReactNode, icon?: string) {
   return ({ closeToast }: ToastContentProps) => {

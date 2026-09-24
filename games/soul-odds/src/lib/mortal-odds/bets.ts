@@ -14,7 +14,7 @@ export function betLabel(
   }
   const market = marketsConfig.find((m) => m.id === bet.marketId);
   const option = market?.options.find((o) => o.id === bet.optionId);
-  // A single sin reads as its era-specific phrase; a pair is too long for that, so it keeps its "A + B" label.
+  // ✦ A single sin reads as its era-specific phrase; a pair is too long for that, so it keeps its "A + B" label.
   const sinCategories = bet.marketId === 'sins' ? categoriesOfSinOption(bet.optionId) : [];
   const phrase =
     sinCategories.length === 1

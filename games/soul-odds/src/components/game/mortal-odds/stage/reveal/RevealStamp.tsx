@@ -8,7 +8,6 @@ const TONE_CLASSES: Record<'win' | 'loss' | 'neutral', string> = {
   neutral: 'border-[#F5B83D] text-[#F5B83D] bg-[#F5B83D]/10',
 };
 
-/** A small ink-stamp badge that punches into place, like a verdict stamped onto papyrus. */
 export const RevealStamp = (props: {
   tone: 'win' | 'loss' | 'neutral';
   rotate?: number;

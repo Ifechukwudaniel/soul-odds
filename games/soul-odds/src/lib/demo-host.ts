@@ -31,14 +31,14 @@ function loadOrCreateWallet(): `0x${string}` {
     const saved = localStorage.getItem(WALLET_STORAGE_KEY);
     if (saved && /^0x[0-9a-f]{40}$/.test(saved)) return saved as `0x${string}`;
   } catch {
-    // storage unavailable: fall through to a wallet that just won't persist across reloads
+    // ✦ storage unavailable: fall through to a wallet that just won't persist across reloads
   }
 
   const address = randomAddress();
   try {
     localStorage.setItem(WALLET_STORAGE_KEY, address);
   } catch {
-    // storage unavailable: the demo still plays, it just gets a new identity on refresh
+    // ✦ storage unavailable: the demo still plays, it just gets a new identity on refresh
   }
   return address;
 }
@@ -70,7 +70,7 @@ function save(state: SavedDemoHost): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch {
-    /* storage unavailable: the demo still plays, it just resets on refresh */
+    /* ✦ storage unavailable: the demo still plays, it just resets on refresh */
   }
 }
 
@@ -107,8 +107,8 @@ function buildSnapshot(
 
 /**
  * Stands in for the chain.wtf host when the game is opened outside its iframe: keeps a play-money
- * balance and settles rounds locally with the same SoulOddsEngine odds and payout maths the deployed
- * contract uses, and pushes each change to `publish` the way the real host pushes snapshots.
+ * balance and settles rounds locally with the deployed contract's odds and payout maths, pushing
+ * each change through `publish` like the real host.
  */
 export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Promise<HostApiV1> {
   const wallet = loadOrCreateWallet();
@@ -140,7 +140,7 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
 
       const sessionId = String(nextSessionId++);
       const sessionKey = randomHex32();
-      // Like the real engine, the era configuration is fixed when the session starts, before any prediction.
+      // ✦ Like the real engine, the era configuration is fixed when the session starts, before any prediction.
       const configurationIndex = pickConfigurationIndex(
         randomHex32(),
         soulOddsConfigurations.length,
@@ -200,7 +200,7 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
       const payout = predictionPayout(configuration, wager, prediction, result);
       const now = Math.floor(Date.now() / 1000);
 
-      // A demo player who busts gets a fresh bankroll instead of a dead end.
+      // ✦ A demo player who busts gets a fresh bankroll instead of a dead end.
       balance += payout;
       if (balance < SMALLEST_CHIP) balance = STARTING_BALANCE;
 
@@ -221,7 +221,7 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
           ]),
         },
       });
-      // Saved before the settle delay, so a refresh mid-wait comes back to an already-settled round.
+      // ✦ Saved before the settle delay, so a refresh mid-wait comes back to an already-settled round.
       persist();
 
       await delay(SETTLE_LATENCY_MS);

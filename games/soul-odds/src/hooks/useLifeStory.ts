@@ -10,9 +10,9 @@ import { sinsOf } from '@/lib/mortal-odds/sin-selection';
 import { apiClient } from '@/libs/ApiClient';
 import type { Life } from '@/types';
 
-// The server bounds its own OpenRouter call (see OPENROUTER_TIMEOUT_MS in lib/mortal-odds/openrouter.ts)
-// and should always respond well within this; it's a backstop for a hung request or a dropped
-// response, so a network hiccup can't leave the player staring at the loader indefinitely.
+// ✦ Backstop for a hung or dropped request so the player never stares at the loader forever; the
+//   server already bounds its own OpenRouter call (OPENROUTER_TIMEOUT_MS in
+//   lib/mortal-odds/openrouter.ts).
 const REQUEST_TIMEOUT_MS = 15_000;
 
 async function fetchLifeStory(options: {
@@ -44,10 +44,8 @@ async function fetchLifeStory(options: {
 }
 
 /**
- * Identifies exactly this soul: `sessionKey` alone should already be unique per round, but
- * folding the actual facts in too means two different souls can never share a cache entry even
- * if a session key were ever reused — the failure mode that made "Summon another soul" show the
- * previous soul's land and year.
+ * Identifies exactly this soul: `sessionKey` plus the actual facts, so two souls never share a
+ * cache entry even if a session key is reused.
  */
 function cacheKeyFor(sessionKey: string, life: Life, placeName: string): string {
   return [sessionKey, life.sex, life.year, life.age, life.deathYear, placeName].join(':');
@@ -56,16 +54,12 @@ function cacheKeyFor(sessionKey: string, life: Life, placeName: string): string 
 export type { LifeStoryState, LifeStoryPayload };
 
 /**
- * Resolves the life story (and the name OpenRouter invented for it) for this soul exactly once:
- * on success, or the locally-generated `fallbackStory` (with no name) once a request has
- * definitively failed. Reports `{ ready: false }` for as long as that's still undecided, on
- * purpose — showing the fallback and then swapping it out from under the player once the real
- * story lands reads as a bug, so callers should render a loading state instead of text that might
- * change.
+ * Resolves the life story (and the name OpenRouter invented) once: the fetched one on success, or
+ * `fallbackStory` (no name) once the request has definitively failed.
  *
- * Backed by a `LifeStoryLoader`, whose cache survives a refresh and whose "latest key wins" rule
- * stops a slow response for a round the player has already left (e.g. "Summon another soul" fired
- * mid-request) from ever overwriting the newer one.
+ * Reports `{ ready: false }` while undecided so callers render a loader instead of text that would
+ * swap. Backed by a `LifeStoryLoader`, whose cache survives a refresh and whose latest-key-wins
+ * rule drops stale responses.
  */
 export function useLifeStory(options: {
   sessionKey: string | null;
@@ -77,9 +71,8 @@ export function useLifeStory(options: {
   const fallback: LifeStoryPayload = { story: fallbackStory, name: null };
   const [state, setState] = useState<LifeStoryState>({ ready: false });
 
-  // The request in flight for a given key always started with that same round's facts, so
-  // reading the latest ones here (rather than closing over the values from whenever the loader
-  // was constructed) can't mix a stale round's life/place into a still-pending fetch.
+  // ✦ Read the latest facts here rather than the ones closed over when the loader was built, so a
+  //   pending fetch never mixes rounds.
   const latest = useRef({ life, placeName });
   latest.current = { life, placeName };
 
@@ -101,7 +94,7 @@ export function useLifeStory(options: {
         setState({ ready: true, payload }),
       ),
     );
-    // fallbackStory (not the `fallback` object, which is a fresh reference every render) is the real dependency.
+    // ✦ fallbackStory (not the `fallback` object, which is a fresh reference every render) is the real dependency.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionKey, life, placeName, fallbackStory]);
 

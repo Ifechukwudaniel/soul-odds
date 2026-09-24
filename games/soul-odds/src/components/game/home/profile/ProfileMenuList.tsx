@@ -4,13 +4,12 @@ import { useRef, useState } from 'react';
 import { ProfileMenuItem } from '@/components/game/home/profile/ProfileMenuItem';
 import type { ProfileMenuAction } from '@/components/game/home/profile/types';
 
-// Up/Down move between items; Home/End jump to the ends.
+// ✦ Up/Down move between items; Home/End jump to the ends.
 const MOVE: Record<string, number> = { ArrowDown: 1, ArrowUp: -1 };
 
 /**
- * A vertical action menu with roving-tabindex keyboard nav: only one item is ever a Tab stop, arrow keys move
- * it between items (clamped at the ends), and Enter/Space activate — like a native menu, not a tab list, since
- * each item is a one-off action (open a picker, navigate away) rather than a persistent selected state.
+ * A vertical action menu with roving-tabindex keyboard nav: arrows move between items (clamped),
+ * Enter/Space activate. Not a tab list, since each item is a one-off action.
  */
 export const ProfileMenuList = (props: { actions: ProfileMenuAction[] }) => {
   const [rovingIndex, setRovingIndex] = useState(0);

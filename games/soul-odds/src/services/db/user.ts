@@ -12,7 +12,7 @@ export type LeaderboardSort = 'points' | 'balance';
 
 const DEFAULT_LEADERBOARD_LIMIT = 100;
 
-// Addresses are stored lowercase so lookups don't depend on checksum casing.
+// ✦ Addresses are stored lowercase so lookups don't depend on checksum casing.
 function normalizeAddress(address: string) {
   return address.toLowerCase();
 }

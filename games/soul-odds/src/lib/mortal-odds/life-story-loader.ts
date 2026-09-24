@@ -30,7 +30,7 @@ export function createLocalStorageLifeStoryCache(): LifeStoryCache {
       try {
         localStorage.setItem(CACHE_PREFIX + key, JSON.stringify(payload));
       } catch {
-        /* storage unavailable: the AI story just won't survive a refresh */
+        /* ✦ storage unavailable: the AI story just won't survive a refresh */
       }
     },
   };
@@ -39,16 +39,12 @@ export function createLocalStorageLifeStoryCache(): LifeStoryCache {
 export type LifeStoryState = { ready: true; payload: LifeStoryPayload } | { ready: false };
 
 /**
- * Fetches the AI-written life story for a round at most once, and makes sure a slow request for
- * an old round can never overwrite a newer one once the player has moved on (e.g. clicking
- * "Summon another soul" before the previous soul's narrative finished generating). `#latestKey`
- * is the single source of truth for which round is still "current" — a resolved fetch only calls
- * `onResolved` when its key still matches it.
+ * Fetches the AI-written life story for a round at most once, and drops a slow response for an old
+ * round once the player has moved on (e.g. "Summon another soul" mid-request). `#latestKey` decides
+ * which round is current.
  *
- * Deliberately never hands back the local `fallback` payload while a fetch is still in flight: a
- * story that shows up and then gets swapped out from under the player reads as a bug, not a
- * feature, so callers get "not ready yet" until there's a final answer — the real narrative on
- * success, or the fallback once the request has definitively failed.
+ * Never hands back the local `fallback` while a fetch is in flight, since a story that gets swapped
+ * out reads as a bug: callers get "not ready" until there's a final answer.
  */
 export class LifeStoryLoader {
   #cache: LifeStoryCache;
@@ -65,10 +61,10 @@ export class LifeStoryLoader {
   }
 
   /**
-   * Returns the current state for `key`: ready with the cached payload if one exists, otherwise
-   * not ready. The first time `key` is requested with nothing cached, starts a background fetch
-   * that reports back through `onResolved` — with the fetched payload on success, or `fallback` on
-   * failure — only if `key` is still the most recently requested one once it settles.
+   * Returns the state for `key`: ready with the cached payload if one exists, otherwise not ready.
+   * The first request with nothing cached starts a background fetch that reports through
+   * `onResolved` (the payload, or `fallback` on failure) only if `key` is still the latest once it
+   * settles.
    */
   request(
     key: string,

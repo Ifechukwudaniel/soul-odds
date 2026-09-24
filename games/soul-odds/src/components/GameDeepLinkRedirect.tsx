@@ -5,7 +5,6 @@ import { usePathname, useRouter } from '@/libs/I18nNavigation';
 import { useAppStore } from '@/services/store/store';
 import { redirectToScreenFromCode } from '@/utils/redirectToScreenFromCode';
 
-/** Sets the requested screen from a `/game/<code>` deep link, then redirects to the game home. */
 export const GameDeepLinkRedirect = () => {
   const router = useRouter();
   const pathname = usePathname();

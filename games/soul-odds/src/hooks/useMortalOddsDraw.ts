@@ -69,6 +69,9 @@ import type {
 } from '@/types';
 import { playSound } from '@/utils/playSound';
 
+// =====================================
+// ⬢ Constants
+// =====================================
 const CURRENT_YEAR = new Date().getFullYear();
 const RECENT_EPITAPHS_KEPT = 8;
 const RECENT_TIME_STORIES_KEPT = 6;
@@ -81,6 +84,9 @@ const fullModelConfig: FullModelConfig = {
   sins: sinsConfig,
 };
 
+// =====================================
+// ⬢ Round phases
+// =====================================
 export type MortalOddsDrawPhase =
   | 'idle'
   | 'drawing'
@@ -100,7 +106,10 @@ function stepSequence(phase: MortalOddsDrawPhase, delta: number): MortalOddsDraw
   return SEQUENCE[index + delta] ?? phase;
 }
 
-/** From "Weigh their fate" (confirming the land) through settlement — the window the year and place are locked in, so it's safe to have already asked for this draw's sin narratives. */
+/**
+ * From "Weigh their fate" through settlement, when the year and place are locked in, so this draw's
+ * sin narratives can be prefetched.
+ */
 const AWAITING_SINS_PHASES = new Set<MortalOddsDrawPhase>(['predicting', 'confirming', 'settling']);
 
 export type RevealResult = {
@@ -115,6 +124,9 @@ export type RevealResult = {
   bookieMedianAge: number;
 };
 
+// =====================================
+// ⬢ State and reducer
+// =====================================
 type State = {
   phase: MortalOddsDrawPhase;
   era: EraFilter;
@@ -223,15 +235,18 @@ const initialState: State = {
   error: null,
 };
 
+// =====================================
+// ⬢ Hook
+// =====================================
 type Session = { key: string; id?: string; wagerWei: bigint };
 
 /**
  * Drives the idle -> drawing -> when -> where -> predicting -> confirming -> settling -> revealed
- * round. Opening a fresh round escrows the whole chip stake as one casino-host session; the
- * player's sex/age/sins picks become a single on-chain prediction submitted at "confirming", and
- * the soul the deployed SoulOddsEngine title returns is the actual settlement truth. Everything
- * else about the soul (year, region, place, job, story) stays a local flavor draw the chain never
- * sees — the on-chain soul only decides who won, and how much.
+ * round.
+ *
+ * A fresh round escrows the whole stake as one casino-host session; the sex/age/sins picks become a
+ * single on-chain prediction, and the soul the deployed title returns is the settlement truth.
+ * Year, region, place, job and story stay a local flavor draw the chain never sees.
  */
 export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   phase: MortalOddsDrawPhase;
@@ -262,6 +277,9 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   retreat: () => void;
   placeBets: (bets: Record<string, Bet>) => void;
 } {
+  // =====================================
+  // ⬢ State and effects
+  // =====================================
   const [state, dispatch] = useReducer(reducer, initialState);
   const spin = useRef<ReturnType<typeof animate> | null>(null);
   const { hostApi, snapshot } = useCasinoHost();
@@ -294,11 +312,9 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
 
   useEffect(() => () => spin.current?.stop(), []);
 
-  // Sins are era-specific OpenRouter flavor text: prefetched the moment the player confirms the
-  // land ("Weigh their fate" — the year and place are locked from here on), so the wait sits
-  // behind however long picking sex and a death-year guess takes, instead of being tacked onto
-  // the reveal. Also covers resuming mid-round (restore can land straight in "confirming" or
-  // "settling"). Refiring on every relevant re-render is safe: the loader dedupes by key.
+  // ✦ Sins are era-specific OpenRouter text, prefetched when the player confirms the land so the wait
+  //   hides behind the sex and year picks. Also covers resuming in "confirming" or "settling"; the
+  //   loader dedupes by key, so refiring is safe.
   useEffect(() => {
     if (!state.draw || !AWAITING_SINS_PHASES.has(state.phase)) return;
     const { year, place } = state.draw;
@@ -310,6 +326,9 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     setSinNarrativesState((current) => (current?.key === key ? current : { key, state: result }));
   }, [state.phase, state.draw]);
 
+  // =====================================
+  // ⬢ Round actions
+  // =====================================
   const startDrawSequence = async (wagerWei: bigint) => {
     const rng = createRng();
     const { year, region } = drawBirth({
@@ -318,9 +337,8 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
       erasConfig,
       currentYear: CURRENT_YEAR,
     });
-    // Prefer the backend's real data for this year (Cliopatria place, and the on-chain SoulEra
-    // name for its era); fall back to the local synthetic model if a request fails, so a network
-    // hiccup never blocks the round.
+    // ✦ Prefer the backend's real data (Cliopatria place, on-chain SoulEra); fall back to the local
+    //   synthetic model so a network hiccup never blocks the round.
     const [place, era] = await Promise.all([
       fetchPlace(year).catch(() => pickPlace({ region, rng, placesConfig })),
       fetchEra(year).catch(() => eraFor({ year, erasConfig })),
@@ -356,9 +374,9 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
       return;
     }
 
-    // One timeline drives the reel (year events), the tick sounds and the lock; the clock runs in milliseconds.
-    // The chart draws itself in only on a round's first draw (it mounts then); a redraw finds it already on screen.
-    // "where" never reaches here — redrawing the land alone is `redrawLocation`, which keeps the year fixed.
+    // ✦ One timeline drives the reel, the tick sounds and the lock (in milliseconds).
+    //   The chart draws itself in only on a round's first draw. "where" never reaches here: redrawing
+    //   the land alone is `redrawLocation`.
     const isRedraw = state.phase === 'when';
     const timeline = buildSpinTimeline({
       targetYear: year,
@@ -394,9 +412,8 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   };
 
   /**
-   * Rerolls only the land, holding the year fixed — "who else was alive in this same year", not
-   * a new year. The region rerolls with it (a place belongs to a region, and the local fallback
-   * needs one to pick from), but the era, the story and every year-derived number stay untouched.
+   * Rerolls only the land, holding the year fixed. The region rerolls with it (a place belongs to
+   * one); the era, story and every year-derived number stay untouched.
    */
   const redrawLocation = async () => {
     if (state.phase !== 'where' || !state.draw || !state.context) return;
@@ -439,8 +456,8 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   const drawHuman = (chipSize: number) => {
     if (state.phase === 'drawing' || openingSession.current) return;
 
-    // A redraw only rerolls the local flavor (year/region/place) — the round's session and its
-    // already-escrowed wager, opened on the first draw, stay exactly as they are.
+    // ✦ A redraw only rerolls local flavor; the session and escrowed wager opened on the first draw
+    //   stay as they are.
     const isRedraw = state.phase === 'when' || state.phase === 'where';
     if (isRedraw && session) {
       playSound({ name: 'spend', amount: REDRAW_COST });
@@ -472,7 +489,11 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
       });
   };
 
-  // Once the opened session's row appears, capture its sessionId for the later submitAction.
+  // =====================================
+  // ⬢ Session sync
+  // =====================================
+
+  // ✦ Once the opened session's row appears, capture its sessionId for the later submitAction.
   useEffect(() => {
     if (!session || session.id || !snapshot) return;
     const row = snapshot.sessions.items.find((item) => item.sessionKey === session.key);
@@ -482,9 +503,8 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     );
   }, [session, snapshot]);
 
-  // The contract fixes the round's era configuration at session start, before the player predicts,
-  // and exposes it in the session's state while it waits for that prediction. Pinning the odds to it
-  // makes every price exact instead of an average over eras the round can no longer land in.
+  // ✦ The contract fixes the era configuration at session start; pinning the odds to it makes every
+  //   price exact instead of an average over eras the round can no longer land in.
   useEffect(() => {
     if (!session || !snapshot) return;
     const row = snapshot.sessions.items.find((item) => item.sessionKey === session.key);
@@ -492,7 +512,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     setConfigurationIndex(configurationIndexFromGameState(row.raw.gameState));
   }, [session, snapshot]);
 
-  // A round the host cancelled or forfeited while the player was away can never settle; drop it instead of hanging.
+  // ✦ A round the host cancelled or forfeited while the player was away can never settle; drop it instead of hanging.
   useEffect(() => {
     if (state.phase === 'idle' || state.phase === 'revealed' || !session || !snapshot) return;
     const row = snapshot.sessions.items.find((item) => item.sessionKey === session.key);
@@ -501,6 +521,9 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     }
   }, [snapshot, state.phase, session]);
 
+  // =====================================
+  // ⬢ Betting and settlement
+  // =====================================
   const placeBets = (bets: Record<string, Bet>) => {
     if (
       state.phase !== 'confirming' ||
@@ -523,7 +546,7 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
       });
   };
 
-  // Settle the active round once the host's session list shows it terminal.
+  // ✦ Settle the active round once the host's session list shows it terminal.
   useEffect(() => {
     if (state.phase !== 'settling' || !session?.id || !snapshot || !state.draw || !state.samples)
       return;
@@ -540,11 +563,9 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
       const deathYear = draw.year + result.age;
       const categories = categoriesOfCrimeMask(result.crimeMask);
 
-      // The chain only decides which crime categories hit (none, one or two) — their era-specific
-      // narratives are OpenRouter flavor text prefetched back when the player confirmed the land
-      // ("Weigh their fate"). Wait for them here instead of revealing without: there's no local
-      // catalog to fall back to anymore, and swapping the phrase into the story after the reveal
-      // is already showing would be the same bug we fixed for the life story itself.
+      // ✦ The chain only settles which crime categories hit; their narratives are prefetched
+      //   OpenRouter text. Wait for them rather than reveal without (no local catalog remains, and
+      //   swapping text in after the reveal reads as a bug).
       let sinNarratives: SinNarratives | null = null;
       if (categories.length > 0) {
         const sinsKey = sinNarrativesKeyFor(draw.year, draw.place.name);
@@ -560,8 +581,8 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
       }
 
       const rng = createRng();
-      // The chain settles sex/age/crime-category; region, literacy, city and cause-of-death stay
-      // a locally-drawn flavor conditioned on the same year/region/sex, purely for narrative color.
+      // ✦ The chain settles sex, age and crime category; region, literacy, city and cause of death
+      //   stay a local flavor draw for narrative color.
       const flavor = sampleLife({
         year: draw.year,
         region: draw.region,
@@ -578,8 +599,8 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
       const life: Life = { ...flavor, sex, age: result.age, deathYear, sin: sins[0] ?? null, sins };
       life.cause = pickCauseOfDeath({ life, currentYear: CURRENT_YEAR, rng });
 
-      // Crime-category odds are conditioned on the bucket the player's own prediction paired
-      // them with, not the soul's actual result bucket — see `previewSinsPrices`.
+      // ✦ Crime odds are conditioned on the bucket the player's own prediction paired them with, not
+      //   the soul's actual one; see `previewSinsPrices`.
       const ageBet = bets.age;
       const predictedBucket = ageBet?.kind === 'choice' ? ageBucketIndex(ageBet.optionId) : 0;
       const prices = previewCategoryPrices(session.wagerWei, predictedBucket, configurationIndex);
@@ -641,8 +662,8 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
         },
       });
     } catch {
-      // The deployed title's bytecode doesn't match this app's expected game-state shape (e.g. a
-      // stale local chain still running an older SoulOddsEngine) — surface it, don't crash.
+      // ✦ The deployed title doesn't match the expected game-state shape (e.g. a stale local chain);
+      //   surface it instead of crashing.
       setAwaitingSinNarrative(false);
       pendingBets.current = null;
       dispatch({
@@ -652,26 +673,28 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     }
   }, [snapshot, state.phase, session, state.draw, state.samples, sinNarrativesState]);
 
+  // =====================================
+  // ⬢ Pricing
+  // =====================================
   const priceDeathYear = (guessYear: number): Price => {
     if (!state.samples) return { p: 0, odds: null, tag: 'Long shot' };
     const p = deathYearP({ samples: state.samples, guess: guessYear, window: DEATH_WINDOW });
     return priceFromP({ p, config: PRICING_CONFIG });
   };
 
-  // Crime-category odds depend on which age bucket the player paired them with (see
-  // `previewSinsPrices`), so the "sins" step re-prices live once the age bet is known instead of
-  // reusing the draw-time preview, which only ever reflected the placeholder bucket 0.
+  // ✦ Sin odds depend on the paired age bucket (see `previewSinsPrices`), so the "sins" step
+  //   re-prices once the age bet is known.
   const priceSins = (lifespanBucket: number): Record<string, Price> =>
     previewSinsPrices(session?.wagerWei ?? 0n, lifespanBucket, configurationIndex);
 
-  // Sex and age prices are averaged over every era at draw time; swap in the exact ones once the era is known.
+  // ✦ Sex and age prices are averaged over every era at draw time; swap in the exact ones once the era is known.
   const prices: MarketPrices | null =
     state.prices && session && configurationIndex !== null
       ? { ...state.prices, ...previewCategoryPrices(session.wagerWei, 0, configurationIndex) }
       : state.prices;
 
-  // `null` while this draw's narratives are still loading (or none has been requested yet) —
-  // the sins bet step reads this to know whether to show its own loading state.
+  // ✦ `null` while this draw's narratives are loading or not yet requested; the sins step shows its
+  //   own loader on it.
   const sinNarratives =
     state.draw &&
     sinNarrativesState?.key === sinNarrativesKeyFor(state.draw.year, state.draw.place.name) &&
@@ -679,6 +702,9 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
       ? sinNarrativesState.state.narratives
       : null;
 
+  // =====================================
+  // ⬢ Public API
+  // =====================================
   return {
     phase: state.phase,
     era: state.era,

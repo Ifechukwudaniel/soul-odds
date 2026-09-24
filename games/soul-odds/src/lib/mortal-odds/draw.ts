@@ -14,10 +14,8 @@ import type { Rng } from '@/lib/mortal-odds/rng';
 import type { Draw, EraFilter, Place, PlaceContext, RegionId } from '@/types';
 
 /**
- * The Cliopatria dataset's own last-updated year: a polity whose attested range ends here wasn't
- * necessarily dissolved that year — the dataset simply stops tracking it there, and borders and
- * empires keep changing in the real world after every snapshot. Treated as "still standing" rather
- * than a hard end date.
+ * The Cliopatria dataset's last-updated year. A range ending here means "still standing", not
+ * dissolved: the dataset simply stops tracking it.
  */
 const CLIOPATRIA_DATA_CUTOFF_YEAR = 2023;
 
@@ -45,7 +43,6 @@ function pickRandom<T>(items: readonly T[], rng: Rng): T {
   return item;
 }
 
-/** Weighted-picks an era and year within it, then a region from that era's shares. */
 export function drawBirth(options: {
   era: EraFilter;
   rng: Rng;
@@ -66,9 +63,9 @@ export function drawBirth(options: {
 }
 
 /**
- * Weighted-picks a specific sub-region place within a region. Folds the continent into `name`
- * (`"City, Continent"`) to match the shape `/api/mortal-odds/place`'s synthetic fallback already
- * returns — see `lib/mortal-odds/place.ts`'s `toPlace`, which normalizes both into one `Place`.
+ * Weighted-picks a sub-region place within a region, folding the continent into `name`
+ * (`"City, Continent"`) to match the shape of `/api/mortal-odds/place`'s synthetic fallback; see
+ * `toPlace` in `place.ts`.
  */
 export function pickPlace(options: {
   region: RegionId;
@@ -95,7 +92,7 @@ export function continentNear(options: {
 }): string {
   const { lat, lon, placesConfig } = options;
   const rad = Math.PI / 180;
-  // Haversine's `a` grows with distance, which is all that's needed to find the nearest.
+  // ✦ Haversine's `a` grows with distance, which is all that's needed to find the nearest.
   const closeness = (p: PlaceConfig) =>
     Math.sin(((p.lat - lat) * rad) / 2) ** 2 +
     Math.cos(lat * rad) * Math.cos(p.lat * rad) * Math.sin(((p.lon - lon) * rad) / 2) ** 2;
@@ -122,15 +119,11 @@ export function regionShare(options: {
 }
 
 /**
- * Builds the place-context text shown alongside a drawn human: where, local population, and era.
- * Takes the year's era pre-resolved (the backend's `/api/mortal-odds/era`, or the local `eraFor`
- * fallback — see `useMortalOddsDraw.ts`) rather than looking it up itself, so this function stays
- * agnostic to where that data came from.
- *
- * `where` is the header line ("the North China Plain · Asia · 1675 CE") and `local` says how many
- * people lived there. A synthetic pick (`share` set) gets an estimate from its share of the region;
- * a real historical polity (from Cliopatria) gets its own estimate, or, when it has none, the date
- * range it is attested for.
+ * Builds the place-context text shown with a drawn human: `where` is the header line ("the North
+ * China Plain · Asia · 1675 CE") and `local` says how many people lived there.
+ * A synthetic pick (`share` set) estimates from its share of the region; a real polity (Cliopatria)
+ * uses its own estimate or, lacking one, its attested date range. The year's era comes pre-resolved
+ * (backend or local `eraFor`), so this stays agnostic to its source.
  */
 export function placeContext(options: {
   draw: Draw;
@@ -159,8 +152,8 @@ export function placeContext(options: {
           );
   }
 
-  // A synthetic place's name already ends in its continent ("City, Continent"); a polity's doesn't.
-  // `fmtYear` leaves "CE" off recent years; the header always spells it out.
+  // ✦ A synthetic place's name already ends in its continent ("City, Continent"); a polity's doesn't.
+  //   `fmtYear` leaves "CE" off recent years; the header always spells it out.
   const yearLabel = draw.year > 0 ? `${draw.year} CE` : fmtYear(draw.year);
   const where = [
     ...(draw.place.continent

@@ -54,8 +54,8 @@ describe('applyShocks', () => {
 
   it('respects an age window filter', () => {
     const narrow: ShockConfig = { ...WAR, ages: [50, 60] };
-    // Born in 1940, age 10 at the war's start -> the person is 10-15 during 1940-1945,
-    // well outside the [50, 60] age filter, so exposure should be zero.
+    // ✦ Born in 1940, age 10 at the war's start -> the person is 10-15 during 1940-1945,
+    //   well outside the [50, 60] age filter, so exposure should be zero.
     const hit = applyShocks({
       year: 1940,
       region: 'eur',

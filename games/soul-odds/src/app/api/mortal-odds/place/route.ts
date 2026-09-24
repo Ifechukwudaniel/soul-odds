@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
         lon: cliopatriaPlace.lon,
         placesConfig,
       }),
-      // Worked out from the region's density in this exact year times the polity's area.
+      // ✦ Worked out from the region's density in this exact year times the polity's area.
       population: estimatePopulation({ empire: cliopatriaPlace.name, year })?.population,
       year,
       source: 'cliopatria',

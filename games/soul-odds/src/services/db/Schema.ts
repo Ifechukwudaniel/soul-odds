@@ -39,12 +39,11 @@ export const userSchema = pgTable('user', {
 export type User = InferSelectModel<typeof userSchema>;
 export type NewUser = typeof userSchema.$inferInsert;
 
-// ---------------------------------------------------------------------------
-// Tasks
-// ---------------------------------------------------------------------------
-// The original hand-rolled `id` as `(await db.tasks.all()).length + 1`,
-// which races under concurrent creates. `serial` replaces that with a
-// real auto-incrementing primary key.
+// =====================================
+// ⬢ Tasks
+// =====================================
+
+// ✦ `serial` replaces the racy hand-rolled `(await db.tasks.all()).length + 1` id.
 
 export const taskSchema = pgTable('task', {
   id: serial('id').primaryKey(),
@@ -56,14 +55,14 @@ export const taskSchema = pgTable('task', {
 export type Task = InferSelectModel<typeof taskSchema>;
 export type NewTask = typeof taskSchema.$inferInsert;
 
-// ---------------------------------------------------------------------------
-// Cliopatria places
-// ---------------------------------------------------------------------------
-// One row per Cliopatria polity (see `scripts/seed-cliopatria.ts` and the
-// gitignored `cliopatria.geojson/` dataset it reads from): the polity's name,
-// the year range it held that territory, and a representative point (its
-// outer ring's centroid) instead of the full polygon - a random-year lookup
-// only ever needs one point to place a soul, not the whole shape.
+// =====================================
+// ⬢ Cliopatria places
+// =====================================
+
+// ✦ One row per Cliopatria polity (seeded from the gitignored `cliopatria.geojson/` dataset): its
+//   name, the year range it held that territory and a representative point (its outer ring's
+//   centroid) instead of the full polygon, since a random-year lookup only needs one point to place a
+//   soul.
 
 export const cliopatriaPlaceSchema = pgTable('cliopatria_place', {
   id: serial('id').primaryKey(),
@@ -72,21 +71,22 @@ export const cliopatriaPlaceSchema = pgTable('cliopatria_place', {
   toYear: integer('to_year').notNull(),
   lat: numeric('lat', { precision: 9, scale: 6, mode: 'number' }).notNull(),
   lon: numeric('lon', { precision: 9, scale: 6, mode: 'number' }).notNull(),
-  // Wikidata QID (e.g. "Q2345840"), when the source dataset has one - lets a correction script
-  // cross-check/fix `fromYear`/`toYear` against Wikidata without re-parsing the raw geojson.
+  // ✦ Wikidata QID (e.g. "Q2345840"), when the source dataset has one; lets a correction script fix
+  //   `fromYear`/`toYear` without re-parsing the raw geojson.
   wikidata: varchar('wikidata', { length: 32 }),
 });
 
 export type CliopatriaPlaceRow = InferSelectModel<typeof cliopatriaPlaceSchema>;
 export type NewCliopatriaPlaceRow = typeof cliopatriaPlaceSchema.$inferInsert;
-// ---------------------------------------------------------------------------
-// Sin catalog
-// ---------------------------------------------------------------------------
-// One row per pre-generated set of sin narratives, written for one place and the
-// years `fromYear`..`toYear` it applies to, so a place that spans centuries (an
-// empire) has several rows and serving only ever considers those covering the
-// drawn year. A period can hold more than one row: the sins route occasionally asks
-// OpenRouter to grow that period's pool by one more.
+
+// =====================================
+// ⬢ Sin catalog
+// =====================================
+
+// ✦ One row per pre-generated set of sin narratives, written for one place and the years
+//   `fromYear`..`toYear` it applies to. A place that spans centuries (an empire) has several rows,
+//   and serving only considers those covering the drawn year. A period can hold more than one row:
+//   the sins route occasionally asks OpenRouter to grow its pool by one.
 
 export const sinCatalogSchema = pgTable(
   'sin_variant',
@@ -105,12 +105,13 @@ export const sinCatalogSchema = pgTable(
 export type SinCatalogRow = InferSelectModel<typeof sinCatalogSchema>;
 export type NewSinCatalogRow = typeof sinCatalogSchema.$inferInsert;
 
-// ---------------------------------------------------------------------------
-// Bet history
-// ---------------------------------------------------------------------------
-// One row per settled round, keyed by the wallet that played it and the round's
-// session key. The AI-written `story` and `name` land after the row is first
-// written (see `patchBetHistoryStory`), so they start as the local story / null.
+// =====================================
+// ⬢ Bet history
+// =====================================
+
+// ✦ One row per settled round, keyed by wallet and session key. The AI-written `story` and `name`
+//   land after the row is first written (see `patchBetHistoryStory`), so they start as the local
+//   story / null.
 
 export const betHistorySchema = pgTable(
   'bet_history',

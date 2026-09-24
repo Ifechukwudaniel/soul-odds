@@ -100,7 +100,7 @@ export const LifespanChart = (props: {
         strokeDasharray="4 3"
       />
 
-      {/* Bookie's typical (median) age: hollow gold ring */}
+      {/* ✦ Bookie's typical (median) age: hollow gold ring ✦ */}
       <circle
         cx={ageX(props.bookieMedianAge)}
         cy={MARKER_Y}
@@ -109,7 +109,7 @@ export const LifespanChart = (props: {
         stroke="#F5B83D"
         strokeWidth={2}
       />
-      {/* Real typical (median) age: filled lavender dot */}
+      {/* ✦ Real typical (median) age: filled lavender dot ✦ */}
       <circle cx={ageX(props.realMedianAge)} cy={MARKER_Y} r={4} fill="#4C6FD1" />
 
       <path

@@ -10,7 +10,7 @@ import { CHART_INTRO_MS, HOP_ROLL_MS, SETTLE_ROLL_MS } from '@/lib/mortal-odds/s
 
 gsap.registerPlugin(useGSAP, DrawSVGPlugin);
 
-// The intro is CHART_INTRO_MS long: the curve draws itself in, then the projection is revealed and the marker lands.
+// ✦ The intro is CHART_INTRO_MS long: the curve draws itself in, then the projection is revealed and the marker lands.
 const INTRO_S = CHART_INTRO_MS / 1000;
 const CURVE_DRAW_S = INTRO_S * 0.78;
 const PROJECTION_S = INTRO_S - CURVE_DRAW_S;
@@ -170,11 +170,9 @@ export const PopulationChart = (props: {
 
   const yForPop = (pop: number) => TOP + PLOT_HEIGHT * (1 - pop / maxPop);
 
-  /*
-   * Intro, only when the chart mounts during a draw (a restored round or a step back stays static): the curve
-   * draws itself in with DrawSVG while a lead dot rides its front (found with getPointAtLength) and the area fill
-   * wipes in right behind it; then the dashed projection is revealed and the marker lands on "now".
-   */
+  // ✦ Intro (only when the chart mounts during a draw; a restored round or step back stays static):
+  //   the curve draws in with DrawSVG while a lead dot rides its front and the area wipes in behind,
+  //   then the dashed projection is revealed and the marker lands on "now".
   useGSAP(() => {
     const solid = solidRef.current;
     const clipRect = clipRectRef.current;
@@ -250,11 +248,8 @@ export const PopulationChart = (props: {
     return () => motion.revert();
   });
 
-  /*
-   * The marker follows the spin timeline: whenever it hops to a new year, the marker glides there along the
-   * log-scaled axis over the same time the year reel takes to roll, and the last glide (onto the answer) is
-   * the slow one. Outside a spin it just sits on the answer.
-   */
+  // ✦ The marker follows the spin timeline: on each new year it glides along the log-scaled axis over
+  //   the reel's roll time, slowest on the final landing. Outside a spin it sits on the answer.
   useEffect(() => {
     if (animationFrameRef.current !== null) {
       cancelAnimationFrame(animationFrameRef.current);
@@ -322,10 +317,6 @@ export const PopulationChart = (props: {
     L${solidPoints[0]![0]} ${TOP + PLOT_HEIGHT}
     Z`;
 
-  /*
-   * IMPORTANT:
-   * The marker now follows animatedYear instead of props.year.
-   */
   const markerPop = interpolate({
     points: worldPopCurve,
     x: animatedYear,
@@ -452,7 +443,7 @@ export const PopulationChart = (props: {
           })}
         </g>
 
-        {/* Animated selection */}
+        {/* ✦ Animated selection ✦ */}
         <g ref={markerRef}>
           <line
             x1={markerX}

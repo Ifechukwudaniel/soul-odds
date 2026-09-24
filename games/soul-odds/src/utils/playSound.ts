@@ -5,7 +5,7 @@ export type Sound =
   | { name: 'search-tick'; step: number }
   | { name: 'search-lock' };
 
-// Partial ratios and relative levels of a struck metal bell: inharmonic overtones are what read as "coin", not "beep".
+// ✦ Partial ratios and relative levels of a struck metal bell: inharmonic overtones are what read as "coin", not "beep".
 const BELL_PARTIALS = [
   { ratio: 1, gain: 1 },
   { ratio: 2.76, gain: 0.45 },
@@ -13,18 +13,17 @@ const BELL_PARTIALS = [
 ];
 
 const SPEND_SRC = '/sound/dragon-studio-coins-dropping-into-wooden-box-467468.mp3';
-// The clip is mastered hot (its peaks pass full scale); this brings it level with the button click.
+// ✦ The clip is mastered hot (its peaks pass full scale); this brings it level with the button click.
 const SPEND_VOLUME = 0.45;
 const SPEND_FADE_SECONDS = 0.06;
 
 const fetchSpendData = () => fetch(SPEND_SRC).then((response) => response.arrayBuffer());
 
-// Start fetching as soon as the module loads in the browser, so the first spend doesn't wait on the network.
+// ✦ Start fetching as soon as the module loads in the browser, so the first spend doesn't wait on the network.
 let spendData: Promise<ArrayBuffer> | null =
   typeof window === 'undefined' ? null : fetchSpendData();
 let spendBuffer: Promise<AudioBuffer> | null = null;
 
-/** Decodes the coin clip once and reuses it. */
 const getSpendBuffer = (ctx: AudioContext) => {
   spendData ??= fetchSpendData();
   spendBuffer ??= spendData.then((data) => ctx.decodeAudioData(data));
@@ -86,7 +85,7 @@ const playSpend = async (ctx: AudioContext, amount: number) => {
   const source = ctx.createBufferSource();
   const envelope = ctx.createGain();
   source.buffer = buffer;
-  // A slight pitch drift keeps repeated spends from sounding identical.
+  // ✦ A slight pitch drift keeps repeated spends from sounding identical.
   source.playbackRate.value = rate;
   envelope.gain.setValueAtTime(SPEND_VOLUME, now);
   envelope.gain.setValueAtTime(SPEND_VOLUME, now + wallSeconds - SPEND_FADE_SECONDS);
@@ -130,7 +129,6 @@ const playLock = (ctx: AudioContext) => {
   ring(ctx, { frequency: 990, start: now + 0.09, decay: 1.4, volume: 0.07 });
 };
 
-/** Plays a synthesized game sound effect, unless the player has muted sound. */
 export const playSound = (sound: Sound) => {
   if (isSoundMuted()) {
     return;

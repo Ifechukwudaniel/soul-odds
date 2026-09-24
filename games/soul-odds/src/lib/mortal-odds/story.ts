@@ -45,8 +45,8 @@ export function tellStory(options: {
     );
   }
 
-  // The crime category is settled on-chain independently of age, so a life can carry a sin even
-  // when it never reached adulthood — this has to stay outside the `grownUp` gate above it.
+  // ✦ The crime category is settled on-chain independently of age, so a life can carry a sin even
+  //   when it never reached adulthood — this has to stay outside the `grownUp` gate above it.
   if (life.sin)
     parts.push(`Along the way, ${she.toLowerCase()} ${lowercaseFirst(life.sin.phrase)}.`);
 

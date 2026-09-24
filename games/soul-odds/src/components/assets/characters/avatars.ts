@@ -25,11 +25,7 @@ export const DEFAULT_AVATAR_ID = DEFAULT_AVATAR.id;
 export const getAvatarById = (id: string): Avatar =>
   AVATARS.find((avatar) => avatar.id === id) ?? DEFAULT_AVATAR;
 
-/**
- * Deterministically picks an avatar for a user id, so the same user always gets the same "random" avatar.
- * @param userId - The user's stable id.
- * @returns The avatar assigned to this user.
- */
+/** Deterministically picks an avatar for a user id, so the same user always gets the same one. */
 export const getRandomAvatarForUser = (userId: string): Avatar => {
   const hash = [...userId].reduce((acc, char) => acc * 31 + (char.codePointAt(0) ?? 0), 0);
   const index = Math.trunc(Math.abs(hash)) % AVATARS.length;

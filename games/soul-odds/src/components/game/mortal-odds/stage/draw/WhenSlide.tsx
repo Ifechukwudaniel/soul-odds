@@ -11,7 +11,7 @@ import { serifFont } from '@/styles/serif-font';
 
 const INTRO = 'Most births happened recently in history.';
 
-// The reel settles with a springy punch, so the answer lands with weight.
+// ✦ The reel settles with a springy punch, so the answer lands with weight.
 const REEL_VARIANTS = {
   spinning: { scale: 1 },
   locked: {
@@ -28,7 +28,7 @@ export const WhenSlide = (props: {
   currentYear: number;
 }) => {
   const yearsAgo = props.currentYear - props.year;
-  // While spinning the reel follows the spin timeline (starting from today); afterwards it holds the answer.
+  // ✦ While spinning the reel follows the spin timeline (starting from today); afterwards it holds the answer.
   const reelYear = props.isSpinning ? (props.displayYear ?? props.currentYear) : props.year;
 
   return (
@@ -52,7 +52,7 @@ export const WhenSlide = (props: {
         />
       </div>
 
-      {/* Screen readers skip the rolling digits and hear the settled answer once, when the region updates. */}
+      {/* ✦ Screen readers skip the rolling digits and hear the settled answer once, when the region updates. ✦ */}
       <div aria-live="polite" className="flex flex-col items-center gap-1 lg:gap-2">
         <motion.div
           initial={false}

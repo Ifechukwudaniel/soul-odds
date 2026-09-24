@@ -4,7 +4,7 @@ import { getMarketIcon } from '@/lib/mortal-odds/market-icons';
 import type { MarketConfig, MarketOption, Price } from '@/types';
 import { playClickSound } from '@/utils/playClickSound';
 
-// The grid is 2 columns wide (see the `grid-cols-2` below); arrow-key roving needs that number to move up/down a row.
+// ✦ The grid is 2 columns wide (see the `grid-cols-2` below); arrow-key roving needs that number to move up/down a row.
 const GRID_COLUMNS = 2;
 const ARROW_MOVE: Record<string, number> = {
   ArrowRight: 1,
@@ -31,9 +31,8 @@ export const ChoiceMarket = (props: {
     return !!price && price.odds !== null;
   };
 
-  // Only the selected option (or the first pickable one, before anything's picked) is a Tab stop, like a native
-  // radio group. Arrow keys move both focus and the pick together — the same action a click already takes —
-  // clamped at the grid's edges and skipping past any closed (unpickable) option in the pressed direction.
+  // ✦ Only the selected (or first pickable) option is a Tab stop. Arrows move focus and pick
+  //   together, clamped at the edges and skipping closed options.
   const rovingId = props.selectedOptionId ?? options.find(isPickable)?.id;
 
   const moveSelection = (fromIndex: number, key: string) => {

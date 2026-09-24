@@ -24,13 +24,13 @@ import { periodOf } from '@/lib/mortal-odds/sin-variants';
 const DATA_DIR = path.join(process.cwd(), 'cliopatria.geojson');
 const CURRENT_FILE = path.join(DATA_DIR, 'cliopatria-population.json');
 const OUT_FILE = path.join(DATA_DIR, 'cliopatria-population.next.json');
-// Each request takes seconds to answer, so throughput comes from running many at once.
+// ✦ Each request takes seconds to answer, so throughput comes from running many at once.
 const CONCURRENCY = 30;
 const SAVE_EVERY = 25;
-// Cheap but knows enough history: on the polities tried it put the Roman Empire near the researched
-// figure, where the default model and gpt-4o-mini came out several times too low, and it returns plain JSON.
+// ✦ Cheap but knows enough history: on the polities tried it put the Roman Empire near the researched
+//   figure, where the default model and gpt-4o-mini came out several times too low, and it returns plain JSON.
 const POPULATION_MODEL = 'google/gemini-2.5-flash';
-// A researched figure this many years from a window is too far to anchor an estimate.
+// ✦ A researched figure this many years from a window is too far to anchor an estimate.
 const MAX_REFERENCE_GAP_YEARS = 300;
 
 const COLUMNS = [
@@ -158,7 +158,7 @@ async function main() {
   const jobs = await buildWindowJobs();
   const researched = researchedByName();
   const jobByKey = new Map(jobs.map((job) => [keyOf(job.name, job.window.fromYear), job]));
-  // Rows saved before clipping ran cover the whole window, so clip every loaded row to its polity's lifetime.
+  // ✦ Rows saved before clipping ran cover the whole window, so clip every loaded row to its polity's lifetime.
   const done = new Map(
     readRows(OUT_FILE).flatMap((row): [string, Row][] => {
       const job = jobByKey.get(keyOf(row.name, row.fromYear));
@@ -166,7 +166,7 @@ async function main() {
     }),
   );
 
-  // A researched figure whose own dates overlap the window answers it outright; the rest need a model.
+  // ✦ A researched figure whose own dates overlap the window answers it outright; the rest need a model.
   const direct = new Map<WindowJob, Researched>();
   for (const job of jobs) {
     const overlapping = researched

@@ -3,7 +3,6 @@ import { PiXBold } from 'react-icons/pi';
 import { serifFont } from '@/styles/serif-font';
 import { playClickSound } from '@/utils/playClickSound';
 
-/** The shared modal header: a gold Eye of Horus divider over a serif title, with an optional intro line. */
 export const ModalHeader = (props: { title: string; titleId?: string; intro?: string }) => (
   <header className="flex flex-col items-center gap-2 text-center">
     <div className="flex w-full items-center gap-3">
@@ -18,7 +17,6 @@ export const ModalHeader = (props: { title: string; titleId?: string; intro?: st
   </header>
 );
 
-/** The shared modal close button, pinned to the top-right corner of a `relative` panel. */
 export const ModalCloseButton = (props: { onClick: () => void }) => (
   <button
     type="button"

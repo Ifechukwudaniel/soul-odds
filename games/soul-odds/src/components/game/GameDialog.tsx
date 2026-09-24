@@ -2,17 +2,14 @@
 
 import { useEffect, useRef } from 'react';
 
-// Chromium can drop focus to <body> for one Tab press when leaving certain controls (observed with
-// <input type="range">) at the edge of a native <dialog>'s focus trap, letting that one press look like
-// it left the dialog (it snaps back on the next press, but with no visible focus ring in between). We
-// reinforce the wrap ourselves at the two edges so Tab/Shift+Tab always land back inside, every press.
+// ✦ Chromium can drop focus to <body> on a Tab press at a native <dialog>'s focus-trap edges (seen
+//   with <input type="range">). Wrap focus manually at both edges so every press lands back inside.
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 /**
- * A controlled modal built on the native `<dialog>`: showModal/close track `isOpen`, so the browser
- * handles the focus trap, Escape-to-close and returning focus to whatever opened it for free.
- * A click on the dimmed backdrop closes it too; a click inside does not (it lands on a child, not the dialog).
+ * A controlled modal on the native `<dialog>`: the browser handles the focus trap, Escape and focus
+ * return. A click on the dimmed backdrop closes it; a click inside doesn't.
  */
 export const GameDialog = (props: {
   isOpen: boolean;
@@ -39,8 +36,8 @@ export const GameDialog = (props: {
     <dialog
       ref={dialogRef}
       aria-labelledby={props.labelledBy}
-      // The native "close" event covers every way the dialog closes (Escape, .close(), the backdrop click below),
-      // so it's the single place that reports back to the caller.
+      // ✦ The native "close" event covers every close path (Escape, .close(), backdrop click), so
+      //   it's the single place that reports back.
       onClose={props.onClose}
       onClick={(event) => {
         if (event.target === event.currentTarget) {

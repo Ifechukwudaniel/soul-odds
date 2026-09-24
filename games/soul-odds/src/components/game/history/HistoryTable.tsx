@@ -10,7 +10,7 @@ import { cn } from '@/utils';
 
 const COLUMNS = ['Soul', 'Bets', 'Net', 'Date'] as const;
 
-// Same grid-not-<tr> approach as the leaderboard table; each body row is a button that opens the round's details.
+// ✦ Same grid-not-<tr> approach as the leaderboard table; each body row is a button that opens the round's details.
 const ROW_GRID = 'grid grid-cols-[minmax(0,1fr)_5rem_6rem_5rem] items-center gap-4 px-4';
 
 const NET_COLOR = (net: number) =>

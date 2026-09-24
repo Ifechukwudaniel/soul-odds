@@ -1,7 +1,6 @@
 import type { SinNarratives, SinPlaceContext } from '@/lib/mortal-odds/sin-variants';
 import { apiClient } from '@/libs/ApiClient';
 
-/** Fetches this draw's four era-specific sin narratives from the backend. */
 export async function fetchSinNarratives(options: {
   year: number;
   location: string;

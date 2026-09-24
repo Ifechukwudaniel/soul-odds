@@ -26,7 +26,7 @@ export const Env = createEnv({
   shared: {
     NODE_ENV: z.enum(['test', 'development', 'production']).optional(),
   },
-  // You need to destructure all the keys manually
+  // ✦ You need to destructure all the keys manually
   runtimeEnv: {
     ARCJET_KEY: process.env.ARCJET_KEY,
     DATABASE_URL: process.env.DATABASE_URL,

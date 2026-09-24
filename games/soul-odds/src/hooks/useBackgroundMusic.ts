@@ -22,7 +22,6 @@ function readVolume(): number {
   }
 }
 
-/** Lazily creates the single shared background-music element. */
 function getAudio(): HTMLAudioElement {
   if (!sharedAudio) {
     sharedAudio = new Audio(BG_MUSIC_SRC);
@@ -33,7 +32,6 @@ function getAudio(): HTMLAudioElement {
   return sharedAudio;
 }
 
-/** Loops the shared background music and persists the mute toggle and volume across sessions. */
 export function useBackgroundMusic(): {
   isMuted: boolean;
   toggle: () => void;
@@ -64,7 +62,7 @@ export function useBackgroundMusic(): {
       audio.play().catch(() => {});
     };
 
-    // Direct play works where autoplay is allowed; otherwise music starts on the first user gesture.
+    // ✦ Direct play works where autoplay is allowed; otherwise music starts on the first user gesture.
     audio.play().catch(() => {
       document.addEventListener('pointerdown', start, { once: true });
       document.addEventListener('keydown', start, { once: true });
@@ -83,7 +81,7 @@ export function useBackgroundMusic(): {
       try {
         localStorage.setItem(MUTED_STORAGE_KEY, next ? '1' : '0');
       } catch {
-        // storage unavailable: the mute state stays in memory
+        // ✦ storage unavailable: the mute state stays in memory
       }
       return next;
     });
@@ -95,7 +93,7 @@ export function useBackgroundMusic(): {
     try {
       localStorage.setItem(VOLUME_STORAGE_KEY, String(clamped));
     } catch {
-      // storage unavailable: the volume stays in memory
+      // ✦ storage unavailable: the volume stays in memory
     }
   };
 

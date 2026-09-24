@@ -11,9 +11,11 @@ import worldLandJson from '@/config/mortal-odds/world-land.json';
 import type { PricingConfig } from '@/lib/mortal-odds/pricing';
 import type { EraFilter, MarketConfig, MarketOption, RegionId } from '@/types';
 
+// =====================================
+// ⬢ Constants
+// =====================================
 export const MODES: Record<EraFilter, number> = { all: -Infinity, ce: 1, modern: 1750 };
 
-/** Chip sizes the player can lock in as their stake before summoning a soul. */
 export const CHIP_SIZES = [1, 5, 10, 25, 50];
 
 /** Flat fee to reroll the age/land once a stake is already locked in; the first reveal is free. */
@@ -38,6 +40,9 @@ export const REGIONS: Record<RegionId, string> = {
 
 export const HUMANS_EVER = 117e9;
 
+// =====================================
+// ⬢ Schemas
+// =====================================
 const regionIdSchema = z.enum(['ssa', 'mena', 'eur', 'sas', 'eas', 'sea', 'ame']);
 
 /** Every region id, typed — avoids casting the result of Object.keys over region-keyed records. */
@@ -125,10 +130,9 @@ const shockConfigSchema = z.object({
 const shocksConfigSchema = z.array(shockConfigSchema);
 
 /**
- * The four crime categories the deployed SoulOddsEngine title actually predicts on-chain
- * (index-aligned with the title's `crimes` slots — see `config/mortal-odds/soul-odds-title.json`).
- * Adding, removing or reweighting a `sins.json` entry never touches this list or the contract;
- * only changing the categories themselves would require a new title deployment.
+ * The four crime categories the deployed SoulOddsEngine title predicts on-chain, index-aligned with
+ * its `crimes` slots (see `config/mortal-odds/soul-odds-title.json`). Sin catalog edits never touch
+ * this list; changing the categories needs a new title deployment.
  */
 export const SIN_CATEGORIES = [
   { id: 'violence', label: 'Violence' },
@@ -142,10 +146,9 @@ export type SinCategoryId = (typeof SIN_CATEGORIES)[number]['id'];
 export const SIN_ID_SEPARATOR = '+';
 
 /**
- * The bettable sin catalog. Hand-edited: add an entry here and it becomes a possible outcome
- * for every life whose crime category matches, no other file to touch. `to: null` means the sin
- * is still possible today; `rate` follows the same region-or-"all" shape as a shock's rate.
- * `category` is flavor-only bucketing into one of the four on-chain `SIN_CATEGORIES` slots.
+ * The bettable sin catalog, hand-edited: an entry becomes a possible outcome for every life whose
+ * crime category matches. `to: null` means still possible today, `rate` follows a shock's
+ * region-or-"all" shape, and `category` is flavor-only bucketing into a `SIN_CATEGORIES` slot.
  */
 const sinConfigSchema = z.object({
   id: z.string(),
@@ -198,6 +201,9 @@ const regionModifiersConfigSchema = z.object({
   sexChildMortalityMultiplier: sexPairSchema,
 });
 
+// =====================================
+// ⬢ Parsed config
+// =====================================
 export type EraConfig = z.infer<typeof eraConfigSchema>;
 export type PlaceConfig = z.infer<typeof placeConfigSchema>;
 export type LandRing = z.infer<typeof worldLandSchema>[number];
@@ -215,11 +221,14 @@ export const jobsConfig: JobsConfig = jobsConfigSchema.parse(jobsJson);
 export const regionModifiersConfig: RegionModifiersConfig =
   regionModifiersConfigSchema.parse(regionModifiersJson);
 
+// =====================================
+// ⬢ Markets
+// =====================================
+
 /**
- * The "sins" market's options mirror every crime state the contract accepts: "Clean" for none,
- * each of the four crime categories on its own, and every pair of two (the contract allows at
- * most two, and only an exact match pays). The specific sin revealed within a category (drawn
- * from `sins.json`) is flavor only — see `pickSin`.
+ * The "sins" market mirrors every crime state the contract accepts: "Clean" for none, each category
+ * alone and every pair (at most two, and only an exact match pays). The sin revealed within a
+ * category is flavor only; see `pickSin`.
  */
 const sinPairOptions = SIN_CATEGORIES.flatMap((first, index) =>
   SIN_CATEGORIES.slice(index + 1).map((second): MarketOption => ({
@@ -245,6 +254,9 @@ export const marketsConfig: MarketConfig[] = [
   sinsMarket,
 ];
 
+// =====================================
+// ⬢ Curves
+// =====================================
 const curves = curvesConfigSchema.parse(curvesJson);
 export const worldPopCurve: ReadonlyArray<readonly [number, number]> = curves.worldPop;
 export const bookieCurves = {

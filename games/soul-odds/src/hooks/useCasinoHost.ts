@@ -20,10 +20,9 @@ type HostBridge = {
 let bridge: HostBridge | undefined;
 
 /**
- * One connection per page. The host binds its guest proxy to the first
- * handshake, so connecting again on a remount (StrictMode in dev) would leave
- * the host pushing into a destroyed connection. Opened outside the host iframe,
- * the page talks to a local demo host instead, so the game is playable on its own.
+ * One connection per page: the host binds its guest proxy to the first handshake, so a StrictMode
+ * remount must not reconnect. Outside the host iframe it talks to a local demo host so the game is
+ * playable on its own.
  */
 function hostBridge(): HostBridge {
   if (bridge) return bridge;
@@ -66,7 +65,7 @@ export function useCasinoHost(): {
         if (mounted) setHostApi(parent);
       })
       .catch(() => {
-        // Handshake with the host iframe failed — the "waiting for host" screen stays up.
+        // ✦ Handshake with the host iframe failed — the "waiting for host" screen stays up.
       });
 
     return () => {

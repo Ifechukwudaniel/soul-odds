@@ -5,8 +5,8 @@ import { REDRAW_COST } from '@/lib/mortal-odds/config';
 type SlideInfo = { title: string; intro: string; points: InfoPoint[] };
 
 /**
- * What the "In which age?" step really does today: the odds are priced from the age alone
- * (the bookie's model has no region, sex or catastrophes), so keep these claims to that.
+ * What the "In which age?" step does today: odds are priced from the age alone (the bookie's model
+ * has no region, sex or catastrophes), so keep these claims to that.
  */
 export const AGE_INFO: SlideInfo = {
   title: 'Why the age matters',
@@ -32,8 +32,8 @@ export const AGE_INFO: SlideInfo = {
 };
 
 /**
- * What the "In which land?" step does today: the land shapes the life story shown at the reveal, not the odds.
- * The last point is a teaser for region-tilted sin odds and is marked "soon" until that ships; drop the flag then.
+ * What the "In which land?" step does today: the land shapes the reveal's life story, not the odds.
+ * The last point teases region-tilted sin odds and is marked "soon"; drop the flag once it ships.
  */
 export const LAND_INFO: SlideInfo = {
   title: 'Why the land matters',

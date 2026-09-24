@@ -4,10 +4,6 @@ import { motion } from 'framer-motion';
 import { RevealStamp } from '@/components/game/mortal-odds/stage/reveal/RevealStamp';
 import type { BetResult } from '@/types';
 
-/**
- * The full round's verdict as one paper-card popup: every bet, the skill score, and the net
- * result, all stamped onto a single pinned note. Stays up until the player taps it away.
- */
 export const BetResultStamp = (props: {
   results: BetResult[];
   skill: number;

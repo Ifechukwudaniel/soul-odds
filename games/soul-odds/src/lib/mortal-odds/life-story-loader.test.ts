@@ -112,7 +112,7 @@ describe('LifeStoryLoader', () => {
       );
       expect(stateForOld).toEqual({ ready: false });
 
-      // The player summons another soul before the old round's OpenRouter request lands.
+      // ✦ The player summons another soul before the old round's OpenRouter request lands.
       const stateForNew = loader.request(
         'session-new',
         payload("new soul's local story"),
@@ -120,7 +120,7 @@ describe('LifeStoryLoader', () => {
       );
       expect(stateForNew).toEqual({ ready: false });
 
-      // The stale request for the abandoned round finally resolves.
+      // ✦ The stale request for the abandoned round finally resolves.
       oldRequest.resolve(payload("old soul's story, written in the land of Java", 'Old Soul'));
       await Promise.resolve();
       await Promise.resolve();
@@ -180,8 +180,8 @@ describe('LifeStoryLoader', () => {
       });
       const onResolved = vi.fn();
 
-      // Real usage always passes the same setState setter as `onResolved`, so a re-render that
-      // re-requests the same key (still the latest) still gets the eventual result.
+      // ✦ Real usage always passes the same setState setter as `onResolved`, so a re-render that
+      //   re-requests the same key (still the latest) still gets the eventual result.
       loader.request('session-a', payload('fallback a'), onResolved);
       loader.request('session-a', payload('fallback a'), onResolved);
       await Promise.resolve();

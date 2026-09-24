@@ -39,12 +39,12 @@ export const WorldMap = (props: { year: number; marker: { lat: number; lon: numb
     const waypoints = Array.from({ length: ROAM_STOPS }, randomPoint);
     const xs = [pinX.get(), ...waypoints.map((w) => w.x), pin.x];
     const ys = [pinY.get(), ...waypoints.map((w) => w.y), pin.y];
-    // ease into the final stop more slowly than the frantic jumps before it
+    // ✦ ease into the final stop more slowly than the frantic jumps before it
     const times = xs.map((_, i) => (i === xs.length - 1 ? 1 : (i / (xs.length - 1)) * 0.85));
 
     const cx = animateValue(pinX, xs, { duration: ROAM_DURATION, times, ease: 'easeInOut' });
     const cy = animateValue(pinY, ys, { duration: ROAM_DURATION, times, ease: 'easeInOut' });
-    // A tock as the pin reaches each waypoint (the first and last stops are the start and the landing), then a chime as it lands.
+    // ✦ A tock as the pin reaches each waypoint (the first and last stops are the start and the landing), then a chime as it lands.
     const ticks = times
       .slice(1, -1)
       .map((time, step) =>

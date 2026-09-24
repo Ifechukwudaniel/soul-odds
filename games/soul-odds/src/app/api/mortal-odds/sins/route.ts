@@ -48,9 +48,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ message: 'Missing "location" query parameter.' }, { status: 400 });
   }
 
-  // An empire spans centuries, so only a variant written for this year's period is ever served. A place
-  // with none of its own (a synthetic one, or a polity that wasn't around then) borrows the variants of
-  // the polity nearest to it that was alive in the drawn year, so the crimes still fit its region and era.
+  // ✦ Only variants written for this year's period are served (an empire spans centuries); a place
+  //   with none borrows the nearest polity alive that year.
   const place = readPlaceContext(request.nextUrl.searchParams);
   const nearest = place
     ? await findNearestCliopatriaPlace({ lat: place.lat, lon: place.lon, year })

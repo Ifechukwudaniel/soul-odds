@@ -41,9 +41,8 @@ export function useMortalOddsPlayer(): {
   const skill = useAppStore((state) => state.user.skill);
   const address = useAppStore((state) => state.user.address);
   /**
-   * A round's stake and payout now move for real through `hostApi.openSession`/`submitAction`,
-   * so `user.balance` is driven entirely by the host's pushed snapshot (see the balance-sync
-   * effect in `page.tsx`) — this delta is only for the local, chain-unaware redraw fee.
+   * Stake and payout move on-chain through `hostApi`, so `user.balance` follows the host's pushed
+   * snapshot (see `page.tsx`); this delta is only for the local, chain-unaware redraw fee.
    */
   const applyRedrawFeeDelta = useAppStore((state) => state.applyBalanceDelta);
   const updateUser = useAppStore((state) => state.updateUser);
@@ -59,7 +58,7 @@ export function useMortalOddsPlayer(): {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch {
-      /* storage unavailable: round stats continue in memory */
+      /* ✦ storage unavailable: round stats continue in memory */
     }
   };
 
@@ -75,8 +74,8 @@ export function useMortalOddsPlayer(): {
   };
 
   /**
-   * Pays for a redraw with a banked free redraw when there is one, otherwise with the flat fee.
-   * The free redraw is spent optimistically; if the server disagrees, the local count is re-synced from it.
+   * Pays for a redraw with a banked free redraw if there is one, otherwise the flat fee. The free
+   * redraw is spent optimistically and re-synced if the server disagrees.
    */
   const payRedraw = (fee: number) => {
     if (freeRedraws > 0) {
@@ -92,12 +91,10 @@ export function useMortalOddsPlayer(): {
   };
 
   /**
-   * The round's stake/payout already moved on-chain, so this only accumulates the stats that have
-   * no chain equivalent: skill and streaks. The deltas are still computed client-side (not yet
-   * validated server-side), but skill is also persisted to the user's DB `points` column and a
-   * winning round's net to their lifetime winnings — the columns the leaderboard reads — so both
-   * survive a refresh and show up there, instead of living only in this browser's localStorage.
-   * A losing round adds nothing to winnings rather than subtracting.
+   * Accumulates the stats with no chain equivalent: skill and streaks (computed client-side, not
+   * yet validated server-side). Skill is persisted to the DB `points` column and a winning round's
+   * net to lifetime winnings, which the leaderboard reads. A losing round adds nothing to winnings
+   * rather than subtracting.
    */
   const commitRound = (options: { net: number; skill: number }) => {
     updateUser({ skill: accumulateSkill(skill, options.skill) });

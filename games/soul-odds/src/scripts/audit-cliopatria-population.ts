@@ -68,7 +68,7 @@ function checkRules(): string[] {
 function compareToResearched() {
   const rows = readReferences().flatMap((ref) => {
     const estimate = estimatePopulation({ empire: ref.name, year: ref.year });
-    // A reference that itself breaks the rules (Seshat scaled onto a tiny or huge territory) can't judge anything.
+    // ✦ A reference that itself breaks the rules (Seshat scaled onto a tiny or huge territory) can't judge anything.
     const usable =
       ref.population > 0 &&
       checkPopulation({

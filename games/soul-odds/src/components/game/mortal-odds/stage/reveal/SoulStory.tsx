@@ -25,10 +25,8 @@ const StoryLoading = () => (
 );
 
 /**
- * The narrative of the soul's life. Waits for an OpenRouter-written story for this exact soul,
- * showing a loading placeholder rather than the local template — swapping visible text out from
- * under the player reads as a bug, not a feature — and only ever renders the template once the
- * request has definitively failed.
+ * The soul's life story. Shows a loading placeholder until the OpenRouter story for this soul
+ * arrives, and renders the local template only once the request has definitively failed.
  */
 export const SoulStory = (props: { state: LifeStoryState }) => (
   <RevealSection icon={ GiScrollUnfurled } title="The life of this soul">

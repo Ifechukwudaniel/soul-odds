@@ -93,9 +93,9 @@ const CAUSES: readonly Cause[] = [
 ];
 
 /**
- * Picks a random cause of death that fits the soul's age, sex and era, or null when there is no
- * death to explain: they are still living, or a historical catastrophe already killed them. A soul
- * recorded as having committed a sin may instead die a shameful death for it.
+ * Picks a random cause of death fitting the soul's age, sex and era, or null when there is no death
+ * to explain (still living, or killed by a catastrophe). A soul recorded as having committed a sin
+ * may instead die a shameful death for it.
  */
 export function pickCauseOfDeath(options: {
   life: Life;

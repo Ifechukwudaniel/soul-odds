@@ -20,7 +20,6 @@ export function yearReelParts(year: number): { value: number; suffix: string } {
   return { value: year, suffix: year < 1500 ? ' CE' : '' };
 }
 
-/** Formats a population count in plain language: billion / million / thousand. */
 export function fmtPeople(n: number): string {
   if (n >= 1e9) return `${(n / 1e9).toFixed(1)} billion`;
   if (n >= 1e6) return `${Math.round(n / 1e6)} million`;
@@ -29,9 +28,9 @@ export function fmtPeople(n: number): string {
 }
 
 /**
- * Formats an estimated population as a round figure, since the estimates are only good to about a
- * factor of two: rounded to the nearest half of its leading unit, so 574,000 reads "550 thousand",
- * 1,430,000 reads "1.5 million" and 68,000,000 reads "70 million".
+ * Formats an estimated population as a round figure, since estimates are only good to about a
+ * factor of two: the nearest half of its leading unit, e.g. 574,000 -> "550 thousand" and 1,430,000
+ * -> "1.5 million".
  */
 export function fmtPeopleRounded(n: number): string {
   if (n < 1000) return `${Math.round(n)}`;
@@ -47,7 +46,6 @@ export function lowercaseFirst(text: string): string {
   return text.charAt(0).toLowerCase() + text.slice(1);
 }
 
-/** Maps a year to its named historical period. */
 export function periodName(year: number): string {
   if (year < -10000) return 'Old Stone Age';
   if (year < -3300) return 'New Stone Age';

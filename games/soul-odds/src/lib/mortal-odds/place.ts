@@ -26,9 +26,9 @@ type PlaceApiResponse =
     };
 
 /**
- * Normalizes `/api/mortal-odds/place`'s two response shapes into one `Place`: a real historical
- * polity (Cliopatria) carries its attested date range, the synthetic fallback carries its
- * weighted population share — never both, see `Place`'s own doc comment.
+ * Normalizes `/api/mortal-odds/place`'s two response shapes into one `Place`: a real polity
+ * (Cliopatria) carries its attested date range, the synthetic fallback its weighted population
+ * share, never both.
  */
 export function toPlace(response: PlaceApiResponse): Place {
   if (response.source === 'cliopatria') {

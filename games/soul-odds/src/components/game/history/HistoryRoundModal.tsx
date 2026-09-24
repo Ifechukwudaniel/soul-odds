@@ -46,7 +46,6 @@ function lifespanLabel(entry: BetHistoryEntry): string {
   return entry.age === 1 ? '1 year' : `${entry.age} years`;
 }
 
-/** Everything kept about one settled round: the soul and its story, each bet, and where the money went. */
 export const HistoryRoundModal = (props: { entry: BetHistoryEntry; onClose: () => void }) => {
   const { entry } = props;
   const titleId = useId();

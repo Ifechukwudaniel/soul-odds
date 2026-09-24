@@ -35,7 +35,7 @@ export const MenuBtn: React.FC<MenuLink> = ({
         <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] transform">
           {isActive ? activeIcon : icon}
         </div>
-        {/* Decorative background shape behind the real icon; the button's accessible name comes from the label below. */}
+        {/* ✦ Decorative background shape behind the real icon; the button's accessible name comes from the label below. ✦ */}
         <img
           src={`${isActive ? '/img/bubbleactive.png' : '/img/bubble.png'}`}
           alt=""

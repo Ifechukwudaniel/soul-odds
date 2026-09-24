@@ -7,7 +7,6 @@ import { LeaderboardTable } from './LeaderboardTable';
 import { WeeklyCountdown } from './WeeklyCountdown';
 
 interface LeaderboardProps {
-  /** Full ranked list, rank 1-100 */
   users: LeaderboardUser[];
   currentUser?: LeaderboardUser;
   resetAt: Date;

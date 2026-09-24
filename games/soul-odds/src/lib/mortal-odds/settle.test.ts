@@ -80,7 +80,7 @@ describe('resolveBets', () => {
       trueProbabilities: { sex: { boy: 0.512, girl: 0.488 } },
       truthSamples: [LIFE],
     });
-    // Lost the bet (life.sex is "boy"); skill still comes out positive, from the stake alone.
+    // ✦ Lost the bet (life.sex is "boy"); skill still comes out positive, from the stake alone.
     expect(results[0]?.won).toBe(false);
     expect(results[0]?.skill).toBeCloseTo(computeBetSkill({ stake: 10, won: false, odds: 1.84 }));
     expect(results[0]?.skill).toBeGreaterThan(0);

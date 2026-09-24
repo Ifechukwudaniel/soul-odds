@@ -4,17 +4,17 @@ import { centroidOf, loadCliopatria } from '@/lib/mortal-odds/cliopatria';
 import { worldPopCurve } from '@/lib/mortal-odds/config';
 import { interpolate } from '@/lib/mortal-odds/curves';
 
-// Builds cliopatria.geojson/cliopatria_population.csv and cliopatria.geojson/cliopatria-population.json:
-// one population estimate per Cliopatria row (a polity over the years it held one territory), keyed by
-// (Name, FromYear, ToYear). The JSON is what `lib/mortal-odds/population-estimate.ts` and the population API read.
+// ✦ Builds cliopatria.geojson/cliopatria_population.csv and cliopatria.geojson/cliopatria-population.json:
+//   one population estimate per Cliopatria row (a polity over the years it held one territory), keyed by
+//   (Name, FromYear, ToYear). The JSON is what `lib/mortal-odds/population-estimate.ts` and the population API read.
 //
-// Seshat (the project Cliopatria belongs to) publishes hand-researched polity populations for
-// ~250 of Cliopatria's ~1,600 polities. Where a row has one within MAX_GAP_YEARS, the estimate is
-// carried over as a density (people per km²) and scaled to that row's territory, so a polity that
-// grew or shrank keeps a sensible figure. Every other row is imputed from the densities of the
-// nearest Seshat-covered rows in time and place, capped at MAX_IMPUTED_DENSITY and scaled down wherever
-// the polities alive in a year would otherwise add up to more than the world population that year.
-// The Method column says which one each row got.
+//   Seshat (the project Cliopatria belongs to) publishes hand-researched polity populations for
+//   ~250 of Cliopatria's ~1,600 polities. Where a row has one within MAX_GAP_YEARS, the estimate is
+//   carried over as a density (people per km²) and scaled to that row's territory, so a polity that
+//   grew or shrank keeps a sensible figure. Every other row is imputed from the densities of the
+//   nearest Seshat-covered rows in time and place, capped at MAX_IMPUTED_DENSITY and scaled down wherever
+//   the polities alive in a year would otherwise add up to more than the world population that year.
+//   The Method column says which one each row got.
 
 const SESHAT_URL = 'https://seshat-db.com/api/sc/polity-populations/?format=json&page_size=200';
 const CSV_PATH = path.join(process.cwd(), 'cliopatria.geojson', 'cliopatria_population.csv');
@@ -22,7 +22,7 @@ const JSON_PATH = path.join(process.cwd(), 'cliopatria.geojson', 'cliopatria-pop
 const MAX_GAP_YEARS = 200;
 const NEIGHBOURS = 10;
 const MAX_IMPUTED_DENSITY = 300;
-// One unit of distance = this many years, or this many degrees, so 150 years counts like 8 degrees (~900 km).
+// ✦ One unit of distance = this many years, or this many degrees, so 150 years counts like 8 degrees (~900 km).
 const YEARS_PER_UNIT = 150;
 const DEGREES_PER_UNIT = 8;
 
@@ -111,9 +111,9 @@ function applySeshat(rows: Row[], observations: Map<string, Observation[]>) {
     const gap = gapOf(nearest.year);
     if (gap > MAX_GAP_YEARS) continue;
 
-    // The observation is for the whole polity at its own year, so its territory is the biggest row of that
-    // polity around then (other rows sharing the ID are components or duplicates). Turn it into a density
-    // over that territory, then apply it to this row's own area.
+    // ✦ The observation is for the whole polity at its own year, so its territory is the biggest row of that
+    //   polity around then (other rows sharing the ID are components or duplicates). Turn it into a density
+    //   over that territory, then apply it to this row's own area.
     const gapTo = (r: Row) =>
       nearest.year < r.fromYear
         ? r.fromYear - nearest.year

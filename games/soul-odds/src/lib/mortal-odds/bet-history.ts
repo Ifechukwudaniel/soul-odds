@@ -14,7 +14,6 @@ const betHistoryBetSchema = z.object({
   odds: z.number(),
 });
 
-/** One settled round: the soul that was drawn, every bet placed on it and how the money moved. */
 export const betHistoryEntrySchema = z.object({
   id: z.string().min(1).max(128),
   settledAt: z.number(),
@@ -29,7 +28,6 @@ export const betHistoryEntrySchema = z.object({
   age: z.number().int(),
   sex: z.enum(['girl', 'boy']),
   sin: z.string().nullable(),
-  /** The round's locked wager. */
   wager: z.number(),
   /** Redraw fees paid on top of the wager. */
   fees: z.number(),

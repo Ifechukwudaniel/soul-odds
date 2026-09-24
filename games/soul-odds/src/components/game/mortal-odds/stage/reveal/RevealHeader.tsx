@@ -12,7 +12,6 @@ const YearStamp = (props: { year: number; label: string }) => (
   </div>
 );
 
-/** The reveal's headline: the soul's fate, where it began, and the years that bound its life. */
 export const RevealHeader = (props: {
   fate: string;
   placeName: string;

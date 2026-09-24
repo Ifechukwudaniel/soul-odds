@@ -42,7 +42,6 @@ export async function POST(request: Request, props: { params: Promise<{ address:
   return new NextResponse(null, { status: 204 });
 }
 
-/** Swaps in the AI-written story and soul name for an already-recorded round. */
 export async function PATCH(request: Request, props: { params: Promise<{ address: string }> }) {
   const unauthorized = requireApiSecret(request);
   if (unauthorized) {

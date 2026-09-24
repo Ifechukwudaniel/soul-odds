@@ -88,7 +88,7 @@ export function writeRound(key: string, round: StoredRound): void {
   try {
     localStorage.setItem(key, JSON.stringify(round));
   } catch {
-    /* storage unavailable: the round still plays, it just can't be resumed */
+    /* ✦ storage unavailable: the round still plays, it just can't be resumed */
   }
 }
 
@@ -96,6 +96,6 @@ export function clearRound(key: string): void {
   try {
     localStorage.removeItem(key);
   } catch {
-    /* storage unavailable: nothing to clear */
+    /* ✦ storage unavailable: nothing to clear */
   }
 }

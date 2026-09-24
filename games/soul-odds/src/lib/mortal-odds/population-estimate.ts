@@ -6,20 +6,21 @@ import { fmtPeople, fmtYear } from '@/lib/mortal-odds/format';
 import overridesFile from '../../../cliopatria.geojson/cliopatria-population-overrides.json';
 import populationFile from '../../../cliopatria.geojson/cliopatria-population.json';
 
-// The estimates are built by `scripts/build-cliopatria-population.ts`: one row per Cliopatria polity
-// over the years it held one territory. `method` says where the number came from: "seshat" (a
-// researched figure for exactly that row), "seshat_scaled" (a researched figure for the same polity
-// at a nearby date, scaled to this row's territory), "imputed" (typical density of nearby polities
-// in time and place, capped and kept under the world population) or "llm" (a model's estimate for
-// a fixed window of years, checked against the territory's area and the world population; built by
-// `scripts/regenerate-cliopatria-population.ts`) or "density" (each modern country's density that year, from Our World in Data's long-run population
-// series, times the land the polity covers in it; see `lib/mortal-odds/density.ts`, written by
-// `scripts/build-country-population.ts`). A "manual" row is one corrected by hand in
-// `cliopatria.geojson/cliopatria-population-overrides.json`, a list of
-// `{ "name": "Principality of Peremyshl", "fromYear": 1031, "toYear": 1146, "population": 150000 }`
-// entries applied on top of whatever was generated, so regenerating never loses a correction.
-// `low` and `high` are optional and default to `population`; `fromYear`/`toYear` are optional
-// and default to every row of that name; an entry corrects each row of that name it overlaps.
+// ✦ Estimates are built by `scripts/build-cliopatria-population.ts`: one row per Cliopatria polity
+//   over the years it held one territory. `method` says where a number came from:
+//   - "seshat": a researched figure for exactly that row
+//   - "seshat_scaled": a researched figure for the same polity at a nearby date, scaled to this row's
+//   territory
+//   - "imputed": typical density of nearby polities in time and place, capped and kept under the
+//   world population
+//   - "llm": a model's estimate for a fixed window, checked against the area and world population
+//   (`scripts/regenerate-cliopatria-population.ts`)
+//   - "density": each modern country's density that year times the land the polity covers in it (see
+//   `density.ts`, `scripts/build-country-population.ts`)
+//   - "manual": hand-corrected in `cliopatria.geojson/cliopatria-population-overrides.json`, applied
+//   on top of anything generated so regenerating never loses a correction. Entries look like
+//   `{ "name": "Principality of Peremyshl", "fromYear": 1031, "toYear": 1146, "population": 150000 }`;
+//   `low`/`high` default to `population`, and the years to every row of that name.
 
 export type PopulationMethod =
   | 'seshat'
@@ -179,9 +180,9 @@ function scaleForYear(row: PopulationRow, year: number): number {
 }
 
 /**
- * The row's figures for one year. A density row is worked out from the density of each modern country it
- * covers in that exact year times the land it covers there, keeping the spread its low and high had around the stored figure; any other row
- * (researched, hand-corrected, or without a country breakdown) scales its stored figure with world population.
+ * The row's figures for one year. A density row is worked out from each covered country's density
+ * in that exact year times the land it covers there, keeping the spread its low and high had around
+ * the stored figure; any other row scales its stored figure with world population.
  */
 function figuresFor(
   row: PopulationRow,
@@ -189,7 +190,7 @@ function figuresFor(
 ): Pick<PopulationEstimate, 'population' | 'low' | 'high'> {
   if (row.method === 'density' && row.landByCountry && row.population > 0) {
     const population = populationFromCountries({ year, landByCountry: row.landByCountry });
-    // The stored spread came from figures that don't always straddle their best estimate, so keep low <= mid <= high and within 5x.
+    // ✦ The stored spread came from figures that don't always straddle their best estimate, so keep low <= mid <= high and within 5x.
     const lowRatio = Math.min(1, Math.max(0.25, row.low / row.population));
     const highRatio = Math.max(1, Math.min(4, row.high / row.population));
     return {
@@ -223,9 +224,10 @@ function toEstimate(row: PopulationRow, year: number): PopulationEstimate {
 const covers = (row: PopulationRow, year: number) => row.fromYear <= year && year <= row.toYear;
 
 /**
- * Prefers the exact name (any case), then names that contain the query; the shortest name wins so "Rome" finds "Rome" before "Roman Empire".
- * When the exact name exists but not in `year`, the same name in parentheses is tried, which is how Cliopatria lists a
- * territory that another polity's row repeats, so "British Empire" finds "(British Empire)" in 1900.
+ * Prefers the exact name (any case), then names containing the query, shortest first so "Rome"
+ * finds "Rome" before "Roman Empire". When the exact name isn't in `year`, the same name in
+ * parentheses is tried, which is how Cliopatria lists a territory another polity repeats ("British
+ * Empire" finds "(British Empire)" in 1900).
  */
 function rowsNamed(query: string, year: number): PopulationRow[] {
   const wanted = normalize(query);

@@ -12,11 +12,6 @@ import type { SinNarratives } from '@/lib/mortal-odds/sin-variants';
 import type { MarketConfig, Price } from '@/types';
 import { playClickSound } from '@/utils/playClickSound';
 
-/**
- * Anubis only weighs a heart against Ma'at's feather when it might carry something — so the sin
- * category picker only appears once the heart is judged heavy. A clean heart settles the bet
- * outright at "none", the same as any other choice market.
- */
 export const SinsMarket = (props: {
   market: MarketConfig;
   prices: Record<string, Price>;
@@ -33,7 +28,7 @@ export const SinsMarket = (props: {
   const selectedSins = props.selectedOptionId ? categoriesOfSinOption(props.selectedOptionId) : [];
   const atSinLimit = selectedSins.length >= MAX_SINS;
 
-  // The contract settles the exact set of sins (one or two), so a pick is a set: tap to add or release, never empty here.
+  // ✦ The contract settles the exact set of sins (one or two), so a pick is a set: tap to add or release, never empty here.
   const toggleSin = (id: SinCategoryId) => {
     const next = selectedSins.includes(id)
       ? selectedSins.filter((sin) => sin !== id)

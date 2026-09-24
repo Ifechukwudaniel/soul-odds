@@ -17,7 +17,6 @@ export function isStillLiving(entry: BetHistoryEntry): boolean {
   return entry.deathYear >= new Date(entry.settledAt).getFullYear();
 }
 
-/** The soul's name once the story named it, otherwise just their sex, as on the reveal screen. */
 export function soulLabel(entry: BetHistoryEntry): string {
   return entry.name ?? (entry.sex === 'girl' ? 'A girl' : 'A boy');
 }

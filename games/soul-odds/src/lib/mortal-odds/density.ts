@@ -1,11 +1,11 @@
 import * as z from 'zod';
 import countryPopulationsJson from '@/config/mortal-odds/country-populations.json';
 
-// Country populations come from Our World in Data's "Population" long-run series (population-long-run-with-projections;
-// HYDE 3.3 before 1800, Gapminder to 1949, UN WPP 2024 after, medium-variant projections to 2100), which
-// `scripts/build-country-population.ts` turns into country-populations.json along with each country's land
-// area. Countries are in today's borders, so a country's density in a year is its population over its land,
-// and a historical territory gets the density of each modern country it overlaps times the land it covers there.
+// ✦ Country populations come from Our World in Data's long-run series (HYDE 3.3 before 1800,
+//   Gapminder to 1949, UN WPP 2024 after, medium-variant projections to 2100), turned into
+//   country-populations.json with each country's land area by `scripts/build-country-population.ts`.
+//   Countries use today's borders, so a historical territory gets the density of each modern country
+//   it overlaps times the land it covers there.
 
 const countryPopulationsSchema = z.object({
   years: z.array(z.number()),
@@ -51,7 +51,6 @@ export function populationFromCountries(options: {
   );
 }
 
-/** The index of a country in the table by name, e.g. "Italy", or undefined. */
 export function countryIndex(name: string): number | undefined {
   const index = countries.findIndex((country) => country.name === name);
   return index === -1 ? undefined : index;

@@ -10,9 +10,9 @@ export type SinPlaceContext = { lat: number; lon: number; fromYear?: number; toY
 export type SinVariant = SinNarratives & { fromYear?: number; toYear?: number };
 
 /**
- * How wide a variant's period is, by the year it falls in. Crime barely changes across millennia of
- * the deep past, so those windows are wide; from 1500 on witchcraft trials, piracy and the like
- * shift within a century, and from 1900 on (wars, Prohibition, cybercrime) within decades. Each size divides the year its tier starts at.
+ * How wide a variant's period is, by the year it falls in: wide across the deep past, within a
+ * century from 1500 (witchcraft trials, piracy) and within decades from 1900 (wars, Prohibition,
+ * cybercrime). Each size divides the year its tier starts at.
  */
 const WINDOW_TIERS: { before: number; size: number }[] = [
   { before: 0, size: 500 },

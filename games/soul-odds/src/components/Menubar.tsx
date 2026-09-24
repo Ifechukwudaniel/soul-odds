@@ -42,7 +42,7 @@ export const menuLinks: MenuLink[] = [
   },
 ];
 
-// Left/Right move between tabs; Home/End jump to the ends. Only Left/Right carry a step (a single row of tabs).
+// ✦ Left/Right move between tabs; Home/End jump to the ends. Only Left/Right carry a step (a single row of tabs).
 const NAV_MOVE: Record<string, number> = { ArrowRight: 1, ArrowLeft: -1 };
 
 export const Menubar = () => {
@@ -55,8 +55,8 @@ export const Menubar = () => {
     setScreen(label as TScreens);
   };
 
-  // Roving tabindex: only the active tab is a Tab stop, like a native tab list. Arrow keys move focus and
-  // switch screens together — the same immediate action a click already takes — clamped at the ends, not wrapped.
+  // ✦ Roving tabindex: only the active tab is a Tab stop. Arrows move focus and switch screens
+  //   together, clamped at the ends.
   const moveSelection = (fromIndex: number, key: string) => {
     const delta = NAV_MOVE[key];
     const targetIndex =

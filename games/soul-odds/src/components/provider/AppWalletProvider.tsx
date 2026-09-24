@@ -12,7 +12,6 @@ type CasinoHostContextValue = {
 
 const CasinoHostContext = createContext<CasinoHostContextValue | null>(null);
 
-/** The casino host connection, established once `AppWalletProvider` mounts. */
 export function useCasinoHostContext(): CasinoHostContextValue {
   const value = use(CasinoHostContext);
   if (!value) {
@@ -22,9 +21,8 @@ export function useCasinoHostContext(): CasinoHostContextValue {
 }
 
 /**
- * Connects to the casino host and gates rendering until the handshake and first snapshot land.
- * The loader stays mounted through its own exit transition (see Loader's `ready`/`onExit`) so a
- * handshake that resolves instantly still dissolves out instead of flashing off screen.
+ * Connects to the casino host and gates rendering until the handshake and first snapshot land. The
+ * loader stays mounted through its exit transition so an instant handshake still dissolves out.
  */
 export function AppWalletProvider(props: { children: React.ReactNode }) {
   const { hostApi, snapshot } = useCasinoHost();

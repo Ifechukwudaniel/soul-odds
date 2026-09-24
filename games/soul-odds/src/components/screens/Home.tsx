@@ -19,6 +19,9 @@ import { useCasinoHost } from '@/hooks/useCasinoHost';
 
 
 export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlayer> }) => {
+  // =====================================
+  // ⬢ State
+  // =====================================
   const {  snapshot } = useCasinoHost();
   const [chipSize, setChipSize] = useState(10);
   const CURRENCY = snapshot?.token.symbol || 'chUSD';
@@ -38,12 +41,20 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
     setChipSize,
   });
 
-  // Chip size is the round's whole stake: locked the moment a soul is summoned, freed up again once it's revealed.
+  // =====================================
+  // ⬢ Derived state
+  // =====================================
+
+  // ✦ Chip size is the round's whole stake: locked the moment a soul is summoned, freed up again once it's revealed.
   const chipLocked = round.phase !== 'idle' && round.phase !== 'revealed';
   const isRedraw = round.phase === 'when' || round.phase === 'where';
   const drawCost = isRedraw ? (player.freeRedraws > 0 ? 0 : REDRAW_COST) : chipSize;
 
-  // Pays for a redraw with a free redraw if one is banked (no charge line), otherwise the flat fee.
+  // =====================================
+  // ⬢ Handlers
+  // =====================================
+
+  // ✦ Pays for a redraw with a free redraw if one is banked (no charge line), otherwise the flat fee.
   const payRedraw = () => {
     const paid = player.payRedraw(REDRAW_COST);
     if (paid === 'paid') {
@@ -55,9 +66,8 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
     return paid !== null;
   };
 
-  // A redraw is a local, chain-unaware fee (spent up front); the round's stake instead moves
-  // for real once `round.drawHuman` escrows it into the on-chain session — only affordability
-  // is checked here, the debit itself comes from the host's own pushed balance afterwards.
+  // ✦ A redraw is a local, chain-unaware fee; the stake moves on-chain when `round.drawHuman` escrows
+  //   it, so only affordability is checked here.
   const onDraw = () => {
     if (isRedraw) {
       if (!payRedraw()) return;
@@ -73,8 +83,7 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
     round.advance();
   };
 
-  // Holds the year fixed and only rerolls the land — a separate action from redrawing the year
-  // itself, and the same flat fee either way.
+  // ✦ Holds the year fixed and only rerolls the land, for the same flat fee as a redraw.
   const onRedrawLocation = () => {
     if (!payRedraw()) return;
     round.redrawLocation();
@@ -84,18 +93,24 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
     round.placeBets(slip.bets);
   };
 
-  // Crime-category odds depend on which age bucket the player paired them with (a child is far
-  // likelier to be "Clean" than an adult), so the draw-time preview — priced against a
-  // placeholder bucket, since no age is picked yet at draw time — gets replaced everywhere it's
-  // displayed (the picker and the confirm screen) once the real age bet is known.
+  // =====================================
+  // ⬢ Odds
+  // =====================================
+
+  // ✦ Crime odds depend on the age bucket the player paired them with, so the draw-time preview
+  //   (priced against a placeholder bucket) is replaced once the age bet is known.
   const ageBet = slip.bets.age;
   const prices: MarketPrices | null =
     round.prices && ageBet?.kind === 'choice'
       ? { ...round.prices, sins: round.priceSins(ageBucketIndex(ageBet.optionId)) }
       : round.prices;
 
-  // The round settles asynchronously on-chain; commit the local skill/streak stats once its
-  // outcome comes back instead of synchronously from onPlaceBet.
+  // =====================================
+  // ⬢ Effects
+  // =====================================
+
+  // ✦ The round settles asynchronously on-chain; commit the local skill/streak stats when its outcome
+  //   returns.
   useEffect(() => {
     if (!round.reveal || round.reveal === restoredReveal) return;
     player.commitRound({
@@ -122,6 +137,9 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
     if (round.error) notification.error(round.error);
   }, [round.error]);
 
+  // =====================================
+  // ⬢ Render
+  // =====================================
   return (
     <div className="flex h-full w-full flex-col">
       <div className="container mx-auto flex flex-1 flex-col gap-4 px-4 pb-[10dvh] lg:flex-row">

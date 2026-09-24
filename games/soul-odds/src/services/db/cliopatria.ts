@@ -30,7 +30,7 @@ export async function findNearestCliopatriaPlace(options: {
     .select()
     .from(cliopatriaPlaceSchema)
     .where(and(lte(cliopatriaPlaceSchema.fromYear, year), gte(cliopatriaPlaceSchema.toYear, year)))
-    // Squared distance with longitude scaled by latitude: only the order matters, not the unit.
+    // ✦ Squared distance with longitude scaled by latitude: only the order matters, not the unit.
     .orderBy(
       sql`power(${cliopatriaPlaceSchema.lat} - ${lat}, 2) + power(cos(radians(${lat})) * (${cliopatriaPlaceSchema.lon} - ${lon}), 2)`,
     )

@@ -31,7 +31,6 @@ export function lifespanCap(chart: LifespanHistogram): number {
   return Math.max(...adultBins) * 2;
 }
 
-/** Median age across a batch of samples, used to mark "typical" lifespan on the chart. */
 export function medianAge(samples: ReadonlyArray<{ age: number }>): number {
   const sorted = [...samples].map((s) => s.age).sort((a, b) => a - b);
   const mid = Math.floor(sorted.length / 2);

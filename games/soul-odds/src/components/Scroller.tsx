@@ -13,8 +13,8 @@ const addArrow = (instance: OverlayScrollbars, direction: -1 | 1) => {
   const button = document.createElement('button');
   button.type = 'button';
   button.tabIndex = -1;
-  // setAttribute, not the `ariaHidden` property: older Firefox lacks ARIA reflection. The scroll area is
-  // already operable by keyboard, so these are a pointer-only redundancy and stay out of the a11y tree.
+  // ✦ setAttribute, not `ariaHidden`: older Firefox lacks ARIA reflection. These are a pointer-only
+  //   redundancy, so they stay out of the a11y tree.
   button.setAttribute('aria-hidden', 'true');
   button.className = `os-arrow ${direction < 0 ? 'os-arrow-up' : 'os-arrow-down'}`;
 
@@ -33,7 +33,7 @@ const addArrow = (instance: OverlayScrollbars, direction: -1 | 1) => {
     scrollOffsetElement.scrollBy({ top: direction * ARROW_STEP_PX });
   };
 
-  // Keep focus (and so keyboard scrolling) in the scroll area when an arrow is pressed.
+  // ✦ Keep focus (and so keyboard scrolling) in the scroll area when an arrow is pressed.
   button.addEventListener('mousedown', (event) => event.preventDefault());
   button.addEventListener('pointerdown', () => {
     step();
@@ -52,8 +52,8 @@ const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 /**
- * Mirrors overflow onto the host as `data-os-overflow-x/y` (styles key off it, no `:has()` needed) and makes
- * an overflowing area keyboard-focusable when it has no focusable content of its own.
+ * Mirrors overflow onto the host as `data-os-overflow-x/y` and makes an overflowing area
+ * keyboard-focusable when it has no focusable content.
  */
 const syncScrollState = (instance: OverlayScrollbars) => {
   const { host, viewport } = instance.elements();
@@ -65,13 +65,9 @@ const syncScrollState = (instance: OverlayScrollbars) => {
   viewport.tabIndex = needsFocusStop ? 0 : -1;
 };
 
-/*
- * OverlayScrollbars' own `updated` event only fires on an overflow change, not on every content change — so a
- * viewport that already overflows (or doesn't, either way) can go a tab stop or not based on what was in the DOM
- * at that one moment, and stay wrong from then on if content swaps in afterwards without changing the overflow
- * (e.g. a StageSlide's buttons arriving a tick after its prices do). Watching the viewport directly re-checks on
- * every such change regardless of what the library itself noticed.
- */
+// ✦ OverlayScrollbars' `updated` event only fires on an overflow change, so content that swaps in
+//   without changing overflow (e.g. a StageSlide's buttons arriving after its prices) can leave the
+//   tab stop wrong. Watching the viewport directly re-checks on every content change.
 const watchContentForFocusStop = (instance: OverlayScrollbars) => {
   const { viewport } = instance.elements();
   const observer = new MutationObserver(() => syncScrollState(instance));
@@ -106,10 +102,9 @@ const horizontalOptions: PartialOptions = {
 };
 
 /**
- * Themed overlay scrollbar container. Give it a definite size (e.g. `h-full` or `min-h-0 flex-1`).
- * While the bar shows, its content gets `--os-gutter` (default 36px) of right padding to stay clear of it.
- * With `reserveGutter` the gutter is kept on both sides all the time, so content never shifts when the bar
- * appears (use it where content grows past the height mid-view, and is centred).
+ * Themed overlay scrollbar container; give it a definite size (e.g. `h-full`). The content gets
+ * `--os-gutter` (default 36px) of right padding while the bar shows; `reserveGutter` keeps it on
+ * both sides at all times so centred content never shifts.
  */
 export const Scroller = (props: {
   children: React.ReactNode;

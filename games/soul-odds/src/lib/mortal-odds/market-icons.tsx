@@ -9,7 +9,6 @@ const MARKET_ICONS: Record<string, IconType> = {
   dy: GiTombstone,
 };
 
-/** The icon for a market/bet id, shared between the market picker and the bet summary table. */
 export function getMarketIcon(marketId: string): IconType {
   return MARKET_ICONS[marketId] ?? FaRegQuestionCircle;
 }

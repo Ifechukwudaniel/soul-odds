@@ -212,7 +212,7 @@ async function main() {
   );
   const indexOfCode = new Map(codes.map((code, i) => [code, i]));
 
-  // Paint each country's index onto the grid, counting its land as the cells' areas.
+  // ✦ Paint each country's index onto the grid, counting its land as the cells' areas.
   const countryOfCell = new Int16Array(COLS * ROWS).fill(-1);
   const landKm2 = new Float64Array(codes.length);
   for (const feature of polygons) {
@@ -271,7 +271,7 @@ async function main() {
 
   if (!fs.existsSync(RESEARCHED_FILE)) fs.copyFileSync(FILE, RESEARCHED_FILE);
 
-  // Imported now, not at the top: it reads the file written above.
+  // ✦ Imported now, not at the top: it reads the file written above.
   const { populationFromCountries } = await import('@/lib/mortal-odds/density');
   const territories = await loadCliopatria();
   const rows = territories.map((territory, index): Row => {
@@ -282,7 +282,7 @@ async function main() {
       if (country >= 0) land.set(country, (land.get(country) ?? 0) + rowAreaKm2[row]!);
     });
     if (land.size === 0) {
-      // Smaller than a single cell, or all sea: the country its centre lies in gets its whole area.
+      // ✦ Smaller than a single cell, or all sea: the country its centre lies in gets its whole area.
       const { lat, lon } = centroidOf(territory);
       const country =
         countryOfCell[

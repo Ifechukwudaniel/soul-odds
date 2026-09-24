@@ -39,7 +39,6 @@ function reducer(state: BetsState, action: Action): BetsState {
   }
 }
 
-/** The bet slip: one pick per market, added and removed as the player fills in the predictions panel. */
 export function useMortalOddsBets(): {
   bets: BetsState;
   setChoice: (marketId: string, optionId: string, stake: number) => void;

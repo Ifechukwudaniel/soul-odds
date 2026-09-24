@@ -1,4 +1,3 @@
-// qrHandler.ts
 import { TScreenPayload, TScreens } from '@/services/store/store';
 import { notification } from './notifications';
 
@@ -7,7 +6,6 @@ export const redirectToScreenFromCode = (
   code: string,
   setScreen: (action: TScreens, payload?: TScreenPayload | null | undefined) => void,
 ) => {
-  // Remove liveUrl from the result
   const [action] = code.split('#');
 
   switch (action) {

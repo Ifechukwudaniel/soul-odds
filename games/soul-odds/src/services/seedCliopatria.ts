@@ -2,8 +2,8 @@ import { loadCliopatria, toCliopatriaPlace } from '@/lib/mortal-odds/cliopatria'
 import { countCliopatriaPlaces, insertCliopatriaPlaces } from '@/services/db/cliopatria';
 import type { NewCliopatriaPlaceRow } from '@/services/db/Schema';
 
-// Postgres caps a single statement at 65535 bound parameters; cliopatriaPlaceSchema has 5 insertable
-// columns, so this stays comfortably under that per batch (2000 * 5 = 10000).
+// ✦ Postgres caps a statement at 65535 bound parameters; `cliopatriaPlaceSchema` has 5 insertable
+//   columns, so 2000 rows per batch (10000) stays well under.
 const BATCH_SIZE = 2000;
 
 export async function seedCliopatria() {

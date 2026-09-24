@@ -30,7 +30,7 @@ function pad(value: number) {
 }
 
 export function WeeklyCountdown({ resetAt }: WeeklyCountdownProps) {
-  // Lazy init avoids a first render showing 0s before the effect runs.
+  // ✦ Lazy init avoids a first render showing 0s before the effect runs.
   const [time, setTime] = useState(() => getTimeParts(resetAt));
 
   useEffect(() => {

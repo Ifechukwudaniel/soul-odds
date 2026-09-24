@@ -1,6 +1,8 @@
 import Head from 'next/head';
 
-// Interface
+// =====================================
+// ⬢ Interface
+// =====================================
 interface IProps {
   title: string;
   description: string;
@@ -13,7 +15,9 @@ interface IProps {
   domain: string;
 }
 
-// Component
+// =====================================
+// ⬢ Component
+// =====================================
 const MetaHeader = ({
   title,
   description,
@@ -78,7 +82,9 @@ const MetaHeader = ({
   );
 };
 
-// Props
+// =====================================
+// ⬢ Props
+// =====================================
 MetaHeader.defaultProps = {};
 
 export default MetaHeader;

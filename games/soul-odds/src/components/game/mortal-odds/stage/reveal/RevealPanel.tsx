@@ -43,7 +43,8 @@ export const RevealPanel = (props: {
 
   const address = useAppStore((state) => state.user.address);
 
-  // The round is recorded in the history the moment it settles, with the local story; swap in the AI-written one (and its name) once it lands.
+  // ✦ Recorded in the history on settle with the local story; patched with the AI story and name once
+  //   they land.
   useEffect(() => {
     if (!lifeStory.ready || !address || !props.sessionKey) return;
     patchBetHistoryStory(address, {
@@ -63,15 +64,15 @@ export const RevealPanel = (props: {
     setDismissed(true);
   };
 
-  // The stake is already reflected inside net; only side fees (redraws) reduce the round's take further.
+  // ✦ The stake is already reflected inside net; only side fees (redraws) reduce the round's take further.
   const fees = props.charges
     .filter((charge) => charge.kind === 'fee')
     .reduce((sum, charge) => sum + charge.amount, 0);
   const roundNet = net - fees;
 
   const alive = life.deathYear >= props.currentYear;
-  // The name only exists once OpenRouter's narrative lands; until then (or if it never does),
-  // the header falls back to the plain sex label rather than waiting on it.
+  // ✦ The name only exists once OpenRouter's narrative lands; until then (or if it never does) the
+  //   header falls back to the plain sex label.
   const soulName = lifeStory.ready ? lifeStory.payload.name : null;
   const sexLabel = soulName ?? (life.sex === 'girl' ? 'A girl' : 'A boy');
   const fate = alive

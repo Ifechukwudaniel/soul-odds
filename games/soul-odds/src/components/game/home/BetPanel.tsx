@@ -31,9 +31,8 @@ export const BetPanel = (props: {
   sinNarratives: SinNarratives | null;
 }) => {
   const minWager = Math.min(...props.quickAmounts);
-  // Buffered locally so the field can be cleared or mid-typed (e.g. "1." while entering "1.5") without a
-  // controlled value snapping back on every keystroke; it re-syncs whenever chipSize changes from elsewhere
-  // (a quick-amount chip, a restored round), and only pushes a value upstream once it's actually a valid number.
+  // ✦ Local buffer so the field can be cleared or mid-typed ("1.") without snapping back; re-syncs
+  //   when chipSize changes elsewhere and only pushes valid numbers upstream.
   const [customWager, setCustomWager] = useState(() => String(props.chipSize));
 
   useEffect(() => {
@@ -56,7 +55,7 @@ export const BetPanel = (props: {
     return odds === null ? null : bet.stake * odds;
   });
   const totalPotentialWin = potentialWins.reduce((sum: number, win) => sum + (win ?? 0), 0);
-  // Bet stakes are a breakdown of the "stake" charge already locked in at summon, not additional spend.
+  // ✦ Bet stakes are a breakdown of the "stake" charge already locked in at summon, not additional spend.
   const atRisk = props.charges.reduce((sum, charge) => sum + charge.amount, 0);
   const unpicked = Math.max(0, props.requiredBets - bets.length);
 

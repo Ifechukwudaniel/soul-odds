@@ -1,6 +1,5 @@
 import { formatAddress } from '@/utils';
 
-/** Tells a player on a generated wallet what that means, since their account lives only in this browser. */
 export const GuestNotice = (props: { address: string; onDismiss: () => void }) => (
   <div
     role="status"

@@ -13,7 +13,6 @@ export const recordBetHistory = async (
   await apiClient.post(`/api/user/${address}/history`, { entries });
 };
 
-/** Swaps in the AI-written story and soul name once they land, after the round was first recorded. */
 export const patchBetHistoryStory = async (
   address: string,
   patch: Pick<BetHistoryEntry, 'id' | 'story' | 'name'>,

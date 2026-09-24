@@ -4,10 +4,9 @@ const PARTICIPATION_RATE = 0.5;
 const WIN_BONUS_RATE = 1;
 
 /**
- * Rank points for one settled bet: participation credit on the stake alone (win or lose, so a player who
- * keeps staking keeps climbing and never loses ground for losing), plus a win bonus on top scaled by the
- * payout, so a win always counts for more than just playing. Never negative — losing costs nothing here,
- * the stake itself was already the cost.
+ * Rank points for one settled bet: participation credit on the stake alone (win or lose, so playing
+ * always counts) plus a win bonus scaled by the payout. Never negative; the stake was already the
+ * cost of losing.
  */
 export function computeBetSkill(options: { stake: number; won: boolean; odds: number }): number {
   const { stake, won, odds } = options;
@@ -17,9 +16,8 @@ export function computeBetSkill(options: { stake: number; won: boolean; odds: nu
 }
 
 /**
- * Skill/rank is a running total that only ever moves up: a round's points are added (computeBetSkill never
- * returns a negative number, so there's nothing to subtract), and the result is floored at 0 so a player
- * carrying an old negative balance climbs back to zero on their very next round instead of staying stuck.
+ * Skill is a running total that only moves up (`computeBetSkill` is never negative), floored at 0
+ * so a player carrying an old negative balance climbs back to zero on their next round.
  */
 export function accumulateSkill(currentTotal: number, delta: number): number {
   return Math.max(0, currentTotal + delta);

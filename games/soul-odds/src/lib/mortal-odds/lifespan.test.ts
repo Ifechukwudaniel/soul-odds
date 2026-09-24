@@ -21,9 +21,9 @@ describe('lifespanCap', () => {
       truthSamples: [{ age: 0 }, { age: 0 }, { age: 0 }, { age: 40 }],
       bookieSamples: [{ age: 40 }],
     });
-    // real bins: bin0 = 3/4 = 0.75, bin8 (age 40) = 1/4 = 0.25 -> tallest non-bin0 real is 0.25
-    // bookie bins: bin8 = 1 -> tallest non-bin0 bookie is 1
-    // cap = max(0.25, 1) * 2 = 2
+    // ✦ real bins: bin0 = 3/4 = 0.75, bin8 (age 40) = 1/4 = 0.25 -> tallest non-bin0 real is 0.25
+    //   bookie bins: bin8 = 1 -> tallest non-bin0 bookie is 1
+    //   cap = max(0.25, 1) * 2 = 2
     expect(lifespanCap(chart)).toBeCloseTo(2);
   });
 });

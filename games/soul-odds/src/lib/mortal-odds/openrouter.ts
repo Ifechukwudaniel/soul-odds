@@ -10,10 +10,9 @@ const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const MODEL = 'mistralai/mistral-nemo';
 
 /**
- * Calls the chat completions endpoint and returns the parsed JSON content as-is (could be an
- * object or an array — this model doesn't reliably follow "reply with a JSON object" over "reply
- * with a JSON array", so callers handle whichever shape their prompt actually gets back).
- * Throws on a missing key, request failure, or a response that isn't valid JSON.
+ * Calls the chat completions endpoint and returns the parsed JSON content as-is. It may be an
+ * object or an array, since this model doesn't reliably follow "reply with a JSON object" over
+ * "reply with a JSON array". Throws on a missing key, a failed request or invalid JSON.
  */
 async function completeJson(
   systemPrompt: string,
@@ -141,10 +140,9 @@ const POPULATION_SYSTEM_PROMPT =
   'You estimate historical populations for a game, drawing on archaeological and historical scholarship. Reply with strict JSON: {"low": number, "mid": number, "high": number}, whole numbers of people living inside the given polity\'s territory in the given year: your best estimate and a plausible range, low <= mid <= high. The territory\'s area is given; averaged over a whole territory, density is usually well under 50 people per km² and never above 300. Never exceed the world population that year.';
 
 /**
- * Asks an OpenRouter model how many people lived in a polity's territory in one year, checking the
- * answer against the territory's area and the world population and asking again (naming the
- * problem) when it doesn't add up. A researched `reference` figure, when there is one, anchors it.
- * Throws when every attempt is implausible.
+ * Asks a model how many people lived in a polity's territory in one year, re-asking (and naming the
+ * problem) when the answer fails the area and world-population checks. A researched `reference`
+ * figure anchors it. Throws when every attempt is implausible.
  */
 export async function generatePopulationEstimate(options: {
   name: string;

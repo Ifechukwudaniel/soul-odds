@@ -5,7 +5,7 @@ import { type BetHistoryRow, betHistorySchema } from './Schema';
 
 const HISTORY_LIMIT = 100;
 
-// Addresses are stored lowercase so lookups don't depend on checksum casing.
+// ✦ Addresses are stored lowercase so lookups don't depend on checksum casing.
 function normalizeAddress(address: string) {
   return address.toLowerCase();
 }
@@ -15,7 +15,6 @@ function toEntry(row: BetHistoryRow): BetHistoryEntry {
   return { ...rest, settledAt: settledAt.getTime(), sex: sex === 'girl' ? 'girl' : 'boy' };
 }
 
-/** A wallet's most recent settled rounds, newest first. */
 export async function findBetHistory(address: string): Promise<BetHistoryEntry[]> {
   const rows = await db
     .select()
@@ -41,7 +40,6 @@ export async function insertBetHistory(address: string, entries: BetHistoryEntry
     .onConflictDoNothing();
 }
 
-/** Fills in the AI-written story and soul name once they land, after the round was first recorded. */
 export async function patchBetHistoryStory(
   address: string,
   id: string,

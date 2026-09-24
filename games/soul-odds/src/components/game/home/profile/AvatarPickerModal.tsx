@@ -8,7 +8,7 @@ import { ModalCloseButton, ModalHeader } from '@/components/game/GameModalParts'
 import { useAppStore } from '@/services/store/store';
 import { playClickSound } from '@/utils/playClickSound';
 
-// The grid is 3 columns wide (see the `grid-cols-3` below); arrow-key roving needs that number to move up/down a row.
+// ✦ The grid is 3 columns wide (see the `grid-cols-3` below); arrow-key roving needs that number to move up/down a row.
 const GRID_COLUMNS = 3;
 const ARROW_MOVE: Record<string, number> = {
   ArrowRight: 1,
@@ -39,8 +39,8 @@ export const AvatarPickerModal = (props: { isOpen: boolean; onClose: () => void 
     return 'Not enough coins';
   };
 
-  // Roving tabindex: only the selected tile is a Tab stop, like a native radio group. Arrow keys move the
-  // selection (and focus) between tiles instead, clamped to the grid's edges rather than wrapping around.
+  // ✦ Roving tabindex: only the selected tile is a Tab stop. Arrows move selection and focus, clamped
+  //   at the grid's edges.
   const moveSelection = (fromIndex: number, key: string) => {
     const delta = ARROW_MOVE[key];
     const targetIndex =
@@ -114,7 +114,7 @@ export const AvatarPickerModal = (props: { isOpen: boolean; onClose: () => void 
                   </span>
                 )}
 
-                {/* The tile's own aria-label already covers name/cost/equipped; hide these decorative icons from AT browse mode. */}
+                {/* ✦ The tile's own aria-label already covers name/cost/equipped; hide these decorative icons from AT browse mode. ✦ */}
                 <div
                   aria-hidden="true"
                   className="flex h-16 w-16 items-center justify-center rounded-full border-4 border-black p-1"

@@ -63,9 +63,8 @@ export function eraFor(options: { year: number; erasConfig: EraConfig[] }): EraC
 export type DensityBlob = Point & { id: string; intensity: number };
 
 /**
- * Where people lived in a given year: each place carries its region's share of that era's
- * population, split across the region's places by weight. Intensities are scaled so the
- * densest place of the year reads as 1.
+ * Where people lived in a year: each place carries its region's share of that era's population,
+ * split across the region's places by weight and scaled so the densest place reads as 1.
  */
 export function densityField(options: {
   year: number;

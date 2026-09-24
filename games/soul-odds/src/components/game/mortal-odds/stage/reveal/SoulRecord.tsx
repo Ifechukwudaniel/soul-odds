@@ -42,10 +42,6 @@ const RecordGroup = (props: { rows: RecordRow[] }) => (
   </dl>
 );
 
-/**
- * The soul's vital facts, grouped into birth/place,
- * death/lifespan, upbringing and sin/cause.
- */
 export const SoulRecord = (props: { life: Life; placeName: string; alive: boolean }) => {
   const { life } = props;
 
