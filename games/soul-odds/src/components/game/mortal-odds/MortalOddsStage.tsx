@@ -100,6 +100,7 @@ export const MortalOddsStage = (props: {
               bets={props.bets}
               onSetChoice={props.onSetChoice}
               onBack={round.retreat}
+              onPlaceBet={round.advance}
               sinNarratives={round.sinNarratives}
               key={`${round.draw.year}-${round.draw.region}-${round.draw.place.name}`}
             />

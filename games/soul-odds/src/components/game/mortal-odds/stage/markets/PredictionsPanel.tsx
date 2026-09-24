@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { PiArrowRight } from 'react-icons/pi';
 import { GameButton } from '@/components/game/GameButton';
 import { GameCard } from '@/components/game/home/GameCard';
 import { ChoiceMarket } from '@/components/game/mortal-odds/stage/markets/ChoiceMarket';
@@ -22,6 +23,7 @@ export const PredictionsPanel = (props: {
   bets: Record<string, Bet>;
   onSetChoice: (marketId: string, optionId: string, stake: number) => void;
   onBack: () => void;
+  onPlaceBet: () => void;
   sinNarratives: SinNarratives | null;
 }) => {
   const [slide, setSlide] = useState({ step: 0, direction: 0 });
@@ -29,6 +31,7 @@ export const PredictionsPanel = (props: {
 
   const market = marketsConfig[step];
   const bet = market ? props.bets[market.id] : undefined;
+  const unpicked = Math.max(0, marketsConfig.length - Object.keys(props.bets).length);
 
   const goTo = (next: number) => {
     if (next < 0 || next > LAST_STEP) {
@@ -108,14 +111,25 @@ export const PredictionsPanel = (props: {
               ))}
             </div>
 
-            <GameButton
-              variant="papyrus"
-              disabled={step === LAST_STEP}
-              onClick={() => goTo(step + 1)}
-              className="px-4 py-1.5 text-xs"
-            >
-              Next
-            </GameButton>
+            {step === LAST_STEP ? (
+              <GameButton
+                variant="papyrus"
+                disabled={unpicked > 0}
+                onClick={props.onPlaceBet}
+                className="px-4 py-1.5 text-xs"
+              >
+                Place Bet
+                <PiArrowRight className="h-3.5 w-3.5" />
+              </GameButton>
+            ) : (
+              <GameButton
+                variant="papyrus"
+                onClick={() => goTo(step + 1)}
+                className="px-4 py-1.5 text-xs"
+              >
+                Next
+              </GameButton>
+            )}
           </div>
         </div>
       </div>
