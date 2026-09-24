@@ -125,7 +125,7 @@ export default function GamePage() {
   const rankTitle = badgesLists[user.rank]?.title ?? badgesLists[0]!.title;
 
   return (
-    <div className="flex h-screen w-full flex-col">
+    <div className="flex h-dvh w-full flex-col">
       <GameHeader
         balance={user.balance}
         currency={snapshot?.token.symbol ?? 'chUSD'}

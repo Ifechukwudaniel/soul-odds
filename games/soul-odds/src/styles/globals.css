@@ -43,6 +43,7 @@ span {
 } */
 main {
   height: 100vh;
+  height: 100dvh;
 }
 
 .gold-gradient {

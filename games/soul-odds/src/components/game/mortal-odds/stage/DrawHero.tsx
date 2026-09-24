@@ -25,9 +25,7 @@ export const DrawHero = (props: {
       either way.
     </p>
 
-    <p className="mt-4 text-xs font-semibold tracking-[0.2em] text-white/80 uppercase">
-      Choose one
-    </p>
+    
 
     <button
       type="button"

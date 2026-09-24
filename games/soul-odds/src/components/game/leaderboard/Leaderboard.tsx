@@ -37,7 +37,7 @@ export function Leaderboard({ users, currentUser, resetAt }: LeaderboardProps) {
 
   return (
     <div className="container mx-auto px-4 py-4">
-      <h2 className="mb-3 text-2xl font-[500]">Leaderboard</h2>
+      <h2 className="mb-3 text-2xl font-[500] mt-[4rem] md:mt-0">Leaderboard</h2>
       <p className="text-sm leading-[1.7] text-white">
         See how you stack up against everyone else this week and climb the ranks.
       </p>
