@@ -1,21 +1,23 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { GiPlainCircle } from "react-icons/gi";
-import { InfoDialog } from "@/components/game/InfoDialog";
-import { AGE_INFO } from "@/components/game/mortal-odds/stage/draw/slide-info";
-import { PopulationChart } from "@/components/game/mortal-odds/stage/draw/PopulationChart";
-import { YearReel } from "@/components/game/mortal-odds/stage/draw/YearReel";
-import { fmtNumber, fmtYear, periodName } from "@/lib/mortal-odds/format";
-import { serifFont } from "@/styles/serif-font";
+import { motion } from 'framer-motion';
+import { GiPlainCircle } from 'react-icons/gi';
+import { InfoDialog } from '@/components/game/InfoDialog';
+import { PopulationChart } from '@/components/game/mortal-odds/stage/draw/PopulationChart';
+import { AGE_INFO } from '@/components/game/mortal-odds/stage/draw/slide-info';
+import { YearReel } from '@/components/game/mortal-odds/stage/draw/YearReel';
+import { fmtNumber, fmtYear, periodName } from '@/lib/mortal-odds/format';
+import { serifFont } from '@/styles/serif-font';
 
-const INTRO =
-  "Most births happened recently in history.";
+const INTRO = 'Most births happened recently in history.';
 
 // The reel settles with a springy punch, so the answer lands with weight.
 const REEL_VARIANTS = {
   spinning: { scale: 1 },
-  locked: { scale: [1.12, 1], transition: { type: "spring" as const, stiffness: 300, damping: 12 } },
+  locked: {
+    scale: [1.12, 1],
+    transition: { type: 'spring' as const, stiffness: 300, damping: 12 },
+  },
 };
 
 export const WhenSlide = (props: {
@@ -32,7 +34,11 @@ export const WhenSlide = (props: {
   return (
     <div className="flex min-h-full flex-col items-center gap-3 text-center lg:gap-4">
       <div className="flex items-center justify-center gap-3">
-        <h2 className={`${serifFont.className} font-bold text-3xl text-[#F1D6AE] sm:text-4xl leading-[0.55] pt-[0.5rem]`}>In which age?</h2>
+        <h2
+          className={`${serifFont.className} pt-[0.5rem] text-3xl leading-[0.55] font-bold text-[#F1D6AE] sm:text-4xl`}
+        >
+          In which age?
+        </h2>
         <InfoDialog {...AGE_INFO} />
       </div>
       <p className="max-w-lg text-[0.8rem] text-[#f1f1f2c0]">{INTRO}</p>
@@ -50,12 +56,12 @@ export const WhenSlide = (props: {
       <div aria-live="polite" className="flex flex-col items-center gap-1 lg:gap-2">
         <motion.div
           initial={false}
-          animate={props.isSpinning ? "spinning" : "locked"}
+          animate={props.isSpinning ? 'spinning' : 'locked'}
           variants={REEL_VARIANTS}
-          role={props.isSpinning ? undefined : "img"}
+          role={props.isSpinning ? undefined : 'img'}
           aria-label={props.isSpinning ? undefined : fmtYear(props.year)}
           aria-hidden={props.isSpinning || undefined}
-          className={`${serifFont.className} font-bold text-4xl leading-none tabular-nums transition-colors duration-500 sm:text-5xl ${props.isSpinning ? "text-white/50" : "text-white"}`}
+          className={`${serifFont.className} text-4xl leading-none font-bold tabular-nums transition-colors duration-500 sm:text-5xl ${props.isSpinning ? 'text-white/50' : 'text-white'}`}
         >
           <YearReel year={reelYear} landing={reelYear === props.year} />
         </motion.div>
@@ -67,11 +73,13 @@ export const WhenSlide = (props: {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.35, delay: 0.1 }}
-            className={`${serifFont.className} flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-2 text-center font-bold text-xl text-white`}
+            className={`${serifFont.className} flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-2 text-center text-xl font-bold text-white`}
           >
             <span>{fmtNumber(yearsAgo)} years ago</span>
             <GiPlainCircle aria-hidden className="h-1.5 w-1.5 text-white/30" />
-            <span className="text-[#DEAE56] text-[0.9rem]">the {periodName(props.year).toLowerCase()}</span>
+            <span className="text-[0.9rem] text-[#DEAE56]">
+              the {periodName(props.year).toLowerCase()}
+            </span>
           </motion.p>
         )}
       </div>
@@ -81,7 +89,7 @@ export const WhenSlide = (props: {
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, delay: 0.15 }}
-          className="max-w-md text-[0.85rem] text-white/75 italic leading-relaxed"
+          className="max-w-md text-[0.85rem] leading-relaxed text-white/75 italic"
         >
           {props.story}
         </motion.p>

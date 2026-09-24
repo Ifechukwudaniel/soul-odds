@@ -1,11 +1,10 @@
-import { NextResponse } from "next/server";
-import { requireApiSecret } from "@/libs/ApiAuth";
-import { findAllUsers, getAllTokensInCirculation } from "@/services/db/user";
-
+import { NextResponse } from 'next/server';
+import { requireApiSecret } from '@/libs/ApiAuth';
+import { findAllUsers, getAllTokensInCirculation } from '@/services/db/user';
 
 export type Stat = {
-  totalUsers: number,
-  totalTokens: number,
+  totalUsers: number;
+  totalTokens: number;
 };
 
 export async function GET(request: Request) {
@@ -25,9 +24,9 @@ export async function GET(request: Request) {
 
     return NextResponse.json(stats);
   } catch (error) {
-    console.error("Error retrieving user stats:", error);
+    console.error('Error retrieving user stats:', error);
     return NextResponse.json(
-      { message: "An unexpected error occurred while getting user stats." },
+      { message: 'An unexpected error occurred while getting user stats.' },
       { status: 500 },
     );
   }

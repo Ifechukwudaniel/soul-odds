@@ -1,7 +1,7 @@
 import { and, desc, eq } from 'drizzle-orm';
+import type { BetHistoryEntry } from '@/lib/mortal-odds/bet-history';
 import { db } from '.';
 import { type BetHistoryRow, betHistorySchema } from './Schema';
-import type { BetHistoryEntry } from '@/lib/mortal-odds/bet-history';
 
 const HISTORY_LIMIT = 100;
 
@@ -31,7 +31,13 @@ export async function insertBetHistory(address: string, entries: BetHistoryEntry
   if (entries.length === 0) return;
   await db
     .insert(betHistorySchema)
-    .values(entries.map((entry) => ({ ...entry, address: normalizeAddress(address), settledAt: new Date(entry.settledAt) })))
+    .values(
+      entries.map((entry) => ({
+        ...entry,
+        address: normalizeAddress(address),
+        settledAt: new Date(entry.settledAt),
+      })),
+    )
     .onConflictDoNothing();
 }
 
@@ -44,5 +50,7 @@ export async function patchBetHistoryStory(
   await db
     .update(betHistorySchema)
     .set(patch)
-    .where(and(eq(betHistorySchema.address, normalizeAddress(address)), eq(betHistorySchema.id, id)));
+    .where(
+      and(eq(betHistorySchema.address, normalizeAddress(address)), eq(betHistorySchema.id, id)),
+    );
 }

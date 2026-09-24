@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Loader } from "../Loader";
-import { CrownIcon } from "../assets/CrownIcon";
-import { DoubleCoinIcon } from "../assets/DoubleCoinIcon";
-import { StatsCard } from "../soulodds/StatsCard";
-import { RefeshInterval } from "@/constants";
-import { getStats } from "@/services/data/stats";
-import numeral from "numeral";
+import numeral from 'numeral';
+import React, { useEffect, useState } from 'react';
+import { RefeshInterval } from '@/constants';
+import { getStats } from '@/services/data/stats';
+import { CrownIcon } from '../assets/CrownIcon';
+import { DoubleCoinIcon } from '../assets/DoubleCoinIcon';
+import { Loader } from '../Loader';
+import { StatsCard } from '../soulodds/StatsCard';
 
 type StatsCardList = {
   title: string;
@@ -15,14 +15,14 @@ type StatsCardList = {
 
 const initialStatsCardLists: StatsCardList[] = [
   {
-    title: "Total Share Balance",
+    title: 'Total Share Balance',
     icon: <DoubleCoinIcon width="17" height="16" />,
-    count: "Loading...",
+    count: 'Loading...',
   },
   {
-    title: "Total Players",
+    title: 'Total Players',
     icon: <CrownIcon />,
-    count: "Loading...",
+    count: 'Loading...',
   },
 ];
 
@@ -31,12 +31,12 @@ const fetchStats = async (): Promise<StatsCardList[]> => {
     const stats = await getStats();
     return [
       {
-        title: "Total Share Balance",
+        title: 'Total Share Balance',
         icon: <DoubleCoinIcon width="17" height="16" />,
-        count: numeral(stats.totalTokens).format("O.Oa"),
+        count: numeral(stats.totalTokens).format('O.Oa'),
       },
       {
-        title: "Total Players",
+        title: 'Total Players',
         icon: <CrownIcon />,
         count: stats.totalUsers.toLocaleString(),
       },
@@ -51,7 +51,10 @@ export const StatsScreen = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const interval = setInterval(async () => setStatsCardLists(await fetchStats()), RefeshInterval * 10);
+    const interval = setInterval(
+      async () => setStatsCardLists(await fetchStats()),
+      RefeshInterval * 10,
+    );
 
     if (loading) {
       setTimeout(async () => {
@@ -65,20 +68,18 @@ export const StatsScreen = () => {
 
   if (loading) {
     return (
-      <section className="flex flex-col h-screen justify-center items-center">
+      <section className="flex h-screen flex-col items-center justify-center">
         <Loader />
       </section>
     );
   }
 
   return (
-    <section className="flex flex-col h-screen overflow-hidden">
-      <div className="container mx-auto px-4 my-5">
-        <h2 className="text-2xl font-bold mb-3 tracking-tight">Statistics</h2>
-        <p className="text-sm text-white my-3 font-medium">
-          This are our application stats
-        </p>
-        <div className="bg-gray-800 h-px w-full my-5" />
+    <section className="flex h-screen flex-col overflow-hidden">
+      <div className="container mx-auto my-5 px-4">
+        <h2 className="mb-3 text-2xl font-bold tracking-tight">Statistics</h2>
+        <p className="my-3 text-sm font-medium text-white">This are our application stats</p>
+        <div className="my-5 h-px w-full bg-gray-800" />
         <div className="mt-3">
           <div className="grid grid-cols-2 gap-2">
             {statsCardLists.map(({ title, icon, count }, index) => (

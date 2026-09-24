@@ -1,6 +1,6 @@
-import type { ShockConfig } from "@/lib/mortal-odds/config";
-import type { Rng } from "@/lib/mortal-odds/rng";
-import type { RegionId, Sex, Shock } from "@/types";
+import type { ShockConfig } from '@/lib/mortal-odds/config';
+import type { Rng } from '@/lib/mortal-odds/rng';
+import type { RegionId, Sex, Shock } from '@/types';
 
 /**
  * The first catastrophe that overlaps this life's exposure window sets the age at death.

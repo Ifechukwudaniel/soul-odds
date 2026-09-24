@@ -1,9 +1,9 @@
-import { betLabel } from "@/lib/mortal-odds/bets";
-import { DEATH_WINDOW, marketsConfig } from "@/lib/mortal-odds/config";
-import { fmtYear } from "@/lib/mortal-odds/format";
-import { deathYearP, LIFE_RESOLVERS } from "@/lib/mortal-odds/pricing";
-import { computeBetSkill } from "@/lib/mortal-odds/skill";
-import type { Bet, BetResult, Life, MarketPrices, Price } from "@/types";
+import { betLabel } from '@/lib/mortal-odds/bets';
+import { DEATH_WINDOW, marketsConfig } from '@/lib/mortal-odds/config';
+import { fmtYear } from '@/lib/mortal-odds/format';
+import { deathYearP, LIFE_RESOLVERS } from '@/lib/mortal-odds/pricing';
+import { computeBetSkill } from '@/lib/mortal-odds/skill';
+import type { Bet, BetResult, Life, MarketPrices, Price } from '@/types';
 
 /** Settles every bet against the life that actually happened. A losing bet's net is just its stake. */
 export function resolveBets(options: {
@@ -18,7 +18,7 @@ export function resolveBets(options: {
   const results: BetResult[] = [];
 
   for (const bet of Object.values(bets)) {
-    if (bet.kind === "choice") {
+    if (bet.kind === 'choice') {
       const market = marketsConfig.find((m) => m.id === bet.marketId);
       const resolve = LIFE_RESOLVERS[bet.marketId];
       const price = prices[bet.marketId]?.[bet.optionId];
@@ -47,11 +47,15 @@ export function resolveBets(options: {
       if (price.odds === null) continue;
 
       const won = Math.abs(life.deathYear - bet.guessYear) <= DEATH_WINDOW;
-      const realP = deathYearP({ samples: truthSamples, guess: bet.guessYear, window: DEATH_WINDOW });
+      const realP = deathYearP({
+        samples: truthSamples,
+        guess: bet.guessYear,
+        window: DEATH_WINDOW,
+      });
 
       results.push({
-        marketId: "dy",
-        marketLabel: "Year of death",
+        marketId: 'dy',
+        marketLabel: 'Year of death',
         won,
         stake: bet.stake,
         net: won ? bet.stake * (price.odds - 1) : -bet.stake,

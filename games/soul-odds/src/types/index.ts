@@ -13,19 +13,18 @@ export type QuestList = {
   claimed: boolean;
 };
 
-
 export type UserTask = {
-  id:number,
+  id: number;
   title: string;
   link: string;
-  completed:boolean
-}
+  completed: boolean;
+};
 
 // =====================================
 // ⬢  Mortal Odds
 // =====================================
-export type RegionId = "ssa" | "mena" | "eur" | "sas" | "eas" | "sea" | "ame";
-export type EraFilter = "all" | "ce" | "modern";
+export type RegionId = 'ssa' | 'mena' | 'eur' | 'sas' | 'eas' | 'sea' | 'ame';
+export type EraFilter = 'all' | 'ce' | 'modern';
 
 /**
  * `share` (this place's weighted fraction of its region's population) only applies to the
@@ -35,32 +34,41 @@ export type EraFilter = "all" | "ce" | "modern";
  * `population` is the estimated number of people the polity had in the drawn year, when an estimate exists.
  * `continent` is filled in for a polity, whose name doesn't carry one the way a synthetic place's ("City, Continent") does.
  */
-export type Place = { name: string; lat: number; lon: number; share?: number; fromYear?: number; toYear?: number; population?: number; continent?: string };
+export type Place = {
+  name: string;
+  lat: number;
+  lon: number;
+  share?: number;
+  fromYear?: number;
+  toYear?: number;
+  population?: number;
+  continent?: string;
+};
 export type Draw = { year: number; region: RegionId; place: Place };
 export type PlaceContext = { where: string; local: string; when: string; story: string };
 
 export type MarketOption = { id: string; label: string };
 export type MarketConfig = {
   id: string;
-  kind: "choice";
+  kind: 'choice';
   title: string;
   note?: string;
   options: MarketOption[];
   fixedBookieP?: Record<string, number>;
 };
 
-export type ChanceTag = "Likely" | "Toss-up" | "Unlikely" | "Long shot";
+export type ChanceTag = 'Likely' | 'Toss-up' | 'Unlikely' | 'Long shot';
 export type Price = { p: number; odds: number | null; tag: ChanceTag };
 export type MarketPrices = Record<string, Record<string, Price>>;
 
 /** A step of the round the player has already paid for, shown as a line on the bet panel. "stake" is the locked round bet; "fee" is a side cost like a redraw. */
-export type RoundCharge = { id: string; label: string; amount: number; kind: "stake" | "fee" };
+export type RoundCharge = { id: string; label: string; amount: number; kind: 'stake' | 'fee' };
 
 export type Bet =
-  | { marketId: string; kind: "choice"; optionId: string; stake: number }
-  | { marketId: "dy"; kind: "range"; guessYear: number; stake: number };
+  | { marketId: string; kind: 'choice'; optionId: string; stake: number }
+  | { marketId: 'dy'; kind: 'range'; guessYear: number; stake: number };
 
-export type Sex = "girl" | "boy";
+export type Sex = 'girl' | 'boy';
 
 export type Shock = {
   id: string;
@@ -115,7 +123,6 @@ export interface LeaderboardUser {
   points: number;
   reward: number;
 }
- 
 
 export interface PodiumUser extends LeaderboardUser {
   prize: number;

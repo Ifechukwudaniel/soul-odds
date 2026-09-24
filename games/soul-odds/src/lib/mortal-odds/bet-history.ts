@@ -1,7 +1,7 @@
-import * as z from "zod";
-import type { RevealResult } from "@/hooks/useMortalOddsDraw";
-import { sinsOf } from "@/lib/mortal-odds/sin-selection";
-import type { Draw, RoundCharge } from "@/types";
+import * as z from 'zod';
+import type { RevealResult } from '@/hooks/useMortalOddsDraw';
+import { sinsOf } from '@/lib/mortal-odds/sin-selection';
+import type { Draw, RoundCharge } from '@/types';
 
 const betHistoryBetSchema = z.object({
   marketId: z.string(),
@@ -27,7 +27,7 @@ export const betHistoryEntrySchema = z.object({
   bornYear: z.number().int(),
   deathYear: z.number().int(),
   age: z.number().int(),
-  sex: z.enum(["girl", "boy"]),
+  sex: z.enum(['girl', 'boy']),
   sin: z.string().nullable(),
   /** The round's locked wager. */
   wager: z.number(),
@@ -52,8 +52,10 @@ export function toHistoryEntry(options: {
   settledAt: number;
 }): BetHistoryEntry {
   const { reveal, draw, charges } = options;
-  const fees = charges.filter((charge) => charge.kind === "fee").reduce((sum, charge) => sum + charge.amount, 0);
-  const wager = charges.find((charge) => charge.kind === "stake")?.amount ?? 0;
+  const fees = charges
+    .filter((charge) => charge.kind === 'fee')
+    .reduce((sum, charge) => sum + charge.amount, 0);
+  const wager = charges.find((charge) => charge.kind === 'stake')?.amount ?? 0;
 
   return {
     id: options.sessionKey,
@@ -67,21 +69,26 @@ export function toHistoryEntry(options: {
     deathYear: reveal.life.deathYear,
     age: reveal.life.age,
     sex: reveal.life.sex,
-    sin: sinsOf(reveal.life).map((sin) => sin.phrase).join("; ") || null,
+    sin:
+      sinsOf(reveal.life)
+        .map((sin) => sin.phrase)
+        .join('; ') || null,
     wager,
     fees,
     net: reveal.net,
     roundNet: reveal.net - fees,
     skill: reveal.skill,
-    bets: reveal.results.map(({ marketId, marketLabel, pickLabel, outcomeLabel, won, stake, net, odds }) => ({
-      marketId,
-      marketLabel,
-      pickLabel,
-      outcomeLabel,
-      won,
-      stake,
-      net,
-      odds,
-    })),
+    bets: reveal.results.map(
+      ({ marketId, marketLabel, pickLabel, outcomeLabel, won, stake, net, odds }) => ({
+        marketId,
+        marketLabel,
+        pickLabel,
+        outcomeLabel,
+        won,
+        stake,
+        net,
+        odds,
+      }),
+    ),
   };
 }

@@ -1,9 +1,10 @@
-import { motion } from "framer-motion";
-import { timelineTickPositions, timelineX } from "@/lib/mortal-odds/timeline";
+import { motion } from 'framer-motion';
+import { timelineTickPositions, timelineX } from '@/lib/mortal-odds/timeline';
 
 export const HistoryTimeline = (props: { year: number | null; currentYear: number }) => {
   const ticks = timelineTickPositions({ currentYear: props.currentYear });
-  const markerX = props.year === null ? null : timelineX({ year: props.year, currentYear: props.currentYear });
+  const markerX =
+    props.year === null ? null : timelineX({ year: props.year, currentYear: props.currentYear });
 
   return (
     <svg
@@ -16,13 +17,24 @@ export const HistoryTimeline = (props: { year: number | null; currentYear: numbe
       {ticks.map((tick) => (
         <g key={tick.label}>
           <circle cx={tick.x} cy={18} r={3} fill="#3FB6A8" fillOpacity={0.5} />
-          <text x={tick.x} y={38} textAnchor={tick.anchor} fill="currentColor" fillOpacity={0.5} fontSize={11}>
+          <text
+            x={tick.x}
+            y={38}
+            textAnchor={tick.anchor}
+            fill="currentColor"
+            fillOpacity={0.5}
+            fontSize={11}
+          >
             {tick.label}
           </text>
         </g>
       ))}
       {markerX !== null && (
-        <motion.g initial={false} animate={{ x: markerX }} transition={{ duration: 0.5, ease: "easeOut" }}>
+        <motion.g
+          initial={false}
+          animate={{ x: markerX }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+        >
           <circle cx={0} cy={18} r={5} fill="#3FB6A8" />
           <circle cx={0} cy={18} r={9} fill="#3FB6A8" fillOpacity={0.35} />
         </motion.g>

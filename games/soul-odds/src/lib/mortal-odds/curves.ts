@@ -1,8 +1,11 @@
 /** Linear interpolation over a sorted [x, y] point list, clamped at both ends. */
-export function interpolate(options: { points: ReadonlyArray<readonly [number, number]>; x: number }): number {
+export function interpolate(options: {
+  points: ReadonlyArray<readonly [number, number]>;
+  x: number;
+}): number {
   const { points, x } = options;
   const first = points[0];
-  if (!first) throw new Error("interpolate: points must not be empty");
+  if (!first) throw new Error('interpolate: points must not be empty');
   if (x <= first[0]) return first[1];
 
   for (let i = 1; i < points.length; i++) {
@@ -19,6 +22,6 @@ export function interpolate(options: { points: ReadonlyArray<readonly [number, n
   }
 
   const last = points[points.length - 1];
-  if (!last) throw new Error("interpolate: points must not be empty");
+  if (!last) throw new Error('interpolate: points must not be empty');
   return last[1];
 }

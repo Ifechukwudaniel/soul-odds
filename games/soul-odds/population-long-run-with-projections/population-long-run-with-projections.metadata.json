@@ -5,15 +5,7 @@
     "note": "Historical country data is shown based on today's geographical borders.",
     "citation": "UN WPP (2024); HYDE (2023); Gapminder (2022); UN WPP (2024)",
     "originalChartUrl": "https://ourworldindata.org/grapher/population-long-run-with-projections?v=1&csvType=full&useColumnShortNames=false",
-    "selection": [
-      "China",
-      "Brazil",
-      "Nigeria",
-      "Indonesia",
-      "United States",
-      "Japan",
-      "India"
-    ]
+    "selection": ["China", "Brazil", "Nigeria", "Indonesia", "United States", "Japan", "India"]
   },
   "columns": {
     "Population (projections)": {

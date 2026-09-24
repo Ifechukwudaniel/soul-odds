@@ -1,5 +1,5 @@
-import { CurrencyCoinIcon } from "@/components/assets/CurrencyCoinIcon";
-import { playClickSound } from "@/utils/playClickSound";
+import { CurrencyCoinIcon } from '@/components/assets/CurrencyCoinIcon';
+import { playClickSound } from '@/utils/playClickSound';
 
 export const WalletBalanceBadge = (props: { amount: number; currency: string }) => (
   <button

@@ -1,13 +1,16 @@
-const CACHE_PREFIX = "mortal-odds-life-story:v2:";
+const CACHE_PREFIX = 'mortal-odds-life-story:v2:';
 
 export type LifeStoryPayload = { story: string; name: string | null };
 
-export type LifeStoryCache = { read: (key: string) => LifeStoryPayload | null; write: (key: string, payload: LifeStoryPayload) => void };
+export type LifeStoryCache = {
+  read: (key: string) => LifeStoryPayload | null;
+  write: (key: string, payload: LifeStoryPayload) => void;
+};
 
 function isLifeStoryPayload(value: unknown): value is LifeStoryPayload {
-  if (typeof value !== "object" || value === null) return false;
+  if (typeof value !== 'object' || value === null) return false;
   const { story, name } = value as Record<string, unknown>;
-  return typeof story === "string" && (name === null || typeof name === "string");
+  return typeof story === 'string' && (name === null || typeof name === 'string');
 }
 
 /** Namespaced localStorage-backed cache for the AI-generated life story, keyed by round session key. */
@@ -53,7 +56,10 @@ export class LifeStoryLoader {
   #latestKey: string | null = null;
   #requested = new Set<string>();
 
-  constructor(options: { cache: LifeStoryCache; fetchStory: (key: string) => Promise<LifeStoryPayload> }) {
+  constructor(options: {
+    cache: LifeStoryCache;
+    fetchStory: (key: string) => Promise<LifeStoryPayload>;
+  }) {
     this.#cache = options.cache;
     this.#fetchStory = options.fetchStory;
   }
@@ -64,7 +70,11 @@ export class LifeStoryLoader {
    * that reports back through `onResolved` — with the fetched payload on success, or `fallback` on
    * failure — only if `key` is still the most recently requested one once it settles.
    */
-  request(key: string, fallback: LifeStoryPayload, onResolved: (payload: LifeStoryPayload) => void): LifeStoryState {
+  request(
+    key: string,
+    fallback: LifeStoryPayload,
+    onResolved: (payload: LifeStoryPayload) => void,
+  ): LifeStoryState {
     this.#latestKey = key;
 
     const cached = this.#cache.read(key);

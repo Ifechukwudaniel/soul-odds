@@ -1,10 +1,14 @@
-import React from "react";
-
 export const WhaleBadge = ({ unlocked = false }: { unlocked: boolean }) => {
   return (
     <div>
       {unlocked ? (
-        <svg width="87" height="96" viewBox="0 0 87 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="87"
+          height="96"
+          viewBox="0 0 87 96"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <g filter="url(#filter0_dd_672_4905)">
             <path
               d="M13.0869 32.3351H20.3579V49.5027C15.8135 49.5027 13.0869 46.29 13.0869 43.6798V32.3351Z"
@@ -81,7 +85,7 @@ export const WhaleBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <g opacity="0.5">
                 <mask
                   id="mask0_672_4905"
-                  style={{ maskType: "alpha" }}
+                  style={{ maskType: 'alpha' }}
                   maskUnits="userSpaceOnUse"
                   x="23"
                   y="18"
@@ -128,8 +132,15 @@ export const WhaleBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset />
               <feGaussianBlur stdDeviation="2.05999" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.9375 0 0 0 0 0.695 0 0 0 0 0.558594 0 0 0 1 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_672_4905" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.9375 0 0 0 0 0.695 0 0 0 0 0.558594 0 0 0 1 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_672_4905"
+              />
               <feColorMatrix
                 in="SourceAlpha"
                 type="matrix"
@@ -138,9 +149,21 @@ export const WhaleBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset dy="0.823995" />
               <feGaussianBlur stdDeviation="6.17996" />
-              <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.749833 0 0 0 0 0.670833 0 0 0 0.6 0" />
-              <feBlend mode="normal" in2="effect1_dropShadow_672_4905" result="effect2_dropShadow_672_4905" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_672_4905" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 1 0 0 0 0 0.749833 0 0 0 0 0.670833 0 0 0 0.6 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="effect1_dropShadow_672_4905"
+                result="effect2_dropShadow_672_4905"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect2_dropShadow_672_4905"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter1_d_672_4905"
@@ -160,9 +183,21 @@ export const WhaleBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset dy="1.61577" />
               <feGaussianBlur stdDeviation="0.605914" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.491667 0 0 0 0 0.276808 0 0 0 0 0.208958 0 0 0 0.54 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_672_4905" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_672_4905" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.491667 0 0 0 0 0.276808 0 0 0 0 0.208958 0 0 0 0.54 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_672_4905"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_672_4905"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter2_f_672_4905"
@@ -197,7 +232,10 @@ export const WhaleBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <feOffset />
               <feGaussianBlur stdDeviation="1.35808" />
               <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.283333 0 0 0 0 0.158667 0 0 0 0 0.0566667 0 0 0 1 0" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.283333 0 0 0 0 0.158667 0 0 0 0 0.0566667 0 0 0 1 0"
+              />
               <feBlend mode="normal" in2="shape" result="effect1_innerShadow_672_4905" />
             </filter>
             <linearGradient
@@ -373,7 +411,13 @@ export const WhaleBadge = ({ unlocked = false }: { unlocked: boolean }) => {
           </defs>
         </svg>
       ) : (
-        <svg width="56" height="66" viewBox="0 0 56 66" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="56"
+          height="66"
+          viewBox="0 0 56 66"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             d="M0.435547 21.207H7.70652V38.3746C3.16216 38.3746 0.435547 35.162 0.435547 32.5517V21.207Z"
             fill="#040208"
@@ -428,7 +472,7 @@ export const WhaleBadge = ({ unlocked = false }: { unlocked: boolean }) => {
           <g opacity="0.5">
             <mask
               id="mask0_742_8312"
-              style={{ maskType: "alpha" }}
+              style={{ maskType: 'alpha' }}
               maskUnits="userSpaceOnUse"
               x="8"
               y="7"

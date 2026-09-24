@@ -1,11 +1,11 @@
-import type { Viewport } from "next";
-import Script from "next/script";
-import { GameProviders } from "@/components/provider/GameProviders";
-import "overlayscrollbars/styles/overlayscrollbars.css";
-import "@/styles/globals.css";
+import type { Viewport } from 'next';
+import Script from 'next/script';
+import { GameProviders } from '@/components/provider/GameProviders';
+import 'overlayscrollbars/styles/overlayscrollbars.css';
+import '@/styles/globals.css';
 
 export const viewport: Viewport = {
-  width: "device-width",
+  width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,

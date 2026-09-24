@@ -1,16 +1,26 @@
-import React from "react";
-
 export const KrakenBadge = ({ unlocked = false }: { unlocked: boolean }) => {
   return (
     <div>
       {unlocked ? (
-        <svg width="94" height="90" viewBox="0 0 94 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="94"
+          height="90"
+          viewBox="0 0 94 90"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             d="M57.0028 43.1331L86.8145 58.6331L80.8845 68.904L52.5554 50.8363L57.0028 43.1331Z"
             fill="url(#paint0_linear_251_2111)"
           />
-          <path d="M52.0497 51.4324L53.5322 85H41.6724L43.1549 51.4324H52.0497Z" fill="url(#paint1_linear_251_2111)" />
-          <path d="M42.9239 33.5676L41.4414 0L53.3013 0L51.8188 33.5676H42.9239Z" fill="url(#paint2_linear_251_2111)" />
+          <path
+            d="M52.0497 51.4324L53.5322 85H41.6724L43.1549 51.4324H52.0497Z"
+            fill="url(#paint1_linear_251_2111)"
+          />
+          <path
+            d="M42.9239 33.5676L41.4414 0L53.3013 0L51.8188 33.5676H42.9239Z"
+            fill="url(#paint2_linear_251_2111)"
+          />
           <path
             d="M42.4454 50.9428L14.1162 69.0105L8.18628 58.7396L37.9979 43.2396L42.4454 50.9428Z"
             fill="url(#paint3_linear_251_2111)"
@@ -190,7 +200,7 @@ export const KrakenBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <g opacity="0.5">
                 <mask
                   id="mask0_251_2111"
-                  style={{ maskType: "alpha" }}
+                  style={{ maskType: 'alpha' }}
                   maskUnits="userSpaceOnUse"
                   x="32"
                   y="25"
@@ -258,8 +268,15 @@ export const KrakenBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset />
               <feGaussianBlur stdDeviation="2.35648" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.991667 0 0 0 0 0.801597 0 0 0 0 0.516493 0 0 0 1 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_251_2111" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.991667 0 0 0 0 0.801597 0 0 0 0 0.516493 0 0 0 1 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_251_2111"
+              />
               <feColorMatrix
                 in="SourceAlpha"
                 type="matrix"
@@ -268,9 +285,21 @@ export const KrakenBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset dy="0.942591" />
               <feGaussianBlur stdDeviation="7.06943" />
-              <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.722667 0 0 0 0 0.466667 0 0 0 0.6 0" />
-              <feBlend mode="normal" in2="effect1_dropShadow_251_2111" result="effect2_dropShadow_251_2111" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_251_2111" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 1 0 0 0 0 0.722667 0 0 0 0 0.466667 0 0 0 0.6 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="effect1_dropShadow_251_2111"
+                result="effect2_dropShadow_251_2111"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect2_dropShadow_251_2111"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter1_d_251_2111"
@@ -290,9 +319,21 @@ export const KrakenBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset />
               <feGaussianBlur stdDeviation="0.615829" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.7 0 0 0 0 0.561568 0 0 0 0 0.32375 0 0 0 0.78 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_251_2111" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_251_2111" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.7 0 0 0 0 0.561568 0 0 0 0 0.32375 0 0 0 0.78 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_251_2111"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_251_2111"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter2_d_251_2111"
@@ -312,9 +353,21 @@ export const KrakenBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset />
               <feGaussianBlur stdDeviation="0.615829" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.7 0 0 0 0 0.561568 0 0 0 0 0.32375 0 0 0 0.78 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_251_2111" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_251_2111" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.7 0 0 0 0 0.561568 0 0 0 0 0.32375 0 0 0 0.78 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_251_2111"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_251_2111"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter3_d_251_2111"
@@ -334,9 +387,21 @@ export const KrakenBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset />
               <feGaussianBlur stdDeviation="0.615829" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.7 0 0 0 0 0.561568 0 0 0 0 0.32375 0 0 0 0.78 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_251_2111" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_251_2111" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.7 0 0 0 0 0.561568 0 0 0 0 0.32375 0 0 0 0.78 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_251_2111"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_251_2111"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter4_d_251_2111"
@@ -356,9 +421,21 @@ export const KrakenBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset dy="1.23166" />
               <feGaussianBlur stdDeviation="0.461872" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.4375 0 0 0 0 0.287401 0 0 0 0 0.111198 0 0 0 0.6 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_251_2111" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_251_2111" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.4375 0 0 0 0 0.287401 0 0 0 0 0.111198 0 0 0 0.6 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_251_2111"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_251_2111"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter5_f_251_2111"
@@ -393,7 +470,10 @@ export const KrakenBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <feOffset />
               <feGaussianBlur stdDeviation="1.03523" />
               <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.458333 0 0 0 0 0.256743 0 0 0 0 0.0706597 0 0 0 1 0" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.458333 0 0 0 0 0.256743 0 0 0 0 0.0706597 0 0 0 1 0"
+              />
               <feBlend mode="normal" in2="shape" result="effect1_innerShadow_251_2111" />
             </filter>
             <filter
@@ -906,7 +986,13 @@ export const KrakenBadge = ({ unlocked = false }: { unlocked: boolean }) => {
           </defs>
         </svg>
       ) : (
-        <svg width="100" height="78" viewBox="0 0 100 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="100"
+          height="78"
+          viewBox="0 0 100 78"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             d="M39.4268 53.2205L41.3933 43.1475L17.6098 38.5043C16.3807 44.8 20.094 49.4462 23.7102 50.1522L39.4268 53.2205Z"
             fill="#040208"
@@ -981,7 +1067,7 @@ export const KrakenBadge = ({ unlocked = false }: { unlocked: boolean }) => {
           <g opacity="0.5">
             <mask
               id="mask0_742_9191"
-              style={{ maskType: "alpha" }}
+              style={{ maskType: 'alpha' }}
               maskUnits="userSpaceOnUse"
               x="26"
               y="9"

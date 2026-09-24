@@ -1,23 +1,20 @@
-"use client";
+'use client';
 
-import { GameButton } from "@/components/game/GameButton";
-import { GameCard } from "@/components/game/home/GameCard";
-import { StageSlide } from "@/components/game/mortal-odds/stage/StageSlide";
-import { StageStepper } from "@/components/game/mortal-odds/stage/draw/StageStepper";
-import { WhenSlide } from "@/components/game/mortal-odds/stage/draw/WhenSlide";
-import { WhereSlide } from "@/components/game/mortal-odds/stage/draw/WhereSlide";
-import { PiArrowLeft, PiArrowsClockwise } from "react-icons/pi";
-import { PiArrowRight } from "react-icons/pi";
-
-import { CurrencyCoinIcon } from "@/components/assets/CurrencyCoinIcon";
-
-import type { Draw, PlaceContext } from "@/types";
+import { PiArrowLeft, PiArrowsClockwise } from 'react-icons/pi';
+import { PiArrowRight } from 'react-icons/pi';
+import { CurrencyCoinIcon } from '@/components/assets/CurrencyCoinIcon';
+import { GameButton } from '@/components/game/GameButton';
+import { GameCard } from '@/components/game/home/GameCard';
+import { StageStepper } from '@/components/game/mortal-odds/stage/draw/StageStepper';
+import { WhenSlide } from '@/components/game/mortal-odds/stage/draw/WhenSlide';
+import { WhereSlide } from '@/components/game/mortal-odds/stage/draw/WhereSlide';
+import { StageSlide } from '@/components/game/mortal-odds/stage/StageSlide';
+import type { Draw, PlaceContext } from '@/types';
 
 const STEPS = [
-  { key: "when", label: "the age" },
-  { key: "where", label: "the land" },
+  { key: 'when', label: 'the age' },
+  { key: 'where', label: 'the land' },
 ] as const;
-
 
 export const DrawSequence = (props: {
   draw: Draw;
@@ -25,7 +22,7 @@ export const DrawSequence = (props: {
   displayYear: number | null;
   isSpinning: boolean;
   currentYear: number;
-  step: "when" | "where";
+  step: 'when' | 'where';
   onAdvance: () => void;
   onRetreat: () => void;
   onRedraw: () => void;
@@ -34,7 +31,7 @@ export const DrawSequence = (props: {
   canAffordDraw: boolean;
 }) => {
   const activeIndex = STEPS.findIndex((entry) => entry.key === props.step);
-  const isWhere = props.step === "where";
+  const isWhere = props.step === 'where';
 
   return (
     <GameCard
@@ -91,15 +88,20 @@ export const DrawSequence = (props: {
               <span className="flex items-center gap-1 text-white/50 group-hover:text-white/80">
                 <span className="h-3 w-px bg-white/20" />
                 {props.drawCost > 0 && <CurrencyCoinIcon width={16} height="16" />}
-                {props.drawCost > 0 ? props.drawCost : "Free"}
+                {props.drawCost > 0 ? props.drawCost : 'Free'}
               </span>
             </>
           )}
         </GameButton>
 
         <div className="flex flex-col items-end gap-1">
-          <GameButton variant="papyrus" disabled={props.isSpinning} onClick={props.onAdvance} className="group px-5 py-2.5 text-sm">
-            {isWhere ? "Weigh their fate" : "Reveal the land"}
+          <GameButton
+            variant="papyrus"
+            disabled={props.isSpinning}
+            onClick={props.onAdvance}
+            className="group px-5 py-2.5 text-sm"
+          >
+            {isWhere ? 'Weigh their fate' : 'Reveal the land'}
             <PiArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" />
           </GameButton>
         </div>

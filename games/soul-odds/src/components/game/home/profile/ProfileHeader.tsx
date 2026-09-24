@@ -1,7 +1,7 @@
-import { FaPen } from "react-icons/fa";
-import { getAvatarById } from "@/components/assets/characters/avatars";
-import { RankBadge } from "@/components/game/home/profile/RankBadge";
-import { playClickSound } from "@/utils/playClickSound";
+import { FaPen } from 'react-icons/fa';
+import { getAvatarById } from '@/components/assets/characters/avatars';
+import { RankBadge } from '@/components/game/home/profile/RankBadge';
+import { playClickSound } from '@/utils/playClickSound';
 
 export const ProfileHeader = (props: {
   username: string;
@@ -19,7 +19,7 @@ export const ProfileHeader = (props: {
           className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-black p-1"
           style={{
             background:
-              "conic-gradient(from 180deg, #FDE991, #B07464, #7B6A72, #5F6166, #BAAF7F, #FDE991)",
+              'conic-gradient(from 180deg, #FDE991, #B07464, #7B6A72, #5F6166, #BAAF7F, #FDE991)',
           }}
         >
           <div className="flex h-full w-full items-center justify-center rounded-full bg-slate-950">

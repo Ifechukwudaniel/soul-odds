@@ -4,7 +4,7 @@ import {
   type GetDerivedStateFromError,
   type PropsWithChildren,
   type ReactNode,
-} from "react";
+} from 'react';
 
 export interface ErrorBoundaryProps extends PropsWithChildren {
   fallback?: ReactNode | ComponentType<{ error: unknown }>;
@@ -15,23 +15,34 @@ interface ErrorBoundaryState {
 }
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  state: ErrorBoundaryState = {};
+  override state: ErrorBoundaryState = {};
 
   // eslint-disable-next-line max-len
-  static getDerivedStateFromError: GetDerivedStateFromError<ErrorBoundaryProps, ErrorBoundaryState> = error => ({
+  static getDerivedStateFromError: GetDerivedStateFromError<
+    ErrorBoundaryProps,
+    ErrorBoundaryState
+  > = (error) => ({
     error,
   });
 
-  componentDidCatch(error: Error) {
+  override componentDidCatch(error: Error) {
     this.setState({ error });
   }
 
-  render() {
+  override render() {
     const {
       state: { error },
       props: { fallback: Fallback, children },
     } = this;
 
-    return "error" in this.state ? typeof Fallback === "function" ? <Fallback error={error} /> : Fallback : children;
+    return 'error' in this.state ? (
+      typeof Fallback === 'function' ? (
+        <Fallback error={error} />
+      ) : (
+        Fallback
+      )
+    ) : (
+      children
+    );
   }
 }

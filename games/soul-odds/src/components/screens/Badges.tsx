@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { AutoSwipeIcon } from "../assets/AutoSwipeIcon";
-import { DolphinBadge } from "../assets/badges/DolphinBadge";
-import { KrakenBadge } from "../assets/badges/KrakenBadge";
-import { LeviathanBadge } from "../assets/badges/LeviathanBadge";
-import { MegalodonBadge } from "../assets/badges/MegalodonBadge";
-import { MinnowBadge } from "../assets/badges/MinnowBadge";
-import { OrcaBadge } from "../assets/badges/OrcaBadge";
-import { PlanktonBadge } from "../assets/badges/PlanktonBadge";
-import { SharkBadge } from "../assets/badges/SharkBadge";
-import { WhaleBadge } from "../assets/badges/WhaleBadge";
-import { BadgeCard } from "../soulodds/BadgeCard";
-import { useAppStore } from "@/services/store/store";
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
+import { ChevronLeftIcon } from '@heroicons/react/24/solid';
+import React from 'react';
+import { useAppStore } from '@/services/store/store';
+import { DolphinBadge } from '../assets/badges/DolphinBadge';
+import { KrakenBadge } from '../assets/badges/KrakenBadge';
+import { LeviathanBadge } from '../assets/badges/LeviathanBadge';
+import { MegalodonBadge } from '../assets/badges/MegalodonBadge';
+import { MinnowBadge } from '../assets/badges/MinnowBadge';
+import { OrcaBadge } from '../assets/badges/OrcaBadge';
+import { PlanktonBadge } from '../assets/badges/PlanktonBadge';
+import { SharkBadge } from '../assets/badges/SharkBadge';
+import { WhaleBadge } from '../assets/badges/WhaleBadge';
+import { BadgeCard } from '../soulodds/BadgeCard';
 
 type BadgesList = {
   title: string;
@@ -26,7 +25,7 @@ type BadgesList = {
 
 export const badgesLists: BadgesList[] = [
   {
-    title: "Plankton",
+    title: 'Plankton',
     requiredCoin: 30000,
     isUnlocked: true,
     claimed: true,
@@ -35,7 +34,7 @@ export const badgesLists: BadgesList[] = [
     lockedIcon: <PlanktonBadge unlocked={true} />,
   },
   {
-    title: "Minnow",
+    title: 'Minnow',
     requiredCoin: 60000,
     reward: 6000,
     claimed: false,
@@ -44,7 +43,7 @@ export const badgesLists: BadgesList[] = [
     lockedIcon: <MinnowBadge unlocked={false} />,
   },
   {
-    title: "Dolphin",
+    title: 'Dolphin',
     requiredCoin: 120000,
     reward: 12000,
     claimed: false,
@@ -53,7 +52,7 @@ export const badgesLists: BadgesList[] = [
     lockedIcon: <DolphinBadge unlocked={false} />,
   },
   {
-    title: "Shark",
+    title: 'Shark',
     requiredCoin: 240000,
     reward: 24000,
     claimed: false,
@@ -62,7 +61,7 @@ export const badgesLists: BadgesList[] = [
     lockedIcon: <SharkBadge unlocked={false} />,
   },
   {
-    title: "Orca",
+    title: 'Orca',
     requiredCoin: 480000,
     reward: 48000,
     claimed: false,
@@ -71,7 +70,7 @@ export const badgesLists: BadgesList[] = [
     lockedIcon: <OrcaBadge unlocked={false} />,
   },
   {
-    title: "Whale",
+    title: 'Whale',
     requiredCoin: 960000,
     reward: 96000,
     claimed: false,
@@ -80,7 +79,7 @@ export const badgesLists: BadgesList[] = [
     lockedIcon: <WhaleBadge unlocked={false} />,
   },
   {
-    title: "Megalodon",
+    title: 'Megalodon',
     requiredCoin: 1920000,
     reward: 192000,
     claimed: false,
@@ -89,7 +88,7 @@ export const badgesLists: BadgesList[] = [
     lockedIcon: <MegalodonBadge unlocked={false} />,
   },
   {
-    title: "Leviathan",
+    title: 'Leviathan',
     requiredCoin: 3840000,
     reward: 384000,
     claimed: false,
@@ -98,7 +97,7 @@ export const badgesLists: BadgesList[] = [
     lockedIcon: <LeviathanBadge unlocked={false} />,
   },
   {
-    title: "Kraken",
+    title: 'Kraken',
     requiredCoin: 7680000,
     reward: 768000,
     claimed: false,
@@ -109,11 +108,11 @@ export const badgesLists: BadgesList[] = [
 ];
 
 export const BadgesScreen = () => {
-  const setScreen = useAppStore(state => state.setScreen);
-  const user = useAppStore(state => state.user);
-  const balance = useAppStore(state => state.user.balance);
-  const claimRank = useAppStore(state => state.claimRank);
-  const updateBalance = useAppStore(state => state.updateBalance);
+  const setScreen = useAppStore((state) => state.setScreen);
+  const user = useAppStore((state) => state.user);
+  const balance = useAppStore((state) => state.user.balance);
+  const claimRank = useAppStore((state) => state.claimRank);
+  const updateBalance = useAppStore((state) => state.updateBalance);
   const badgeUserData = badgesLists.map((badge, index) => {
     const isUnlocked = user.skill >= badge.requiredCoin;
     const hasNotClaimed = !(index <= user.rank) && isUnlocked;
@@ -121,7 +120,7 @@ export const BadgesScreen = () => {
   });
 
   const goBack = () => {
-    setScreen("home");
+    setScreen('home');
   };
 
   const handleClaim = (id: number, reward: number) => {
@@ -130,23 +129,26 @@ export const BadgesScreen = () => {
   };
 
   return (
-    <section className="flex flex-col h-screen overflow-y">
-      <div className="container mx-auto px-4 my-8 pb-32">
-        <div className="flex container h-20  mb-5   fixed top-0 left-0 right-0 p-5 z-40">
-          <button onClick={goBack} className="p-3 hover:bg-[#182027] bg-[#293641] rounded-lg ">
+    <section className="overflow-y flex h-screen flex-col">
+      <div className="container mx-auto my-8 px-4 pb-32">
+        <div className="fixed top-0 right-0 left-0 z-40 container mb-5 flex h-20 p-5">
+          <button onClick={goBack} className="rounded-lg bg-[#293641] p-3 hover:bg-[#182027]">
             <ChevronLeftIcon width={20} />
           </button>
         </div>
         <div className="mt-10">
-          <h2 className="text-2xl font-[500] mb-3">Ranks</h2>
-          <p className="text-sm leading-[1.7] sf-pro-medium">
-            Consistently show up, climb up the ladder and unlock all the ranks! Your skill points determine the rank
-            you are in.
+          <h2 className="mb-3 text-2xl font-[500]">Ranks</h2>
+          <p className="sf-pro-medium text-sm leading-[1.7]">
+            Consistently show up, climb up the ladder and unlock all the ranks! Your skill points
+            determine the rank you are in.
           </p>
           <div className="mt-8">
-            <div className="grid grid-cols-3 gap-x-1 gap-y-10 my-6">
+            <div className="my-6 grid grid-cols-3 gap-x-1 gap-y-10">
               {badgeUserData.map(
-                ({ title, reward, unlockedIcon, lockedIcon, isUnlocked, requiredCoin, claimed }, index) => (
+                (
+                  { title, reward, unlockedIcon, lockedIcon, isUnlocked, requiredCoin, claimed },
+                  index,
+                ) => (
                   <BadgeCard
                     title={title}
                     unlockedIcon={unlockedIcon}

@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
-import { MotionConfig } from "framer-motion";
-import { BetPanel } from "@/components/game/home/BetPanel";
-import { GameCard } from "@/components/game/home/GameCard";
-import { DrawHero } from "@/components/game/mortal-odds/stage/DrawHero";
-import { DrawSequence } from "@/components/game/mortal-odds/stage/draw/DrawSequence";
-import { PredictionsPanel } from "@/components/game/mortal-odds/stage/markets/PredictionsPanel";
-import { RevealPanel } from "@/components/game/mortal-odds/stage/reveal/RevealPanel";
-import { BetSummary } from "@/components/game/mortal-odds/stage/summary/BetSummary";
-import type { MortalOddsBets } from "@/hooks/useMortalOddsBets";
-import type { MortalOddsRound } from "@/hooks/useMortalOddsDraw";
-import { marketsConfig } from "@/lib/mortal-odds/config";
-import type { MarketPrices, Price, RoundCharge } from "@/types";
+import { MotionConfig } from 'framer-motion';
+import { BetPanel } from '@/components/game/home/BetPanel';
+import { GameCard } from '@/components/game/home/GameCard';
+import { DrawSequence } from '@/components/game/mortal-odds/stage/draw/DrawSequence';
+import { DrawHero } from '@/components/game/mortal-odds/stage/DrawHero';
+import { PredictionsPanel } from '@/components/game/mortal-odds/stage/markets/PredictionsPanel';
+import { RevealPanel } from '@/components/game/mortal-odds/stage/reveal/RevealPanel';
+import { BetSummary } from '@/components/game/mortal-odds/stage/summary/BetSummary';
+import type { MortalOddsBets } from '@/hooks/useMortalOddsBets';
+import type { MortalOddsRound } from '@/hooks/useMortalOddsDraw';
+import { marketsConfig } from '@/lib/mortal-odds/config';
+import type { MarketPrices, Price, RoundCharge } from '@/types';
 
 export const MortalOddsStage = (props: {
   round: MortalOddsRound;
-  bets: MortalOddsBets["bets"];
+  bets: MortalOddsBets['bets'];
   chipSize: number;
   currency: string;
   onDraw: () => void;
-  onSetChoice: MortalOddsBets["setChoice"];
+  onSetChoice: MortalOddsBets['setChoice'];
   onPlaceBet: () => void;
   onRevealLocation: () => void;
   onRedrawLocation: () => void;
@@ -31,10 +31,11 @@ export const MortalOddsStage = (props: {
   chipLocked: boolean;
   prices: MarketPrices | null;
   priceDeathYear: (guessYear: number) => Price;
-  onRemoveBet: MortalOddsBets["remove"];
+  onRemoveBet: MortalOddsBets['remove'];
 }) => {
   const { round } = props;
-  const inDrawSequence = round.phase === "drawing" || round.phase === "when" || round.phase === "where";
+  const inDrawSequence =
+    round.phase === 'drawing' || round.phase === 'when' || round.phase === 'where';
 
   return (
     <MotionConfig reducedMotion="user">
@@ -55,15 +56,15 @@ export const MortalOddsStage = (props: {
             onRemoveBet={props.onRemoveBet}
             charges={props.charges}
             onPlaceBet={round.advance}
-            canPlaceBet={round.phase === "predicting"}
-            isLocked={round.phase === "confirming" || round.phase === "settling"}
+            canPlaceBet={round.phase === 'predicting'}
+            isLocked={round.phase === 'confirming' || round.phase === 'settling'}
             requiredBets={marketsConfig.length}
             sinNarratives={round.sinNarratives}
           />
         </div>
 
         <div className="flex min-w-0 flex-1 flex-col lg:h-full">
-          {round.phase === "idle" && (
+          {round.phase === 'idle' && (
             <DrawHero
               currentYear={round.currentYear}
               onDraw={props.onDraw}
@@ -77,10 +78,10 @@ export const MortalOddsStage = (props: {
               draw={round.draw}
               context={round.context}
               displayYear={round.displayYear}
-              isSpinning={round.phase === "drawing"}
+              isSpinning={round.phase === 'drawing'}
               currentYear={round.currentYear}
-              step={round.phase === "where" ? "where" : "when"}
-              onAdvance={round.phase === "when" ? props.onRevealLocation : round.advance}
+              step={round.phase === 'where' ? 'where' : 'when'}
+              onAdvance={round.phase === 'when' ? props.onRevealLocation : round.advance}
               onRetreat={round.retreat}
               onRedraw={props.onDraw}
               onRedrawLocation={props.onRedrawLocation}
@@ -89,7 +90,7 @@ export const MortalOddsStage = (props: {
             />
           )}
 
-          {round.phase === "predicting" && round.draw && props.prices && (
+          {round.phase === 'predicting' && round.draw && props.prices && (
             <PredictionsPanel
               prices={props.prices}
               chipSize={props.chipSize}
@@ -101,7 +102,7 @@ export const MortalOddsStage = (props: {
             />
           )}
 
-          {round.phase === "confirming" && round.draw && props.prices && (
+          {round.phase === 'confirming' && round.draw && props.prices && (
             <BetSummary
               draw={round.draw}
               bets={props.bets}
@@ -115,13 +116,20 @@ export const MortalOddsStage = (props: {
             />
           )}
 
-          {round.phase === "settling" && (
-            <GameCard className="flex min-h-0 flex-1 items-center justify-center" containerClassName="flex h-full w-full flex-col">
-              <p className="animate-pulse text-sm text-white/60">{round.awaitingSinNarrative ? "Consulting the record of sins…" : "Reading the omens…"}</p>
+          {round.phase === 'settling' && (
+            <GameCard
+              className="flex min-h-0 flex-1 items-center justify-center"
+              containerClassName="flex h-full w-full flex-col"
+            >
+              <p className="animate-pulse text-sm text-white/60">
+                {round.awaitingSinNarrative
+                  ? 'Consulting the record of sins…'
+                  : 'Reading the omens…'}
+              </p>
             </GameCard>
           )}
 
-          {round.phase === "revealed" && round.reveal && round.draw && (
+          {round.phase === 'revealed' && round.reveal && round.draw && (
             <RevealPanel
               reveal={round.reveal}
               place={round.draw.place}

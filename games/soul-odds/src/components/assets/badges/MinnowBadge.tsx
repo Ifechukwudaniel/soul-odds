@@ -1,10 +1,14 @@
-import React from "react";
-
 export const MinnowBadge = ({ unlocked = false }: { unlocked: boolean }) => {
   return (
     <div>
       {unlocked ? (
-        <svg width="91" height="103" viewBox="0 0 91 103" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="91"
+          height="103"
+          viewBox="0 0 91 103"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <g filter="url(#filter0_d_672_9649)">
             <g filter="url(#filter1_d_672_9649)">
               <path
@@ -25,7 +29,7 @@ export const MinnowBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <g opacity="0.5">
                 <mask
                   id="mask0_672_9649"
-                  style={{ maskType: "alpha" }}
+                  style={{ maskType: 'alpha' }}
                   maskUnits="userSpaceOnUse"
                   x="17"
                   y="19"
@@ -72,9 +76,21 @@ export const MinnowBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset />
               <feGaussianBlur stdDeviation="4.38891" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.92549 0 0 0 0 0.909804 0 0 0 0 0.913725 0 0 0 0.48 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_672_9649" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_672_9649" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.92549 0 0 0 0 0.909804 0 0 0 0 0.913725 0 0 0 0.48 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_672_9649"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_672_9649"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter1_d_672_9649"
@@ -94,9 +110,21 @@ export const MinnowBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset dy="2.34075" />
               <feGaussianBlur stdDeviation="0.877782" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.475 0 0 0 0 0.425521 0 0 0 0 0.425521 0 0 0 0.35 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_672_9649" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_672_9649" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.475 0 0 0 0 0.425521 0 0 0 0 0.425521 0 0 0 0.35 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_672_9649"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_672_9649"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter2_f_672_9649"
@@ -131,7 +159,10 @@ export const MinnowBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <feOffset />
               <feGaussianBlur stdDeviation="1.96744" />
               <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.508333 0 0 0 0 0.437506 0 0 0 0 0.415139 0 0 0 1 0" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.508333 0 0 0 0 0.437506 0 0 0 0 0.415139 0 0 0 1 0"
+              />
               <feBlend mode="normal" in2="shape" result="effect1_innerShadow_672_9649" />
             </filter>
             <linearGradient
@@ -181,7 +212,13 @@ export const MinnowBadge = ({ unlocked = false }: { unlocked: boolean }) => {
           </defs>
         </svg>
       ) : (
-        <svg width="75" height="85" viewBox="0 0 75 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="75"
+          height="85"
+          viewBox="0 0 75 85"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             d="M3.62783 18.6759L35.228 1.48579C36.6446 0.71513 38.3554 0.71513 39.7721 1.48579L71.3722 18.6759C72.9023 19.5083 73.8548 21.1107 73.8548 22.8526L73.8548 62.1474C73.8548 63.8893 72.9023 65.4917 71.3722 66.3241L39.7721 83.5142C38.3554 84.2849 36.6446 84.2849 35.228 83.5142L3.62782 66.3241C2.09771 65.4917 1.14523 63.8893 1.14523 62.1474L1.14524 22.8526C1.14524 21.1107 2.09772 19.5083 3.62783 18.6759Z"
             fill="#040208"
@@ -202,7 +239,7 @@ export const MinnowBadge = ({ unlocked = false }: { unlocked: boolean }) => {
           <g opacity="0.5">
             <mask
               id="mask0_742_9349"
-              style={{ maskType: "alpha" }}
+              style={{ maskType: 'alpha' }}
               maskUnits="userSpaceOnUse"
               x="9"
               y="10"

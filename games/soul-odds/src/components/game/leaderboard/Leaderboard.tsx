@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import { LeaderboardTable } from "./LeaderboardTable";
-import { CurrentUserJumpBar } from "./CurrentUserJumpBar";
-import { WeeklyCountdown } from "./WeeklyCountdown";
-import type { LeaderboardUser } from "@/types";
+import { useEffect, useRef, useState } from 'react';
+import type { LeaderboardUser } from '@/types';
+import { CurrentUserJumpBar } from './CurrentUserJumpBar';
+import { LeaderboardTable } from './LeaderboardTable';
+import { WeeklyCountdown } from './WeeklyCountdown';
 
 interface LeaderboardProps {
   /** Full ranked list, rank 1-100 */
@@ -21,25 +21,24 @@ export function Leaderboard({ users, currentUser, resetAt }: LeaderboardProps) {
     const node = currentUserRowRef.current;
     if (!node) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsRowVisible(entry.isIntersecting),
-      { threshold: 0.3 }
-    );
+    const observer = new IntersectionObserver(([entry]) => setIsRowVisible(entry?.isIntersecting ?? true), {
+      threshold: 0.3,
+    });
     observer.observe(node);
     return () => observer.disconnect();
   }, [currentUser]);
 
   const handleJumpToMe = () => {
     currentUserRowRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
+      behavior: 'smooth',
+      block: 'center',
     });
   };
 
   return (
-    <div className="mx-auto container  px-4 py-4">
-      <h2 className="text-2xl font-[500] mb-3">Leaderboard</h2>
-      <p className="text-sm text-white leading-[1.7]">
+    <div className="container mx-auto px-4 py-4">
+      <h2 className="mb-3 text-2xl font-[500]">Leaderboard</h2>
+      <p className="text-sm leading-[1.7] text-white">
         See how you stack up against everyone else this week and climb the ranks.
       </p>
 
@@ -47,7 +46,7 @@ export function Leaderboard({ users, currentUser, resetAt }: LeaderboardProps) {
         <WeeklyCountdown resetAt={resetAt} />
       </div>
 
-      <div className="mt-10  ">
+      <div className="mt-10">
         <LeaderboardTable
           users={users}
           currentUserId={currentUser?.id}
@@ -56,11 +55,7 @@ export function Leaderboard({ users, currentUser, resetAt }: LeaderboardProps) {
       </div>
 
       {currentUser && (
-        <CurrentUserJumpBar
-          user={currentUser}
-          visible={!isRowVisible}
-          onJump={handleJumpToMe}
-        />
+        <CurrentUserJumpBar user={currentUser} visible={!isRowVisible} onJump={handleJumpToMe} />
       )}
     </div>
   );

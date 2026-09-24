@@ -1,8 +1,18 @@
-import { apiClient } from "@/libs/ApiClient";
-import type { Place } from "@/types";
+import { apiClient } from '@/libs/ApiClient';
+import type { Place } from '@/types';
 
 type PlaceApiResponse =
-  | { name: string; lat: number; lon: number; fromYear: number; toYear: number; population?: number; continent?: string; year: number; source: "cliopatria" }
+  | {
+      name: string;
+      lat: number;
+      lon: number;
+      fromYear: number;
+      toYear: number;
+      population?: number;
+      continent?: string;
+      year: number;
+      source: 'cliopatria';
+    }
   | {
       name: string;
       lat: number;
@@ -12,7 +22,7 @@ type PlaceApiResponse =
       region: string;
       regionShare: number;
       year: number;
-      source: "places-fallback";
+      source: 'places-fallback';
     };
 
 /**
@@ -21,8 +31,16 @@ type PlaceApiResponse =
  * weighted population share — never both, see `Place`'s own doc comment.
  */
 export function toPlace(response: PlaceApiResponse): Place {
-  if (response.source === "cliopatria") {
-    return { name: response.name, lat: response.lat, lon: response.lon, fromYear: response.fromYear, toYear: response.toYear, population: response.population, continent: response.continent };
+  if (response.source === 'cliopatria') {
+    return {
+      name: response.name,
+      lat: response.lat,
+      lon: response.lon,
+      fromYear: response.fromYear,
+      toYear: response.toYear,
+      population: response.population,
+      continent: response.continent,
+    };
   }
   return { name: response.name, lat: response.lat, lon: response.lon, share: response.regionShare };
 }

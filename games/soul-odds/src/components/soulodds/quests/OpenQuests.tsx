@@ -1,4 +1,4 @@
-import { QuestCard } from "./QuestCard";
+import { QuestCard } from './QuestCard';
 
 type OpenQuestsList = {
   title: string;
@@ -8,9 +8,9 @@ type OpenQuestsList = {
 
 export const openQuestsLists: OpenQuestsList[] = [
   {
-    title: "Social Media Madness!",
-    page: "social",
-    reward: "1 free redraw",
+    title: 'Social Media Madness!',
+    page: 'social',
+    reward: '1 free redraw',
   },
 ];
 

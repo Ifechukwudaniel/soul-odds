@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { Suspense, useEffect } from "react";
-import { ToastContainer } from "react-toastify";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { Loader } from "@/components/Loader";
-import { AppWalletProvider } from "@/components/provider/AppWalletProvider";
-import { DesertHorizon } from "@/components/game/mortal-odds/DesertHorizon";
+import { Suspense, useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { DesertHorizon } from '@/components/game/mortal-odds/DesertHorizon';
+import { Loader } from '@/components/Loader';
+import { AppWalletProvider } from '@/components/provider/AppWalletProvider';
 
 const ErrorBoundaryError = (props: { error: unknown }) => (
   <div>
@@ -14,7 +14,7 @@ const ErrorBoundaryError = (props: { error: unknown }) => (
       <code>
         {props.error instanceof Error
           ? props.error.message
-          : typeof props.error === "string"
+          : typeof props.error === 'string'
             ? props.error
             : JSON.stringify(props.error)}
       </code>
@@ -24,9 +24,11 @@ const ErrorBoundaryError = (props: { error: unknown }) => (
 
 const EnableErudaConsole = () => {
   useEffect(() => {
-    const el = document.createElement("div");
+    const el = document.createElement('div');
     document.body.appendChild(el);
-    import("eruda").then((lib) => lib.default.init({ container: el, tool: ["console", "elements"] }));
+    import('eruda').then((lib) =>
+      lib.default.init({ container: el, tool: ['console', 'elements'] }),
+    );
   }, []);
 
   return null;
@@ -36,18 +38,18 @@ export const GameProviders = (props: { children: React.ReactNode }) => {
   return (
     <ErrorBoundary fallback={ErrorBoundaryError}>
       <EnableErudaConsole />
-        <Suspense fallback={<Loader />}>
-            <main
-              className="relative overflow-x-hidden"
-              style={{ background: `url('/img/stars.svg') repeat` }}
-            >
-              <DesertHorizon />
-              <div className="relative z-10">
-                <AppWalletProvider>{props.children}</AppWalletProvider>
-              </div>
-            </main>
-          <ToastContainer theme="light" />
-        </Suspense>
+      <Suspense fallback={<Loader />}>
+        <main
+          className="relative overflow-x-hidden"
+          style={{ background: `url('/img/stars.svg') repeat` }}
+        >
+          <DesertHorizon />
+          <div className="relative z-10">
+            <AppWalletProvider>{props.children}</AppWalletProvider>
+          </div>
+        </main>
+        <ToastContainer theme="light" />
+      </Suspense>
     </ErrorBoundary>
   );
 };

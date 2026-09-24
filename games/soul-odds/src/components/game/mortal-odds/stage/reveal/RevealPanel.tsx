@@ -1,39 +1,56 @@
-"use client";
+'use client';
 
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { CurrencyCoinIcon } from "@/components/assets/CurrencyCoinIcon";
-import { AnubisBackdrop } from "@/components/game/AnubisBackdrop";
-import { GameButton } from "@/components/game/GameButton";
-import { GameCard } from "@/components/game/home/GameCard";
-import { BetResultStamp } from "@/components/game/mortal-odds/stage/reveal/BetResultStamp";
-import { RevealHeader } from "@/components/game/mortal-odds/stage/reveal/RevealHeader";
-import { RevealStamp } from "@/components/game/mortal-odds/stage/reveal/RevealStamp";
-import { SoulRecord } from "@/components/game/mortal-odds/stage/reveal/SoulRecord";
-import { SoulStory } from "@/components/game/mortal-odds/stage/reveal/SoulStory";
-import { useLifeStory } from "@/hooks/useLifeStory";
-import { patchBetHistoryStory } from "@/services/data/bet-history";
-import { useAppStore } from "@/services/store/store";
-import { playClickSound } from "@/utils/playClickSound";
-import type { RevealResult } from "@/hooks/useMortalOddsDraw";
-import type { Place, RoundCharge } from "@/types";
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { CurrencyCoinIcon } from '@/components/assets/CurrencyCoinIcon';
+import { AnubisBackdrop } from '@/components/game/AnubisBackdrop';
+import { GameButton } from '@/components/game/GameButton';
+import { GameCard } from '@/components/game/home/GameCard';
+import { BetResultStamp } from '@/components/game/mortal-odds/stage/reveal/BetResultStamp';
+import { RevealHeader } from '@/components/game/mortal-odds/stage/reveal/RevealHeader';
+import { RevealStamp } from '@/components/game/mortal-odds/stage/reveal/RevealStamp';
+import { SoulRecord } from '@/components/game/mortal-odds/stage/reveal/SoulRecord';
+import { SoulStory } from '@/components/game/mortal-odds/stage/reveal/SoulStory';
+import { useLifeStory } from '@/hooks/useLifeStory';
+import type { RevealResult } from '@/hooks/useMortalOddsDraw';
+import { patchBetHistoryStory } from '@/services/data/bet-history';
+import { useAppStore } from '@/services/store/store';
+import type { Place, RoundCharge } from '@/types';
+import { playClickSound } from '@/utils/playClickSound';
 
 const STAMP_DELAY_MS = 1500;
 
-export const RevealPanel = (props: { reveal: RevealResult; place: Place; currentYear: number; currency: string; charges: RoundCharge[]; onNext: () => void; drawCost: number; canAffordDraw: boolean; sessionKey: string | null }) => {
+export const RevealPanel = (props: {
+  reveal: RevealResult;
+  place: Place;
+  currentYear: number;
+  currency: string;
+  charges: RoundCharge[];
+  onNext: () => void;
+  drawCost: number;
+  canAffordDraw: boolean;
+  sessionKey: string | null;
+}) => {
   const { life, results, net, skill, story, epitaph } = props.reveal;
   const [stampReady, setStampReady] = useState(false);
   const [dismissed, setDismissed] = useState(false);
-  const lifeStory = useLifeStory({ sessionKey: props.sessionKey, life, placeName: props.place.name, fallbackStory: story });
+  const lifeStory = useLifeStory({
+    sessionKey: props.sessionKey,
+    life,
+    placeName: props.place.name,
+    fallbackStory: story,
+  });
 
   const address = useAppStore((state) => state.user.address);
 
   // The round is recorded in the history the moment it settles, with the local story; swap in the AI-written one (and its name) once it lands.
   useEffect(() => {
     if (!lifeStory.ready || !address || !props.sessionKey) return;
-    patchBetHistoryStory(address, { id: props.sessionKey, story: lifeStory.payload.story, name: lifeStory.payload.name }).catch((error) =>
-      console.error("Could not save the life story to history:", error),
-    );
+    patchBetHistoryStory(address, {
+      id: props.sessionKey,
+      story: lifeStory.payload.story,
+      name: lifeStory.payload.name,
+    }).catch((error) => console.error('Could not save the life story to history:', error));
   }, [lifeStory.ready, address, props.sessionKey]);
 
   useEffect(() => {
@@ -47,36 +64,62 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
   };
 
   // The stake is already reflected inside net; only side fees (redraws) reduce the round's take further.
-  const fees = props.charges.filter((charge) => charge.kind === "fee").reduce((sum, charge) => sum + charge.amount, 0);
+  const fees = props.charges
+    .filter((charge) => charge.kind === 'fee')
+    .reduce((sum, charge) => sum + charge.amount, 0);
   const roundNet = net - fees;
 
   const alive = life.deathYear >= props.currentYear;
   // The name only exists once OpenRouter's narrative lands; until then (or if it never does),
   // the header falls back to the plain sex label rather than waiting on it.
   const soulName = lifeStory.ready ? lifeStory.payload.name : null;
-  const sexLabel = soulName ?? (life.sex === "girl" ? "A girl" : "A boy");
-  const fate = alive ? `${sexLabel}, still living` : life.age === 0 ? `${sexLabel}, gone within a year` : `${sexLabel}, dead at ${life.age}`;
+  const sexLabel = soulName ?? (life.sex === 'girl' ? 'A girl' : 'A boy');
+  const fate = alive
+    ? `${sexLabel}, still living`
+    : life.age === 0
+      ? `${sexLabel}, gone within a year`
+      : `${sexLabel}, dead at ${life.age}`;
 
   return (
-    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: "easeOut" }} className="flex h-full w-full flex-col">
-      <GameCard scrollable className="relative isolate flex flex-col gap-4" containerClassName="flex h-full w-full flex-col">
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
+      className="flex h-full w-full flex-col"
+    >
+      <GameCard
+        scrollable
+        className="relative isolate flex flex-col gap-4"
+        containerClassName="flex h-full w-full flex-col"
+      >
         <AnubisBackdrop />
-        <RevealHeader fate={fate} placeName={props.place.name} bornYear={life.year} deathYear={life.deathYear} epitaph={epitaph} alive={alive} />
+        <RevealHeader
+          fate={fate}
+          placeName={props.place.name}
+          bornYear={life.year}
+          deathYear={life.deathYear}
+          epitaph={epitaph}
+          alive={alive}
+        />
 
         <div className="grid gap-4 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
           <SoulStory state={lifeStory} />
           <SoulRecord life={life} placeName={props.place.name} alive={alive} />
         </div>
 
-        {results.length === 0 && <p className="text-white/50 text-sm">No bets this round. Just watching.</p>}
+        {results.length === 0 && (
+          <p className="text-sm text-white/50">No bets this round. Just watching.</p>
+        )}
 
         {dismissed && results.length > 0 && (
           <div className="flex flex-wrap items-center gap-2">
             <RevealStamp tone="neutral" rotate={-2}>
-              Skill {skill >= 0 ? "+" : "−"}
+              Skill {skill >= 0 ? '+' : '−'}
               {Math.abs(Math.round(skill))} pts
             </RevealStamp>
-            <p className="text-white/50 text-xs">Every bet earns points just for playing — a win earns more.</p>
+            <p className="text-xs text-white/50">
+              Every bet earns points just for playing — a win earns more.
+            </p>
           </div>
         )}
 
@@ -85,8 +128,8 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
             <dl className="flex flex-col gap-1 text-sm">
               <div className="flex justify-between">
                 <dt className="text-white/50">Bets</dt>
-                <dd className={net >= 0 ? "text-[#6BA84F]" : "text-[#B7410E]"}>
-                  {net >= 0 ? "+" : "−"}
+                <dd className={net >= 0 ? 'text-[#6BA84F]' : 'text-[#B7410E]'}>
+                  {net >= 0 ? '+' : '−'}
                   {Math.abs(net).toFixed(2)}
                 </dd>
               </div>
@@ -96,10 +139,12 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
               </div>
             </dl>
             <div className="flex items-center gap-2">
-              <RevealStamp tone={roundNet >= 0 ? "win" : "loss"} rotate={-3} className="text-sm">
-                {roundNet >= 0 ? "Up" : "Down"}
+              <RevealStamp tone={roundNet >= 0 ? 'win' : 'loss'} rotate={-3} className="text-sm">
+                {roundNet >= 0 ? 'Up' : 'Down'}
               </RevealStamp>
-              <p className={`font-bold text-lg ${roundNet >= 0 ? "text-[#6BA84F]" : "text-[#B7410E]"}`}>
+              <p
+                className={`text-lg font-bold ${roundNet >= 0 ? 'text-[#6BA84F]' : 'text-[#B7410E]'}`}
+              >
                 {Math.abs(roundNet).toFixed(2)} {props.currency} this round
               </p>
             </div>
@@ -107,7 +152,12 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
         )}
 
         {dismissed && (
-          <GameButton variant="papyrus" disabled={!props.canAffordDraw} onClick={props.onNext} className="px-6 py-3 text-base">
+          <GameButton
+            variant="papyrus"
+            disabled={!props.canAffordDraw}
+            onClick={props.onNext}
+            className="px-6 py-3 text-base"
+          >
             Summon another soul
             <span className="flex items-center gap-1 text-slate-950/60">
               <span className="h-3 w-px bg-slate-950/20" />
@@ -120,7 +170,13 @@ export const RevealPanel = (props: { reveal: RevealResult; place: Place; current
 
       <AnimatePresence>
         {stampReady && !dismissed && (
-          <BetResultStamp results={results} skill={skill} roundNet={roundNet} currency={props.currency} onDismiss={handleDismiss} />
+          <BetResultStamp
+            results={results}
+            skill={skill}
+            roundNet={roundNet}
+            currency={props.currency}
+            onDismiss={handleDismiss}
+          />
         )}
       </AnimatePresence>
     </motion.div>

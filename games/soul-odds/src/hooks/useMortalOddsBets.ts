@@ -1,29 +1,40 @@
-import { useReducer } from "react";
-import type { Bet } from "@/types";
+import { useReducer } from 'react';
+import type { Bet } from '@/types';
 
 type BetsState = Record<string, Bet>;
 
 type Action =
-  | { type: "set-choice"; marketId: string; optionId: string; stake: number }
-  | { type: "set-death-year"; guessYear: number; stake: number }
-  | { type: "remove"; marketId: string }
-  | { type: "replace"; bets: BetsState }
-  | { type: "reset" };
+  | { type: 'set-choice'; marketId: string; optionId: string; stake: number }
+  | { type: 'set-death-year'; guessYear: number; stake: number }
+  | { type: 'remove'; marketId: string }
+  | { type: 'replace'; bets: BetsState }
+  | { type: 'reset' };
 
 function reducer(state: BetsState, action: Action): BetsState {
   switch (action.type) {
-    case "set-choice":
-      return { ...state, [action.marketId]: { marketId: action.marketId, kind: "choice", optionId: action.optionId, stake: action.stake } };
-    case "set-death-year":
-      return { ...state, dy: { marketId: "dy", kind: "range", guessYear: action.guessYear, stake: action.stake } };
-    case "remove": {
+    case 'set-choice':
+      return {
+        ...state,
+        [action.marketId]: {
+          marketId: action.marketId,
+          kind: 'choice',
+          optionId: action.optionId,
+          stake: action.stake,
+        },
+      };
+    case 'set-death-year':
+      return {
+        ...state,
+        dy: { marketId: 'dy', kind: 'range', guessYear: action.guessYear, stake: action.stake },
+      };
+    case 'remove': {
       const next = { ...state };
       delete next[action.marketId];
       return next;
     }
-    case "replace":
+    case 'replace':
       return action.bets;
-    case "reset":
+    case 'reset':
       return {};
   }
 }
@@ -41,11 +52,12 @@ export function useMortalOddsBets(): {
 
   return {
     bets,
-    setChoice: (marketId, optionId, stake) => dispatch({ type: "set-choice", marketId, optionId, stake }),
-    setDeathYear: (guessYear, stake) => dispatch({ type: "set-death-year", guessYear, stake }),
-    remove: (marketId) => dispatch({ type: "remove", marketId }),
-    replace: (next) => dispatch({ type: "replace", bets: next }),
-    reset: () => dispatch({ type: "reset" }),
+    setChoice: (marketId, optionId, stake) =>
+      dispatch({ type: 'set-choice', marketId, optionId, stake }),
+    setDeathYear: (guessYear, stake) => dispatch({ type: 'set-death-year', guessYear, stake }),
+    remove: (marketId) => dispatch({ type: 'remove', marketId }),
+    replace: (next) => dispatch({ type: 'replace', bets: next }),
+    reset: () => dispatch({ type: 'reset' }),
   };
 }
 

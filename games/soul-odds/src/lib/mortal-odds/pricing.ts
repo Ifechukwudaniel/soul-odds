@@ -1,6 +1,6 @@
-import type { BookieLife } from "@/lib/mortal-odds/model";
-import { sinOptionId, sinsOf } from "@/lib/mortal-odds/sin-selection";
-import type { ChanceTag, Life, MarketConfig, MarketPrices, Price } from "@/types";
+import type { BookieLife } from '@/lib/mortal-odds/model';
+import { sinOptionId, sinsOf } from '@/lib/mortal-odds/sin-selection';
+import type { ChanceTag, Life, MarketConfig, MarketPrices, Price } from '@/types';
 
 export type PricingConfig = { houseEdge: number; maxOdds: number; minP: number };
 
@@ -12,10 +12,10 @@ export function toOdds(options: { p: number; config: PricingConfig }): number | 
 }
 
 export function chanceTag(p: number): ChanceTag {
-  if (p >= 0.6) return "Likely";
-  if (p >= 0.3) return "Toss-up";
-  if (p >= 0.1) return "Unlikely";
-  return "Long shot";
+  if (p >= 0.6) return 'Likely';
+  if (p >= 0.3) return 'Toss-up';
+  if (p >= 0.1) return 'Unlikely';
+  return 'Long shot';
 }
 
 export function priceFromP(options: { p: number; config: PricingConfig }): Price {
@@ -23,8 +23,8 @@ export function priceFromP(options: { p: number; config: PricingConfig }): Price
 }
 
 const RESOLVERS: Record<string, (life: BookieLife) => string> = {
-  age: (life) => (life.age < 5 ? "u5" : life.age < 30 ? "y" : life.age < 60 ? "m" : "o"),
-  sins: (life) => life.sin ?? "none",
+  age: (life) => (life.age < 5 ? 'u5' : life.age < 30 ? 'y' : life.age < 60 ? 'm' : 'o'),
+  sins: (life) => life.sin ?? 'none',
 };
 
 /** Prices every choice market's options from the bookie's year-only samples. */
@@ -39,7 +39,10 @@ export function computeMarketPrices(options: {
   for (const market of markets) {
     if (market.fixedBookieP) {
       prices[market.id] = Object.fromEntries(
-        Object.entries(market.fixedBookieP).map(([optionId, p]) => [optionId, priceFromP({ p, config })]),
+        Object.entries(market.fixedBookieP).map(([optionId, p]) => [
+          optionId,
+          priceFromP({ p, config }),
+        ]),
       );
       continue;
     }
@@ -54,7 +57,10 @@ export function computeMarketPrices(options: {
     }
 
     prices[market.id] = Object.fromEntries(
-      market.options.map((o) => [o.id, priceFromP({ p: (counts[o.id] ?? 0) / samples.length, config })]),
+      market.options.map((o) => [
+        o.id,
+        priceFromP({ p: (counts[o.id] ?? 0) / samples.length, config }),
+      ]),
     );
   }
 
@@ -62,7 +68,11 @@ export function computeMarketPrices(options: {
 }
 
 /** Share of samples whose death year falls within `window` of `guess`. */
-export function deathYearP(options: { samples: ReadonlyArray<{ deathYear: number }>; guess: number; window: number }): number {
+export function deathYearP(options: {
+  samples: ReadonlyArray<{ deathYear: number }>;
+  guess: number;
+  window: number;
+}): number {
   const { samples, guess, window } = options;
   let hits = 0;
   for (const life of samples) if (Math.abs(life.deathYear - guess) <= window) hits++;
@@ -79,12 +89,15 @@ export function medianDeathYear(samples: ReadonlyArray<{ deathYear: number }>): 
 /** Resolves a market's outcome id for one fully-simulated life; used both for real-probability counts and settlement. */
 export const LIFE_RESOLVERS: Record<string, (life: Life) => string> = {
   sex: (life) => life.sex,
-  age: (life) => (life.age < 5 ? "u5" : life.age < 30 ? "y" : life.age < 60 ? "m" : "o"),
+  age: (life) => (life.age < 5 ? 'u5' : life.age < 30 ? 'y' : life.age < 60 ? 'm' : 'o'),
   sins: (life) => sinOptionId(sinsOf(life).map((sin) => sin.id)),
 };
 
 /** Real probabilities per market/option from the full model's truth samples (region, sex, catastrophes). */
-export function computeTrueProbabilities(options: { markets: MarketConfig[]; samples: Life[] }): Record<string, Record<string, number>> {
+export function computeTrueProbabilities(options: {
+  markets: MarketConfig[];
+  samples: Life[];
+}): Record<string, Record<string, number>> {
   const { markets, samples } = options;
   const result: Record<string, Record<string, number>> = {};
 
@@ -98,7 +111,9 @@ export function computeTrueProbabilities(options: { markets: MarketConfig[]; sam
       counts[outcome] = (counts[outcome] ?? 0) + 1;
     }
 
-    result[market.id] = Object.fromEntries(market.options.map((o) => [o.id, (counts[o.id] ?? 0) / samples.length]));
+    result[market.id] = Object.fromEntries(
+      market.options.map((o) => [o.id, (counts[o.id] ?? 0) / samples.length]),
+    );
   }
 
   return result;

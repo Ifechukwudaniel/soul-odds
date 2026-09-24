@@ -1,5 +1,5 @@
-import { fmtPeople, fmtYear } from "@/lib/mortal-odds/format";
-import { estimatePopulation } from "@/lib/mortal-odds/population-estimate";
+import { fmtPeople, fmtYear } from '@/lib/mortal-odds/format';
+import { estimatePopulation } from '@/lib/mortal-odds/population-estimate';
 
 /**
  * Answers "what was the population of this in this year" from the game's own figures, in one line:
@@ -12,8 +12,13 @@ import { estimatePopulation } from "@/lib/mortal-odds/population-estimate";
 
 const [name, yearArg] = process.argv.slice(2);
 const year = Number(yearArg);
-if (!name || yearArg === undefined || !Number.isInteger(year)) throw new Error('Usage: ask-population.ts "<polity name>" <year, negative for BCE>');
+if (!name || yearArg === undefined || !Number.isInteger(year))
+  throw new Error('Usage: ask-population.ts "<polity name>" <year, negative for BCE>');
 
 const estimate = estimatePopulation({ empire: name, year });
 
-console.log(estimate ? `${estimate.empire}, ${fmtYear(year)}: about ${fmtPeople(estimate.population)} people` : `No polity called "${name}" existed in ${fmtYear(year)}.`);
+console.log(
+  estimate
+    ? `${estimate.empire}, ${fmtYear(year)}: about ${fmtPeople(estimate.population)} people`
+    : `No polity called "${name}" existed in ${fmtYear(year)}.`,
+);

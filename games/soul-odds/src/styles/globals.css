@@ -19,8 +19,9 @@
 
 body {
   color: white;
-  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
-  font-family: "SF Mono", sans-serif;
+  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb)))
+    rgb(var(--background-start-rgb));
+  font-family: 'SF Mono', sans-serif;
   background: #0b0a08;
   overflow-y: hidden !important;
   width: 100%;
@@ -87,7 +88,10 @@ main {
   min-height: auto;
   padding: 0.75rem 1rem;
   border-radius: 1rem;
-  box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.55), 0 3px 0 0 #7a5a1f80, inset 0 1px 0 0 #fff8e8b3;
+  box-shadow:
+    0 10px 24px -6px rgba(0, 0, 0, 0.55),
+    0 3px 0 0 #7a5a1f80,
+    inset 0 1px 0 0 #fff8e8b3;
   background: linear-gradient(to bottom, #f3ead2, var(--anubis-papyrus));
   border: 2px solid var(--anubis-gold-leaf);
   color: #33353d;
@@ -182,7 +186,7 @@ main {
 
 /* Grip square, centered on the vertical thumb. */
 .soul-odds.os-scrollbar-vertical .os-scrollbar-handle::after {
-  content: "";
+  content: '';
   position: absolute;
   top: calc(50% - 7px);
   left: 3px;
@@ -224,7 +228,7 @@ main {
 }
 
 .soul-odds .os-arrow::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 5px;
   left: 2px;
@@ -240,7 +244,7 @@ main {
 
 /* Sparkle pixels on the bevel. */
 .soul-odds .os-arrow::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 1px;
   left: 4px;
@@ -276,7 +280,7 @@ main {
 }
 
 /* Reserved: the same gutter on both sides even with no overflow, so centred content stays put when the bar fades in. */
-[data-os-gutter="reserved"] > [data-overlayscrollbars-viewport] > * {
+[data-os-gutter='reserved'] > [data-overlayscrollbars-viewport] > * {
   padding-inline: var(--os-gutter, 36px);
 }
 
@@ -394,9 +398,15 @@ summary:focus-visible,
  * browser that lacks a newer form falls back to the previous one; the numbers are the click hotspot.
  */
 html {
-  cursor: url("/cursors/default.png") 3 3, default;
-  cursor: -webkit-image-set(url("/cursors/default.png") 1x, url("/cursors/default@2x.png") 2x) 3 3, default;
-  cursor: image-set(url("/cursors/default.png") 1x, url("/cursors/default@2x.png") 2x) 3 3, default;
+  cursor:
+    url('/cursors/default.png') 3 3,
+    default;
+  cursor:
+    -webkit-image-set(url('/cursors/default.png') 1x, url('/cursors/default@2x.png') 2x) 3 3,
+    default;
+  cursor:
+    image-set(url('/cursors/default.png') 1x, url('/cursors/default@2x.png') 2x) 3 3,
+    default;
 }
 
 a[href],
@@ -404,42 +414,77 @@ button,
 summary,
 select,
 label[for],
-input[type="button"],
-input[type="submit"],
-input[type="checkbox"],
-input[type="radio"],
-[role="button"],
-[role="tab"],
-[role="link"],
+input[type='button'],
+input[type='submit'],
+input[type='checkbox'],
+input[type='radio'],
+[role='button'],
+[role='tab'],
+[role='link'],
 .cursor-pointer {
-  cursor: url("/cursors/pointer.png") 9 5, pointer;
-  cursor: -webkit-image-set(url("/cursors/pointer.png") 1x, url("/cursors/pointer@2x.png") 2x) 9 5, pointer;
-  cursor: image-set(url("/cursors/pointer.png") 1x, url("/cursors/pointer@2x.png") 2x) 9 5, pointer;
+  cursor:
+    url('/cursors/pointer.png') 9 5,
+    pointer;
+  cursor:
+    -webkit-image-set(url('/cursors/pointer.png') 1x, url('/cursors/pointer@2x.png') 2x) 9 5,
+    pointer;
+  cursor:
+    image-set(url('/cursors/pointer.png') 1x, url('/cursors/pointer@2x.png') 2x) 9 5,
+    pointer;
 }
 
-input:not([type="button"], [type="submit"], [type="reset"], [type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="image"], :disabled),
+input:not(
+  [type='button'],
+  [type='submit'],
+  [type='reset'],
+  [type='checkbox'],
+  [type='radio'],
+  [type='range'],
+  [type='color'],
+  [type='file'],
+  [type='image'],
+  :disabled
+),
 textarea:not(:disabled),
-[contenteditable]:not([contenteditable="false"]),
+[contenteditable]:not([contenteditable='false']),
 .cursor-text {
-  cursor: url("/cursors/text.png") 16 16, text;
-  cursor: -webkit-image-set(url("/cursors/text.png") 1x, url("/cursors/text@2x.png") 2x) 16 16, text;
-  cursor: image-set(url("/cursors/text.png") 1x, url("/cursors/text@2x.png") 2x) 16 16, text;
+  cursor:
+    url('/cursors/text.png') 16 16,
+    text;
+  cursor:
+    -webkit-image-set(url('/cursors/text.png') 1x, url('/cursors/text@2x.png') 2x) 16 16,
+    text;
+  cursor:
+    image-set(url('/cursors/text.png') 1x, url('/cursors/text@2x.png') 2x) 16 16,
+    text;
 }
 
 /* After the pointer rule so a disabled control wins over a `cursor-pointer` class. */
 :disabled,
-[aria-disabled="true"],
-a[href][aria-disabled="true"],
+[aria-disabled='true'],
+a[href][aria-disabled='true'],
 .cursor-not-allowed {
-  cursor: url("/cursors/not-allowed.png") 2 2, not-allowed;
-  cursor: -webkit-image-set(url("/cursors/not-allowed.png") 1x, url("/cursors/not-allowed@2x.png") 2x) 2 2, not-allowed;
-  cursor: image-set(url("/cursors/not-allowed.png") 1x, url("/cursors/not-allowed@2x.png") 2x) 2 2, not-allowed;
+  cursor:
+    url('/cursors/not-allowed.png') 2 2,
+    not-allowed;
+  cursor:
+    -webkit-image-set(url('/cursors/not-allowed.png') 1x, url('/cursors/not-allowed@2x.png') 2x) 2 2,
+    not-allowed;
+  cursor:
+    image-set(url('/cursors/not-allowed.png') 1x, url('/cursors/not-allowed@2x.png') 2x) 2 2,
+    not-allowed;
 }
 
 .cursor-crosshair {
-  cursor: url("/cursors/crosshair.png") 16 16, crosshair;
-  cursor: -webkit-image-set(url("/cursors/crosshair.png") 1x, url("/cursors/crosshair@2x.png") 2x) 16 16, crosshair;
-  cursor: image-set(url("/cursors/crosshair.png") 1x, url("/cursors/crosshair@2x.png") 2x) 16 16, crosshair;
+  cursor:
+    url('/cursors/crosshair.png') 16 16,
+    crosshair;
+  cursor:
+    -webkit-image-set(url('/cursors/crosshair.png') 1x, url('/cursors/crosshair@2x.png') 2x) 16 16,
+    crosshair;
+  cursor:
+    image-set(url('/cursors/crosshair.png') 1x, url('/cursors/crosshair@2x.png') 2x) 16 16,
+    crosshair;
 }
 
 /*
@@ -451,13 +496,14 @@ a[href][aria-disabled="true"],
   background:
     linear-gradient(rgba(10, 9, 8, 0.9), rgba(7, 7, 6, 0.9)) padding-box,
     linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.38) 0%,
-      rgba(255, 255, 255, 0.12) 22%,
-      rgba(255, 255, 255, 0.045) 48%,
-      rgba(208, 170, 91, 0.18) 76%,
-      rgba(255, 255, 255, 0.08) 100%
-    ) border-box;
+        135deg,
+        rgba(255, 255, 255, 0.38) 0%,
+        rgba(255, 255, 255, 0.12) 22%,
+        rgba(255, 255, 255, 0.045) 48%,
+        rgba(208, 170, 91, 0.18) 76%,
+        rgba(255, 255, 255, 0.08) 100%
+      )
+      border-box;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow:
@@ -523,7 +569,7 @@ a[href][aria-disabled="true"],
 
 .cartouche::before,
 .cartouche::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 18%;
   height: 64%;
@@ -532,8 +578,12 @@ a[href][aria-disabled="true"],
   border-radius: 1px;
 }
 
-.cartouche::before { left: -6px; }
-.cartouche::after { right: -6px; }
+.cartouche::before {
+  left: -6px;
+}
+.cartouche::after {
+  right: -6px;
+}
 
 .cartouche > * {
   border-radius: 9999px;
@@ -581,7 +631,7 @@ a[href][aria-disabled="true"],
 }
 
 .chamfer-btn::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: var(--inset);
   clip-path: var(--octagon);
@@ -609,7 +659,7 @@ a[href][aria-disabled="true"],
 }
 
 .stat-card::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: var(--inset);
   clip-path: var(--octagon);
@@ -618,7 +668,8 @@ a[href][aria-disabled="true"],
 }
 
 .chamfer-btn-glow {
-  filter: drop-shadow(0 0 6px rgba(253, 233, 145, 0.75)) drop-shadow(0 0 16px rgba(251, 187, 63, 0.45));
+  filter: drop-shadow(0 0 6px rgba(253, 233, 145, 0.75))
+    drop-shadow(0 0 16px rgba(251, 187, 63, 0.45));
 }
 
 /*
@@ -645,7 +696,7 @@ a[href][aria-disabled="true"],
 }
 
 .loader-track::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: var(--inset);
   clip-path: var(--octagon);
@@ -663,7 +714,7 @@ a[href][aria-disabled="true"],
 }
 
 .loader-track-fill::after {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   width: 60px;
@@ -702,11 +753,18 @@ a[href][aria-disabled="true"],
 }
 
 .green-gradient::after {
-  content: "";
+  content: '';
   width: 100%;
   height: 80%;
   position: absolute;
-  background: linear-gradient(90deg, #76821c 1.44%, #626a17 28.48%, #2c310b 94.38%, #0c0d03 143.39%, #000000 170.43%);
+  background: linear-gradient(
+    90deg,
+    #76821c 1.44%,
+    #626a17 28.48%,
+    #2c310b 94.38%,
+    #0c0d03 143.39%,
+    #000000 170.43%
+  );
   background-blend-mode: screen;
   z-index: 10;
   top: 0;
@@ -718,7 +776,11 @@ a[href][aria-disabled="true"],
 }
 
 .light-green-gradient {
-  background: linear-gradient(51.99deg, rgba(34, 99, 105, 0.2) 8.22%, rgba(129, 219, 226, 0.2) 125.1%);
+  background: linear-gradient(
+    51.99deg,
+    rgba(34, 99, 105, 0.2) 8.22%,
+    rgba(129, 219, 226, 0.2) 125.1%
+  );
 }
 
 .dark-green-gradient {
@@ -759,19 +821,16 @@ a[href][aria-disabled="true"],
   border: 1px solid transparent;
 
   background:
+    linear-gradient(rgba(11, 10, 8, 0.93), rgba(7, 7, 6, 0.95)) padding-box,
     linear-gradient(
-      rgba(11, 10, 8, 0.93),
-      rgba(7, 7, 6, 0.95)
-    ) padding-box,
-
-    linear-gradient(
-      135deg,
-      rgba(255, 244, 210, 0.42) 0%,
-      rgba(218, 183, 103, 0.34) 24%,
-      rgba(255, 255, 255, 0.08) 48%,
-      rgba(184, 143, 63, 0.28) 74%,
-      rgba(255, 222, 145, 0.2) 100%
-    ) border-box;
+        135deg,
+        rgba(255, 244, 210, 0.42) 0%,
+        rgba(218, 183, 103, 0.34) 24%,
+        rgba(255, 255, 255, 0.08) 48%,
+        rgba(184, 143, 63, 0.28) 74%,
+        rgba(255, 222, 145, 0.2) 100%
+      )
+      border-box;
 
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -783,7 +842,7 @@ a[href][aria-disabled="true"],
 }
 
 .mystic-glass-gold::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: -1px;
   border-radius: inherit;
@@ -820,21 +879,18 @@ a[href][aria-disabled="true"],
   border: 1px solid transparent;
 
   background:
+    linear-gradient(rgba(12, 10, 7, 0.94), rgba(7, 6, 5, 0.97)) padding-box,
     linear-gradient(
-      rgba(12, 10, 7, 0.94),
-      rgba(7, 6, 5, 0.97)
-    ) padding-box,
-
-    linear-gradient(
-      135deg,
-      rgba(255, 246, 214, 0.72) 0%,
-      rgba(239, 204, 128, 0.58) 18%,
-      rgba(181, 138, 55, 0.42) 38%,
-      rgba(255, 255, 255, 0.12) 52%,
-      rgba(180, 136, 50, 0.48) 74%,
-      rgba(246, 212, 136, 0.6) 90%,
-      rgba(255, 241, 195, 0.38) 100%
-    ) border-box;
+        135deg,
+        rgba(255, 246, 214, 0.72) 0%,
+        rgba(239, 204, 128, 0.58) 18%,
+        rgba(181, 138, 55, 0.42) 38%,
+        rgba(255, 255, 255, 0.12) 52%,
+        rgba(180, 136, 50, 0.48) 74%,
+        rgba(246, 212, 136, 0.6) 90%,
+        rgba(255, 241, 195, 0.38) 100%
+      )
+      border-box;
 
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -847,7 +903,7 @@ a[href][aria-disabled="true"],
 }
 
 .mystic-glass-gold-strong::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: -1px;
   border-radius: inherit;
@@ -883,23 +939,38 @@ a[href][aria-disabled="true"],
 }
 
 .gold-text {
-  background: linear-gradient(
-    135deg,
-    #FFE7A3 0%,
-    #F5B83D 38%,
-    #D99224 68%,
-    #F7C95F 100%
-  );
+  background: linear-gradient(135deg, #ffe7a3 0%, #f5b83d 38%, #d99224 68%, #f7c95f 100%);
 
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 
-  text-shadow:
-    0 0 14px rgba(245, 184, 61, 0.12);
+  text-shadow: 0 0 14px rgba(245, 184, 61, 0.12);
 }
 
-.mystic-gold-record { position: relative; } .mystic-gold-record > .record-group { position: relative; } .mystic-gold-record > .record-group:not(:first-child)::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient( 90deg, transparent 0%, rgba(255, 240, 189, 0.18) 12%, rgba(245, 184, 61, 0.42) 35%, rgba(218, 157, 43, 0.3) 65%, rgba(248, 204, 103, 0.18) 88%, transparent 100% ); }
+.mystic-gold-record {
+  position: relative;
+}
+.mystic-gold-record > .record-group {
+  position: relative;
+}
+.mystic-gold-record > .record-group:not(:first-child)::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 240, 189, 0.18) 12%,
+    rgba(245, 184, 61, 0.42) 35%,
+    rgba(218, 157, 43, 0.3) 65%,
+    rgba(248, 204, 103, 0.18) 88%,
+    transparent 100%
+  );
+}
 
 /* Layered so Tailwind's utilities (in @layer utilities) can still override this default -
    an unlayered rule here would always win over any Tailwind color class on a <p>, regardless
@@ -916,7 +987,7 @@ a[href][aria-disabled="true"],
 }
 
 .tab-active::after {
-  content: "";
+  content: '';
   position: absolute;
   bottom: -1px;
   left: 0;
@@ -948,18 +1019,16 @@ a[href][aria-disabled="true"],
     border: 1px solid transparent;
 
     background:
+      linear-gradient(rgba(10, 9, 8, 0.92), rgba(7, 7, 6, 0.94)) padding-box,
       linear-gradient(
-        rgba(10, 9, 8, 0.92),
-        rgba(7, 7, 6, 0.94)
-      ) padding-box,
-      linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.38) 0%,
-        rgba(255, 255, 255, 0.12) 22%,
-        rgba(255, 255, 255, 0.045) 48%,
-        rgba(208, 170, 91, 0.18) 76%,
-        rgba(255, 255, 255, 0.08) 100%
-      ) border-box;
+          135deg,
+          rgba(255, 255, 255, 0.38) 0%,
+          rgba(255, 255, 255, 0.12) 22%,
+          rgba(255, 255, 255, 0.045) 48%,
+          rgba(208, 170, 91, 0.18) 76%,
+          rgba(255, 255, 255, 0.08) 100%
+        )
+        border-box;
 
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -975,7 +1044,7 @@ a[href][aria-disabled="true"],
   }
 
   .mystic-glass::before {
-    content: "";
+    content: '';
     position: absolute;
     inset: -1px;
     border-radius: inherit;
@@ -1006,7 +1075,6 @@ a[href][aria-disabled="true"],
       0 8px 24px rgba(0, 0, 0, 0.45);
   }
 }
-
 
 @keyframes numberAnimation {
   0% {

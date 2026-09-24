@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { useReducedMotion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { MortalOddsStage } from "@/components/game/mortal-odds/MortalOddsStage";
-import { useMortalOddsBets } from "@/hooks/useMortalOddsBets";
-import { useMortalOddsDraw } from "@/hooks/useMortalOddsDraw";
-import { useRoundResume } from "@/hooks/useRoundResume";
-import type { useMortalOddsPlayer } from "@/hooks/useMortalOddsPlayer";
-import { toHistoryEntry } from "@/lib/mortal-odds/bet-history";
-import { CHIP_SIZES, REDRAW_COST } from "@/lib/mortal-odds/config";
-import { ageBucketIndex } from "@/lib/mortal-odds/soul-odds-contract";
-import { recordBetHistory } from "@/services/data/bet-history";
-import { useAppStore } from "@/services/store/store";
-import { notification } from "@/utils/notifications";
-import type { MarketPrices, RoundCharge } from "@/types";
+import { useReducedMotion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { MortalOddsStage } from '@/components/game/mortal-odds/MortalOddsStage';
+import { useMortalOddsBets } from '@/hooks/useMortalOddsBets';
+import { useMortalOddsDraw } from '@/hooks/useMortalOddsDraw';
+import type { useMortalOddsPlayer } from '@/hooks/useMortalOddsPlayer';
+import { useRoundResume } from '@/hooks/useRoundResume';
+import { toHistoryEntry } from '@/lib/mortal-odds/bet-history';
+import { CHIP_SIZES, REDRAW_COST } from '@/lib/mortal-odds/config';
+import { ageBucketIndex } from '@/lib/mortal-odds/soul-odds-contract';
+import { recordBetHistory } from '@/services/data/bet-history';
+import { useAppStore } from '@/services/store/store';
+import type { MarketPrices, RoundCharge } from '@/types';
+import { notification } from '@/utils/notifications';
 
-const CURRENCY = "deben";
+const CURRENCY = 'deben';
 
 export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlayer> }) => {
   const [chipSize, setChipSize] = useState(10);
@@ -26,18 +26,28 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
   const slip = useMortalOddsBets();
   const { player } = props;
   const address = useAppStore((state) => state.user.address);
-  const { restoredReveal } = useRoundResume({ round, slip, charges, setCharges, chipSize, setChipSize });
+  const { restoredReveal } = useRoundResume({
+    round,
+    slip,
+    charges,
+    setCharges,
+    chipSize,
+    setChipSize,
+  });
 
   // Chip size is the round's whole stake: locked the moment a soul is summoned, freed up again once it's revealed.
-  const chipLocked = round.phase !== "idle" && round.phase !== "revealed";
-  const isRedraw = round.phase === "when" || round.phase === "where";
+  const chipLocked = round.phase !== 'idle' && round.phase !== 'revealed';
+  const isRedraw = round.phase === 'when' || round.phase === 'where';
   const drawCost = isRedraw ? (player.freeRedraws > 0 ? 0 : REDRAW_COST) : chipSize;
 
   // Pays for a redraw with a free redraw if one is banked (no charge line), otherwise the flat fee.
   const payRedraw = () => {
     const paid = player.payRedraw(REDRAW_COST);
-    if (paid === "paid") {
-      setCharges([...charges, { id: `redraw-${charges.length}`, label: "Redraw", amount: REDRAW_COST, kind: "fee" }]);
+    if (paid === 'paid') {
+      setCharges([
+        ...charges,
+        { id: `redraw-${charges.length}`, label: 'Redraw', amount: REDRAW_COST, kind: 'fee' },
+      ]);
     }
     return paid !== null;
   };
@@ -50,7 +60,7 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
       if (!payRedraw()) return;
     } else {
       if (!player.canAfford(chipSize)) return;
-      setCharges([{ id: "stake", label: "Stake", amount: chipSize, kind: "stake" }]);
+      setCharges([{ id: 'stake', label: 'Stake', amount: chipSize, kind: 'stake' }]);
       slip.reset();
     }
     round.drawHuman(chipSize);
@@ -77,7 +87,7 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
   // displayed (the picker and the confirm screen) once the real age bet is known.
   const ageBet = slip.bets.age;
   const prices: MarketPrices | null =
-    round.prices && ageBet?.kind === "choice"
+    round.prices && ageBet?.kind === 'choice'
       ? { ...round.prices, sins: round.priceSins(ageBucketIndex(ageBet.optionId)) }
       : round.prices;
 
@@ -86,12 +96,21 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
   useEffect(() => {
     if (!round.reveal || round.reveal === restoredReveal) return;
     player.commitRound({
-      net: round.reveal.net, skill: round.reveal.skill,
-      totalStake: 0
+      net: round.reveal.net,
+      skill: round.reveal.skill,
+      totalStake: 0,
     });
     if (address && round.sessionKey && round.draw) {
-      const entry = toHistoryEntry({ sessionKey: round.sessionKey, reveal: round.reveal, draw: round.draw, charges, settledAt: Date.now() });
-      recordBetHistory(address, [entry]).catch((error) => console.error("Could not save the round to history:", error));
+      const entry = toHistoryEntry({
+        sessionKey: round.sessionKey,
+        reveal: round.reveal,
+        draw: round.draw,
+        charges,
+        settledAt: Date.now(),
+      });
+      recordBetHistory(address, [entry]).catch((error) =>
+        console.error('Could not save the round to history:', error),
+      );
     }
     slip.reset();
   }, [round.reveal]);

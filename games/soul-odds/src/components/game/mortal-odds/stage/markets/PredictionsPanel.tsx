@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { GameButton } from "@/components/game/GameButton";
-import { GameCard } from "@/components/game/home/GameCard";
-import { StageSlide } from "@/components/game/mortal-odds/stage/StageSlide";
-import { ChoiceMarket } from "@/components/game/mortal-odds/stage/markets/ChoiceMarket";
-import { SinsMarket } from "@/components/game/mortal-odds/stage/markets/SinsMarket";
-import { marketsConfig } from "@/lib/mortal-odds/config";
-import type { SinNarratives } from "@/lib/mortal-odds/sin-variants";
-import { playClickSound } from "@/utils/playClickSound";
-import type { Bet, MarketPrices } from "@/types";
+import { useState } from 'react';
+import { GameButton } from '@/components/game/GameButton';
+import { GameCard } from '@/components/game/home/GameCard';
+import { ChoiceMarket } from '@/components/game/mortal-odds/stage/markets/ChoiceMarket';
+import { SinsMarket } from '@/components/game/mortal-odds/stage/markets/SinsMarket';
+import { StageSlide } from '@/components/game/mortal-odds/stage/StageSlide';
+import { marketsConfig } from '@/lib/mortal-odds/config';
+import type { SinNarratives } from '@/lib/mortal-odds/sin-variants';
+import type { Bet, MarketPrices } from '@/types';
+import { playClickSound } from '@/utils/playClickSound';
 
 const LAST_STEP = marketsConfig.length - 1;
 
@@ -49,19 +49,19 @@ export const PredictionsPanel = (props: {
             <GameButton variant="papyrus" onClick={props.onBack} className="px-4 py-1.5 text-xs">
               ← Back
             </GameButton>
-            <span className="text-white/40 text-xs">
+            <span className="text-xs text-white/40">
               {step + 1} of {marketsConfig.length}
             </span>
           </div>
 
           <StageSlide slideKey={step} direction={direction} onSwipe={(delta) => goTo(step + delta)}>
             {market &&
-              (market.id === "sins" ? (
+              (market.id === 'sins' ? (
                 <SinsMarket
                   market={market}
                   prices={props.prices[market.id] ?? {}}
                   narratives={props.sinNarratives}
-                  selectedOptionId={bet?.kind === "choice" ? bet.optionId : undefined}
+                  selectedOptionId={bet?.kind === 'choice' ? bet.optionId : undefined}
                   onSelect={(optionId) => {
                     props.onSetChoice(market.id, optionId, stakePerMarket(props.chipSize));
                   }}
@@ -70,7 +70,7 @@ export const PredictionsPanel = (props: {
                 <ChoiceMarket
                   market={market}
                   prices={props.prices[market.id] ?? {}}
-                  selectedOptionId={bet?.kind === "choice" ? bet.optionId : undefined}
+                  selectedOptionId={bet?.kind === 'choice' ? bet.optionId : undefined}
                   onSelect={(optionId) => {
                     props.onSetChoice(market.id, optionId, stakePerMarket(props.chipSize));
                   }}
@@ -101,14 +101,19 @@ export const PredictionsPanel = (props: {
                     playClickSound();
                     goTo(index);
                   }}
-                  className={`h-1.5 w-1.5 rounded-full ${props.bets[entry.id] ? "bg-[#F5B83D]" : "bg-white/20"} ${
-                    index === step ? "ring-2 ring-white/30" : ""
+                  className={`h-1.5 w-1.5 rounded-full ${props.bets[entry.id] ? 'bg-[#F5B83D]' : 'bg-white/20'} ${
+                    index === step ? 'ring-2 ring-white/30' : ''
                   }`}
                 />
               ))}
             </div>
 
-            <GameButton variant="papyrus" disabled={step === LAST_STEP} onClick={() => goTo(step + 1)} className="px-4 py-1.5 text-xs">
+            <GameButton
+              variant="papyrus"
+              disabled={step === LAST_STEP}
+              onClick={() => goTo(step + 1)}
+              className="px-4 py-1.5 text-xs"
+            >
               Next
             </GameButton>
           </div>

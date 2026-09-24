@@ -1,6 +1,6 @@
 /** Rounds to 2 decimals and adds thousands separators, e.g. 12345.678 -> "12,345.68". */
 export function fmtNumber(n: number): string {
-  return (Math.round(n * 100) / 100).toLocaleString("en-US", { maximumFractionDigits: 2 });
+  return (Math.round(n * 100) / 100).toLocaleString('en-US', { maximumFractionDigits: 2 });
 }
 
 /** Formats a year as "X BCE" for non-positive years, "X CE" before 1500, or bare "XXXX" after. */
@@ -15,9 +15,9 @@ export function fmtYear(year: number): string {
 /** Splits a year into a number and its era suffix for the reel; joined, they read exactly like `fmtYear`. */
 export function yearReelParts(year: number): { value: number; suffix: string } {
   if (year <= 0) {
-    return { value: 1 - year, suffix: " BCE" };
+    return { value: 1 - year, suffix: ' BCE' };
   }
-  return { value: year, suffix: year < 1500 ? " CE" : "" };
+  return { value: year, suffix: year < 1500 ? ' CE' : '' };
 }
 
 /** Formats a population count in plain language: billion / million / thousand. */
@@ -37,7 +37,8 @@ export function fmtPeopleRounded(n: number): string {
   if (n < 1000) return `${Math.round(n)}`;
   const step = 10 ** Math.floor(Math.log10(n)) / 2;
   const rounded = Math.round(n / step) * step;
-  const [unit, label] = rounded >= 1e9 ? [1e9, "billion"] : rounded >= 1e6 ? [1e6, "million"] : [1e3, "thousand"];
+  const [unit, label] =
+    rounded >= 1e9 ? [1e9, 'billion'] : rounded >= 1e6 ? [1e6, 'million'] : [1e3, 'thousand'];
   return `${Number((rounded / unit).toFixed(1))} ${label}`;
 }
 
@@ -48,13 +49,13 @@ export function lowercaseFirst(text: string): string {
 
 /** Maps a year to its named historical period. */
 export function periodName(year: number): string {
-  if (year < -10000) return "Old Stone Age";
-  if (year < -3300) return "New Stone Age";
-  if (year < -1200) return "Bronze Age";
-  if (year < -500) return "Iron Age";
-  if (year < 500) return "Classical era";
-  if (year < 1500) return "Middle Ages";
-  if (year < 1800) return "Early modern era";
-  if (year < 1950) return "Industrial age";
-  return "Modern era";
+  if (year < -10000) return 'Old Stone Age';
+  if (year < -3300) return 'New Stone Age';
+  if (year < -1200) return 'Bronze Age';
+  if (year < -500) return 'Iron Age';
+  if (year < 500) return 'Classical era';
+  if (year < 1500) return 'Middle Ages';
+  if (year < 1800) return 'Early modern era';
+  if (year < 1950) return 'Industrial age';
+  return 'Modern era';
 }

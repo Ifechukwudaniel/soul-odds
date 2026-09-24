@@ -1,4 +1,4 @@
-import Head from "next/head";
+import Head from 'next/head';
 
 // Interface
 interface IProps {
@@ -29,7 +29,11 @@ const MetaHeader = ({
     <Head>
       <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
       <meta httpEquiv="content-language" content={locale} />
-      <meta name="viewport" id="viewporttag" content="width=device-width, user-scalable=no, initial-scale=1" />
+      <meta
+        name="viewport"
+        id="viewporttag"
+        content="width=device-width, user-scalable=no, initial-scale=1"
+      />
 
       <link rel="apple-touch-icon" sizes="57x57" href="/img/logo.png" />
       <link rel="apple-touch-icon" sizes="60x60" href="/img/logo.png" />

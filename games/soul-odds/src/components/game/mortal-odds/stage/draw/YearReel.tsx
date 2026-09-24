@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import NumberFlow, { continuous } from "@number-flow/react";
-import { yearReelParts } from "@/lib/mortal-odds/format";
-import { HOP_ROLL_MS, SETTLE_ROLL_MS } from "@/lib/mortal-odds/spin-timeline";
+import NumberFlow, { continuous } from '@number-flow/react';
+import { yearReelParts } from '@/lib/mortal-odds/format';
+import { HOP_ROLL_MS, SETTLE_ROLL_MS } from '@/lib/mortal-odds/spin-timeline';
 
 // Quick hops ease in and out; the landing roll decelerates hard, like a reel coming to rest.
-const HOP_TIMING = { duration: HOP_ROLL_MS, easing: "cubic-bezier(0.45, 0, 0.25, 1)" };
-const SETTLE_TIMING = { duration: SETTLE_ROLL_MS, easing: "cubic-bezier(0.16, 1, 0.3, 1)" };
-const FADE_TIMING = { duration: 200, easing: "ease-out" };
+const HOP_TIMING = { duration: HOP_ROLL_MS, easing: 'cubic-bezier(0.45, 0, 0.25, 1)' };
+const SETTLE_TIMING = { duration: SETTLE_ROLL_MS, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' };
+const FADE_TIMING = { duration: 200, easing: 'ease-out' };
 
 /**
  * A year whose digits roll through the in-between numbers whenever it changes; `landing` is the slow final roll onto the answer.

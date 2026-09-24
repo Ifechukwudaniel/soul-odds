@@ -1,17 +1,17 @@
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { CurrencyCoinIcon } from "@/components/assets/CurrencyCoinIcon";
-import { GameTooltip } from "@/components/game/GameTooltip";
-import { BetQuickAmounts } from "@/components/game/home/BetQuickAmounts";
-import { GameCard } from "@/components/game/home/GameCard";
-import { PlaceBetButton } from "@/components/game/home/PlaceBetButton";
-import { PotentialWinSummary } from "@/components/game/home/PotentialWinSummary";
-import { SlipRow } from "@/components/game/home/SlipRow";
-import { Scroller } from "@/components/Scroller";
-import { betOdds } from "@/lib/mortal-odds/bets";
-import { serifFont } from "@/styles/serif-font";
-import type { SinNarratives } from "@/lib/mortal-odds/sin-variants";
-import type { Bet, MarketPrices, Price, RoundCharge } from "@/types";
+import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { CurrencyCoinIcon } from '@/components/assets/CurrencyCoinIcon';
+import { GameTooltip } from '@/components/game/GameTooltip';
+import { BetQuickAmounts } from '@/components/game/home/BetQuickAmounts';
+import { GameCard } from '@/components/game/home/GameCard';
+import { PlaceBetButton } from '@/components/game/home/PlaceBetButton';
+import { PotentialWinSummary } from '@/components/game/home/PotentialWinSummary';
+import { SlipRow } from '@/components/game/home/SlipRow';
+import { Scroller } from '@/components/Scroller';
+import { betOdds } from '@/lib/mortal-odds/bets';
+import type { SinNarratives } from '@/lib/mortal-odds/sin-variants';
+import { serifFont } from '@/styles/serif-font';
+import type { Bet, MarketPrices, Price, RoundCharge } from '@/types';
 
 export const BetPanel = (props: {
   currency: string;
@@ -61,20 +61,23 @@ export const BetPanel = (props: {
   const unpicked = Math.max(0, props.requiredBets - bets.length);
 
   return (
-    <GameCard className="flex min-h-0 flex-1 flex-col gap-4" containerClassName="flex h-full w-full flex-col">
-      <h2 className={`${serifFont.className} font-bold text-white"`}>Your wager</h2>
+    <GameCard
+      className="flex min-h-0 flex-1 flex-col gap-4"
+      containerClassName="flex h-full w-full flex-col"
+    >
+      <h2 className={`${serifFont.className} text-white" font-bold`}>Your wager</h2>
 
       {props.chipLocked ? (
         <GameTooltip text="Your stake is locked in for this round." className="w-full">
           <div className="mystic-glass flex w-full items-center gap-2 rounded-xl px-4 py-3">
-            <CurrencyCoinIcon width={28} height={"28"} />
+            <CurrencyCoinIcon width={28} height={'28'} />
             <span className="text-2xl font-bold text-white">{atRisk.toFixed(2)}</span>
             <span className="text-white/50">{props.currency}</span>
           </div>
         </GameTooltip>
       ) : (
         <div className="mystic-glass flex items-center gap-2 rounded-xl px-4 py-3">
-          <CurrencyCoinIcon width={28} height={"28"} />
+          <CurrencyCoinIcon width={28} height={'28'} />
           <input
             type="number"
             inputMode="decimal"
@@ -83,13 +86,17 @@ export const BetPanel = (props: {
             value={customWager}
             onChange={handleCustomWager}
             aria-label={`Custom wager, minimum ${minWager} ${props.currency}`}
-            className="w-full min-w-0 bg-transparent text-2xl font-bold text-white outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            className="w-full min-w-0 [appearance:textfield] bg-transparent text-2xl font-bold text-white outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
           />
           <span className="text-white/50">{props.currency}</span>
         </div>
       )}
 
-      <PotentialWinSummary amount={totalPotentialWin} currency={props.currency} betCount={bets.length} />
+      <PotentialWinSummary
+        amount={totalPotentialWin}
+        currency={props.currency}
+        betCount={bets.length}
+      />
 
       {props.canPlaceBet && (
         <div className="flex flex-col gap-1">
@@ -105,7 +112,7 @@ export const BetPanel = (props: {
                 key={charge.id}
                 initial={{ opacity: 0, x: -6 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
                 className="flex items-center justify-between text-sm"
               >
                 <span className="text-white/60">{charge.label}</span>
@@ -114,11 +121,20 @@ export const BetPanel = (props: {
                 </span>
               </motion.div>
             ))}
-            {props.charges.length === 0 && <p className="text-sm text-white/40">Nothing on the scales yet. Pick your stake, then summon a soul.</p>}
+            {props.charges.length === 0 && (
+              <p className="text-sm text-white/40">
+                Nothing on the scales yet. Pick your stake, then summon a soul.
+              </p>
+            )}
           </div>
 
           <div>
-            <BetQuickAmounts amounts={props.quickAmounts} selected={props.chipSize} onSelect={props.onSelectChip} disabled={props.chipLocked} />
+            <BetQuickAmounts
+              amounts={props.quickAmounts}
+              selected={props.chipSize}
+              onSelect={props.onSelectChip}
+              disabled={props.chipLocked}
+            />
           </div>
 
           <div className="flex flex-col gap-2">

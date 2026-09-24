@@ -1,13 +1,13 @@
-import * as z from "zod";
-import { Env } from "@/libs/Env";
-import { fmtYear, lowercaseFirst } from "@/lib/mortal-odds/format";
-import { findAnachronism } from "@/lib/mortal-odds/life-story-lint";
-import { checkPopulation } from "@/lib/mortal-odds/population-lint";
-import type { PopulationRange } from "@/lib/mortal-odds/population-lint";
-import type { SinPlaceContext } from "@/lib/mortal-odds/sin-variants";
+import * as z from 'zod';
+import { fmtYear, lowercaseFirst } from '@/lib/mortal-odds/format';
+import { findAnachronism } from '@/lib/mortal-odds/life-story-lint';
+import { checkPopulation } from '@/lib/mortal-odds/population-lint';
+import type { PopulationRange } from '@/lib/mortal-odds/population-lint';
+import type { SinPlaceContext } from '@/lib/mortal-odds/sin-variants';
+import { Env } from '@/libs/Env';
 
-const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-const MODEL = "mistralai/mistral-nemo";
+const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
+const MODEL = 'mistralai/mistral-nemo';
 
 /**
  * Calls the chat completions endpoint and returns the parsed JSON content as-is (could be an
@@ -15,29 +15,35 @@ const MODEL = "mistralai/mistral-nemo";
  * with a JSON array", so callers handle whichever shape their prompt actually gets back).
  * Throws on a missing key, request failure, or a response that isn't valid JSON.
  */
-async function completeJson(systemPrompt: string, userPrompt: string, model: string = MODEL): Promise<unknown> {
+async function completeJson(
+  systemPrompt: string,
+  userPrompt: string,
+  model: string = MODEL,
+): Promise<unknown> {
   const apiKey = Env.OPENROUTER_API_KEY;
   if (!apiKey) {
-    throw new Error("OPENROUTER_API_KEY is not configured");
+    throw new Error('OPENROUTER_API_KEY is not configured');
   }
 
   const startedAt = Date.now();
   const response = await fetch(OPENROUTER_URL, {
-    method: "POST",
+    method: 'POST',
     headers: {
       Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       model,
-      response_format: { type: "json_object" },
+      response_format: { type: 'json_object' },
       messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt },
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
       ],
     }),
   });
-  console.log(`[openrouter] ${model} responded in ${Date.now() - startedAt}ms (status ${response.status})`);
+  console.log(
+    `[openrouter] ${model} responded in ${Date.now() - startedAt}ms (status ${response.status})`,
+  );
 
   if (!response.ok) {
     throw new Error(`OpenRouter request failed: ${response.status} ${await response.text()}`);
@@ -46,7 +52,7 @@ async function completeJson(systemPrompt: string, userPrompt: string, model: str
   const data = (await response.json()) as { choices?: { message?: { content?: string } }[] };
   const content = data.choices?.[0]?.message?.content;
   if (!content) {
-    throw new Error("OpenRouter response had no content");
+    throw new Error('OpenRouter response had no content');
   }
 
   return parseJsonReply(content);
@@ -58,7 +64,7 @@ function parseJsonReply(content: string): unknown {
     return JSON.parse(content) as unknown;
   } catch (error) {
     const start = content.search(/[{[]/);
-    const end = Math.max(content.lastIndexOf("}"), content.lastIndexOf("]"));
+    const end = Math.max(content.lastIndexOf('}'), content.lastIndexOf(']'));
     if (start === -1 || end <= start) throw error;
     return JSON.parse(content.slice(start, end + 1)) as unknown;
   }
@@ -67,14 +73,19 @@ function parseJsonReply(content: string): unknown {
 /** "Gutian Dynasty (2150 BCE to 2050 BCE), around latitude 33.1, longitude 44.2" — the place as the population prompt describes it. */
 function describePlace(location: string, place: SinPlaceContext | undefined): string {
   if (!place) return location;
-  const period = place.fromYear !== undefined && place.toYear !== undefined ? ` (${fmtYear(place.fromYear)} to ${fmtYear(place.toYear)})` : "";
+  const period =
+    place.fromYear !== undefined && place.toYear !== undefined
+      ? ` (${fmtYear(place.fromYear)} to ${fmtYear(place.toYear)})`
+      : '';
   return `${location}${period}, around latitude ${place.lat.toFixed(1)}, longitude ${place.lon.toFixed(1)}`;
 }
 
-const lifeStorySchema = z.object({ story: z.string().min(1).max(1200), name: z.string().min(1).max(60) });
+const lifeStorySchema = z.object({
+  story: z.string().min(1).max(1200),
+  name: z.string().min(1).max(60),
+});
 
 export type LifeStoryNarrative = z.infer<typeof lifeStorySchema> & { birthYear: number };
-
 
 const LIFE_STORY_ATTEMPTS = 2;
 
@@ -83,7 +94,7 @@ const LIFE_STORY_SYSTEM_PROMPT =
 
 /** Asks OpenRouter for the soul's life story, retrying once when it uses weapons that don't fit the era. */
 export async function generateLifeStory(options: {
-  sex: "girl" | "boy";
+  sex: 'girl' | 'boy';
   year: number;
   location: string;
   age: number;
@@ -95,17 +106,17 @@ export async function generateLifeStory(options: {
   const alive = deathYear >= new Date().getFullYear();
 
   const facts = [
-    `Born ${sex === "girl" ? "a girl" : "a boy"} in ${location}, ${fmtYear(year)}.`,
+    `Born ${sex === 'girl' ? 'a girl' : 'a boy'} in ${location}, ${fmtYear(year)}.`,
     sinPhrase ? `Along the way, ${lowercaseFirst(sinPhrase)}.` : null,
     alive
       ? `Still alive today, projected to live to age ${age}.`
       : age === 0
-        ? "Died before turning one."
+        ? 'Died before turning one.'
         : `Died at age ${age} in ${fmtYear(deathYear)}.`,
     !alive && cause ? `Cause of death: ${lowercaseFirst(cause)}.` : null,
   ]
     .filter((line): line is string => line !== null)
-    .join(" ");
+    .join(' ');
 
   for (let attempt = 1; attempt <= LIFE_STORY_ATTEMPTS; attempt++) {
     const content = await completeJson(LIFE_STORY_SYSTEM_PROMPT, facts);
@@ -115,10 +126,14 @@ export async function generateLifeStory(options: {
       return { ...narrative, birthYear: year };
     }
   }
-  throw new Error("Life story kept contradicting its era");
+  throw new Error('Life story kept contradicting its era');
 }
 
-const populationSchema = z.object({ low: z.number().positive(), mid: z.number().positive(), high: z.number().positive() });
+const populationSchema = z.object({
+  low: z.number().positive(),
+  mid: z.number().positive(),
+  high: z.number().positive(),
+});
 
 const POPULATION_ATTEMPTS = 3;
 
@@ -145,16 +160,26 @@ export async function generatePopulationEstimate(options: {
   const facts = [
     `Polity: ${describePlace(name, place)}. Year: ${fmtYear(year)}.`,
     `Territory: about ${Math.round(areaKm2)} km². World population then: about ${Math.round(world)}.`,
-    reference ? `A researched figure for this polity: about ${Math.round(reference.population)} people in ${fmtYear(reference.year)} across about ${Math.round(reference.areaKm2)} km²; stay consistent with it, adjusted for the territory and the year.` : null,
+    reference
+      ? `A researched figure for this polity: about ${Math.round(reference.population)} people in ${fmtYear(reference.year)} across about ${Math.round(reference.areaKm2)} km²; stay consistent with it, adjusted for the territory and the year.`
+      : null,
   ]
     .filter((line): line is string => line !== null)
-    .join(" ");
+    .join(' ');
 
   let problem: string | null = null;
   for (let attempt = 1; attempt <= POPULATION_ATTEMPTS; attempt++) {
-    const content = await completeJson(POPULATION_SYSTEM_PROMPT, problem ? `${facts} Your previous answer was rejected: ${problem}.` : facts, model);
+    const content = await completeJson(
+      POPULATION_SYSTEM_PROMPT,
+      problem ? `${facts} Your previous answer was rejected: ${problem}.` : facts,
+      model,
+    );
     const parsed = populationSchema.parse(Array.isArray(content) ? content[0] : content);
-    const estimate = { low: Math.round(parsed.low), mid: Math.round(parsed.mid), high: Math.round(parsed.high) };
+    const estimate = {
+      low: Math.round(parsed.low),
+      mid: Math.round(parsed.mid),
+      high: Math.round(parsed.high),
+    };
     problem = checkPopulation({ estimate, areaKm2, world, year });
     if (!problem) return estimate;
   }

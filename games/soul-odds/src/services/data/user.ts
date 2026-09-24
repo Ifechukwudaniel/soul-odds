@@ -1,14 +1,13 @@
-import { apiClient } from "@/libs/ApiClient";
-import { User } from "@/services/db/user";
+import { apiClient } from '@/libs/ApiClient';
+import { User } from '@/services/db/user';
 
-
-export const getUser = async (address:string) :Promise<User>=> {
+export const getUser = async (address: string): Promise<User> => {
   try {
     let user = (await apiClient.get(`/api/user/${address}`)).data as User;
-    return user
+    return user;
   } catch (error) {
     console.error(error);
-    throw new Error("Could not get user refers ");
+    throw new Error('Could not get user refers ');
   }
 };
 
@@ -21,12 +20,16 @@ export const getUser = async (address:string) :Promise<User>=> {
  * create and re-synced on every call so a returning user's balance never
  * drifts from their wallet.
  */
-export const registerUser = async (address: string, referredBy?: string, balance?: number): Promise<void> => {
+export const registerUser = async (
+  address: string,
+  referredBy?: string,
+  balance?: number,
+): Promise<void> => {
   try {
-    await apiClient.post("/api/user", { address, referredBy, balance });
+    await apiClient.post('/api/user', { address, referredBy, balance });
   } catch (error) {
     console.error(error);
-    throw new Error("Could not register user");
+    throw new Error('Could not register user');
   }
 };
 

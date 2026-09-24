@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useId, useRef } from "react";
-import type { IconType } from "react-icons";
-import { LuInfo } from "react-icons/lu";
-import { GameButton } from "@/components/game/GameButton";
-import { ModalCloseButton, ModalHeader } from "@/components/game/GameModalParts";
-import { playClickSound } from "@/utils/playClickSound";
+import { useId, useRef } from 'react';
+import type { IconType } from 'react-icons';
+import { LuInfo } from 'react-icons/lu';
+import { GameButton } from '@/components/game/GameButton';
+import { ModalCloseButton, ModalHeader } from '@/components/game/GameModalParts';
+import { playClickSound } from '@/utils/playClickSound';
 
 export type InfoPoint = { icon: IconType; title: string; text: string; soon?: boolean };
 
@@ -57,13 +57,15 @@ export const InfoDialog = (props: { title: string; intro: string; points: InfoPo
                   <point.icon size={18} />
                 </span>
                 <div>
-                  <p className="font-semibold text-sm text-white">
+                  <p className="text-sm font-semibold text-white">
                     {point.title}
                     {point.soon && (
-                      <span className="ml-2 rounded-full border border-[#F5B83D]/50 px-2 py-0.5 font-normal text-[#F5B83D] text-[10px] uppercase tracking-widest">Soon</span>
+                      <span className="ml-2 rounded-full border border-[#F5B83D]/50 px-2 py-0.5 text-[10px] font-normal tracking-widest text-[#F5B83D] uppercase">
+                        Soon
+                      </span>
                     )}
                   </p>
-                  <p className="mt-0.5 text-[0.8rem] text-white/70 leading-relaxed">{point.text}</p>
+                  <p className="mt-0.5 text-[0.8rem] leading-relaxed text-white/70">{point.text}</p>
                 </div>
               </li>
             ))}

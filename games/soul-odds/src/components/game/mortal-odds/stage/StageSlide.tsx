@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { AnimatePresence, motion } from "framer-motion";
-import { Scroller } from "@/components/Scroller";
+import { AnimatePresence, motion } from 'framer-motion';
+import { Scroller } from '@/components/Scroller';
 
 const SWIPE_THRESHOLD = 60;
 
@@ -33,8 +33,8 @@ export const StageSlide = (props: {
           initial="enter"
           animate="center"
           exit="exit"
-          transition={{ duration: 0.2, ease: "easeOut" }}
-          drag={onSwipe ? "x" : false}
+          transition={{ duration: 0.2, ease: 'easeOut' }}
+          drag={onSwipe ? 'x' : false}
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.15}
           onDragEnd={(_event, info) => {
@@ -50,7 +50,9 @@ export const StageSlide = (props: {
           }}
           className="absolute inset-0 px-1"
         >
-          <Scroller className="h-full" reserveGutter={props.reserveGutter}>{props.children}</Scroller>
+          <Scroller className="h-full" reserveGutter={props.reserveGutter}>
+            {props.children}
+          </Scroller>
         </motion.div>
       </AnimatePresence>
     </div>

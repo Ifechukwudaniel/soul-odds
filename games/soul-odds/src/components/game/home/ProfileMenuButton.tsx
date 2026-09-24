@@ -1,4 +1,4 @@
-import { playClickSound } from "@/utils/playClickSound";
+import { playClickSound } from '@/utils/playClickSound';
 
 export const ProfileMenuButton = (props: { avatar: React.ReactNode; onClick?: () => void }) => (
   <button
@@ -7,9 +7,11 @@ export const ProfileMenuButton = (props: { avatar: React.ReactNode; onClick?: ()
       playClickSound();
       props.onClick?.();
     }}
-    className="flex items-center gap-2 rounded-full border mystic-glass-gold  py-1 pr-4 pl-2 bg-white/10"
+    className="mystic-glass-gold flex items-center gap-2 rounded-full border bg-white/10 py-1 pr-4 pl-2"
   >
-    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10">{props.avatar}</span>
+    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10">
+      {props.avatar}
+    </span>
     <span className="text-white/50">▾</span>
   </button>
 );

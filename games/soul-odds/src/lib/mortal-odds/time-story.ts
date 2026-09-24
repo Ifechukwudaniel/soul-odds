@@ -1,10 +1,10 @@
-import * as z from "zod";
-import timeStoriesJson from "@/config/mortal-odds/time-stories.json";
-import { worldPopCurve } from "@/lib/mortal-odds/config";
-import { interpolate } from "@/lib/mortal-odds/curves";
-import { fmtPeople } from "@/lib/mortal-odds/format";
-import { pickWeighted } from "@/lib/mortal-odds/rng";
-import type { Rng } from "@/lib/mortal-odds/rng";
+import * as z from 'zod';
+import timeStoriesJson from '@/config/mortal-odds/time-stories.json';
+import { worldPopCurve } from '@/lib/mortal-odds/config';
+import { interpolate } from '@/lib/mortal-odds/curves';
+import { fmtPeople } from '@/lib/mortal-odds/format';
+import { pickWeighted } from '@/lib/mortal-odds/rng';
+import type { Rng } from '@/lib/mortal-odds/rng';
 
 export const FIRST_YEAR = -6000;
 export const LAST_YEAR = 2100;
@@ -44,7 +44,7 @@ export function pickTimeStory(options: {
   const fresh = covering.filter((story) => !recent.includes(story.id));
   const candidates = fresh.length > 0 ? fresh : covering;
 
-  if (candidates.length === 0) return { id: "fallback", text: "" };
+  if (candidates.length === 0) return { id: 'fallback', text: '' };
 
   const chosen = pickWeighted({ items: candidates, weight: weightOf, rng });
   return { id: chosen.id, text: renderTimeStory(chosen.text, year) };
@@ -57,7 +57,10 @@ type Anachronism = { pattern: RegExp; earliest: number };
  * earliest plausible date, rounded; a story's `from` must be at or after it. Keep the model prompt in sync.
  */
 export const ANACHRONISMS: Anachronism[] = [
-  { pattern: /\b(villages?|farm|farms|farmer|farmers|farming|farmed|crops?|plough|plow)\b/i, earliest: -10000 },
+  {
+    pattern: /\b(villages?|farm|farms|farmer|farmers|farming|farmed|crops?|plough|plow)\b/i,
+    earliest: -10000,
+  },
   { pattern: /\b(temples?)\b/i, earliest: -9500 },
   { pattern: /\b(bronze)\b/i, earliest: -3300 },
   { pattern: /\b(cit(y|ies))\b/i, earliest: -3700 },
@@ -123,22 +126,30 @@ export function lintTimeStory(story: TimeStory): string[] {
   const problems: string[] = [];
   const label = `[${story.id}]`;
 
-  if (story.from > story.to) problems.push(`${label} from (${story.from}) is after to (${story.to})`);
-  if (story.from < FIRST_YEAR) problems.push(`${label} from (${story.from}) is before ${FIRST_YEAR}`);
+  if (story.from > story.to)
+    problems.push(`${label} from (${story.from}) is after to (${story.to})`);
+  if (story.from < FIRST_YEAR)
+    problems.push(`${label} from (${story.from}) is before ${FIRST_YEAR}`);
   if (story.to > LAST_YEAR) problems.push(`${label} to (${story.to}) is after ${LAST_YEAR}`);
 
   if (story.text.length < MIN_LENGTH || story.text.length > MAX_LENGTH) {
-    problems.push(`${label} text must be ${MIN_LENGTH}-${MAX_LENGTH} characters, got ${story.text.length}`);
+    problems.push(
+      `${label} text must be ${MIN_LENGTH}-${MAX_LENGTH} characters, got ${story.text.length}`,
+    );
   }
-  if (/\d/.test(story.text)) problems.push(`${label} text contains a digit; spell numbers out or use {people}`);
+  if (/\d/.test(story.text))
+    problems.push(`${label} text contains a digit; spell numbers out or use {people}`);
 
-  const withoutToken = story.text.replace(/\{people\}/g, " ");
-  if (/[{}]/.test(withoutToken)) problems.push(`${label} text has an unknown placeholder; only {people} is allowed`);
+  const withoutToken = story.text.replace(/\{people\}/g, ' ');
+  if (/[{}]/.test(withoutToken))
+    problems.push(`${label} text has an unknown placeholder; only {people} is allowed`);
 
   for (const { pattern, earliest } of ANACHRONISMS) {
     const hit = withoutToken.match(pattern)?.[0];
     if (hit && story.from < earliest) {
-      problems.push(`${label} says "${hit}", which only fits from year ${earliest}, but the range starts at ${story.from}`);
+      problems.push(
+        `${label} says "${hit}", which only fits from year ${earliest}, but the range starts at ${story.from}`,
+      );
     }
   }
 
@@ -176,6 +187,7 @@ export function lintTimeStories(list: TimeStory[], lastYear = LAST_YEAR): string
   }
   flush(lastYear);
 
-  if (gaps.length > 0) problems.push(`coverage: fewer than ${MIN_COVERAGE} stories for years ${gaps.join(", ")}`);
+  if (gaps.length > 0)
+    problems.push(`coverage: fewer than ${MIN_COVERAGE} stories for years ${gaps.join(', ')}`);
   return problems;
 }

@@ -1,13 +1,18 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useCasinoHost } from "@/hooks/useCasinoHost";
-import { notification } from "@/utils/notifications";
-import type { MortalOddsBets } from "@/hooks/useMortalOddsBets";
-import type { MortalOddsRound, RevealResult } from "@/hooks/useMortalOddsDraw";
-import { clearRound, readRound, roundStorageKey, toResumablePhase, writeRound } from "@/lib/mortal-odds/round-storage";
-import type { RoundCharge } from "@/types";
-
+import { useEffect, useState } from 'react';
+import { useCasinoHost } from '@/hooks/useCasinoHost';
+import type { MortalOddsBets } from '@/hooks/useMortalOddsBets';
+import type { MortalOddsRound, RevealResult } from '@/hooks/useMortalOddsDraw';
+import {
+  clearRound,
+  readRound,
+  roundStorageKey,
+  toResumablePhase,
+  writeRound,
+} from '@/lib/mortal-odds/round-storage';
+import type { RoundCharge } from '@/types';
+import { notification } from '@/utils/notifications';
 
 export function useRoundResume(options: {
   round: MortalOddsRound;
@@ -32,7 +37,11 @@ export function useRoundResume(options: {
       setCharges(stored.charges);
       setChipSize(stored.chipSize);
       setRestoredReveal(stored.reveal);
-      notification.info(stored.phase === "revealed" ? "Here's how your last soul turned out." : "Picking up your round in progress — your wager is safe.");
+      notification.info(
+        stored.phase === 'revealed'
+          ? "Here's how your last soul turned out."
+          : 'Picking up your round in progress — your wager is safe.',
+      );
     }
     setChecked(true);
   }, [key, checked]);
@@ -40,7 +49,14 @@ export function useRoundResume(options: {
   useEffect(() => {
     if (!key || !checked) return;
     const phase = toResumablePhase(round.phase);
-    if (!phase || !round.sessionKey || !round.wagerWei || !round.draw || !round.context || round.samplesSeed === null) {
+    if (
+      !phase ||
+      !round.sessionKey ||
+      !round.wagerWei ||
+      !round.draw ||
+      !round.context ||
+      round.samplesSeed === null
+    ) {
       clearRound(key);
       return;
     }
@@ -59,7 +75,22 @@ export function useRoundResume(options: {
       configurationIndex: round.configurationIndex,
       reveal: round.reveal,
     });
-  }, [key, checked, round.phase, round.sessionKey, round.wagerWei, round.draw, round.context, round.samplesSeed, round.era, round.configurationIndex, round.reveal, slip.bets, charges, chipSize]);
+  }, [
+    key,
+    checked,
+    round.phase,
+    round.sessionKey,
+    round.wagerWei,
+    round.draw,
+    round.context,
+    round.samplesSeed,
+    round.era,
+    round.configurationIndex,
+    round.reveal,
+    slip.bets,
+    charges,
+    chipSize,
+  ]);
 
   return { restoredReveal };
 }

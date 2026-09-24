@@ -1,5 +1,5 @@
-import { FaStar } from "react-icons/fa";
-import { playClickSound } from "@/utils/playClickSound";
+import { FaStar } from 'react-icons/fa';
+import { playClickSound } from '@/utils/playClickSound';
 
 export const RankBadge = (props: { label: string; onClick?: () => void }) => (
   <button

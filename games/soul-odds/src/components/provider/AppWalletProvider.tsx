@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { createContext, use, useState } from "react";
-import type { HostApiV1, HostSnapshotV1 } from "@chain/casino-sdk/guest";
-import { Loader } from "@/components/Loader";
-import { useCasinoHost } from "@/hooks/useCasinoHost";
+import type { HostApiV1, HostSnapshotV1 } from '@chain/casino-sdk/guest';
+import { createContext, use, useState } from 'react';
+import { Loader } from '@/components/Loader';
+import { useCasinoHost } from '@/hooks/useCasinoHost';
 
 type CasinoHostContextValue = {
   hostApi: HostApiV1 | null;
@@ -16,7 +16,7 @@ const CasinoHostContext = createContext<CasinoHostContextValue | null>(null);
 export function useCasinoHostContext(): CasinoHostContextValue {
   const value = use(CasinoHostContext);
   if (!value) {
-    throw new Error("useCasinoHostContext must be used within AppWalletProvider");
+    throw new Error('useCasinoHostContext must be used within AppWalletProvider');
   }
   return value;
 }
@@ -41,5 +41,9 @@ export function AppWalletProvider(props: { children: React.ReactNode }) {
     );
   }
 
-  return <CasinoHostContext.Provider value={{ hostApi, snapshot }}>{props.children}</CasinoHostContext.Provider>;
+  return (
+    <CasinoHostContext.Provider value={{ hostApi, snapshot }}>
+      {props.children}
+    </CasinoHostContext.Provider>
+  );
 }

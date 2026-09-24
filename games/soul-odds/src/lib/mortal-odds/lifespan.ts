@@ -15,7 +15,11 @@ export function buildLifespanHistogram(options: {
   truthSamples: ReadonlyArray<{ age: number }>;
   bookieSamples: ReadonlyArray<{ age: number }>;
 }): LifespanHistogram {
-  return { binSize: 5, real: histogram(options.truthSamples), bookie: histogram(options.bookieSamples) };
+  return {
+    binSize: 5,
+    real: histogram(options.truthSamples),
+    bookie: histogram(options.bookieSamples),
+  };
 }
 
 /**

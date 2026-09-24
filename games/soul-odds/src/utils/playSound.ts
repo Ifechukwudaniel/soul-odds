@@ -1,6 +1,9 @@
-import { isSoundMuted } from "@/utils/soundPreferences";
+import { isSoundMuted } from '@/utils/soundPreferences';
 
-export type Sound = { name: "spend"; amount: number } | { name: "search-tick"; step: number } | { name: "search-lock" };
+export type Sound =
+  | { name: 'spend'; amount: number }
+  | { name: 'search-tick'; step: number }
+  | { name: 'search-lock' };
 
 // Partial ratios and relative levels of a struck metal bell: inharmonic overtones are what read as "coin", not "beep".
 const BELL_PARTIALS = [
@@ -9,7 +12,7 @@ const BELL_PARTIALS = [
   { ratio: 5.4, gain: 0.2 },
 ];
 
-const SPEND_SRC = "/sound/dragon-studio-coins-dropping-into-wooden-box-467468.mp3";
+const SPEND_SRC = '/sound/dragon-studio-coins-dropping-into-wooden-box-467468.mp3';
 // The clip is mastered hot (its peaks pass full scale); this brings it level with the button click.
 const SPEND_VOLUME = 0.45;
 const SPEND_FADE_SECONDS = 0.06;
@@ -17,7 +20,8 @@ const SPEND_FADE_SECONDS = 0.06;
 const fetchSpendData = () => fetch(SPEND_SRC).then((response) => response.arrayBuffer());
 
 // Start fetching as soon as the module loads in the browser, so the first spend doesn't wait on the network.
-let spendData: Promise<ArrayBuffer> | null = typeof window === "undefined" ? null : fetchSpendData();
+let spendData: Promise<ArrayBuffer> | null =
+  typeof window === 'undefined' ? null : fetchSpendData();
 let spendBuffer: Promise<AudioBuffer> | null = null;
 
 /** Decodes the coin clip once and reuses it. */
@@ -32,7 +36,7 @@ let context: AudioContext | null = null;
 /** Lazily creates the shared audio context; returns null until the browser lets it run (needs a prior user gesture). */
 const getRunningContext = () => {
   context ??= new AudioContext();
-  if (context.state !== "running") {
+  if (context.state !== 'running') {
     void context.resume();
     return null;
   }
@@ -51,14 +55,20 @@ export const spendSoundSeconds = (amount: number) => {
 };
 
 /** Strikes a bell: each overtone decays faster than the one below it. */
-const ring = (ctx: AudioContext, options: { frequency: number; start: number; decay: number; volume: number }) => {
+const ring = (
+  ctx: AudioContext,
+  options: { frequency: number; start: number; decay: number; volume: number },
+) => {
   BELL_PARTIALS.forEach((partial, index) => {
     const oscillator = ctx.createOscillator();
     const envelope = ctx.createGain();
     const end = options.start + options.decay / (index + 1);
     oscillator.frequency.value = options.frequency * partial.ratio;
     envelope.gain.setValueAtTime(0.0001, options.start);
-    envelope.gain.exponentialRampToValueAtTime(options.volume * partial.gain, options.start + 0.004);
+    envelope.gain.exponentialRampToValueAtTime(
+      options.volume * partial.gain,
+      options.start + 0.004,
+    );
     envelope.gain.exponentialRampToValueAtTime(0.0001, end);
     oscillator.connect(envelope).connect(ctx.destination);
     oscillator.start(options.start);
@@ -91,7 +101,7 @@ const playTick = (ctx: AudioContext, step: number) => {
   const frequency = 620 * 1.1 ** step;
   const oscillator = ctx.createOscillator();
   const envelope = ctx.createGain();
-  oscillator.type = "triangle";
+  oscillator.type = 'triangle';
   oscillator.frequency.setValueAtTime(frequency * 1.6, now);
   oscillator.frequency.exponentialRampToValueAtTime(frequency, now + 0.05);
   envelope.gain.setValueAtTime(0.0001, now);
@@ -130,13 +140,13 @@ export const playSound = (sound: Sound) => {
     return;
   }
   switch (sound.name) {
-    case "spend":
+    case 'spend':
       playSpend(ctx, sound.amount).catch(() => {});
       break;
-    case "search-tick":
+    case 'search-tick':
       playTick(ctx, sound.step);
       break;
-    case "search-lock":
+    case 'search-lock':
       playLock(ctx);
       break;
   }

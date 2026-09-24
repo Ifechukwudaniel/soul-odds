@@ -1,5 +1,5 @@
-import { lifespanCap } from "@/lib/mortal-odds/lifespan";
-import type { LifespanHistogram } from "@/lib/mortal-odds/lifespan";
+import { lifespanCap } from '@/lib/mortal-odds/lifespan';
+import type { LifespanHistogram } from '@/lib/mortal-odds/lifespan';
 
 const WIDTH = 600;
 const HEIGHT = 130;
@@ -32,11 +32,32 @@ export const LifespanChart = (props: {
       role="img"
       aria-label="Age at death: real spread compared with the bookie's assumption"
     >
-      <line x1={ageX(0)} x2={ageX(100)} y1={BASE_Y} y2={BASE_Y} stroke="currentColor" strokeOpacity={0.2} />
+      <line
+        x1={ageX(0)}
+        x2={ageX(100)}
+        y1={BASE_Y}
+        y2={BASE_Y}
+        stroke="currentColor"
+        strokeOpacity={0.2}
+      />
       {TICKS.map((age) => (
         <g key={age}>
-          <line x1={ageX(age)} x2={ageX(age)} y1={BASE_Y} y2={BASE_Y + 6} stroke="currentColor" strokeOpacity={0.2} />
-          <text x={ageX(age)} y={HEIGHT - 4} textAnchor="middle" fontSize={10} fill="currentColor" fillOpacity={0.5}>
+          <line
+            x1={ageX(age)}
+            x2={ageX(age)}
+            y1={BASE_Y}
+            y2={BASE_Y + 6}
+            stroke="currentColor"
+            strokeOpacity={0.2}
+          />
+          <text
+            x={ageX(age)}
+            y={HEIGHT - 4}
+            textAnchor="middle"
+            fontSize={10}
+            fill="currentColor"
+            fillOpacity={0.5}
+          >
             {age}
           </text>
         </g>
@@ -47,9 +68,23 @@ export const LifespanChart = (props: {
         const capped = v > cap;
         return (
           <g key={i}>
-            <rect x={x} y={barY(v)} width={barWidth} height={BASE_Y - barY(v)} fill="#3FB6A8" fillOpacity={0.6} />
+            <rect
+              x={x}
+              y={barY(v)}
+              width={barWidth}
+              height={BASE_Y - barY(v)}
+              fill="#3FB6A8"
+              fillOpacity={0.6}
+            />
             {capped && (
-              <text x={x + barWidth / 2} y={TOP_Y - 6} textAnchor="middle" fontSize={9} fill="currentColor" fillOpacity={0.7}>
+              <text
+                x={x + barWidth / 2}
+                y={TOP_Y - 6}
+                textAnchor="middle"
+                fontSize={9}
+                fill="currentColor"
+                fillOpacity={0.7}
+              >
                 {Math.round(v * 100)}%
               </text>
             )}
@@ -58,7 +93,7 @@ export const LifespanChart = (props: {
       })}
 
       <polyline
-        points={props.histogram.bookie.map((v, i) => `${ageX(i * 5 + 2.5)},${barY(v)}`).join(" ")}
+        points={props.histogram.bookie.map((v, i) => `${ageX(i * 5 + 2.5)},${barY(v)}`).join(' ')}
         fill="none"
         stroke="#F5B83D"
         strokeWidth={1.5}
@@ -66,7 +101,14 @@ export const LifespanChart = (props: {
       />
 
       {/* Bookie's typical (median) age: hollow gold ring */}
-      <circle cx={ageX(props.bookieMedianAge)} cy={MARKER_Y} r={6} fill="none" stroke="#F5B83D" strokeWidth={2} />
+      <circle
+        cx={ageX(props.bookieMedianAge)}
+        cy={MARKER_Y}
+        r={6}
+        fill="none"
+        stroke="#F5B83D"
+        strokeWidth={2}
+      />
       {/* Real typical (median) age: filled lavender dot */}
       <circle cx={ageX(props.realMedianAge)} cy={MARKER_Y} r={4} fill="#4C6FD1" />
 

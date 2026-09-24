@@ -1,10 +1,14 @@
-import React from "react";
-
 export const DolphinBadge = ({ unlocked = false }: { unlocked: boolean }) => {
   return (
     <div>
       {unlocked ? (
-        <svg width="75" height="85" viewBox="0 0 75 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="75"
+          height="85"
+          viewBox="0 0 75 85"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             d="M35.1231 1.29302L3.52297 18.4832C1.92223 19.3539 0.925791 21.0303 0.925791 22.8526L0.925781 62.1474C0.925781 63.9697 1.92222 65.646 3.52296 66.5168L35.1231 83.707C36.6052 84.5132 38.3949 84.5132 39.8769 83.707L71.4771 66.5168C73.0778 65.646 74.0742 63.9697 74.0742 62.1474L74.0743 22.8526C74.0743 21.0303 73.0778 19.3539 71.4771 18.4832L39.8769 1.29302C38.3949 0.486792 36.6052 0.486792 35.1231 1.29302Z"
             fill="url(#paint0_linear_2015_4957)"
@@ -23,7 +27,7 @@ export const DolphinBadge = ({ unlocked = false }: { unlocked: boolean }) => {
           <g opacity="0.5">
             <mask
               id="mask0_2015_4957"
-              style={{ maskType: "alpha" }}
+              style={{ maskType: 'alpha' }}
               maskUnits="userSpaceOnUse"
               x="9"
               y="10"
@@ -83,7 +87,10 @@ export const DolphinBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <feOffset />
               <feGaussianBlur stdDeviation="1.96744" />
               <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.508333 0 0 0 0 0.437506 0 0 0 0 0.415139 0 0 0 1 0" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.508333 0 0 0 0 0.437506 0 0 0 0 0.415139 0 0 0 1 0"
+              />
               <feBlend mode="normal" in2="shape" result="effect1_innerShadow_2015_4957" />
             </filter>
             <linearGradient
@@ -133,7 +140,13 @@ export const DolphinBadge = ({ unlocked = false }: { unlocked: boolean }) => {
           </defs>
         </svg>
       ) : (
-        <svg width="75" height="85" viewBox="0 0 75 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="75"
+          height="85"
+          viewBox="0 0 75 85"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             d="M3.66278 18.7402L35.2629 1.55005C36.6578 0.791243 38.3422 0.791243 39.7371 1.55005L71.3373 18.7402C72.8438 19.5598 73.7817 21.1375 73.7817 22.8526L73.7817 62.1474C73.7817 63.8625 72.8438 65.4402 71.3373 66.2598L39.7371 83.45C38.3422 84.2088 36.6578 84.2088 35.2629 83.45L3.66278 66.2598C2.1562 65.4402 1.21838 63.8625 1.21838 62.1474L1.21838 22.8526C1.21839 21.1375 2.15621 19.5597 3.66278 18.7402Z"
             fill="#040208"

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { usePathname, useRouter } from "@/libs/I18nNavigation";
-import { redirectToScreenFromCode } from "@/utils/redirectToScreenFromCode";
-import { useAppStore } from "@/services/store/store";
+import { useEffect } from 'react';
+import { usePathname, useRouter } from '@/libs/I18nNavigation';
+import { useAppStore } from '@/services/store/store';
+import { redirectToScreenFromCode } from '@/utils/redirectToScreenFromCode';
 
 /** Sets the requested screen from a `/game/<code>` deep link, then redirects to the game home. */
 export const GameDeepLinkRedirect = () => {
@@ -12,9 +12,9 @@ export const GameDeepLinkRedirect = () => {
   const setScreen = useAppStore((state) => state.setScreen);
 
   useEffect(() => {
-    const code = pathname.replace(/^\/game\/?/, "");
+    const code = pathname.replace(/^\/game\/?/, '');
     redirectToScreenFromCode(code, setScreen);
-    router.push("/");
+    router.push('/');
   }, [pathname, router, setScreen]);
 
   return null;

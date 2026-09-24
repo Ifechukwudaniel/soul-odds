@@ -1,7 +1,7 @@
-import { GameLogo } from "@/components/game/home/GameLogo";
-import { ProfileMenuButton } from "@/components/game/home/ProfileMenuButton";
-import { SoundToggleButton } from "@/components/game/home/SoundToggleButton";
-import { WalletBalanceBadge } from "@/components/game/home/WalletBalanceBadge";
+import { GameLogo } from '@/components/game/home/GameLogo';
+import { ProfileMenuButton } from '@/components/game/home/ProfileMenuButton';
+import { SoundToggleButton } from '@/components/game/home/SoundToggleButton';
+import { WalletBalanceBadge } from '@/components/game/home/WalletBalanceBadge';
 
 export const GameHeader = (props: {
   balance: number;

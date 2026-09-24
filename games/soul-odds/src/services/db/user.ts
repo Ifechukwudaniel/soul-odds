@@ -30,7 +30,11 @@ export async function findAllUsers(): Promise<User[]> {
   return db.select().from(userSchema);
 }
 
-export async function createUser(address: string, referredBy?: string, balance?: number): Promise<User> {
+export async function createUser(
+  address: string,
+  referredBy?: string,
+  balance?: number,
+): Promise<User> {
   const [created] = await db
     .insert(userSchema)
     .values({
@@ -44,7 +48,10 @@ export async function createUser(address: string, referredBy?: string, balance?:
 }
 
 export async function getUserRefers(address: string): Promise<User[]> {
-  return db.select().from(userSchema).where(eq(userSchema.referredBy, normalizeAddress(address)));
+  return db
+    .select()
+    .from(userSchema)
+    .where(eq(userSchema.referredBy, normalizeAddress(address)));
 }
 
 export async function updateTasks(address: string, ids: number[]): Promise<void> {
@@ -61,7 +68,10 @@ export async function updateTasks(address: string, ids: number[]): Promise<void>
  * @param requiredTaskIds The task ids that must all be in the user's completed list.
  * @returns The updated user, or undefined when the user is ineligible or already claimed.
  */
-export async function claimSocialReward(address: string, requiredTaskIds: number[]): Promise<User | undefined> {
+export async function claimSocialReward(
+  address: string,
+  requiredTaskIds: number[],
+): Promise<User | undefined> {
   const required = sql.join(
     requiredTaskIds.map((id) => sql`${id}`),
     sql`, `,

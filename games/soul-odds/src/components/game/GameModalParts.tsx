@@ -1,7 +1,7 @@
-import { GiEyeOfHorus } from "react-icons/gi";
-import { PiXBold } from "react-icons/pi";
-import { serifFont } from "@/styles/serif-font";
-import { playClickSound } from "@/utils/playClickSound";
+import { GiEyeOfHorus } from 'react-icons/gi';
+import { PiXBold } from 'react-icons/pi';
+import { serifFont } from '@/styles/serif-font';
+import { playClickSound } from '@/utils/playClickSound';
 
 /** The shared modal header: a gold Eye of Horus divider over a serif title, with an optional intro line. */
 export const ModalHeader = (props: { title: string; titleId?: string; intro?: string }) => (
@@ -11,10 +11,10 @@ export const ModalHeader = (props: { title: string; titleId?: string; intro?: st
       <GiEyeOfHorus size={28} className="text-[#F5B83D]" />
       <span className="h-px flex-1 bg-linear-to-l from-transparent to-[#F5B83D]/60" />
     </div>
-    <h2 id={props.titleId} className={`${serifFont.className} font-bold text-2xl text-[#F1D6AE]`}>
+    <h2 id={props.titleId} className={`${serifFont.className} text-2xl font-bold text-[#F1D6AE]`}>
       {props.title}
     </h2>
-    {props.intro && <p className="text-[0.85rem] text-white/70 leading-relaxed">{props.intro}</p>}
+    {props.intro && <p className="text-[0.85rem] leading-relaxed text-white/70">{props.intro}</p>}
   </header>
 );
 

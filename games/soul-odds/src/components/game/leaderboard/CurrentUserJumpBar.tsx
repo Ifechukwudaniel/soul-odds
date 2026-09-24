@@ -1,4 +1,4 @@
-import type { LeaderboardUser } from "@/types";
+import type { LeaderboardUser } from '@/types';
 
 interface CurrentUserJumpBarProps {
   user: LeaderboardUser;
@@ -7,11 +7,7 @@ interface CurrentUserJumpBarProps {
   onJump: () => void;
 }
 
-export function CurrentUserJumpBar({
-  user,
-  visible,
-  onJump,
-}: CurrentUserJumpBarProps) {
+export function CurrentUserJumpBar({ user, visible, onJump }: CurrentUserJumpBarProps) {
   if (!visible) return null;
 
   return (

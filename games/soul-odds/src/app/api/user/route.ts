@@ -1,8 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { isAddress } from "viem";
-import { requireApiSecret } from "@/libs/ApiAuth";
-import { createUser, findAllUsers, findUser, updateUser } from "@/services/db/user";
-
+import { NextRequest, NextResponse } from 'next/server';
+import { isAddress } from 'viem';
+import { requireApiSecret } from '@/libs/ApiAuth';
+import { createUser, findAllUsers, findUser, updateUser } from '@/services/db/user';
 
 export async function GET(request: NextRequest) {
   const unauthorized = requireApiSecret(request);
@@ -22,12 +21,13 @@ export async function POST(request: NextRequest) {
 
   try {
     const { address, referredBy, balance } = await request.json();
-    if (!address) return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
+    if (!address) return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
     if (!isAddress(address, { strict: false })) {
-      return NextResponse.json({ error: "Is Not An Address." }, { status: 400 });
+      return NextResponse.json({ error: 'Is Not An Address.' }, { status: 400 });
     }
 
-    const validBalance = typeof balance === "number" && Number.isFinite(balance) ? balance : undefined;
+    const validBalance =
+      typeof balance === 'number' && Number.isFinite(balance) ? balance : undefined;
 
     const user = await findUser(address);
 
@@ -39,16 +39,18 @@ export async function POST(request: NextRequest) {
     }
 
     const validReferrer =
-      referredBy && isAddress(referredBy, { strict: false }) && referredBy.toLowerCase() !== address.toLowerCase()
+      referredBy &&
+      isAddress(referredBy, { strict: false }) &&
+      referredBy.toLowerCase() !== address.toLowerCase()
         ? referredBy
         : undefined;
 
     const newUser = await createUser(address, validReferrer, validBalance);
     return NextResponse.json(newUser, { status: 201 });
   } catch (error) {
-    console.error("Error creating  new  user:", error);
+    console.error('Error creating  new  user:', error);
     return NextResponse.json(
-      { message: "An unexpected error occurred while creating the user." },
+      { message: 'An unexpected error occurred while creating the user.' },
       { status: 500 },
     );
   }

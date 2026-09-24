@@ -1,75 +1,104 @@
-import { describe, expect, it } from "vitest";
-import { applyOverrides, describePopulation, estimatePopulation, estimatesAt } from "@/lib/mortal-odds/population-estimate";
+import { describe, expect, it } from 'vitest';
+import {
+  applyOverrides,
+  describePopulation,
+  estimatePopulation,
+  estimatesAt,
+} from '@/lib/mortal-odds/population-estimate';
 
-describe("estimatePopulation", () => {
-  it("returns the density-based figure for a polity in a year it has one", () => {
-    const estimate = estimatePopulation({ empire: "Roman Empire", year: 100 });
-    expect(estimate?.method).toBe("density");
+describe('estimatePopulation', () => {
+  it('returns the density-based figure for a polity in a year it has one', () => {
+    const estimate = estimatePopulation({ empire: 'Roman Empire', year: 100 });
+    expect(estimate?.method).toBe('density');
     expect(estimate?.population).toBeGreaterThan(15_000_000);
     expect(estimate?.population).toBeLessThan(60_000_000);
   });
 
-  it("matches names case-insensitively", () => {
-    expect(estimatePopulation({ empire: "roman empire", year: 100 })?.empire).toBe("Roman Empire");
+  it('matches names case-insensitively', () => {
+    expect(estimatePopulation({ empire: 'roman empire', year: 100 })?.empire).toBe('Roman Empire');
   });
 
-  it("falls back to a name that contains the query", () => {
-    expect(estimatePopulation({ empire: "Achaemenid", year: -500 })?.empire).toBe("Achaemenid Empire");
+  it('falls back to a name that contains the query', () => {
+    expect(estimatePopulation({ empire: 'Achaemenid', year: -500 })?.empire).toBe(
+      'Achaemenid Empire',
+    );
   });
 
-  it("finds a polity by its Wikidata id", () => {
-    const byName = estimatePopulation({ empire: "Roman Empire", year: 100 });
-    expect(estimatePopulation({ wikidata: byName?.wikidata ?? "", year: 100 })?.empire).toBe("Roman Empire");
+  it('finds a polity by its Wikidata id', () => {
+    const byName = estimatePopulation({ empire: 'Roman Empire', year: 100 });
+    expect(estimatePopulation({ wikidata: byName?.wikidata ?? '', year: 100 })?.empire).toBe(
+      'Roman Empire',
+    );
   });
 
-  it("keeps a low and high estimate around the figure", () => {
-    const estimate = estimatePopulation({ empire: "Northern Song", year: 1000 });
+  it('keeps a low and high estimate around the figure', () => {
+    const estimate = estimatePopulation({ empire: 'Northern Song', year: 1000 });
     expect(estimate?.low).toBeLessThanOrEqual(estimate?.population ?? 0);
     expect(estimate?.high).toBeGreaterThanOrEqual(estimate?.population ?? 0);
   });
 
-  it("returns null for an unknown empire or a year it did not exist", () => {
-    expect(estimatePopulation({ empire: "Atlantis", year: 100 })).toBeNull();
-    expect(estimatePopulation({ empire: "Roman Empire", year: 1800 })).toBeNull();
+  it('returns null for an unknown empire or a year it did not exist', () => {
+    expect(estimatePopulation({ empire: 'Atlantis', year: 100 })).toBeNull();
+    expect(estimatePopulation({ empire: 'Roman Empire', year: 1800 })).toBeNull();
   });
 });
 
-describe("estimatesAt", () => {
-  it("lists polities alive that year, most populous first, without duplicate rows", () => {
+describe('estimatesAt', () => {
+  it('lists polities alive that year, most populous first, without duplicate rows', () => {
     const polities = estimatesAt(100);
     expect(polities.length).toBeGreaterThan(10);
     expect(polities.every((polity) => polity.fromYear <= 100 && 100 <= polity.toYear)).toBe(true);
-    expect(polities.some((polity) => polity.empire.startsWith("("))).toBe(false);
+    expect(polities.some((polity) => polity.empire.startsWith('('))).toBe(false);
     expect(polities[0]!.population).toBeGreaterThanOrEqual(polities[1]!.population);
   });
 });
 
-describe("describePopulation", () => {
-  it("says how many people lived in an empire at that time", () => {
-    expect(describePopulation({ empire: "Roman Empire", year: 100 })).toMatch(/^Roman Empire, 100 CE: about \d+ million people lived here\.$/);
+describe('describePopulation', () => {
+  it('says how many people lived in an empire at that time', () => {
+    expect(describePopulation({ empire: 'Roman Empire', year: 100 })).toMatch(
+      /^Roman Empire, 100 CE: about \d+ million people lived here\.$/,
+    );
   });
 
-  it("returns null when the empire did not exist then", () => {
-    expect(describePopulation({ empire: "Roman Empire", year: 1800 })).toBeNull();
+  it('returns null when the empire did not exist then', () => {
+    expect(describePopulation({ empire: 'Roman Empire', year: 1800 })).toBeNull();
   });
 });
 
-describe("applyOverrides", () => {
-  const row = (name: string, fromYear: number, toYear: number) => ({ name, fromYear, toYear, wikidata: "", seshatId: "", areaKm2: 1000, population: 900, low: 500, high: 1200, method: "llm" as const });
-
-  it("replaces the figures of an overlapping row and marks it manual", () => {
-    const [fixed] = applyOverrides([row("Peremyshl", 1031, 1146)], [{ name: "peremyshl", fromYear: 1100, toYear: 1200, population: 150 }]);
-    expect(fixed).toMatchObject({ population: 150, low: 150, high: 150, method: "manual" });
+describe('applyOverrides', () => {
+  const row = (name: string, fromYear: number, toYear: number) => ({
+    name,
+    fromYear,
+    toYear,
+    wikidata: '',
+    seshatId: '',
+    areaKm2: 1000,
+    population: 900,
+    low: 500,
+    high: 1200,
+    method: 'llm' as const,
   });
 
-  it("uses the low and high it was given", () => {
-    const [fixed] = applyOverrides([row("Besalú", 1000, 1111)], [{ name: "Besalú", population: 60, low: 40, high: 80 }]);
+  it('replaces the figures of an overlapping row and marks it manual', () => {
+    const [fixed] = applyOverrides(
+      [row('Peremyshl', 1031, 1146)],
+      [{ name: 'peremyshl', fromYear: 1100, toYear: 1200, population: 150 }],
+    );
+    expect(fixed).toMatchObject({ population: 150, low: 150, high: 150, method: 'manual' });
+  });
+
+  it('uses the low and high it was given', () => {
+    const [fixed] = applyOverrides(
+      [row('Besalú', 1000, 1111)],
+      [{ name: 'Besalú', population: 60, low: 40, high: 80 }],
+    );
     expect(fixed).toMatchObject({ population: 60, low: 40, high: 80 });
   });
 
-  it("leaves rows of other names or other years alone", () => {
-    const rows = [row("Other", 1000, 1111), row("Peremyshl", 1200, 1300)];
-    expect(applyOverrides(rows, [{ name: "Peremyshl", fromYear: 1031, toYear: 1146, population: 150 }])).toEqual(rows);
+  it('leaves rows of other names or other years alone', () => {
+    const rows = [row('Other', 1000, 1111), row('Peremyshl', 1200, 1300)];
+    expect(
+      applyOverrides(rows, [{ name: 'Peremyshl', fromYear: 1031, toYear: 1146, population: 150 }]),
+    ).toEqual(rows);
   });
 });
-

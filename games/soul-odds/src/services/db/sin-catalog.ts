@@ -5,11 +5,20 @@ import { type NewSinCatalogRow, type SinCatalogRow, sinCatalogSchema } from './S
 export type { NewSinCatalogRow, SinCatalogRow };
 
 /** The rows written for `location` whose period covers `year`. */
-export async function findSinVariantsCovering(location: string, year: number): Promise<SinCatalogRow[]> {
+export async function findSinVariantsCovering(
+  location: string,
+  year: number,
+): Promise<SinCatalogRow[]> {
   return db
     .select()
     .from(sinCatalogSchema)
-    .where(and(eq(sinCatalogSchema.location, location), lte(sinCatalogSchema.fromYear, year), gte(sinCatalogSchema.toYear, year)));
+    .where(
+      and(
+        eq(sinCatalogSchema.location, location),
+        lte(sinCatalogSchema.fromYear, year),
+        gte(sinCatalogSchema.toYear, year),
+      ),
+    );
 }
 
 /** Every row - lets a seed see which variants a live catalog already has. */

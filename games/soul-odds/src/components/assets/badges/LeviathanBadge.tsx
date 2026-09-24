@@ -1,10 +1,14 @@
-import React from "react";
-
 export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
   return (
     <div>
       {unlocked ? (
-        <svg width="108" height="96" viewBox="0 0 108 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="108"
+          height="96"
+          viewBox="0 0 108 96"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <g filter="url(#filter0_df_457_7492)">
             <path
               d="M38.3628 5.00854L39.5955 7.22958L41.8492 6.52145L39.801 7.69842L40.5983 10.1102L39.3656 7.88919L37.1119 8.59732L39.1602 7.42035L38.3628 5.00854Z"
@@ -41,7 +45,10 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               fill="white"
             />
           </g>
-          <path d="M49.4166 33.0499L47.957 0H59.6339L58.1743 33.0499H49.4166Z" fill="url(#paint0_linear_457_7492)" />
+          <path
+            d="M49.4166 33.0499L47.957 0H59.6339L58.1743 33.0499H49.4166Z"
+            fill="url(#paint0_linear_457_7492)"
+          />
           <path
             d="M63.0749 42.4982L92.4268 57.7591L86.5883 67.8716L58.6961 50.0826L63.0749 42.4982Z"
             fill="url(#paint1_linear_457_7492)"
@@ -267,7 +274,7 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <g opacity="0.5">
                 <mask
                   id="mask0_457_7492"
-                  style={{ maskType: "alpha" }}
+                  style={{ maskType: 'alpha' }}
                   maskUnits="userSpaceOnUse"
                   x="34"
                   y="19"
@@ -316,8 +323,17 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <feGaussianBlur stdDeviation="0.198928" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_457_7492" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_457_7492" result="shape" />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_457_7492"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_457_7492"
+                result="shape"
+              />
               <feGaussianBlur stdDeviation="0.0835946" result="effect2_foregroundBlur_457_7492" />
             </filter>
             <filter
@@ -340,8 +356,17 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <feGaussianBlur stdDeviation="0.198928" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_457_7492" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_457_7492" result="shape" />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_457_7492"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_457_7492"
+                result="shape"
+              />
               <feGaussianBlur stdDeviation="0.0835946" result="effect2_foregroundBlur_457_7492" />
             </filter>
             <filter
@@ -364,8 +389,17 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <feGaussianBlur stdDeviation="0.198928" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_457_7492" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_457_7492" result="shape" />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_457_7492"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_457_7492"
+                result="shape"
+              />
               <feGaussianBlur stdDeviation="0.0835946" result="effect2_foregroundBlur_457_7492" />
             </filter>
             <filter
@@ -388,8 +422,17 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <feGaussianBlur stdDeviation="0.198928" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_457_7492" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_457_7492" result="shape" />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_457_7492"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_457_7492"
+                result="shape"
+              />
               <feGaussianBlur stdDeviation="0.0835946" result="effect2_foregroundBlur_457_7492" />
             </filter>
             <filter
@@ -412,8 +455,17 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <feGaussianBlur stdDeviation="0.198928" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_457_7492" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_457_7492" result="shape" />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_457_7492"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_457_7492"
+                result="shape"
+              />
               <feGaussianBlur stdDeviation="0.0835946" result="effect2_foregroundBlur_457_7492" />
             </filter>
             <filter
@@ -436,8 +488,17 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <feGaussianBlur stdDeviation="0.198928" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_457_7492" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_457_7492" result="shape" />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_457_7492"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_457_7492"
+                result="shape"
+              />
               <feGaussianBlur stdDeviation="0.0835946" result="effect2_foregroundBlur_457_7492" />
             </filter>
             <filter
@@ -458,8 +519,15 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset />
               <feGaussianBlur stdDeviation="2.02895" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.558594 0 0 0 0 0.710156 0 0 0 0 0.9375 0 0 0 1 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_457_7492" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.558594 0 0 0 0 0.710156 0 0 0 0 0.9375 0 0 0 1 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_457_7492"
+              />
               <feColorMatrix
                 in="SourceAlpha"
                 type="matrix"
@@ -468,9 +536,21 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset dy="0.81158" />
               <feGaussianBlur stdDeviation="6.08685" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.670833 0 0 0 0 0.8025 0 0 0 0 1 0 0 0 0.6 0" />
-              <feBlend mode="normal" in2="effect1_dropShadow_457_7492" result="effect2_dropShadow_457_7492" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_457_7492" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.670833 0 0 0 0 0.8025 0 0 0 0 1 0 0 0 0.6 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="effect1_dropShadow_457_7492"
+                result="effect2_dropShadow_457_7492"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect2_dropShadow_457_7492"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter7_d_457_7492"
@@ -490,9 +570,21 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset />
               <feGaussianBlur stdDeviation="0.795713" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.288889 0 0 0 0 0.357333 0 0 0 0 0.533333 0 0 0 0.74 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_457_7492" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_457_7492" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.288889 0 0 0 0 0.357333 0 0 0 0 0.533333 0 0 0 0.74 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_457_7492"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_457_7492"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter8_d_457_7492"
@@ -512,9 +604,21 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset />
               <feGaussianBlur stdDeviation="0.795713" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.288889 0 0 0 0 0.357333 0 0 0 0 0.533333 0 0 0 0.74 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_457_7492" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_457_7492" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.288889 0 0 0 0 0.357333 0 0 0 0 0.533333 0 0 0 0.74 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_457_7492"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_457_7492"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter9_d_457_7492"
@@ -534,9 +638,21 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset />
               <feGaussianBlur stdDeviation="0.795713" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.288889 0 0 0 0 0.357333 0 0 0 0 0.533333 0 0 0 0.74 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_457_7492" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_457_7492" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.288889 0 0 0 0 0.357333 0 0 0 0 0.533333 0 0 0 0.74 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_457_7492"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_457_7492"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter10_d_457_7492"
@@ -556,9 +672,21 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset />
               <feGaussianBlur stdDeviation="0.795713" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.288889 0 0 0 0 0.357333 0 0 0 0 0.533333 0 0 0 0.74 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_457_7492" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_457_7492" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.288889 0 0 0 0 0.357333 0 0 0 0 0.533333 0 0 0 0.74 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_457_7492"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_457_7492"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter11_d_457_7492"
@@ -578,9 +706,21 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset />
               <feGaussianBlur stdDeviation="0.795713" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.288889 0 0 0 0 0.357333 0 0 0 0 0.533333 0 0 0 0.8 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_457_7492" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_457_7492" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.288889 0 0 0 0 0.357333 0 0 0 0 0.533333 0 0 0 0.8 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_457_7492"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_457_7492"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter12_d_457_7492"
@@ -600,9 +740,21 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset dy="1.59143" />
               <feGaussianBlur stdDeviation="0.596785" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.141181 0 0 0 0 0.190317 0 0 0 0 0.316667 0 0 0 0.51 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_457_7492" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_457_7492" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.141181 0 0 0 0 0.190317 0 0 0 0 0.316667 0 0 0 0.51 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_457_7492"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_457_7492"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter13_f_457_7492"
@@ -637,7 +789,10 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <feOffset />
               <feGaussianBlur stdDeviation="1.33762" />
               <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.297222 0 0 0 0 0.329917 0 0 0 0 0.445833 0 0 0 1 0" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.297222 0 0 0 0 0.329917 0 0 0 0 0.445833 0 0 0 1 0"
+              />
               <feBlend mode="normal" in2="shape" result="effect1_innerShadow_457_7492" />
             </filter>
             <linearGradient
@@ -1041,7 +1196,13 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
           </defs>
         </svg>
       ) : (
-        <svg width="88" height="78" viewBox="0 0 88 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="88"
+          height="78"
+          viewBox="0 0 88 78"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             d="M33.667 41.2397L33.667 30.9766L9.43454 30.9766C9.43454 37.3911 13.9693 41.2397 17.6537 41.2397L33.667 41.2397Z"
             fill="#040208"
@@ -1130,7 +1291,7 @@ export const LeviathanBadge = ({ unlocked = false }: { unlocked: boolean }) => {
           <g opacity="0.5">
             <mask
               id="mask0_742_7071"
-              style={{ maskType: "alpha" }}
+              style={{ maskType: 'alpha' }}
               maskUnits="userSpaceOnUse"
               x="19"
               y="9"

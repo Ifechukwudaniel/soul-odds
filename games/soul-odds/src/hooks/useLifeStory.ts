@@ -1,18 +1,24 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import { apiClient } from "@/libs/ApiClient";
-import { createLocalStorageLifeStoryCache, LifeStoryLoader } from "@/lib/mortal-odds/life-story-loader";
-import type { LifeStoryPayload, LifeStoryState } from "@/lib/mortal-odds/life-story-loader";
-import { sinsOf } from "@/lib/mortal-odds/sin-selection";
-import type { Life } from "@/types";
+import { useEffect, useRef, useState } from 'react';
+import {
+  createLocalStorageLifeStoryCache,
+  LifeStoryLoader,
+} from '@/lib/mortal-odds/life-story-loader';
+import type { LifeStoryPayload, LifeStoryState } from '@/lib/mortal-odds/life-story-loader';
+import { sinsOf } from '@/lib/mortal-odds/sin-selection';
+import { apiClient } from '@/libs/ApiClient';
+import type { Life } from '@/types';
 
 // The server bounds its own OpenRouter call (see OPENROUTER_TIMEOUT_MS in lib/mortal-odds/openrouter.ts)
 // and should always respond well within this; it's a backstop for a hung request or a dropped
 // response, so a network hiccup can't leave the player staring at the loader indefinitely.
 const REQUEST_TIMEOUT_MS = 10_000;
 
-async function fetchLifeStory(options: { life: Life; placeName: string }): Promise<LifeStoryPayload> {
+async function fetchLifeStory(options: {
+  life: Life;
+  placeName: string;
+}): Promise<LifeStoryPayload> {
   const { life, placeName } = options;
   const params = new URLSearchParams({
     sex: life.sex,
@@ -22,14 +28,17 @@ async function fetchLifeStory(options: { life: Life; placeName: string }): Promi
     deathYear: String(life.deathYear),
   });
   const cause = life.shock?.label ?? life.cause;
-  if (cause) params.set("cause", cause);
+  if (cause) params.set('cause', cause);
   const sins = sinsOf(life);
   if (sins.length > 0) {
-    params.set("sinPhrase", sins.map((sin) => sin.phrase).join(", and "));
+    params.set('sinPhrase', sins.map((sin) => sin.phrase).join(', and '));
   }
 
   const startedAt = Date.now();
-  const response = await apiClient.get<{ story: string; name: string }>(`/api/mortal-odds/life-story?${params.toString()}`, { timeout: REQUEST_TIMEOUT_MS });
+  const response = await apiClient.get<{ story: string; name: string }>(
+    `/api/mortal-odds/life-story?${params.toString()}`,
+    { timeout: REQUEST_TIMEOUT_MS },
+  );
   console.log(`[life-story] round-trip took ${Date.now() - startedAt}ms`);
   return { story: response.data.story, name: response.data.name };
 }
@@ -41,7 +50,7 @@ async function fetchLifeStory(options: { life: Life; placeName: string }): Promi
  * previous soul's land and year.
  */
 function cacheKeyFor(sessionKey: string, life: Life, placeName: string): string {
-  return [sessionKey, life.sex, life.year, life.age, life.deathYear, placeName].join(":");
+  return [sessionKey, life.sex, life.year, life.age, life.deathYear, placeName].join(':');
 }
 
 export type { LifeStoryState, LifeStoryPayload };
@@ -58,7 +67,12 @@ export type { LifeStoryState, LifeStoryPayload };
  * stops a slow response for a round the player has already left (e.g. "Summon another soul" fired
  * mid-request) from ever overwriting the newer one.
  */
-export function useLifeStory(options: { sessionKey: string | null; life: Life; placeName: string; fallbackStory: string }): LifeStoryState {
+export function useLifeStory(options: {
+  sessionKey: string | null;
+  life: Life;
+  placeName: string;
+  fallbackStory: string;
+}): LifeStoryState {
   const { sessionKey, life, placeName, fallbackStory } = options;
   const fallback: LifeStoryPayload = { story: fallbackStory, name: null };
   const [state, setState] = useState<LifeStoryState>({ ready: false });
@@ -82,7 +96,11 @@ export function useLifeStory(options: { sessionKey: string | null; life: Life; p
       setState({ ready: true, payload: fallback });
       return;
     }
-    setState(loader.current!.request(cacheKeyFor(sessionKey, life, placeName), fallback, (payload) => setState({ ready: true, payload })));
+    setState(
+      loader.current!.request(cacheKeyFor(sessionKey, life, placeName), fallback, (payload) =>
+        setState({ ready: true, payload }),
+      ),
+    );
     // fallbackStory (not the `fallback` object, which is a fresh reference every render) is the real dependency.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionKey, life, placeName, fallbackStory]);

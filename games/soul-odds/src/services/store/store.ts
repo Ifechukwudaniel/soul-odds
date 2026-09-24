@@ -1,8 +1,17 @@
-import { DEFAULT_AVATAR_ID } from "@/components/assets/characters/avatars";
-import { create } from "zustand";
-import { createJSONStorage, devtools, persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { createJSONStorage, devtools, persist } from 'zustand/middleware';
+import { DEFAULT_AVATAR_ID } from '@/components/assets/characters/avatars';
 
-export type TScreens = "badges" | "history" | "home" | "refs" | "stats" | "quests" | "social" | "wallet" | "ranks";
+export type TScreens =
+  | 'badges'
+  | 'history'
+  | 'home'
+  | 'refs'
+  | 'stats'
+  | 'quests'
+  | 'social'
+  | 'wallet'
+  | 'ranks';
 
 export type TScreenPayload = {
   data?: string;
@@ -19,19 +28,19 @@ export type TUser = {
   freeRedraws: number;
 };
 
-export const STORE_NAME = "Soul_Odds_Store";
+export const STORE_NAME = 'Soul_Odds_Store';
 
 export const hasState = () => {
-  return typeof window === "undefined" ? false : localStorage.getItem(STORE_NAME) !== null;
+  return typeof window === 'undefined' ? false : localStorage.getItem(STORE_NAME) !== null;
 };
 
 export const emptyUser: TUser = {
-  address: "",
-  username: "",
+  address: '',
+  username: '',
   balance: 1000,
   rank: 0,
   skill: 0,
-  connectionId: "",
+  connectionId: '',
   avatarId: DEFAULT_AVATAR_ID,
   freeRedraws: 0,
 };
@@ -41,8 +50,8 @@ export type TAppStore = {
   defaultData: boolean;
   screen: TScreens;
   user: TUser;
-  wallet:string;
-  walletClaimed:boolean;
+  wallet: string;
+  walletClaimed: boolean;
   setScreen: (newValue: TScreens, payload?: TScreenPayload | null) => void;
   updateBalance: (newBalance: number) => void;
   applyBalanceDelta: (delta: number) => void;
@@ -55,10 +64,10 @@ export type TAppStore = {
 export const initialState = {
   hasData: false,
   defaultData: true,
-  screen: "home" as TScreens,
+  screen: 'home' as TScreens,
   user: emptyUser,
-  wallet:"",
-  walletClaimed:false
+  wallet: '',
+  walletClaimed: false,
 };
 
 export const useAppStore = create<TAppStore>()(
@@ -110,14 +119,14 @@ export const useAppStore = create<TAppStore>()(
             ...initialState,
           }));
         },
-        setWallet:(wallet:string) => {
-           set(()=> ({wallet, walletClaimed:true}))
-        }
+        setWallet: (wallet: string) => {
+          set(() => ({ wallet, walletClaimed: true }));
+        },
       }),
       {
         name: STORE_NAME,
         storage: createJSONStorage(() => localStorage),
-        onRehydrateStorage: state => {
+        onRehydrateStorage: (state) => {
           const previousState = localStorage.getItem(STORE_NAME);
           const defaultStateString = JSON.stringify({ state, version: 0 });
           return (_, error) => {
@@ -132,4 +141,3 @@ export const useAppStore = create<TAppStore>()(
     ),
   ),
 );
-

@@ -1,4 +1,8 @@
-import { decodeAbiParameters, type Hex } from "viem";
+import {
+  toConfiguration,
+  toConfigurationInput,
+  type SoulConfigurationDefinition,
+} from '@chain/soul-odds-engine/configuration';
 // Imported from the specific `soul`/`configuration` subpaths, not the package root: the root
 // barrel also re-exports `title.ts`, which reads title files via `node:fs` — fine server-side,
 // but it drags a Node built-in into this file's browser bundle and Turbopack refuses to chunk it.
@@ -12,16 +16,16 @@ import {
   genderOdds,
   lifespanOdds,
   validCrimeMasks,
-} from "@chain/soul-odds-engine/soul";
+} from '@chain/soul-odds-engine/soul';
+import { decodeAbiParameters, type Hex } from 'viem';
+import titleFile from '@/config/mortal-odds/soul-odds-title.json';
+import { chanceTag } from '@/lib/mortal-odds/pricing';
 import {
-  toConfiguration,
-  toConfigurationInput,
-  type SoulConfigurationDefinition,
-} from "@chain/soul-odds-engine/configuration";
-import { chanceTag } from "@/lib/mortal-odds/pricing";
-import { categoriesOfCrimeMask, crimeMaskOfSinOption, sinOptionId } from "@/lib/mortal-odds/sin-selection";
-import titleFile from "@/config/mortal-odds/soul-odds-title.json";
-import type { Bet, Price } from "@/types";
+  categoriesOfCrimeMask,
+  crimeMaskOfSinOption,
+  sinOptionId,
+} from '@/lib/mortal-odds/sin-selection';
+import type { Bet, Price } from '@/types';
 
 const definitions = titleFile.betConfigurations as SoulConfigurationDefinition[];
 
@@ -42,7 +46,7 @@ export const soulOddsConfigurations: SoulConfiguration[] = definitions.map((defi
  */
 export function configurationIndexFromGameState(gameState: Hex): number | null {
   try {
-    const [index] = decodeAbiParameters([{ type: "uint256" }], gameState);
+    const [index] = decodeAbiParameters([{ type: 'uint256' }], gameState);
     return index < BigInt(soulOddsConfigurations.length) ? Number(index) : null;
   } catch {
     return null;
@@ -51,12 +55,13 @@ export function configurationIndexFromGameState(gameState: Hex): number | null {
 
 /** The one configuration a session is pinned to, or every era when it isn't known yet. */
 function configurationsFor(configurationIndex: number | null): SoulConfiguration[] {
-  const pinned = configurationIndex === null ? undefined : soulOddsConfigurations[configurationIndex];
+  const pinned =
+    configurationIndex === null ? undefined : soulOddsConfigurations[configurationIndex];
   return pinned ? [pinned] : soulOddsConfigurations;
 }
 
 /** Index-aligned with `soul-odds-title.json`'s `lifespans`, and with the "age" market's option order. */
-export const AGE_BUCKET_ORDER = ["u5", "y", "m", "o"] as const;
+export const AGE_BUCKET_ORDER = ['u5', 'y', 'm', 'o'] as const;
 
 const WAD = 10n ** 18n;
 
@@ -71,11 +76,11 @@ export function buildPrediction(bets: Record<string, Bet>): SoulPrediction {
   const sexBet = bets.sex;
   const ageBet = bets.age;
   const sinsBet = bets.sins;
-  if (sexBet?.kind !== "choice" || ageBet?.kind !== "choice" || sinsBet?.kind !== "choice") {
-    throw new Error("A prediction needs a sex, age and sins pick");
+  if (sexBet?.kind !== 'choice' || ageBet?.kind !== 'choice' || sinsBet?.kind !== 'choice') {
+    throw new Error('A prediction needs a sex, age and sins pick');
   }
 
-  const gender = sexBet.optionId === "girl" ? 1 : 0;
+  const gender = sexBet.optionId === 'girl' ? 1 : 0;
   const lifespanBucket = ageBucketIndex(ageBet.optionId);
   const crimeMask = crimeMaskOfSinOption(sinsBet.optionId);
 
@@ -88,31 +93,31 @@ export function encodeMortalOddsPrediction(bets: Record<string, Bet>): Hex {
 
 export const settledGameStateAbi = [
   {
-    type: "tuple",
+    type: 'tuple',
     components: [
-      { type: "uint8", name: "gender" },
-      { type: "uint8", name: "lifespanBucket" },
-      { type: "bool", name: "sins" },
-      { type: "uint8", name: "crimeMask" },
+      { type: 'uint8', name: 'gender' },
+      { type: 'uint8', name: 'lifespanBucket' },
+      { type: 'bool', name: 'sins' },
+      { type: 'uint8', name: 'crimeMask' },
     ],
   },
   {
-    type: "tuple",
+    type: 'tuple',
     components: [
-      { type: "uint8", name: "gender" },
-      { type: "uint16", name: "age" },
-      { type: "int16", name: "birthYear" },
-      { type: "uint8", name: "lifespanBucket" },
-      { type: "uint8", name: "crimeMask" },
+      { type: 'uint8', name: 'gender' },
+      { type: 'uint16', name: 'age' },
+      { type: 'int16', name: 'birthYear' },
+      { type: 'uint8', name: 'lifespanBucket' },
+      { type: 'uint8', name: 'crimeMask' },
     ],
   },
-  { type: "bool" },
+  { type: 'bool' },
   {
-    type: "tuple",
+    type: 'tuple',
     components: [
-      { type: "bool", name: "genderMatch" },
-      { type: "bool", name: "lifespanMatch" },
-      { type: "bool", name: "crimeMatch" },
+      { type: 'bool', name: 'genderMatch' },
+      { type: 'bool', name: 'lifespanMatch' },
+      { type: 'bool', name: 'crimeMatch' },
     ],
   },
 ] as const;
@@ -146,10 +151,17 @@ const CATEGORY_COUNT = 3n;
  * (which works out to `rtp / p`). Averaging the multipliers themselves would let one rare era
  * (a 475x payout at 0.2%) dominate a bet that is 9.5% likely on average.
  */
-function averagePrice(wager: bigint, perConfigurationOdds: { probabilityWad: bigint; payout: bigint }[]): Price {
+function averagePrice(
+  wager: bigint,
+  perConfigurationOdds: { probabilityWad: bigint; payout: bigint }[],
+): Price {
   const chances = perConfigurationOdds.map((odds) => Number(odds.probabilityWad) / 1e18);
   const p = chances.reduce((sum, chance) => sum + chance, 0) / chances.length;
-  const returned = perConfigurationOdds.reduce((sum, odds, i) => sum + (chances[i] ?? 0) * (Number(odds.payout * CATEGORY_COUNT) / Number(wager)), 0);
+  const returned = perConfigurationOdds.reduce(
+    (sum, odds, i) =>
+      sum + (chances[i] ?? 0) * (Number(odds.payout * CATEGORY_COUNT) / Number(wager)),
+    0,
+  );
   const odds = wager === 0n || p === 0 ? null : returned / chances.length / p;
   return { p, odds, tag: chanceTag(p) };
 }
@@ -159,14 +171,20 @@ function averagePrice(wager: bigint, perConfigurationOdds: { probabilityWad: big
  * specific lifespan bucket: each bucket carries its own `noCrimeWeight` (a child is far likelier
  * to be "Clean" than an adult), so these odds are only meaningful once an age bucket is picked.
  */
-export function previewSinsPrices(wager: bigint, lifespanBucket: number, configurationIndex: number | null = null): Record<string, Price> {
+export function previewSinsPrices(
+  wager: bigint,
+  lifespanBucket: number,
+  configurationIndex: number | null = null,
+): Record<string, Price> {
   const previewWager = wager > 0n ? wager : WAD;
   const configurations = configurationsFor(configurationIndex);
   const sins: Record<string, Price> = {};
   for (const crimeMask of validCrimeMasks()) {
     sins[sinOptionId(categoriesOfCrimeMask(crimeMask))] = averagePrice(
       previewWager,
-      configurations.map((configuration) => crimeOdds(configuration, previewWager, lifespanBucket, crimeMask)),
+      configurations.map((configuration) =>
+        crimeOdds(configuration, previewWager, lifespanBucket, crimeMask),
+      ),
     );
   }
   return sins;
@@ -182,7 +200,7 @@ export function previewCategoryPrices(
   const configurations = configurationsFor(configurationIndex);
 
   const sex: Record<string, Price> = {};
-  for (const [optionId, gender] of [["girl", 1] as const, ["boy", 0] as const]) {
+  for (const [optionId, gender] of [['girl', 1] as const, ['boy', 0] as const]) {
     sex[optionId] = averagePrice(
       previewWager,
       configurations.map((configuration) => genderOdds(configuration, previewWager, gender)),
@@ -201,7 +219,9 @@ export function previewCategoryPrices(
 }
 
 /** Reshapes a `previewCategoryPrices` result into the plain-probability records `resolveBets` scores skill against. */
-export function toTrueProbabilities(prices: ReturnType<typeof previewCategoryPrices>): Record<string, Record<string, number>> {
+export function toTrueProbabilities(
+  prices: ReturnType<typeof previewCategoryPrices>,
+): Record<string, Record<string, number>> {
   return {
     sex: Object.fromEntries(Object.entries(prices.sex).map(([id, price]) => [id, price.p])),
     age: Object.fromEntries(Object.entries(prices.age).map(([id, price]) => [id, price.p])),

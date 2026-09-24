@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { OpenQuestDetailScreen } from "./OpenQuestDetails";
-import type { QuestList, UserTask } from "@/types";
-import { SOCIAL_TASKS } from "@/lib/social-quests";
-import { claimSocialReward, getUserTasks, postUserTasks } from "@/services/data/task";
-import { getUser } from "@/services/data/user";
-import { useAppStore } from "@/services/store/store";
-import { notification } from "@/utils/notifications";
-import { Loader } from "../Loader";
+import { useEffect, useState } from 'react';
+import { SOCIAL_TASKS } from '@/lib/social-quests';
+import { claimSocialReward, getUserTasks, postUserTasks } from '@/services/data/task';
+import { getUser } from '@/services/data/user';
+import { useAppStore } from '@/services/store/store';
+import type { QuestList, UserTask } from '@/types';
+import { notification } from '@/utils/notifications';
+import { Loader } from '../Loader';
+import { OpenQuestDetailScreen } from './OpenQuestDetails';
 
 const initialTasks: UserTask[] = SOCIAL_TASKS.map((task) => ({ ...task, completed: false }));
 
@@ -24,7 +24,7 @@ export const SocialQuestScreen = () => {
         setTasks(userTasks);
         setClaimed(user.socialClaimed);
       } catch (error) {
-        console.error("Error fetching user tasks:", error);
+        console.error('Error fetching user tasks:', error);
       }
       setLoading(false);
     };
@@ -32,9 +32,9 @@ export const SocialQuestScreen = () => {
   }, [address]);
 
   const quest: QuestList = {
-    id: "social",
-    title: "Social Media Madness!",
-    desc: "Follow us on X and join our Discord to earn 1 free redraw.",
+    id: 'social',
+    title: 'Social Media Madness!',
+    desc: 'Follow us on X and join our Discord to earn 1 free redraw.',
     tasks,
     claimed,
   };
@@ -42,9 +42,9 @@ export const SocialQuestScreen = () => {
   const handleTaskOpen = (index: number) => {
     const task = tasks[index];
     if (!task) return;
-    window.open(task.link, "_blank", "noopener,noreferrer");
+    window.open(task.link, '_blank', 'noopener,noreferrer');
     setTasks(tasks.map((item) => (item.id === task.id ? { ...item, completed: true } : item)));
-    postUserTasks(address, task.id).catch((error) => console.error("Could not save task:", error));
+    postUserTasks(address, task.id).catch((error) => console.error('Could not save task:', error));
   };
 
   const handleClaim = async () => {
@@ -54,14 +54,14 @@ export const SocialQuestScreen = () => {
       setClaimed(true);
       return true;
     } catch {
-      notification.error("Reward unavailable");
+      notification.error('Reward unavailable');
       return false;
     }
   };
 
   if (loading) {
     return (
-      <section className="flex flex-col h-screen justify-center items-center">
+      <section className="flex h-screen flex-col items-center justify-center">
         <Loader />
       </section>
     );

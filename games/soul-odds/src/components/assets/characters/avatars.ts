@@ -1,8 +1,8 @@
-import type { ComponentType } from "react";
-import { Black } from "@/components/assets/characters/Black";
-import { Skull } from "@/components/assets/characters/Skull";
-import { Slime } from "@/components/assets/characters/Slime";
-import type { IconProps } from "@/types/icontypes";
+import type { ComponentType } from 'react';
+import { Black } from '@/components/assets/characters/Black';
+import { Skull } from '@/components/assets/characters/Skull';
+import { Slime } from '@/components/assets/characters/Slime';
+import type { IconProps } from '@/types/icontypes';
 
 export type Avatar = {
   id: string;
@@ -11,18 +11,19 @@ export type Avatar = {
   cost: number;
 };
 
-const DEFAULT_AVATAR: Avatar = { id: "slime", name: "Slime", Icon: Slime, cost: 0 };
+const DEFAULT_AVATAR: Avatar = { id: 'slime', name: 'Slime', Icon: Slime, cost: 0 };
 
 /** Every playable avatar. Add a new character component and an entry here to make it selectable. */
 export const AVATARS: Avatar[] = [
   DEFAULT_AVATAR,
-  { id: "black", name: "Black", Icon: Black, cost: 0 },
-  { id: "skull", name: "Skull", Icon: Skull, cost: 0 },
+  { id: 'black', name: 'Black', Icon: Black, cost: 0 },
+  { id: 'skull', name: 'Skull', Icon: Skull, cost: 0 },
 ];
 
 export const DEFAULT_AVATAR_ID = DEFAULT_AVATAR.id;
 
-export const getAvatarById = (id: string): Avatar => AVATARS.find((avatar) => avatar.id === id) ?? DEFAULT_AVATAR;
+export const getAvatarById = (id: string): Avatar =>
+  AVATARS.find((avatar) => avatar.id === id) ?? DEFAULT_AVATAR;
 
 /**
  * Deterministically picks an avatar for a user id, so the same user always gets the same "random" avatar.

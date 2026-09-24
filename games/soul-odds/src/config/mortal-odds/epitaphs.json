@@ -1,378 +1,2188 @@
 [
-  { "id": "dead-infant-1", "text": "A candle lit and gone before the night began.", "when": { "status": ["dead"], "ageBand": ["infant"] } },
-  { "id": "dead-infant-2", "text": "The world was glimpsed for a moment, and then the door closed.", "when": { "status": ["dead"], "ageBand": ["infant"] } },
-  { "id": "dead-child-1", "text": "A short life, but not an empty one.", "when": { "status": ["dead"], "ageBand": ["child"] } },
-  { "id": "dead-child-2", "text": "Small footsteps, soon quiet.", "when": { "status": ["dead"], "ageBand": ["child"] } },
-  { "id": "dead-juvenile-1", "text": "The road ended long before its first turning.", "when": { "status": ["dead"], "ageBand": ["juvenile"] } },
-  { "id": "dead-juvenile-2", "text": "{He} never got to see who {he} would become.", "when": { "status": ["dead"], "ageBand": ["juvenile"] } },
-  { "id": "dead-young-1", "text": "Bright and brief, a spark that never got to be a fire.", "when": { "status": ["dead"], "ageBand": ["young"] } },
-  { "id": "dead-young-2", "text": "Too much still waiting, too little time to meet it.", "when": { "status": ["dead"], "ageBand": ["young"] } },
-  { "id": "dead-adult-1", "text": "In the thick of it all, the story simply stopped.", "when": { "status": ["dead"], "ageBand": ["adult"] } },
-  { "id": "dead-adult-2", "text": "Halfway through the work, the work went on without {him}.", "when": { "status": ["dead"], "ageBand": ["adult"] } },
-  { "id": "dead-mature-1", "text": "Most of a life lived, and the last chapters cut short.", "when": { "status": ["dead"], "ageBand": ["mature"] } },
-  { "id": "dead-mature-2", "text": "{He} had the wisdom by then, only not the years.", "when": { "status": ["dead"], "ageBand": ["mature"] } },
-  { "id": "dead-elder-1", "text": "A full life, folded away at last.", "when": { "status": ["dead"], "ageBand": ["elder"] } },
-  { "id": "dead-elder-2", "text": "{He} lived long enough to watch the world change, and then rested.", "when": { "status": ["dead"], "ageBand": ["elder"] } },
-  { "id": "dead-ancient-1", "text": "Few reach these years, and fewer wear them lightly.", "when": { "status": ["dead"], "ageBand": ["ancient"] } },
-  { "id": "dead-ancient-2", "text": "{He} outlasted nearly everyone who ever knew {him}.", "when": { "status": ["dead"], "ageBand": ["ancient"] } },
+  {
+    "id": "dead-infant-1",
+    "text": "A candle lit and gone before the night began.",
+    "when": { "status": ["dead"], "ageBand": ["infant"] }
+  },
+  {
+    "id": "dead-infant-2",
+    "text": "The world was glimpsed for a moment, and then the door closed.",
+    "when": { "status": ["dead"], "ageBand": ["infant"] }
+  },
+  {
+    "id": "dead-child-1",
+    "text": "A short life, but not an empty one.",
+    "when": { "status": ["dead"], "ageBand": ["child"] }
+  },
+  {
+    "id": "dead-child-2",
+    "text": "Small footsteps, soon quiet.",
+    "when": { "status": ["dead"], "ageBand": ["child"] }
+  },
+  {
+    "id": "dead-juvenile-1",
+    "text": "The road ended long before its first turning.",
+    "when": { "status": ["dead"], "ageBand": ["juvenile"] }
+  },
+  {
+    "id": "dead-juvenile-2",
+    "text": "{He} never got to see who {he} would become.",
+    "when": { "status": ["dead"], "ageBand": ["juvenile"] }
+  },
+  {
+    "id": "dead-young-1",
+    "text": "Bright and brief, a spark that never got to be a fire.",
+    "when": { "status": ["dead"], "ageBand": ["young"] }
+  },
+  {
+    "id": "dead-young-2",
+    "text": "Too much still waiting, too little time to meet it.",
+    "when": { "status": ["dead"], "ageBand": ["young"] }
+  },
+  {
+    "id": "dead-adult-1",
+    "text": "In the thick of it all, the story simply stopped.",
+    "when": { "status": ["dead"], "ageBand": ["adult"] }
+  },
+  {
+    "id": "dead-adult-2",
+    "text": "Halfway through the work, the work went on without {him}.",
+    "when": { "status": ["dead"], "ageBand": ["adult"] }
+  },
+  {
+    "id": "dead-mature-1",
+    "text": "Most of a life lived, and the last chapters cut short.",
+    "when": { "status": ["dead"], "ageBand": ["mature"] }
+  },
+  {
+    "id": "dead-mature-2",
+    "text": "{He} had the wisdom by then, only not the years.",
+    "when": { "status": ["dead"], "ageBand": ["mature"] }
+  },
+  {
+    "id": "dead-elder-1",
+    "text": "A full life, folded away at last.",
+    "when": { "status": ["dead"], "ageBand": ["elder"] }
+  },
+  {
+    "id": "dead-elder-2",
+    "text": "{He} lived long enough to watch the world change, and then rested.",
+    "when": { "status": ["dead"], "ageBand": ["elder"] }
+  },
+  {
+    "id": "dead-ancient-1",
+    "text": "Few reach these years, and fewer wear them lightly.",
+    "when": { "status": ["dead"], "ageBand": ["ancient"] }
+  },
+  {
+    "id": "dead-ancient-2",
+    "text": "{He} outlasted nearly everyone who ever knew {him}.",
+    "when": { "status": ["dead"], "ageBand": ["ancient"] }
+  },
 
   { "id": "alive-1", "text": "The last line is not yet written.", "when": { "status": ["alive"] } },
-  { "id": "alive-2", "text": "Still breathing, still deciding what this life will mean.", "when": { "status": ["alive"] } },
-  { "id": "alive-3", "text": "The story is still open, and the scales are watching.", "when": { "status": ["alive"] } },
+  {
+    "id": "alive-2",
+    "text": "Still breathing, still deciding what this life will mean.",
+    "when": { "status": ["alive"] }
+  },
+  {
+    "id": "alive-3",
+    "text": "The story is still open, and the scales are watching.",
+    "when": { "status": ["alive"] }
+  },
 
-  { "id": "dead-grown-lifespan", "text": "{He} was given {lifespan}, and spent them the way most people do: mostly on others.", "when": { "status": ["dead"], "ageBand": ["adult", "mature", "elder", "ancient"] } },
-  { "id": "dead-any-catastrophe", "text": "{Cause} did not ask who {he} was before it took {him}.", "when": { "status": ["dead"], "cause": ["catastrophe"] } },
-  { "id": "dead-covid", "text": "Taken by {cause}, one name among millions.", "when": { "status": ["dead"], "cause": ["covid-19"] } },
-  { "id": "dead-first-world-war-boy", "text": "Sent to a war that never asked what {he} wanted.", "when": { "status": ["dead"], "sex": ["boy"], "cause": ["first-world-war"] } },
-  { "id": "dead-black-death", "text": "{Cause} spared no one's name, and took {his} too.", "when": { "status": ["dead"], "cause": ["black-death"] } },
-  { "id": "sin-greed", "text": "{He} {sinPhrase}, and the scales remember it.", "when": { "sin": ["greed"] } },
-  { "id": "sin-violence", "text": "{He} {sinPhrase}, and carried it to the end.", "when": { "sin": ["violence"] } },
-  { "id": "dead-old-clean", "text": "Not a stain on the scales, and a long road behind {him}.", "when": { "status": ["dead"], "ageBand": ["elder", "ancient"], "sin": ["clean"] } },
-  { "id": "dead-city-literate", "text": "In a crowded city {he} learned {his} letters and left a few words behind.", "when": { "status": ["dead"], "setting": ["city"], "literacy": ["literate"] } },
-  { "id": "dead-land-illiterate", "text": "Never learned to read, but knew every field and season by heart.", "when": { "status": ["dead"], "ageBand": ["adult", "mature", "elder", "ancient"], "setting": ["land"], "literacy": ["illiterate"] } },
-  { "id": "dead-girl-small", "text": "A small girl, and the world felt her going.", "when": { "status": ["dead"], "ageBand": ["infant", "child"], "sex": ["girl"] } },
-  { "id": "dead-boy-young", "text": "A young man with the whole road ahead of him, and it ended at the first bend.", "when": { "status": ["dead"], "ageBand": ["young"], "sex": ["boy"] } },
-  {"id": "dead-infant-cradle-still", "text": "Stillness claimed the cradle before the first cry fully formed.", "when": {"status": ["dead"], "ageBand": ["infant"]}},
-  {"id": "dead-infant-breath-brief", "text": "One brief breath weighed against the long silence that followed.", "when": {"status": ["dead"], "ageBand": ["infant"]}},
-  {"id": "dead-infant-unopened-eye", "text": "The eyes never fully opened to the world that waited.", "when": {"status": ["dead"], "ageBand": ["infant"]}},
-  {"id": "dead-infant-small-weight", "text": "So small a weight upon the scales, yet the balance never recovered.", "when": {"status": ["dead"], "ageBand": ["infant"]}},
-  {"id": "dead-child-early-dusk", "text": "Dusk arrived before the games of childhood could finish.", "when": {"status": ["dead"], "ageBand": ["child"]}},
-  {"id": "dead-child-unfinished-song", "text": "A song begun in the morning remained unfinished by night.", "when": {"status": ["dead"], "ageBand": ["child"]}},
-  {"id": "dead-child-short-shadow", "text": "The shadow stretched only a few summers long.", "when": {"status": ["dead"], "ageBand": ["child"]}},
-  {"id": "dead-child-play-ended", "text": "Play ended while the sun still stood high.", "when": {"status": ["dead"], "ageBand": ["child"]}},
-  {"id": "dead-juvenile-half-grown", "text": "Half grown, the path forward closed without warning.", "when": {"status": ["dead"], "ageBand": ["juvenile"]}},
-  {"id": "dead-juvenile-lessons-cut", "text": "Lessons of youth were cut short by a harder teacher.", "when": {"status": ["dead"], "ageBand": ["juvenile"]}},
-  {"id": "dead-juvenile-promise-unkept", "text": "Promise hung in the air, then fell unanswered.", "when": {"status": ["dead"], "ageBand": ["juvenile"]}},
-  {"id": "dead-juvenile-spring-frost", "text": "Spring frost took what summer might have ripened.", "when": {"status": ["dead"], "ageBand": ["juvenile"]}},
-  {"id": "dead-young-fire-banked", "text": "The fire of youth banked early and went cold.", "when": {"status": ["dead"], "ageBand": ["young"]}},
-  {"id": "dead-young-road-half", "text": "The road was only half walked when the light failed.", "when": {"status": ["dead"], "ageBand": ["young"]}},
-  {"id": "dead-young-strength-spent", "text": "Strength spent itself before the body had fully claimed it.", "when": {"status": ["dead"], "ageBand": ["young"]}},
-  {"id": "dead-young-dawn-to-dusk", "text": "From dawn of possibility to dusk of ending, little time passed.", "when": {"status": ["dead"], "ageBand": ["young"]}},
-  {"id": "dead-adult-mid-labor", "text": "Labor of the middle years ceased without completion.", "when": {"status": ["dead"], "ageBand": ["adult"]}},
-  {"id": "dead-adult-shoulders-eased", "text": "The shoulders eased their burden sooner than expected.", "when": {"status": ["dead"], "ageBand": ["adult"]}},
-  {"id": "dead-adult-noon-shadow", "text": "At the noon of life the shadow lengthened without cause.", "when": {"status": ["dead"], "ageBand": ["adult"]}},
-  {"id": "dead-adult-work-unfinished", "text": "Work of the hands and heart remained half done.", "when": {"status": ["dead"], "ageBand": ["adult"]}},
-  {"id": "dead-mature-harvest-early", "text": "The harvest came early, and the fields stood empty.", "when": {"status": ["dead"], "ageBand": ["mature"]}},
-  {"id": "dead-mature-wisdom-brief", "text": "Wisdom gathered over decades was set down too soon.", "when": {"status": ["dead"], "ageBand": ["mature"]}},
-  {"id": "dead-mature-balance-shift", "text": "The balance shifted while the middle years still held.", "when": {"status": ["dead"], "ageBand": ["mature"]}},
-  {"id": "dead-mature-voice-quiet", "text": "A steady voice grew quiet in the midst of its speaking.", "when": {"status": ["dead"], "ageBand": ["mature"]}},
-  {"id": "dead-elder-long-dusk", "text": "The long dusk settled after many seasons of light.", "when": {"status": ["dead"], "ageBand": ["elder"]}},
-  {"id": "dead-elder-grey-thread", "text": "The grey thread of years finally frayed and broke.", "when": {"status": ["dead"], "ageBand": ["elder"]}},
-  {"id": "dead-elder-memory-banked", "text": "Memories banked like coals cooled at last to ash.", "when": {"status": ["dead"], "ageBand": ["elder"]}},
-  {"id": "dead-elder-steps-slowed", "text": "Steps that had slowed for years came finally to rest.", "when": {"status": ["dead"], "ageBand": ["elder"]}},
-  {"id": "dead-ancient-final-season", "text": "The final season arrived after more years than most are granted.", "when": {"status": ["dead"], "ageBand": ["ancient"]}},
-  {"id": "dead-ancient-deep-roots", "text": "Deep roots released their hold on the soil of living.", "when": {"status": ["dead"], "ageBand": ["ancient"]}},
-  {"id": "dead-ancient-white-hair", "text": "White hair lay still after decades of wind and weather.", "when": {"status": ["dead"], "ageBand": ["ancient"]}},
-  {"id": "dead-ancient-last-breath", "text": "The last breath left a body that had outlasted empires of flesh.", "when": {"status": ["dead"], "ageBand": ["ancient"]}},
-  {"id": "alive-unfinished-path", "text": "The path continues, its end still hidden in mist.", "when": {"status": ["alive"]}},
-  {"id": "alive-scales-still", "text": "The scales have not yet settled on this living weight.", "when": {"status": ["alive"]}},
-  {"id": "alive-story-midway", "text": "The story remains midway, pages still unwritten.", "when": {"status": ["alive"]}},
-  {"id": "alive-breath-ongoing", "text": "Breath continues its quiet counting of days.", "when": {"status": ["alive"]}},
-  {"id": "alive-horizon-open", "text": "The horizon stays open, unmarked by any final line.", "when": {"status": ["alive"]}},
-  {"id": "alive-thread-unspooled", "text": "The thread remains unspooled, its length unknown.", "when": {"status": ["alive"]}},
-  {"id": "alive-weight-unjudged", "text": "This weight has not yet been fully judged.", "when": {"status": ["alive"]}},
-  {"id": "alive-dawn-persists", "text": "Dawn persists for one whose night has not arrived.", "when": {"status": ["alive"]}},
-  {"id": "alive-road-ahead", "text": "Road still stretches ahead, dust rising underfoot.", "when": {"status": ["alive"]}},
-  {"id": "alive-balance-pending", "text": "Balance pending; the pans have not yet spoken.", "when": {"status": ["alive"]}},
-  {"id": "alive-life-unfolding", "text": "Life unfolds still, petal by uncertain petal.", "when": {"status": ["alive"]}},
-  {"id": "alive-measure-incomplete", "text": "The measure of this soul remains incomplete.", "when": {"status": ["alive"]}},
-  {"id": "dead-natural-quiet-end", "text": "Quiet end after the ordinary measure of days.", "when": {"status": ["dead"], "cause": ["natural"]}},
-  {"id": "dead-natural-body-yielded", "text": "The body yielded to time as all bodies must.", "when": {"status": ["dead"], "cause": ["natural"]}},
-  {"id": "dead-natural-no-storm", "text": "No storm took this one; only the slow turning of seasons.", "when": {"status": ["dead"], "cause": ["natural"]}},
-  {"id": "dead-natural-common-fate", "text": "Common fate claimed what uncommon days had shaped.", "when": {"status": ["dead"], "cause": ["natural"]}},
-  {"id": "dead-natural-breath-ceased", "text": "Breath ceased without the drama of catastrophe.", "when": {"status": ["dead"], "cause": ["natural"]}},
-  {"id": "dead-natural-gentle-close", "text": "A gentle closing of the book of living.", "when": {"status": ["dead"], "cause": ["natural"]}},
-  {"id": "dead-natural-time-alone", "text": "Time alone wrote the final line.", "when": {"status": ["dead"], "cause": ["natural"]}},
-  {"id": "dead-natural-ordinary-dusk", "text": "Ordinary dusk after an ordinary span of light.", "when": {"status": ["dead"], "cause": ["natural"]}},
-  {"id": "dead-natural-flesh-rested", "text": "Flesh rested as flesh is meant to rest.", "when": {"status": ["dead"], "cause": ["natural"]}},
-  {"id": "dead-natural-no-name-end", "text": "An ending without a name beyond the name of living itself.", "when": {"status": ["dead"], "cause": ["natural"]}},
-  {"id": "dead-catastrophe-sudden-weight", "text": "Sudden weight tipped the scales beyond recovery.", "when": {"status": ["dead"], "cause": ["catastrophe"]}},
-  {"id": "dead-catastrophe-world-broke", "text": "The world broke open and took this life with it.", "when": {"status": ["dead"], "cause": ["catastrophe"]}},
-  {"id": "dead-catastrophe-unlooked-for", "text": "Unlooked-for ruin closed a life still in motion.", "when": {"status": ["dead"], "cause": ["catastrophe"]}},
-  {"id": "dead-catastrophe-great-wave", "text": "A great wave of ending swept this one away.", "when": {"status": ["dead"], "cause": ["catastrophe"]}},
-  {"id": "dead-catastrophe-history-hand", "text": "History's hand fell heavy and without mercy.", "when": {"status": ["dead"], "cause": ["catastrophe"]}},
-  {"id": "dead-catastrophe-shared-fate", "text": "Shared fate with multitudes, yet solitary in the dark.", "when": {"status": ["dead"], "cause": ["catastrophe"]}},
-  {"id": "dead-catastrophe-scales-overthrown", "text": "The scales themselves were overthrown by larger forces.", "when": {"status": ["dead"], "cause": ["catastrophe"]}},
-  {"id": "dead-catastrophe-brief-and-hard", "text": "Brief and hard the ending when the world convulsed.", "when": {"status": ["dead"], "cause": ["catastrophe"]}},
-  {"id": "dead-justinian-plague-breath", "text": "Breath failed under the shadow of the Plague of Justinian.", "when": {"status": ["dead"], "cause": ["plague-of-justinian"]}},
-  {"id": "dead-justinian-city-emptied", "text": "{Cause} emptied the streets and took this life among them.", "when": {"status": ["dead"], "cause": ["plague-of-justinian"]}},
-  {"id": "dead-justinian-fever-age", "text": "Fever of that age claimed what ordinary years might have spared.", "when": {"status": ["dead"], "cause": ["plague-of-justinian"]}},
-  {"id": "dead-mongol-conquest-storm", "text": "The storm of Mongol conquests rode over this life.", "when": {"status": ["dead"], "cause": ["mongol-conquests"]}},
-  {"id": "dead-mongol-hooves-passed", "text": "Hooves of conquest passed, and this one did not rise again.", "when": {"status": ["dead"], "cause": ["mongol-conquests"]}},
-  {"id": "dead-mongol-empire-edge", "text": "At the edge of expanding empire the light went out.", "when": {"status": ["dead"], "cause": ["mongol-conquests"]}},
-  {"id": "dead-black-death-shadow", "text": "The Black Death cast its long shadow across this span.", "when": {"status": ["dead"], "cause": ["black-death"]}},
-  {"id": "dead-black-death-pestilence", "text": "Pestilence of the mid-century took what it would.", "when": {"status": ["dead"], "cause": ["black-death"]}},
-  {"id": "dead-black-death-marks", "text": "Marks of the plague closed a life still counting seasons.", "when": {"status": ["dead"], "cause": ["black-death"]}},
-  {"id": "dead-post-contact-new-world", "text": "New diseases from across the sea ended this life early.", "when": {"status": ["dead"], "cause": ["post-contact-epidemics"]}},
-  {"id": "dead-post-contact-epidemic-wave", "text": "A wave of epidemic crossed the ocean and claimed its due.", "when": {"status": ["dead"], "cause": ["post-contact-epidemics"]}},
-  {"id": "dead-post-contact-unseen-enemy", "text": "Unseen enemy arrived with the ships and did its work.", "when": {"status": ["dead"], "cause": ["post-contact-epidemics"]}},
-  {"id": "dead-taiping-rebellion-fire", "text": "Fire of the Taiping Rebellion consumed this one among many.", "when": {"status": ["dead"], "cause": ["taiping-rebellion"]}},
-  {"id": "dead-taiping-strife-years", "text": "Years of rebellion and strife left this life unfinished.", "when": {"status": ["dead"], "cause": ["taiping-rebellion"]}},
-  {"id": "dead-taiping-civil-storm", "text": "Civil storm swept the land and took this soul with it.", "when": {"status": ["dead"], "cause": ["taiping-rebellion"]}},
-  {"id": "dead-first-world-war-trench", "text": "The First World War claimed {him} among the young and strong.", "when": {"status": ["dead"], "cause": ["first-world-war"], "sex": ["boy"], "ageBand": ["young", "adult"]}},
-  {"id": "dead-first-world-war-guns", "text": "Guns of that great war fell silent for this life too soon.", "when": {"status": ["dead"], "cause": ["first-world-war"]}},
-  {"id": "dead-first-world-war-mud", "text": "Mud and iron of the war years closed the account.", "when": {"status": ["dead"], "cause": ["first-world-war"]}},
-  {"id": "dead-1918-influenza-fever", "text": "Fever of the great influenza took what war had spared.", "when": {"status": ["dead"], "cause": ["1918-influenza"]}},
-  {"id": "dead-1918-influenza-breath", "text": "Breath failed in the grip of the influenza pandemic.", "when": {"status": ["dead"], "cause": ["1918-influenza"]}},
-  {"id": "dead-1918-influenza-wave", "text": "A second wave of ending followed the first worldwide.", "when": {"status": ["dead"], "cause": ["1918-influenza"]}},
-  {"id": "dead-second-world-war-shadow", "text": "Shadow of the Second World War fell across this life.", "when": {"status": ["dead"], "cause": ["second-world-war"]}},
-  {"id": "dead-second-world-war-fire", "text": "Fire and ruin of that war years claimed their portion.", "when": {"status": ["dead"], "cause": ["second-world-war"]}},
-  {"id": "dead-second-world-war-ended", "text": "The war ended for {him} before the guns fell silent for all.", "when": {"status": ["dead"], "cause": ["second-world-war"], "sex": ["boy"]}},
-  {"id": "dead-great-chinese-famine-hunger", "text": "Hunger of the great famine years emptied this body.", "when": {"status": ["dead"], "cause": ["great-chinese-famine"]}},
-  {"id": "dead-great-chinese-famine-lean", "text": "Lean years took more than the harvest could replace.", "when": {"status": ["dead"], "cause": ["great-chinese-famine"]}},
-  {"id": "dead-great-chinese-famine-soil", "text": "Soil yielded little, and this life yielded all.", "when": {"status": ["dead"], "cause": ["great-chinese-famine"]}},
-  {"id": "dead-hiv-aids-slow", "text": "Slow wasting of the epidemic years claimed this one.", "when": {"status": ["dead"], "cause": ["hiv-aids"]}},
-  {"id": "dead-hiv-aids-shadow", "text": "A long shadow of illness stretched across the decades.", "when": {"status": ["dead"], "cause": ["hiv-aids"]}},
-  {"id": "dead-hiv-aids-quiet-theft", "text": "Quiet theft of strength left the body empty at last.", "when": {"status": ["dead"], "cause": ["hiv-aids"]}},
-  {"id": "dead-covid-19-late", "text": "Late in the span the COVID-19 pandemic closed the door.", "when": {"status": ["dead"], "cause": ["covid-19"], "ageBand": ["elder", "ancient"]}},
-  {"id": "dead-covid-19-breath", "text": "Breath struggled and failed under the weight of that pandemic.", "when": {"status": ["dead"], "cause": ["covid-19"]}},
-  {"id": "dead-covid-19-isolation", "text": "Isolation of the plague years ended in permanent silence.", "when": {"status": ["dead"], "cause": ["covid-19"]}},
-  {"id": "sin-violence-hands", "text": "{He} {sinPhrase}, and the scales recorded the blood.", "when": {"status": ["dead"], "sin": ["violence"]}},
-  {"id": "sin-violence-struck", "text": "Hands that struck in anger found no rest at the end.", "when": {"status": ["dead"], "sin": ["violence"]}},
-  {"id": "sin-violence-weight", "text": "The weight of violence tipped what might have balanced.", "when": {"status": ["dead"], "sin": ["violence"]}},
-  {"id": "sin-violence-blade", "text": "{He} lived by the blade and the blade claimed its due.", "when": {"status": ["dead"], "sin": ["violence"]}},
-  {"id": "sin-violence-echo", "text": "Echo of violence followed into the final quiet.", "when": {"status": ["dead"], "sin": ["violence"]}},
-  {"id": "sin-deceit-tongue", "text": "{He} {sinPhrase}, and truth exacted its price at last.", "when": {"status": ["dead"], "sin": ["deceit"]}},
-  {"id": "sin-deceit-shadow", "text": "Shadows of deceit lengthened until they swallowed the light.", "when": {"status": ["dead"], "sin": ["deceit"]}},
-  {"id": "sin-deceit-false", "text": "False words weighed heavier than the speaker knew.", "when": {"status": ["dead"], "sin": ["deceit"]}},
-  {"id": "sin-deceit-mask", "text": "The mask of deceit slipped only when the face was still.", "when": {"status": ["dead"], "sin": ["deceit"]}},
-  {"id": "sin-deceit-ledger", "text": "A ledger of lies closed with a single final entry.", "when": {"status": ["dead"], "sin": ["deceit"]}},
-  {"id": "sin-greed-hands", "text": "{He} {sinPhrase}, and the empty hands held nothing at the end.", "when": {"status": ["dead"], "sin": ["greed"]}},
-  {"id": "sin-greed-hoarded", "text": "What was hoarded could not be carried beyond the last breath.", "when": {"status": ["dead"], "sin": ["greed"]}},
-  {"id": "sin-greed-weight", "text": "Greed added weight the soul could not finally bear.", "when": {"status": ["dead"], "sin": ["greed"]}},
-  {"id": "sin-greed-fist", "text": "The closed fist opened only in death.", "when": {"status": ["dead"], "sin": ["greed"]}},
-  {"id": "sin-greed-more", "text": "Always more, until there was no more time to take it.", "when": {"status": ["dead"], "sin": ["greed"]}},
-  {"id": "sin-heresy-thought", "text": "{He} {sinPhrase}, and the old order answered in kind.", "when": {"status": ["dead"], "sin": ["heresy"]}},
-  {"id": "sin-heresy-voice", "text": "A voice raised against the accepted truth fell silent.", "when": {"status": ["dead"], "sin": ["heresy"]}},
-  {"id": "sin-heresy-flame", "text": "Flame of forbidden thought burned until the fuel was gone.", "when": {"status": ["dead"], "sin": ["heresy"]}},
-  {"id": "sin-heresy-question", "text": "Questions asked too loudly found their answer in ending.", "when": {"status": ["dead"], "sin": ["heresy"]}},
-  {"id": "sin-heresy-path", "text": "The divergent path led to a common destination.", "when": {"status": ["dead"], "sin": ["heresy"]}},
-  {"id": "sin-clean-unstained", "text": "Unstained by the common marks, the soul passed lightly.", "when": {"status": ["dead"], "sin": ["clean"]}},
-  {"id": "sin-clean-clear-water", "text": "Clear water of a life without the sediment of guilt.", "when": {"status": ["dead"], "sin": ["clean"]}},
-  {"id": "sin-clean-no-ledger", "text": "No ledger of harm followed this one into silence.", "when": {"status": ["dead"], "sin": ["clean"]}},
-  {"id": "sin-clean-light-step", "text": "Light of step and clean of hand, the ending came quiet.", "when": {"status": ["dead"], "sin": ["clean"]}},
-  {"id": "sin-clean-blameless", "text": "Blameless in the accounting, the scales found little to weigh.", "when": {"status": ["dead"], "sin": ["clean"]}},
-  {"id": "sin-clean-open-palm", "text": "Open palms left no stain upon the final record.", "when": {"status": ["dead"], "sin": ["clean"]}},
-  {"id": "sin-clean-simple-truth", "text": "Simple truth marked the days until the last.", "when": {"status": ["dead"], "sin": ["clean"]}},
-  {"id": "sin-clean-no-shadow", "text": "No long shadow of wrongdoing trailed into the dark.", "when": {"status": ["dead"], "sin": ["clean"]}},
-  {"id": "sin-clean-even-keel", "text": "Even keel of a life that harmed little and asked less.", "when": {"status": ["dead"], "sin": ["clean"]}},
-  {"id": "sin-clean-quiet-good", "text": "Quiet good left no monument yet tilted the balance fair.", "when": {"status": ["dead"], "sin": ["clean"]}},
-  {"id": "lit-literate-ink", "text": "Ink and letters filled the days until the hand stilled.", "when": {"status": ["dead"], "literacy": ["literate"]}},
-  {"id": "lit-literate-scroll", "text": "Scrolls and written words outlasted the writer by a little.", "when": {"status": ["dead"], "literacy": ["literate"]}},
-  {"id": "lit-literate-scribe-hand", "text": "A scribe's hand set down what the voice could not keep.", "when": {"status": ["dead"], "literacy": ["literate"]}},
-  {"id": "lit-illiterate-unlettered", "text": "Unlettered, the life spoke only through deed and silence.", "when": {"status": ["dead"], "literacy": ["illiterate"]}},
-  {"id": "lit-illiterate-never-read", "text": "Never learned to read, yet read the world in other ways.", "when": {"status": ["dead"], "literacy": ["illiterate"]}},
-  {"id": "lit-illiterate-marks", "text": "Marks of the hand alone recorded what letters never held.", "when": {"status": ["dead"], "literacy": ["illiterate"]}},
-  {"id": "set-city-streets", "text": "Streets of the city knew these footsteps until they ceased.", "when": {"status": ["dead"], "setting": ["city"]}},
-  {"id": "set-city-market", "text": "Market noise faded for one who had known its press.", "when": {"status": ["dead"], "setting": ["city"]}},
-  {"id": "set-city-urban-dust", "text": "Urban dust settled over a life lived among many.", "when": {"status": ["dead"], "setting": ["city"]}},
-  {"id": "set-land-fields", "text": "Fields knew the labor until the laborer lay down.", "when": {"status": ["dead"], "setting": ["land"]}},
-  {"id": "set-land-soil", "text": "Soil that was worked returned the worker to itself.", "when": {"status": ["dead"], "setting": ["land"]}},
-  {"id": "set-land-harvest", "text": "Harvests came and went; the final harvest came for the reaper.", "when": {"status": ["dead"], "setting": ["land"]}},
-  {"id": "set-land-pasture", "text": "Pasture and herd marked the days until the last.", "when": {"status": ["dead"], "setting": ["land"]}},
-  {"id": "lit-set-city-literate", "text": "In the city the written word shaped a life now closed.", "when": {"status": ["dead"], "setting": ["city"], "literacy": ["literate"]}},
-  {"id": "lit-set-city-illiterate", "text": "City streets held one who never read their names.", "when": {"status": ["dead"], "setting": ["city"], "literacy": ["illiterate"]}},
-  {"id": "lit-set-land-literate", "text": "Letters reached even the fields where this one worked and ended.", "when": {"status": ["dead"], "setting": ["land"], "literacy": ["literate"]}},
-  {"id": "lit-set-land-illiterate", "text": "Illiterate hands shaped the land until they could shape no more.", "when": {"status": ["dead"], "setting": ["land"], "literacy": ["illiterate"]}},
-  {"id": "lit-set-city-ink-streets", "text": "Ink flowed in the city until the final page turned blank.", "when": {"status": ["dead"], "setting": ["city"], "literacy": ["literate"]}},
-  {"id": "lit-set-land-plough", "text": "Plough and soil were the only books this life required.", "when": {"status": ["dead"], "setting": ["land"], "literacy": ["illiterate"]}},
-  {"id": "lit-set-city-market-read", "text": "Market and manuscript both knew this presence for a time.", "when": {"status": ["dead"], "setting": ["city"], "literacy": ["literate"]}},
-  {"id": "lit-set-land-village-unlettered", "text": "Village paths held an unlettered life now at rest.", "when": {"status": ["dead"], "setting": ["land"], "literacy": ["illiterate"]}},
-  {"id": "lit-set-city-streets-unlettered", "text": "Unlettered among the urban press, the voice fell quiet.", "when": {"status": ["dead"], "setting": ["city"], "literacy": ["illiterate"]}},
-  {"id": "lit-set-land-harvest-read", "text": "Harvest and written word shared the measure of these years.", "when": {"status": ["dead"], "setting": ["land"], "literacy": ["literate"]}},
-  {"id": "lit-set-city-dust-letters", "text": "City dust covered letters that outlived their maker briefly.", "when": {"status": ["dead"], "setting": ["city"], "literacy": ["literate"]}},
-  {"id": "lit-set-land-countryside-ink", "text": "Countryside quiet held one who still kept ink and thought.", "when": {"status": ["dead"], "setting": ["land"], "literacy": ["literate"]}},
-  {"id": "sex-girl-young-promise", "text": "Promise of a young woman ended before its full flowering.", "when": {"status": ["dead"], "sex": ["girl"], "ageBand": ["young"]}},
-  {"id": "sex-boy-young-strength", "text": "Strength of a young man spent itself against harder forces.", "when": {"status": ["dead"], "sex": ["boy"], "ageBand": ["young"]}},
-  {"id": "sex-girl-child-dawn", "text": "Dawn of a girl's life closed before the morning was old.", "when": {"status": ["dead"], "sex": ["girl"], "ageBand": ["child"]}},
-  {"id": "sex-boy-child-play", "text": "Play of a boy ended while the sun still climbed.", "when": {"status": ["dead"], "sex": ["boy"], "ageBand": ["child"]}},
-  {"id": "sex-girl-elder-grey", "text": "Grey years of a woman settled into final stillness.", "when": {"status": ["dead"], "sex": ["girl"], "ageBand": ["elder"]}},
-  {"id": "sex-boy-elder-steps", "text": "Steps of an aging man slowed to their last measure.", "when": {"status": ["dead"], "sex": ["boy"], "ageBand": ["elder"]}},
-  {"id": "sex-girl-adult-mid", "text": "Mid years of a woman's labor ceased without warning.", "when": {"status": ["dead"], "sex": ["girl"], "ageBand": ["adult"]}},
-  {"id": "sex-boy-adult-shoulders", "text": "Shoulders of a man eased their load too early.", "when": {"status": ["dead"], "sex": ["boy"], "ageBand": ["adult"]}},
-  {"id": "sex-girl-infant-brief", "text": "Brief span of a girl child measured in days not years.", "when": {"status": ["dead"], "sex": ["girl"], "ageBand": ["infant"]}},
-  {"id": "sex-boy-infant-quiet", "text": "Quiet ending for a boy whose voice had barely begun.", "when": {"status": ["dead"], "sex": ["boy"], "ageBand": ["infant"]}},
-  {"id": "sex-girl-juvenile-half", "text": "Half the growth of a girl completed when the path closed.", "when": {"status": ["dead"], "sex": ["girl"], "ageBand": ["juvenile"]}},
-  {"id": "sex-boy-juvenile-promise", "text": "Promise of a growing boy left unfulfilled by time.", "when": {"status": ["dead"], "sex": ["boy"], "ageBand": ["juvenile"]}},
-  {"id": "sex-girl-mature-wisdom", "text": "Wisdom of a mature woman set down before its full use.", "when": {"status": ["dead"], "sex": ["girl"], "ageBand": ["mature"]}},
-  {"id": "sex-boy-mature-voice", "text": "Steady voice of a mature man grew quiet mid-sentence.", "when": {"status": ["dead"], "sex": ["boy"], "ageBand": ["mature"]}},
-  {"id": "sex-girl-ancient-long", "text": "Long years of a woman ended after most had already gone.", "when": {"status": ["dead"], "sex": ["girl"], "ageBand": ["ancient"]}},
-  {"id": "sex-boy-ancient-roots", "text": "Deep roots of an old man released at last their hold.", "when": {"status": ["dead"], "sex": ["boy"], "ageBand": ["ancient"]}},
-  {"id": "sex-girl-dead-generic", "text": "A woman's span closed with the ordinary dignity of ending.", "when": {"status": ["dead"], "sex": ["girl"]}},
-  {"id": "sex-boy-dead-generic", "text": "A man's measure completed, the account laid by.", "when": {"status": ["dead"], "sex": ["boy"]}},
-  {"id": "sex-girl-alive-path", "text": "A woman's path continues, its final turn still unseen.", "when": {"status": ["alive"], "sex": ["girl"]}},
-  {"id": "sex-boy-alive-road", "text": "A man's road stretches on, dust still rising.", "when": {"status": ["alive"], "sex": ["boy"]}},
-  {"id": "era-new-stone-grain", "text": "First grain and settled earth held this span of living.", "when": {"status": ["dead"], "era": ["new-stone-age"]}},
-  {"id": "era-new-stone-pottery", "text": "Clay and early harvest framed the measure of these years.", "when": {"status": ["dead"], "era": ["new-stone-age"]}},
-  {"id": "era-new-stone-village", "text": "Village life of the new stone age ended in common quiet.", "when": {"status": ["dead"], "era": ["new-stone-age"]}},
-  {"id": "era-bronze-metal", "text": "Bronze edge and early trade marked the working of this life.", "when": {"status": ["dead"], "era": ["bronze-age"]}},
-  {"id": "era-bronze-cast", "text": "Cast metal and rising walls framed the days now closed.", "when": {"status": ["dead"], "era": ["bronze-age"]}},
-  {"id": "era-bronze-alloy", "text": "Alloy of copper and tin outlasted the hands that shaped it.", "when": {"status": ["dead"], "era": ["bronze-age"]}},
-  {"id": "era-iron-blade", "text": "Iron blade and harder tools defined the labor of these years.", "when": {"status": ["dead"], "era": ["iron-age"]}},
-  {"id": "era-iron-forge", "text": "Forge smoke rose over a life now cooled to ash.", "when": {"status": ["dead"], "era": ["iron-age"]}},
-  {"id": "era-iron-stronger", "text": "Stronger metal could not strengthen the span of living.", "when": {"status": ["dead"], "era": ["iron-age"]}},
-  {"id": "era-classical-polis", "text": "City and reasoned speech shaped a life of the classical age.", "when": {"status": ["dead"], "era": ["classical"]}},
-  {"id": "era-classical-column", "text": "Columns and early empires framed the years now ended.", "when": {"status": ["dead"], "era": ["classical"]}},
-  {"id": "era-classical-scroll", "text": "Scroll and symposium light faded for this one.", "when": {"status": ["dead"], "era": ["classical"], "literacy": ["literate"]}},
-  {"id": "era-middle-ages-castle", "text": "Stone walls and feudal order held the measure of these days.", "when": {"status": ["dead"], "era": ["middle-ages"]}},
-  {"id": "era-middle-ages-manuscript", "text": "Manuscript and monastery quiet marked a life now still.", "when": {"status": ["dead"], "era": ["middle-ages"], "literacy": ["literate"]}},
-  {"id": "era-middle-ages-plough", "text": "Plough and manor field shaped the ordinary span.", "when": {"status": ["dead"], "era": ["middle-ages"], "setting": ["land"]}},
-  {"id": "era-early-modern-sail", "text": "Sail and new maps widened the world this life knew briefly.", "when": {"status": ["dead"], "era": ["early-modern"]}},
-  {"id": "era-early-modern-press", "text": "Printed word began to spread as this life closed.", "when": {"status": ["dead"], "era": ["early-modern"], "literacy": ["literate"]}},
-  {"id": "era-early-modern-clock", "text": "Clockwork time measured a span now fully spent.", "when": {"status": ["dead"], "era": ["early-modern"]}},
-  {"id": "era-industrial-smoke", "text": "Smoke of engines and mills marked the working years.", "when": {"status": ["dead"], "era": ["industrial"]}},
-  {"id": "era-industrial-rail", "text": "Rail and factory whistle framed a life of the industrial age.", "when": {"status": ["dead"], "era": ["industrial"]}},
-  {"id": "era-industrial-steam", "text": "Steam and iron reshaped the days until the last.", "when": {"status": ["dead"], "era": ["industrial"]}},
-  {"id": "era-modern-wire", "text": "Wire and signal carried voices this life once answered.", "when": {"status": ["dead"], "era": ["modern"]}},
-  {"id": "era-modern-screen", "text": "Screen light and rapid change marked the closing years.", "when": {"status": ["dead"], "era": ["modern"]}},
-  {"id": "era-modern-network", "text": "Networked world held a presence now disconnected.", "when": {"status": ["dead"], "era": ["modern"]}},
-  {"id": "region-ssa-river", "text": "River of the southern lands knew these footsteps for a time.", "when": {"status": ["dead"], "region": ["ssa"]}},
-  {"id": "region-ssa-savanna", "text": "Savanna wind moved over a life now still beneath it.", "when": {"status": ["dead"], "region": ["ssa"]}},
-  {"id": "region-mena-desert", "text": "Desert edge and ancient routes framed this span of days.", "when": {"status": ["dead"], "region": ["mena"]}},
-  {"id": "region-mena-oasis", "text": "Oasis and dry wind marked the measure until the end.", "when": {"status": ["dead"], "region": ["mena"]}},
-  {"id": "region-eur-forest", "text": "Forest and northern river held a life now returned to them.", "when": {"status": ["dead"], "region": ["eur"]}},
-  {"id": "region-eur-coast", "text": "Coastal fog and old stone watched the years close.", "when": {"status": ["dead"], "region": ["eur"]}},
-  {"id": "region-sas-monsoon", "text": "Monsoon rain fell on the living and the finished alike.", "when": {"status": ["dead"], "region": ["sas"]}},
-  {"id": "region-sas-river-plain", "text": "River plain of the south knew the labor of these hands.", "when": {"status": ["dead"], "region": ["sas"]}},
-  {"id": "region-eas-mountain", "text": "Mountain mist and eastern valleys framed the quiet end.", "when": {"status": ["dead"], "region": ["eas"]}},
-  {"id": "region-eas-rice", "text": "Rice field and terrace held a presence now absent.", "when": {"status": ["dead"], "region": ["eas"]}},
-  {"id": "region-sea-coast", "text": "Island coast and warm sea marked the days of living.", "when": {"status": ["dead"], "region": ["sea"]}},
-  {"id": "region-sea-monsoon-wind", "text": "Monsoon wind over water closed a life among the islands.", "when": {"status": ["dead"], "region": ["sea"]}},
-  {"id": "region-ame-plain", "text": "Wide plain and long river knew this span of breath.", "when": {"status": ["dead"], "region": ["ame"]}},
-  {"id": "region-ame-forest-edge", "text": "Forest edge of the western lands held a life now still.", "when": {"status": ["dead"], "region": ["ame"]}},
-  {"id": "rich-elder-land-illiterate-clean", "text": "Elder hands unlettered and clean worked the land until rest.", "when": {"status": ["dead"], "ageBand": ["elder"], "setting": ["land"], "literacy": ["illiterate"], "sin": ["clean"]}},
-  {"id": "rich-ancient-city-literate-natural", "text": "Ancient city years of letters ended in ordinary quiet.", "when": {"status": ["dead"], "ageBand": ["ancient"], "setting": ["city"], "literacy": ["literate"], "cause": ["natural"]}},
-  {"id": "rich-young-boy-violence-catastrophe", "text": "Young man of violence met a larger violence and fell.", "when": {"status": ["dead"], "ageBand": ["young"], "sex": ["boy"], "sin": ["violence"], "cause": ["catastrophe"]}},
-  {"id": "rich-mature-girl-land-clean", "text": "Mature woman of the fields left no stain upon the record.", "when": {"status": ["dead"], "ageBand": ["mature"], "sex": ["girl"], "setting": ["land"], "sin": ["clean"]}},
-  {"id": "rich-adult-city-deceit", "text": "Adult years in the city carried the weight of deceit to the end.", "when": {"status": ["dead"], "ageBand": ["adult"], "setting": ["city"], "sin": ["deceit"]}},
-  {"id": "rich-elder-boy-literate-eur", "text": "Elder man of letters in the northern lands set down the pen.", "when": {"status": ["dead"], "ageBand": ["elder"], "sex": ["boy"], "literacy": ["literate"], "region": ["eur"]}},
-  {"id": "rich-juvenile-girl-illiterate-land", "text": "Growing girl of the countryside never learned the written word.", "when": {"status": ["dead"], "ageBand": ["juvenile"], "sex": ["girl"], "literacy": ["illiterate"], "setting": ["land"]}},
-  {"id": "rich-ancient-clean-natural-land", "text": "Ancient and unstained, the land received what it had given.", "when": {"status": ["dead"], "ageBand": ["ancient"], "sin": ["clean"], "cause": ["natural"], "setting": ["land"]}},
-  {"id": "rich-young-girl-city-greed", "text": "Young woman of the streets carried greed until the streets claimed her.", "when": {"status": ["dead"], "ageBand": ["young"], "sex": ["girl"], "setting": ["city"], "sin": ["greed"]}},
-  {"id": "rich-mature-boy-heresy-literate", "text": "Mature man of letters asked forbidden questions and paid.", "when": {"status": ["dead"], "ageBand": ["mature"], "sex": ["boy"], "sin": ["heresy"], "literacy": ["literate"]}},
-  {"id": "rich-elder-girl-ssa-land", "text": "Elder woman of the southern rivers returned to the soil.", "when": {"status": ["dead"], "ageBand": ["elder"], "sex": ["girl"], "region": ["ssa"], "setting": ["land"]}},
-  {"id": "rich-adult-boy-mena-city", "text": "Adult man of the desert cities walked the streets no more.", "when": {"status": ["dead"], "ageBand": ["adult"], "sex": ["boy"], "region": ["mena"], "setting": ["city"]}},
-  {"id": "rich-child-illiterate-natural", "text": "Child unlettered met the ordinary end of early years.", "when": {"status": ["dead"], "ageBand": ["child"], "literacy": ["illiterate"], "cause": ["natural"]}},
-  {"id": "rich-ancient-boy-eas-literate", "text": "Ancient man of eastern valleys kept letters until the last.", "when": {"status": ["dead"], "ageBand": ["ancient"], "sex": ["boy"], "region": ["eas"], "literacy": ["literate"]}},
-  {"id": "rich-young-girl-sea-clean", "text": "Young woman of the island coasts left a clean account.", "when": {"status": ["dead"], "ageBand": ["young"], "sex": ["girl"], "region": ["sea"], "sin": ["clean"]}},
-  {"id": "alive-city-ongoing", "text": "City streets still know these living footsteps.", "when": {"status": ["alive"], "setting": ["city"]}},
-  {"id": "alive-land-ongoing", "text": "Fields still wait the labor of hands not yet finished.", "when": {"status": ["alive"], "setting": ["land"]}},
-  {"id": "alive-literate-ongoing", "text": "Letters continue to shape a life still being written.", "when": {"status": ["alive"], "literacy": ["literate"]}},
-  {"id": "alive-illiterate-ongoing", "text": "Unlettered days continue their quiet counting.", "when": {"status": ["alive"], "literacy": ["illiterate"]}},
-  {"id": "dead-infant-natural", "text": "Ordinary ending for a life measured only in days.", "when": {"status": ["dead"], "ageBand": ["infant"], "cause": ["natural"]}},
-  {"id": "dead-child-catastrophe", "text": "Larger forces ended a childhood still in its early chapters.", "when": {"status": ["dead"], "ageBand": ["child"], "cause": ["catastrophe"]}},
-  {"id": "dead-juvenile-natural", "text": "Natural close to years that had only begun to lengthen.", "when": {"status": ["dead"], "ageBand": ["juvenile"], "cause": ["natural"]}},
-  {"id": "dead-young-catastrophe", "text": "Catastrophe met youth and left no further seasons.", "when": {"status": ["dead"], "ageBand": ["young"], "cause": ["catastrophe"]}},
-  {"id": "dead-adult-natural", "text": "Middle years yielded to the ordinary claim of time.", "when": {"status": ["dead"], "ageBand": ["adult"], "cause": ["natural"]}},
-  {"id": "dead-mature-catastrophe", "text": "Mature strength could not stand against the greater storm.", "when": {"status": ["dead"], "ageBand": ["mature"], "cause": ["catastrophe"]}},
-  {"id": "dead-elder-natural", "text": "Elder years closed as elder years often do.", "when": {"status": ["dead"], "ageBand": ["elder"], "cause": ["natural"]}},
-  {"id": "dead-ancient-catastrophe", "text": "Even the long-lived could not outrun the sudden ruin.", "when": {"status": ["dead"], "ageBand": ["ancient"], "cause": ["catastrophe"]}},
-  {"id": "dead-girl-land-clean", "text": "Woman of the fields left the soil cleaner than she found it.", "when": {"status": ["dead"], "sex": ["girl"], "setting": ["land"], "sin": ["clean"]}},
-  {"id": "dead-boy-city-violence", "text": "Man of the streets carried violence until violence answered.", "when": {"status": ["dead"], "sex": ["boy"], "setting": ["city"], "sin": ["violence"]}},
-  {"id": "dead-literate-heresy", "text": "Written thought wandered into forbidden ground and paid.", "when": {"status": ["dead"], "literacy": ["literate"], "sin": ["heresy"]}},
-  {"id": "dead-illiterate-greed", "text": "Unlettered hands still found ways to take more than due.", "when": {"status": ["dead"], "literacy": ["illiterate"], "sin": ["greed"]}},
-  {"id": "dead-city-deceit-natural", "text": "City deceit ended in the quiet way of ordinary time.", "when": {"status": ["dead"], "setting": ["city"], "sin": ["deceit"], "cause": ["natural"]}},
-  {"id": "dead-land-clean-catastrophe", "text": "Clean life of the land met a catastrophe not of its making.", "when": {"status": ["dead"], "setting": ["land"], "sin": ["clean"], "cause": ["catastrophe"]}},
-  {"id": "dead-young-literate-city", "text": "Young years of letters in the city ended before their prime.", "when": {"status": ["dead"], "ageBand": ["young"], "literacy": ["literate"], "setting": ["city"]}},
-  {"id": "dead-elder-illiterate-land", "text": "Elder and unlettered, the land took back what it had lent.", "when": {"status": ["dead"], "ageBand": ["elder"], "literacy": ["illiterate"], "setting": ["land"]}},
-  {"id": "dead-girl-ancient-clean", "text": "Ancient woman unstained by the common marks of harm.", "when": {"status": ["dead"], "sex": ["girl"], "ageBand": ["ancient"], "sin": ["clean"]}},
-  {"id": "dead-boy-infant-natural", "text": "Boy child met the ordinary end before naming days.", "when": {"status": ["dead"], "sex": ["boy"], "ageBand": ["infant"], "cause": ["natural"]}},
-  {"id": "dead-mature-literate-natural", "text": "Mature years of writing closed in the common way of time.", "when": {"status": ["dead"], "ageBand": ["mature"], "literacy": ["literate"], "cause": ["natural"]}},
-  {"id": "dead-juvenile-city-catastrophe", "text": "Growing years in the city ended under larger forces.", "when": {"status": ["dead"], "ageBand": ["juvenile"], "setting": ["city"], "cause": ["catastrophe"]}},
-  {"id": "dead-adult-land-illiterate", "text": "Adult hands of the countryside never needed the written word.", "when": {"status": ["dead"], "ageBand": ["adult"], "setting": ["land"], "literacy": ["illiterate"]}},
-  {"id": "dead-girl-young-deceit", "text": "Young woman of false words found truth waiting at the end.", "when": {"status": ["dead"], "sex": ["girl"], "ageBand": ["young"], "sin": ["deceit"]}},
-  {"id": "dead-boy-mature-greed", "text": "Mature man who took more than due left empty-handed.", "when": {"status": ["dead"], "sex": ["boy"], "ageBand": ["mature"], "sin": ["greed"]}},
-  {"id": "dead-elder-city-literate-clean", "text": "Elder of the city, lettered and clean, set the pen aside.", "when": {"status": ["dead"], "ageBand": ["elder"], "setting": ["city"], "literacy": ["literate"], "sin": ["clean"]}},
-  {"id": "dead-ancient-land-illiterate-natural", "text": "Ancient and unlettered of the fields met ordinary dusk.", "when": {"status": ["dead"], "ageBand": ["ancient"], "setting": ["land"], "literacy": ["illiterate"], "cause": ["natural"]}},
-  {"id": "dead-child-girl-land", "text": "Girl child of the countryside knew only a few seasons.", "when": {"status": ["dead"], "ageBand": ["child"], "sex": ["girl"], "setting": ["land"]}},
-  {"id": "dead-juvenile-boy-city", "text": "Boy growing among the streets left them too soon.", "when": {"status": ["dead"], "ageBand": ["juvenile"], "sex": ["boy"], "setting": ["city"]}},
-  {"id": "dead-young-girl-literate", "text": "Young woman of letters closed the book mid-chapter.", "when": {"status": ["dead"], "ageBand": ["young"], "sex": ["girl"], "literacy": ["literate"]}},
-  {"id": "dead-adult-boy-illiterate", "text": "Adult man unlettered shaped the world by hand alone.", "when": {"status": ["dead"], "ageBand": ["adult"], "sex": ["boy"], "literacy": ["illiterate"]}},
-  {"id": "dead-mature-girl-city", "text": "Mature woman of the urban press walked no more.", "when": {"status": ["dead"], "ageBand": ["mature"], "sex": ["girl"], "setting": ["city"]}},
-  {"id": "dead-elder-boy-land", "text": "Elder man of the fields laid down the tools at last.", "when": {"status": ["dead"], "ageBand": ["elder"], "sex": ["boy"], "setting": ["land"]}},
-  {"id": "dead-infant-girl-catastrophe", "text": "Girl child taken by forces larger than any cradle.", "when": {"status": ["dead"], "ageBand": ["infant"], "sex": ["girl"], "cause": ["catastrophe"]}},
-  {"id": "dead-child-boy-natural", "text": "Boy child met the quiet end that time sometimes brings early.", "when": {"status": ["dead"], "ageBand": ["child"], "sex": ["boy"], "cause": ["natural"]}},
-  {"id": "dead-ancient-girl-city-literate", "text": "Ancient woman of city letters outlasted most who knew her.", "when": {"status": ["dead"], "ageBand": ["ancient"], "sex": ["girl"], "setting": ["city"], "literacy": ["literate"]}},
-  {"id": "dead-young-boy-land-clean", "text": "Young man of the fields left no mark of harm behind.", "when": {"status": ["dead"], "ageBand": ["young"], "sex": ["boy"], "setting": ["land"], "sin": ["clean"]}},
-  {"id": "dead-adult-girl-violence", "text": "Adult woman whose hands knew violence met a hard close.", "when": {"status": ["dead"], "ageBand": ["adult"], "sex": ["girl"], "sin": ["violence"]}},
-  {"id": "dead-mature-boy-city-deceit", "text": "Mature man of city shadows carried deceit to the final door.", "when": {"status": ["dead"], "ageBand": ["mature"], "sex": ["boy"], "setting": ["city"], "sin": ["deceit"]}},
-  {"id": "dead-elder-girl-illiterate-clean", "text": "Elder woman unlettered and clean rested after long labor.", "when": {"status": ["dead"], "ageBand": ["elder"], "sex": ["girl"], "literacy": ["illiterate"], "sin": ["clean"]}},
-  {"id": "dead-ancient-boy-land-natural", "text": "Ancient man of the soil met the ordinary claim of years.", "when": {"status": ["dead"], "ageBand": ["ancient"], "sex": ["boy"], "setting": ["land"], "cause": ["natural"]}},
-  {"id": "dead-juvenile-girl-literate-city", "text": "Growing girl of city letters found the page torn early.", "when": {"status": ["dead"], "ageBand": ["juvenile"], "sex": ["girl"], "literacy": ["literate"], "setting": ["city"]}},
-  {"id": "dead-child-boy-illiterate-land", "text": "Boy child of the countryside never needed more than soil.", "when": {"status": ["dead"], "ageBand": ["child"], "sex": ["boy"], "literacy": ["illiterate"], "setting": ["land"]}},
-  {"id": "dead-young-girl-catastrophe-clean", "text": "Young woman clean of harm taken by the greater storm.", "when": {"status": ["dead"], "ageBand": ["young"], "sex": ["girl"], "cause": ["catastrophe"], "sin": ["clean"]}},
-  {"id": "dead-adult-boy-natural-land", "text": "Adult man of the fields yielded to time alone.", "when": {"status": ["dead"], "ageBand": ["adult"], "sex": ["boy"], "cause": ["natural"], "setting": ["land"]}},
-  {"id": "dead-mature-girl-illiterate-greed", "text": "Mature woman unlettered still knew the hunger of more.", "when": {"status": ["dead"], "ageBand": ["mature"], "sex": ["girl"], "literacy": ["illiterate"], "sin": ["greed"]}},
-  {"id": "dead-elder-boy-city-violence", "text": "Elder man of the streets carried old violence to the end.", "when": {"status": ["dead"], "ageBand": ["elder"], "sex": ["boy"], "setting": ["city"], "sin": ["violence"]}},
-  {"id": "dead-ancient-girl-land-heresy", "text": "Ancient woman of the fields held thoughts the order forbade.", "when": {"status": ["dead"], "ageBand": ["ancient"], "sex": ["girl"], "setting": ["land"], "sin": ["heresy"]}},
-  {"id": "dead-infant-boy-city", "text": "Boy child of the urban press knew only the briefest light.", "when": {"status": ["dead"], "ageBand": ["infant"], "sex": ["boy"], "setting": ["city"]}},
-  {"id": "dead-child-girl-literate", "text": "Girl child who had begun to know letters set them aside early.", "when": {"status": ["dead"], "ageBand": ["child"], "sex": ["girl"], "literacy": ["literate"]}},
-  {"id": "dead-juvenile-boy-natural-clean", "text": "Growing boy clean of harm met the quiet end of time.", "when": {"status": ["dead"], "ageBand": ["juvenile"], "sex": ["boy"], "cause": ["natural"], "sin": ["clean"]}},
-  {"id": "dead-young-girl-land-illiterate", "text": "Young woman of the countryside never read the written word.", "when": {"status": ["dead"], "ageBand": ["young"], "sex": ["girl"], "setting": ["land"], "literacy": ["illiterate"]}},
-  {"id": "dead-adult-boy-city-literate-natural", "text": "Adult man of city letters closed the account in ordinary time.", "when": {"status": ["dead"], "ageBand": ["adult"], "sex": ["boy"], "setting": ["city"], "literacy": ["literate"], "cause": ["natural"]}},
-  {"id": "dead-mature-girl-land-catastrophe", "text": "Mature woman of the fields taken by forces beyond the harvest.", "when": {"status": ["dead"], "ageBand": ["mature"], "sex": ["girl"], "setting": ["land"], "cause": ["catastrophe"]}},
-  {"id": "dead-elder-boy-illiterate-natural", "text": "Elder man unlettered yielded to the common claim of years.", "when": {"status": ["dead"], "ageBand": ["elder"], "sex": ["boy"], "literacy": ["illiterate"], "cause": ["natural"]}},
-  {"id": "dead-ancient-girl-city-clean", "text": "Ancient woman of the streets left no stain upon the final record.", "when": {"status": ["dead"], "ageBand": ["ancient"], "sex": ["girl"], "setting": ["city"], "sin": ["clean"]}},
-  {"id": "alive-young-path", "text": "Young years continue, the later chapters still unwritten.", "when": {"status": ["alive"], "ageBand": ["young"]}},
-  {"id": "alive-adult-measure", "text": "Middle years continue their uncertain measure.", "when": {"status": ["alive"], "ageBand": ["adult"]}},
-  {"id": "alive-elder-dusk", "text": "Elder light continues, the final dusk not yet arrived.", "when": {"status": ["alive"], "ageBand": ["elder"]}},
-  {"id": "alive-girl-ongoing", "text": "A woman's days continue their quiet unfolding.", "when": {"status": ["alive"], "sex": ["girl"]}},
-  {"id": "alive-boy-ongoing", "text": "A man's span continues, its full weight still unknown.", "when": {"status": ["alive"], "sex": ["boy"]}},
-  {"id": "dead-plague-justinian-elder", "text": "Elder years ended under the Plague of Justinian.", "when": {"status": ["dead"], "cause": ["plague-of-justinian"], "ageBand": ["elder"]}},
-  {"id": "dead-mongol-young-boy", "text": "Young man fell beneath the advance of Mongol conquests.", "when": {"status": ["dead"], "cause": ["mongol-conquests"], "ageBand": ["young"], "sex": ["boy"]}},
-  {"id": "dead-black-death-city", "text": "City streets emptied by the Black Death claimed this life too.", "when": {"status": ["dead"], "cause": ["black-death"], "setting": ["city"]}},
-  {"id": "dead-post-contact-land", "text": "Land of the western shores met new epidemics and this life ended.", "when": {"status": ["dead"], "cause": ["post-contact-epidemics"], "setting": ["land"]}},
-  {"id": "dead-taiping-adult", "text": "Adult years cut short by the Taiping Rebellion.", "when": {"status": ["dead"], "cause": ["taiping-rebellion"], "ageBand": ["adult"]}},
-  {"id": "dead-first-war-mature-boy", "text": "Mature man taken by the First World War before its close.", "when": {"status": ["dead"], "cause": ["first-world-war"], "ageBand": ["mature"], "sex": ["boy"]}},
-  {"id": "dead-influenza-young", "text": "Young years ended in the grip of the great influenza.", "when": {"status": ["dead"], "cause": ["1918-influenza"], "ageBand": ["young"]}},
-  {"id": "dead-second-war-girl", "text": "Woman's life closed under the shadow of the Second World War.", "when": {"status": ["dead"], "cause": ["second-world-war"], "sex": ["girl"]}},
-  {"id": "dead-famine-elder-land", "text": "Elder of the fields taken by the great famine years.", "when": {"status": ["dead"], "cause": ["great-chinese-famine"], "ageBand": ["elder"], "setting": ["land"]}},
-  {"id": "dead-hiv-adult-ssa", "text": "Adult years in the southern lands ended under the long epidemic.", "when": {"status": ["dead"], "cause": ["hiv-aids"], "ageBand": ["adult"], "region": ["ssa"]}},
-  {"id": "dead-covid-ancient", "text": "Ancient years closed during the COVID-19 pandemic.", "when": {"status": ["dead"], "cause": ["covid-19"], "ageBand": ["ancient"]}},
-  {"id": "dead-era-bronze-land", "text": "Bronze age fields knew the labor until the laborer rested.", "when": {"status": ["dead"], "era": ["bronze-age"], "setting": ["land"]}},
-  {"id": "dead-era-iron-city", "text": "Iron age city streets held a presence now absent.", "when": {"status": ["dead"], "era": ["iron-age"], "setting": ["city"]}},
-  {"id": "dead-era-classical-literate", "text": "Classical letters shaped a mind now quiet.", "when": {"status": ["dead"], "era": ["classical"], "literacy": ["literate"]}},
-  {"id": "dead-era-middle-illiterate", "text": "Middle ages unlettered life closed in common quiet.", "when": {"status": ["dead"], "era": ["middle-ages"], "literacy": ["illiterate"]}},
-  {"id": "dead-era-early-modern-clean", "text": "Early modern years unstained by the common harms.", "when": {"status": ["dead"], "era": ["early-modern"], "sin": ["clean"]}},
-  {"id": "dead-era-industrial-catastrophe", "text": "Industrial age life ended under larger forces of history.", "when": {"status": ["dead"], "era": ["industrial"], "cause": ["catastrophe"]}},
-  {"id": "dead-era-modern-natural", "text": "Modern years yielded to the ordinary claim of time.", "when": {"status": ["dead"], "era": ["modern"], "cause": ["natural"]}},
-  {"id": "dead-region-ssa-illiterate", "text": "Unlettered life of the southern rivers returned to them.", "when": {"status": ["dead"], "region": ["ssa"], "literacy": ["illiterate"]}},
-  {"id": "dead-region-mena-literate", "text": "Lettered life of the desert edge set down the final word.", "when": {"status": ["dead"], "region": ["mena"], "literacy": ["literate"]}},
-  {"id": "dead-region-eur-elder", "text": "Elder of the northern forests rested after long seasons.", "when": {"status": ["dead"], "region": ["eur"], "ageBand": ["elder"]}},
-  {"id": "dead-region-sas-young", "text": "Young years of the monsoon plains ended early.", "when": {"status": ["dead"], "region": ["sas"], "ageBand": ["young"]}},
-  {"id": "dead-region-eas-city", "text": "City life of the eastern valleys closed its account.", "when": {"status": ["dead"], "region": ["eas"], "setting": ["city"]}},
-  {"id": "dead-region-sea-land", "text": "Island fields knew the labor until the end.", "when": {"status": ["dead"], "region": ["sea"], "setting": ["land"]}},
-  {"id": "dead-region-ame-catastrophe", "text": "Western plains life taken by forces beyond the horizon.", "when": {"status": ["dead"], "region": ["ame"], "cause": ["catastrophe"]}},
-  {"id": "dead-sin-clean-elder-land", "text": "Elder of the fields, clean of hand, rested at last.", "when": {"status": ["dead"], "sin": ["clean"], "ageBand": ["elder"], "setting": ["land"]}},
-  {"id": "dead-sin-violence-young-city", "text": "Young violence of the streets met its answer early.", "when": {"status": ["dead"], "sin": ["violence"], "ageBand": ["young"], "setting": ["city"]}},
-  {"id": "dead-sin-deceit-adult-literate", "text": "Adult of letters whose words deceived found silence waiting.", "when": {"status": ["dead"], "sin": ["deceit"], "ageBand": ["adult"], "literacy": ["literate"]}},
-  {"id": "dead-sin-greed-mature-land", "text": "Mature hands of the land that took too much left empty.", "when": {"status": ["dead"], "sin": ["greed"], "ageBand": ["mature"], "setting": ["land"]}},
-  {"id": "dead-sin-heresy-ancient-city", "text": "Ancient of the city whose thoughts diverged met the common end.", "when": {"status": ["dead"], "sin": ["heresy"], "ageBand": ["ancient"], "setting": ["city"]}},
-  {"id": "dead-baseline-extra-1", "text": "The measure completed, the account closed without flourish.", "when": {"status": ["dead"]}},
-  {"id": "dead-baseline-extra-2", "text": "One more weight settled upon the long balance of living.", "when": {"status": ["dead"]}},
-  {"id": "dead-baseline-extra-3", "text": "Breath that had numbered its days numbered them no more.", "when": {"status": ["dead"]}},
-  {"id": "alive-baseline-extra-1", "text": "The pans of the scale remain in motion for this one.", "when": {"status": ["alive"]}},
-  {"id": "alive-baseline-extra-2", "text": "Unfinished business of living continues its quiet work.", "when": {"status": ["alive"]}},
-  {"id": "alive-baseline-extra-3", "text": "The final line has not yet been written or read.", "when": {"status": ["alive"]}},
-  {"id": "dead-natural-extra-1", "text": "Time did the work that no catastrophe was needed for.", "when": {"status": ["dead"], "cause": ["natural"]}},
-  {"id": "dead-catastrophe-extra-1", "text": "History's larger hand closed a smaller account.", "when": {"status": ["dead"], "cause": ["catastrophe"]}},
-  {"id": "dead-literacy-extra-1", "text": "Written word and living breath shared the same span.", "when": {"status": ["dead"], "literacy": ["literate"]}},
-  {"id": "dead-literacy-extra-2", "text": "No letter marked the days, only the turning of seasons.", "when": {"status": ["dead"], "literacy": ["illiterate"]}},
-  {"id": "dead-setting-extra-1", "text": "Urban press and human density framed the years now ended.", "when": {"status": ["dead"], "setting": ["city"]}},
-  {"id": "dead-setting-extra-2", "text": "Open land and open sky held the measure until the close.", "when": {"status": ["dead"], "setting": ["land"]}},
-  {"id": "dead-sex-extra-1", "text": "Daughter of time returned to the silence that precedes names.", "when": {"status": ["dead"], "sex": ["girl"]}},
-  {"id": "dead-sex-extra-2", "text": "Son of the long continuum walked no farther.", "when": {"status": ["dead"], "sex": ["boy"]}},
-  {"id": "dead-era-extra-2", "text": "New stone settlements held a life now part of the soil.", "when": {"status": ["dead"], "era": ["new-stone-age"]}},
-  {"id": "dead-region-extra-1", "text": "Southern rivers and long rains marked the living and the end.", "when": {"status": ["dead"], "region": ["ssa"]}},
-  {"id": "dead-region-extra-2", "text": "Desert routes and dry horizons framed the final quiet.", "when": {"status": ["dead"], "region": ["mena"]}},
-  {"id": "rich-extra-1", "text": "Elder woman of eastern mountains, lettered and clean, rested.", "when": {"status": ["dead"], "ageBand": ["elder"], "sex": ["girl"], "region": ["eas"], "literacy": ["literate"], "sin": ["clean"]}},
-  {"id": "rich-extra-2", "text": "Young man of western plains met catastrophe with empty hands.", "when": {"status": ["dead"], "ageBand": ["young"], "sex": ["boy"], "region": ["ame"], "cause": ["catastrophe"], "sin": ["clean"]}},
-  {"id": "rich-extra-3", "text": "Mature unlettered life of island coasts closed in ordinary time.", "when": {"status": ["dead"], "ageBand": ["mature"], "region": ["sea"], "literacy": ["illiterate"], "cause": ["natural"]}},
-  {"id": "rich-extra-4", "text": "Ancient man of monsoon lands carried no violence to the end.", "when": {"status": ["dead"], "ageBand": ["ancient"], "sex": ["boy"], "region": ["sas"], "sin": ["clean"]}},
-  {"id": "rich-extra-5", "text": "Adult woman of desert cities, deceitful in life, silent in death.", "when": {"status": ["dead"], "ageBand": ["adult"], "sex": ["girl"], "region": ["mena"], "setting": ["city"], "sin": ["deceit"]}},
-  {"id": "rich-extra-6", "text": "Juvenile boy of northern forests ended under larger historical force.", "when": {"status": ["dead"], "ageBand": ["juvenile"], "sex": ["boy"], "region": ["eur"], "cause": ["catastrophe"]}},
-  {"id": "rich-extra-7", "text": "Child girl of southern savannas knew only the briefest seasons.", "when": {"status": ["dead"], "ageBand": ["child"], "sex": ["girl"], "region": ["ssa"]}},
-  {"id": "rich-extra-8", "text": "Elder man of city letters and quiet harmlessness set the pen down.", "when": {"status": ["dead"], "ageBand": ["elder"], "sex": ["boy"], "setting": ["city"], "literacy": ["literate"], "sin": ["clean"]}},
-  {"id": "rich-extra-9", "text": "Young woman of the land, unlettered, met the ordinary dusk.", "when": {"status": ["dead"], "ageBand": ["young"], "sex": ["girl"], "setting": ["land"], "literacy": ["illiterate"], "cause": ["natural"]}},
-  {"id": "rich-extra-10", "text": "Mature man whose greed shaped the city left nothing to carry.", "when": {"status": ["dead"], "ageBand": ["mature"], "sex": ["boy"], "setting": ["city"], "sin": ["greed"]}}
+  {
+    "id": "dead-grown-lifespan",
+    "text": "{He} was given {lifespan}, and spent them the way most people do: mostly on others.",
+    "when": { "status": ["dead"], "ageBand": ["adult", "mature", "elder", "ancient"] }
+  },
+  {
+    "id": "dead-any-catastrophe",
+    "text": "{Cause} did not ask who {he} was before it took {him}.",
+    "when": { "status": ["dead"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-covid",
+    "text": "Taken by {cause}, one name among millions.",
+    "when": { "status": ["dead"], "cause": ["covid-19"] }
+  },
+  {
+    "id": "dead-first-world-war-boy",
+    "text": "Sent to a war that never asked what {he} wanted.",
+    "when": { "status": ["dead"], "sex": ["boy"], "cause": ["first-world-war"] }
+  },
+  {
+    "id": "dead-black-death",
+    "text": "{Cause} spared no one's name, and took {his} too.",
+    "when": { "status": ["dead"], "cause": ["black-death"] }
+  },
+  {
+    "id": "sin-greed",
+    "text": "{He} {sinPhrase}, and the scales remember it.",
+    "when": { "sin": ["greed"] }
+  },
+  {
+    "id": "sin-violence",
+    "text": "{He} {sinPhrase}, and carried it to the end.",
+    "when": { "sin": ["violence"] }
+  },
+  {
+    "id": "dead-old-clean",
+    "text": "Not a stain on the scales, and a long road behind {him}.",
+    "when": { "status": ["dead"], "ageBand": ["elder", "ancient"], "sin": ["clean"] }
+  },
+  {
+    "id": "dead-city-literate",
+    "text": "In a crowded city {he} learned {his} letters and left a few words behind.",
+    "when": { "status": ["dead"], "setting": ["city"], "literacy": ["literate"] }
+  },
+  {
+    "id": "dead-land-illiterate",
+    "text": "Never learned to read, but knew every field and season by heart.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["adult", "mature", "elder", "ancient"],
+      "setting": ["land"],
+      "literacy": ["illiterate"]
+    }
+  },
+  {
+    "id": "dead-girl-small",
+    "text": "A small girl, and the world felt her going.",
+    "when": { "status": ["dead"], "ageBand": ["infant", "child"], "sex": ["girl"] }
+  },
+  {
+    "id": "dead-boy-young",
+    "text": "A young man with the whole road ahead of him, and it ended at the first bend.",
+    "when": { "status": ["dead"], "ageBand": ["young"], "sex": ["boy"] }
+  },
+  {
+    "id": "dead-infant-cradle-still",
+    "text": "Stillness claimed the cradle before the first cry fully formed.",
+    "when": { "status": ["dead"], "ageBand": ["infant"] }
+  },
+  {
+    "id": "dead-infant-breath-brief",
+    "text": "One brief breath weighed against the long silence that followed.",
+    "when": { "status": ["dead"], "ageBand": ["infant"] }
+  },
+  {
+    "id": "dead-infant-unopened-eye",
+    "text": "The eyes never fully opened to the world that waited.",
+    "when": { "status": ["dead"], "ageBand": ["infant"] }
+  },
+  {
+    "id": "dead-infant-small-weight",
+    "text": "So small a weight upon the scales, yet the balance never recovered.",
+    "when": { "status": ["dead"], "ageBand": ["infant"] }
+  },
+  {
+    "id": "dead-child-early-dusk",
+    "text": "Dusk arrived before the games of childhood could finish.",
+    "when": { "status": ["dead"], "ageBand": ["child"] }
+  },
+  {
+    "id": "dead-child-unfinished-song",
+    "text": "A song begun in the morning remained unfinished by night.",
+    "when": { "status": ["dead"], "ageBand": ["child"] }
+  },
+  {
+    "id": "dead-child-short-shadow",
+    "text": "The shadow stretched only a few summers long.",
+    "when": { "status": ["dead"], "ageBand": ["child"] }
+  },
+  {
+    "id": "dead-child-play-ended",
+    "text": "Play ended while the sun still stood high.",
+    "when": { "status": ["dead"], "ageBand": ["child"] }
+  },
+  {
+    "id": "dead-juvenile-half-grown",
+    "text": "Half grown, the path forward closed without warning.",
+    "when": { "status": ["dead"], "ageBand": ["juvenile"] }
+  },
+  {
+    "id": "dead-juvenile-lessons-cut",
+    "text": "Lessons of youth were cut short by a harder teacher.",
+    "when": { "status": ["dead"], "ageBand": ["juvenile"] }
+  },
+  {
+    "id": "dead-juvenile-promise-unkept",
+    "text": "Promise hung in the air, then fell unanswered.",
+    "when": { "status": ["dead"], "ageBand": ["juvenile"] }
+  },
+  {
+    "id": "dead-juvenile-spring-frost",
+    "text": "Spring frost took what summer might have ripened.",
+    "when": { "status": ["dead"], "ageBand": ["juvenile"] }
+  },
+  {
+    "id": "dead-young-fire-banked",
+    "text": "The fire of youth banked early and went cold.",
+    "when": { "status": ["dead"], "ageBand": ["young"] }
+  },
+  {
+    "id": "dead-young-road-half",
+    "text": "The road was only half walked when the light failed.",
+    "when": { "status": ["dead"], "ageBand": ["young"] }
+  },
+  {
+    "id": "dead-young-strength-spent",
+    "text": "Strength spent itself before the body had fully claimed it.",
+    "when": { "status": ["dead"], "ageBand": ["young"] }
+  },
+  {
+    "id": "dead-young-dawn-to-dusk",
+    "text": "From dawn of possibility to dusk of ending, little time passed.",
+    "when": { "status": ["dead"], "ageBand": ["young"] }
+  },
+  {
+    "id": "dead-adult-mid-labor",
+    "text": "Labor of the middle years ceased without completion.",
+    "when": { "status": ["dead"], "ageBand": ["adult"] }
+  },
+  {
+    "id": "dead-adult-shoulders-eased",
+    "text": "The shoulders eased their burden sooner than expected.",
+    "when": { "status": ["dead"], "ageBand": ["adult"] }
+  },
+  {
+    "id": "dead-adult-noon-shadow",
+    "text": "At the noon of life the shadow lengthened without cause.",
+    "when": { "status": ["dead"], "ageBand": ["adult"] }
+  },
+  {
+    "id": "dead-adult-work-unfinished",
+    "text": "Work of the hands and heart remained half done.",
+    "when": { "status": ["dead"], "ageBand": ["adult"] }
+  },
+  {
+    "id": "dead-mature-harvest-early",
+    "text": "The harvest came early, and the fields stood empty.",
+    "when": { "status": ["dead"], "ageBand": ["mature"] }
+  },
+  {
+    "id": "dead-mature-wisdom-brief",
+    "text": "Wisdom gathered over decades was set down too soon.",
+    "when": { "status": ["dead"], "ageBand": ["mature"] }
+  },
+  {
+    "id": "dead-mature-balance-shift",
+    "text": "The balance shifted while the middle years still held.",
+    "when": { "status": ["dead"], "ageBand": ["mature"] }
+  },
+  {
+    "id": "dead-mature-voice-quiet",
+    "text": "A steady voice grew quiet in the midst of its speaking.",
+    "when": { "status": ["dead"], "ageBand": ["mature"] }
+  },
+  {
+    "id": "dead-elder-long-dusk",
+    "text": "The long dusk settled after many seasons of light.",
+    "when": { "status": ["dead"], "ageBand": ["elder"] }
+  },
+  {
+    "id": "dead-elder-grey-thread",
+    "text": "The grey thread of years finally frayed and broke.",
+    "when": { "status": ["dead"], "ageBand": ["elder"] }
+  },
+  {
+    "id": "dead-elder-memory-banked",
+    "text": "Memories banked like coals cooled at last to ash.",
+    "when": { "status": ["dead"], "ageBand": ["elder"] }
+  },
+  {
+    "id": "dead-elder-steps-slowed",
+    "text": "Steps that had slowed for years came finally to rest.",
+    "when": { "status": ["dead"], "ageBand": ["elder"] }
+  },
+  {
+    "id": "dead-ancient-final-season",
+    "text": "The final season arrived after more years than most are granted.",
+    "when": { "status": ["dead"], "ageBand": ["ancient"] }
+  },
+  {
+    "id": "dead-ancient-deep-roots",
+    "text": "Deep roots released their hold on the soil of living.",
+    "when": { "status": ["dead"], "ageBand": ["ancient"] }
+  },
+  {
+    "id": "dead-ancient-white-hair",
+    "text": "White hair lay still after decades of wind and weather.",
+    "when": { "status": ["dead"], "ageBand": ["ancient"] }
+  },
+  {
+    "id": "dead-ancient-last-breath",
+    "text": "The last breath left a body that had outlasted empires of flesh.",
+    "when": { "status": ["dead"], "ageBand": ["ancient"] }
+  },
+  {
+    "id": "alive-unfinished-path",
+    "text": "The path continues, its end still hidden in mist.",
+    "when": { "status": ["alive"] }
+  },
+  {
+    "id": "alive-scales-still",
+    "text": "The scales have not yet settled on this living weight.",
+    "when": { "status": ["alive"] }
+  },
+  {
+    "id": "alive-story-midway",
+    "text": "The story remains midway, pages still unwritten.",
+    "when": { "status": ["alive"] }
+  },
+  {
+    "id": "alive-breath-ongoing",
+    "text": "Breath continues its quiet counting of days.",
+    "when": { "status": ["alive"] }
+  },
+  {
+    "id": "alive-horizon-open",
+    "text": "The horizon stays open, unmarked by any final line.",
+    "when": { "status": ["alive"] }
+  },
+  {
+    "id": "alive-thread-unspooled",
+    "text": "The thread remains unspooled, its length unknown.",
+    "when": { "status": ["alive"] }
+  },
+  {
+    "id": "alive-weight-unjudged",
+    "text": "This weight has not yet been fully judged.",
+    "when": { "status": ["alive"] }
+  },
+  {
+    "id": "alive-dawn-persists",
+    "text": "Dawn persists for one whose night has not arrived.",
+    "when": { "status": ["alive"] }
+  },
+  {
+    "id": "alive-road-ahead",
+    "text": "Road still stretches ahead, dust rising underfoot.",
+    "when": { "status": ["alive"] }
+  },
+  {
+    "id": "alive-balance-pending",
+    "text": "Balance pending; the pans have not yet spoken.",
+    "when": { "status": ["alive"] }
+  },
+  {
+    "id": "alive-life-unfolding",
+    "text": "Life unfolds still, petal by uncertain petal.",
+    "when": { "status": ["alive"] }
+  },
+  {
+    "id": "alive-measure-incomplete",
+    "text": "The measure of this soul remains incomplete.",
+    "when": { "status": ["alive"] }
+  },
+  {
+    "id": "dead-natural-quiet-end",
+    "text": "Quiet end after the ordinary measure of days.",
+    "when": { "status": ["dead"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-natural-body-yielded",
+    "text": "The body yielded to time as all bodies must.",
+    "when": { "status": ["dead"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-natural-no-storm",
+    "text": "No storm took this one; only the slow turning of seasons.",
+    "when": { "status": ["dead"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-natural-common-fate",
+    "text": "Common fate claimed what uncommon days had shaped.",
+    "when": { "status": ["dead"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-natural-breath-ceased",
+    "text": "Breath ceased without the drama of catastrophe.",
+    "when": { "status": ["dead"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-natural-gentle-close",
+    "text": "A gentle closing of the book of living.",
+    "when": { "status": ["dead"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-natural-time-alone",
+    "text": "Time alone wrote the final line.",
+    "when": { "status": ["dead"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-natural-ordinary-dusk",
+    "text": "Ordinary dusk after an ordinary span of light.",
+    "when": { "status": ["dead"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-natural-flesh-rested",
+    "text": "Flesh rested as flesh is meant to rest.",
+    "when": { "status": ["dead"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-natural-no-name-end",
+    "text": "An ending without a name beyond the name of living itself.",
+    "when": { "status": ["dead"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-catastrophe-sudden-weight",
+    "text": "Sudden weight tipped the scales beyond recovery.",
+    "when": { "status": ["dead"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-catastrophe-world-broke",
+    "text": "The world broke open and took this life with it.",
+    "when": { "status": ["dead"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-catastrophe-unlooked-for",
+    "text": "Unlooked-for ruin closed a life still in motion.",
+    "when": { "status": ["dead"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-catastrophe-great-wave",
+    "text": "A great wave of ending swept this one away.",
+    "when": { "status": ["dead"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-catastrophe-history-hand",
+    "text": "History's hand fell heavy and without mercy.",
+    "when": { "status": ["dead"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-catastrophe-shared-fate",
+    "text": "Shared fate with multitudes, yet solitary in the dark.",
+    "when": { "status": ["dead"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-catastrophe-scales-overthrown",
+    "text": "The scales themselves were overthrown by larger forces.",
+    "when": { "status": ["dead"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-catastrophe-brief-and-hard",
+    "text": "Brief and hard the ending when the world convulsed.",
+    "when": { "status": ["dead"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-justinian-plague-breath",
+    "text": "Breath failed under the shadow of the Plague of Justinian.",
+    "when": { "status": ["dead"], "cause": ["plague-of-justinian"] }
+  },
+  {
+    "id": "dead-justinian-city-emptied",
+    "text": "{Cause} emptied the streets and took this life among them.",
+    "when": { "status": ["dead"], "cause": ["plague-of-justinian"] }
+  },
+  {
+    "id": "dead-justinian-fever-age",
+    "text": "Fever of that age claimed what ordinary years might have spared.",
+    "when": { "status": ["dead"], "cause": ["plague-of-justinian"] }
+  },
+  {
+    "id": "dead-mongol-conquest-storm",
+    "text": "The storm of Mongol conquests rode over this life.",
+    "when": { "status": ["dead"], "cause": ["mongol-conquests"] }
+  },
+  {
+    "id": "dead-mongol-hooves-passed",
+    "text": "Hooves of conquest passed, and this one did not rise again.",
+    "when": { "status": ["dead"], "cause": ["mongol-conquests"] }
+  },
+  {
+    "id": "dead-mongol-empire-edge",
+    "text": "At the edge of expanding empire the light went out.",
+    "when": { "status": ["dead"], "cause": ["mongol-conquests"] }
+  },
+  {
+    "id": "dead-black-death-shadow",
+    "text": "The Black Death cast its long shadow across this span.",
+    "when": { "status": ["dead"], "cause": ["black-death"] }
+  },
+  {
+    "id": "dead-black-death-pestilence",
+    "text": "Pestilence of the mid-century took what it would.",
+    "when": { "status": ["dead"], "cause": ["black-death"] }
+  },
+  {
+    "id": "dead-black-death-marks",
+    "text": "Marks of the plague closed a life still counting seasons.",
+    "when": { "status": ["dead"], "cause": ["black-death"] }
+  },
+  {
+    "id": "dead-post-contact-new-world",
+    "text": "New diseases from across the sea ended this life early.",
+    "when": { "status": ["dead"], "cause": ["post-contact-epidemics"] }
+  },
+  {
+    "id": "dead-post-contact-epidemic-wave",
+    "text": "A wave of epidemic crossed the ocean and claimed its due.",
+    "when": { "status": ["dead"], "cause": ["post-contact-epidemics"] }
+  },
+  {
+    "id": "dead-post-contact-unseen-enemy",
+    "text": "Unseen enemy arrived with the ships and did its work.",
+    "when": { "status": ["dead"], "cause": ["post-contact-epidemics"] }
+  },
+  {
+    "id": "dead-taiping-rebellion-fire",
+    "text": "Fire of the Taiping Rebellion consumed this one among many.",
+    "when": { "status": ["dead"], "cause": ["taiping-rebellion"] }
+  },
+  {
+    "id": "dead-taiping-strife-years",
+    "text": "Years of rebellion and strife left this life unfinished.",
+    "when": { "status": ["dead"], "cause": ["taiping-rebellion"] }
+  },
+  {
+    "id": "dead-taiping-civil-storm",
+    "text": "Civil storm swept the land and took this soul with it.",
+    "when": { "status": ["dead"], "cause": ["taiping-rebellion"] }
+  },
+  {
+    "id": "dead-first-world-war-trench",
+    "text": "The First World War claimed {him} among the young and strong.",
+    "when": {
+      "status": ["dead"],
+      "cause": ["first-world-war"],
+      "sex": ["boy"],
+      "ageBand": ["young", "adult"]
+    }
+  },
+  {
+    "id": "dead-first-world-war-guns",
+    "text": "Guns of that great war fell silent for this life too soon.",
+    "when": { "status": ["dead"], "cause": ["first-world-war"] }
+  },
+  {
+    "id": "dead-first-world-war-mud",
+    "text": "Mud and iron of the war years closed the account.",
+    "when": { "status": ["dead"], "cause": ["first-world-war"] }
+  },
+  {
+    "id": "dead-1918-influenza-fever",
+    "text": "Fever of the great influenza took what war had spared.",
+    "when": { "status": ["dead"], "cause": ["1918-influenza"] }
+  },
+  {
+    "id": "dead-1918-influenza-breath",
+    "text": "Breath failed in the grip of the influenza pandemic.",
+    "when": { "status": ["dead"], "cause": ["1918-influenza"] }
+  },
+  {
+    "id": "dead-1918-influenza-wave",
+    "text": "A second wave of ending followed the first worldwide.",
+    "when": { "status": ["dead"], "cause": ["1918-influenza"] }
+  },
+  {
+    "id": "dead-second-world-war-shadow",
+    "text": "Shadow of the Second World War fell across this life.",
+    "when": { "status": ["dead"], "cause": ["second-world-war"] }
+  },
+  {
+    "id": "dead-second-world-war-fire",
+    "text": "Fire and ruin of that war years claimed their portion.",
+    "when": { "status": ["dead"], "cause": ["second-world-war"] }
+  },
+  {
+    "id": "dead-second-world-war-ended",
+    "text": "The war ended for {him} before the guns fell silent for all.",
+    "when": { "status": ["dead"], "cause": ["second-world-war"], "sex": ["boy"] }
+  },
+  {
+    "id": "dead-great-chinese-famine-hunger",
+    "text": "Hunger of the great famine years emptied this body.",
+    "when": { "status": ["dead"], "cause": ["great-chinese-famine"] }
+  },
+  {
+    "id": "dead-great-chinese-famine-lean",
+    "text": "Lean years took more than the harvest could replace.",
+    "when": { "status": ["dead"], "cause": ["great-chinese-famine"] }
+  },
+  {
+    "id": "dead-great-chinese-famine-soil",
+    "text": "Soil yielded little, and this life yielded all.",
+    "when": { "status": ["dead"], "cause": ["great-chinese-famine"] }
+  },
+  {
+    "id": "dead-hiv-aids-slow",
+    "text": "Slow wasting of the epidemic years claimed this one.",
+    "when": { "status": ["dead"], "cause": ["hiv-aids"] }
+  },
+  {
+    "id": "dead-hiv-aids-shadow",
+    "text": "A long shadow of illness stretched across the decades.",
+    "when": { "status": ["dead"], "cause": ["hiv-aids"] }
+  },
+  {
+    "id": "dead-hiv-aids-quiet-theft",
+    "text": "Quiet theft of strength left the body empty at last.",
+    "when": { "status": ["dead"], "cause": ["hiv-aids"] }
+  },
+  {
+    "id": "dead-covid-19-late",
+    "text": "Late in the span the COVID-19 pandemic closed the door.",
+    "when": { "status": ["dead"], "cause": ["covid-19"], "ageBand": ["elder", "ancient"] }
+  },
+  {
+    "id": "dead-covid-19-breath",
+    "text": "Breath struggled and failed under the weight of that pandemic.",
+    "when": { "status": ["dead"], "cause": ["covid-19"] }
+  },
+  {
+    "id": "dead-covid-19-isolation",
+    "text": "Isolation of the plague years ended in permanent silence.",
+    "when": { "status": ["dead"], "cause": ["covid-19"] }
+  },
+  {
+    "id": "sin-violence-hands",
+    "text": "{He} {sinPhrase}, and the scales recorded the blood.",
+    "when": { "status": ["dead"], "sin": ["violence"] }
+  },
+  {
+    "id": "sin-violence-struck",
+    "text": "Hands that struck in anger found no rest at the end.",
+    "when": { "status": ["dead"], "sin": ["violence"] }
+  },
+  {
+    "id": "sin-violence-weight",
+    "text": "The weight of violence tipped what might have balanced.",
+    "when": { "status": ["dead"], "sin": ["violence"] }
+  },
+  {
+    "id": "sin-violence-blade",
+    "text": "{He} lived by the blade and the blade claimed its due.",
+    "when": { "status": ["dead"], "sin": ["violence"] }
+  },
+  {
+    "id": "sin-violence-echo",
+    "text": "Echo of violence followed into the final quiet.",
+    "when": { "status": ["dead"], "sin": ["violence"] }
+  },
+  {
+    "id": "sin-deceit-tongue",
+    "text": "{He} {sinPhrase}, and truth exacted its price at last.",
+    "when": { "status": ["dead"], "sin": ["deceit"] }
+  },
+  {
+    "id": "sin-deceit-shadow",
+    "text": "Shadows of deceit lengthened until they swallowed the light.",
+    "when": { "status": ["dead"], "sin": ["deceit"] }
+  },
+  {
+    "id": "sin-deceit-false",
+    "text": "False words weighed heavier than the speaker knew.",
+    "when": { "status": ["dead"], "sin": ["deceit"] }
+  },
+  {
+    "id": "sin-deceit-mask",
+    "text": "The mask of deceit slipped only when the face was still.",
+    "when": { "status": ["dead"], "sin": ["deceit"] }
+  },
+  {
+    "id": "sin-deceit-ledger",
+    "text": "A ledger of lies closed with a single final entry.",
+    "when": { "status": ["dead"], "sin": ["deceit"] }
+  },
+  {
+    "id": "sin-greed-hands",
+    "text": "{He} {sinPhrase}, and the empty hands held nothing at the end.",
+    "when": { "status": ["dead"], "sin": ["greed"] }
+  },
+  {
+    "id": "sin-greed-hoarded",
+    "text": "What was hoarded could not be carried beyond the last breath.",
+    "when": { "status": ["dead"], "sin": ["greed"] }
+  },
+  {
+    "id": "sin-greed-weight",
+    "text": "Greed added weight the soul could not finally bear.",
+    "when": { "status": ["dead"], "sin": ["greed"] }
+  },
+  {
+    "id": "sin-greed-fist",
+    "text": "The closed fist opened only in death.",
+    "when": { "status": ["dead"], "sin": ["greed"] }
+  },
+  {
+    "id": "sin-greed-more",
+    "text": "Always more, until there was no more time to take it.",
+    "when": { "status": ["dead"], "sin": ["greed"] }
+  },
+  {
+    "id": "sin-heresy-thought",
+    "text": "{He} {sinPhrase}, and the old order answered in kind.",
+    "when": { "status": ["dead"], "sin": ["heresy"] }
+  },
+  {
+    "id": "sin-heresy-voice",
+    "text": "A voice raised against the accepted truth fell silent.",
+    "when": { "status": ["dead"], "sin": ["heresy"] }
+  },
+  {
+    "id": "sin-heresy-flame",
+    "text": "Flame of forbidden thought burned until the fuel was gone.",
+    "when": { "status": ["dead"], "sin": ["heresy"] }
+  },
+  {
+    "id": "sin-heresy-question",
+    "text": "Questions asked too loudly found their answer in ending.",
+    "when": { "status": ["dead"], "sin": ["heresy"] }
+  },
+  {
+    "id": "sin-heresy-path",
+    "text": "The divergent path led to a common destination.",
+    "when": { "status": ["dead"], "sin": ["heresy"] }
+  },
+  {
+    "id": "sin-clean-unstained",
+    "text": "Unstained by the common marks, the soul passed lightly.",
+    "when": { "status": ["dead"], "sin": ["clean"] }
+  },
+  {
+    "id": "sin-clean-clear-water",
+    "text": "Clear water of a life without the sediment of guilt.",
+    "when": { "status": ["dead"], "sin": ["clean"] }
+  },
+  {
+    "id": "sin-clean-no-ledger",
+    "text": "No ledger of harm followed this one into silence.",
+    "when": { "status": ["dead"], "sin": ["clean"] }
+  },
+  {
+    "id": "sin-clean-light-step",
+    "text": "Light of step and clean of hand, the ending came quiet.",
+    "when": { "status": ["dead"], "sin": ["clean"] }
+  },
+  {
+    "id": "sin-clean-blameless",
+    "text": "Blameless in the accounting, the scales found little to weigh.",
+    "when": { "status": ["dead"], "sin": ["clean"] }
+  },
+  {
+    "id": "sin-clean-open-palm",
+    "text": "Open palms left no stain upon the final record.",
+    "when": { "status": ["dead"], "sin": ["clean"] }
+  },
+  {
+    "id": "sin-clean-simple-truth",
+    "text": "Simple truth marked the days until the last.",
+    "when": { "status": ["dead"], "sin": ["clean"] }
+  },
+  {
+    "id": "sin-clean-no-shadow",
+    "text": "No long shadow of wrongdoing trailed into the dark.",
+    "when": { "status": ["dead"], "sin": ["clean"] }
+  },
+  {
+    "id": "sin-clean-even-keel",
+    "text": "Even keel of a life that harmed little and asked less.",
+    "when": { "status": ["dead"], "sin": ["clean"] }
+  },
+  {
+    "id": "sin-clean-quiet-good",
+    "text": "Quiet good left no monument yet tilted the balance fair.",
+    "when": { "status": ["dead"], "sin": ["clean"] }
+  },
+  {
+    "id": "lit-literate-ink",
+    "text": "Ink and letters filled the days until the hand stilled.",
+    "when": { "status": ["dead"], "literacy": ["literate"] }
+  },
+  {
+    "id": "lit-literate-scroll",
+    "text": "Scrolls and written words outlasted the writer by a little.",
+    "when": { "status": ["dead"], "literacy": ["literate"] }
+  },
+  {
+    "id": "lit-literate-scribe-hand",
+    "text": "A scribe's hand set down what the voice could not keep.",
+    "when": { "status": ["dead"], "literacy": ["literate"] }
+  },
+  {
+    "id": "lit-illiterate-unlettered",
+    "text": "Unlettered, the life spoke only through deed and silence.",
+    "when": { "status": ["dead"], "literacy": ["illiterate"] }
+  },
+  {
+    "id": "lit-illiterate-never-read",
+    "text": "Never learned to read, yet read the world in other ways.",
+    "when": { "status": ["dead"], "literacy": ["illiterate"] }
+  },
+  {
+    "id": "lit-illiterate-marks",
+    "text": "Marks of the hand alone recorded what letters never held.",
+    "when": { "status": ["dead"], "literacy": ["illiterate"] }
+  },
+  {
+    "id": "set-city-streets",
+    "text": "Streets of the city knew these footsteps until they ceased.",
+    "when": { "status": ["dead"], "setting": ["city"] }
+  },
+  {
+    "id": "set-city-market",
+    "text": "Market noise faded for one who had known its press.",
+    "when": { "status": ["dead"], "setting": ["city"] }
+  },
+  {
+    "id": "set-city-urban-dust",
+    "text": "Urban dust settled over a life lived among many.",
+    "when": { "status": ["dead"], "setting": ["city"] }
+  },
+  {
+    "id": "set-land-fields",
+    "text": "Fields knew the labor until the laborer lay down.",
+    "when": { "status": ["dead"], "setting": ["land"] }
+  },
+  {
+    "id": "set-land-soil",
+    "text": "Soil that was worked returned the worker to itself.",
+    "when": { "status": ["dead"], "setting": ["land"] }
+  },
+  {
+    "id": "set-land-harvest",
+    "text": "Harvests came and went; the final harvest came for the reaper.",
+    "when": { "status": ["dead"], "setting": ["land"] }
+  },
+  {
+    "id": "set-land-pasture",
+    "text": "Pasture and herd marked the days until the last.",
+    "when": { "status": ["dead"], "setting": ["land"] }
+  },
+  {
+    "id": "lit-set-city-literate",
+    "text": "In the city the written word shaped a life now closed.",
+    "when": { "status": ["dead"], "setting": ["city"], "literacy": ["literate"] }
+  },
+  {
+    "id": "lit-set-city-illiterate",
+    "text": "City streets held one who never read their names.",
+    "when": { "status": ["dead"], "setting": ["city"], "literacy": ["illiterate"] }
+  },
+  {
+    "id": "lit-set-land-literate",
+    "text": "Letters reached even the fields where this one worked and ended.",
+    "when": { "status": ["dead"], "setting": ["land"], "literacy": ["literate"] }
+  },
+  {
+    "id": "lit-set-land-illiterate",
+    "text": "Illiterate hands shaped the land until they could shape no more.",
+    "when": { "status": ["dead"], "setting": ["land"], "literacy": ["illiterate"] }
+  },
+  {
+    "id": "lit-set-city-ink-streets",
+    "text": "Ink flowed in the city until the final page turned blank.",
+    "when": { "status": ["dead"], "setting": ["city"], "literacy": ["literate"] }
+  },
+  {
+    "id": "lit-set-land-plough",
+    "text": "Plough and soil were the only books this life required.",
+    "when": { "status": ["dead"], "setting": ["land"], "literacy": ["illiterate"] }
+  },
+  {
+    "id": "lit-set-city-market-read",
+    "text": "Market and manuscript both knew this presence for a time.",
+    "when": { "status": ["dead"], "setting": ["city"], "literacy": ["literate"] }
+  },
+  {
+    "id": "lit-set-land-village-unlettered",
+    "text": "Village paths held an unlettered life now at rest.",
+    "when": { "status": ["dead"], "setting": ["land"], "literacy": ["illiterate"] }
+  },
+  {
+    "id": "lit-set-city-streets-unlettered",
+    "text": "Unlettered among the urban press, the voice fell quiet.",
+    "when": { "status": ["dead"], "setting": ["city"], "literacy": ["illiterate"] }
+  },
+  {
+    "id": "lit-set-land-harvest-read",
+    "text": "Harvest and written word shared the measure of these years.",
+    "when": { "status": ["dead"], "setting": ["land"], "literacy": ["literate"] }
+  },
+  {
+    "id": "lit-set-city-dust-letters",
+    "text": "City dust covered letters that outlived their maker briefly.",
+    "when": { "status": ["dead"], "setting": ["city"], "literacy": ["literate"] }
+  },
+  {
+    "id": "lit-set-land-countryside-ink",
+    "text": "Countryside quiet held one who still kept ink and thought.",
+    "when": { "status": ["dead"], "setting": ["land"], "literacy": ["literate"] }
+  },
+  {
+    "id": "sex-girl-young-promise",
+    "text": "Promise of a young woman ended before its full flowering.",
+    "when": { "status": ["dead"], "sex": ["girl"], "ageBand": ["young"] }
+  },
+  {
+    "id": "sex-boy-young-strength",
+    "text": "Strength of a young man spent itself against harder forces.",
+    "when": { "status": ["dead"], "sex": ["boy"], "ageBand": ["young"] }
+  },
+  {
+    "id": "sex-girl-child-dawn",
+    "text": "Dawn of a girl's life closed before the morning was old.",
+    "when": { "status": ["dead"], "sex": ["girl"], "ageBand": ["child"] }
+  },
+  {
+    "id": "sex-boy-child-play",
+    "text": "Play of a boy ended while the sun still climbed.",
+    "when": { "status": ["dead"], "sex": ["boy"], "ageBand": ["child"] }
+  },
+  {
+    "id": "sex-girl-elder-grey",
+    "text": "Grey years of a woman settled into final stillness.",
+    "when": { "status": ["dead"], "sex": ["girl"], "ageBand": ["elder"] }
+  },
+  {
+    "id": "sex-boy-elder-steps",
+    "text": "Steps of an aging man slowed to their last measure.",
+    "when": { "status": ["dead"], "sex": ["boy"], "ageBand": ["elder"] }
+  },
+  {
+    "id": "sex-girl-adult-mid",
+    "text": "Mid years of a woman's labor ceased without warning.",
+    "when": { "status": ["dead"], "sex": ["girl"], "ageBand": ["adult"] }
+  },
+  {
+    "id": "sex-boy-adult-shoulders",
+    "text": "Shoulders of a man eased their load too early.",
+    "when": { "status": ["dead"], "sex": ["boy"], "ageBand": ["adult"] }
+  },
+  {
+    "id": "sex-girl-infant-brief",
+    "text": "Brief span of a girl child measured in days not years.",
+    "when": { "status": ["dead"], "sex": ["girl"], "ageBand": ["infant"] }
+  },
+  {
+    "id": "sex-boy-infant-quiet",
+    "text": "Quiet ending for a boy whose voice had barely begun.",
+    "when": { "status": ["dead"], "sex": ["boy"], "ageBand": ["infant"] }
+  },
+  {
+    "id": "sex-girl-juvenile-half",
+    "text": "Half the growth of a girl completed when the path closed.",
+    "when": { "status": ["dead"], "sex": ["girl"], "ageBand": ["juvenile"] }
+  },
+  {
+    "id": "sex-boy-juvenile-promise",
+    "text": "Promise of a growing boy left unfulfilled by time.",
+    "when": { "status": ["dead"], "sex": ["boy"], "ageBand": ["juvenile"] }
+  },
+  {
+    "id": "sex-girl-mature-wisdom",
+    "text": "Wisdom of a mature woman set down before its full use.",
+    "when": { "status": ["dead"], "sex": ["girl"], "ageBand": ["mature"] }
+  },
+  {
+    "id": "sex-boy-mature-voice",
+    "text": "Steady voice of a mature man grew quiet mid-sentence.",
+    "when": { "status": ["dead"], "sex": ["boy"], "ageBand": ["mature"] }
+  },
+  {
+    "id": "sex-girl-ancient-long",
+    "text": "Long years of a woman ended after most had already gone.",
+    "when": { "status": ["dead"], "sex": ["girl"], "ageBand": ["ancient"] }
+  },
+  {
+    "id": "sex-boy-ancient-roots",
+    "text": "Deep roots of an old man released at last their hold.",
+    "when": { "status": ["dead"], "sex": ["boy"], "ageBand": ["ancient"] }
+  },
+  {
+    "id": "sex-girl-dead-generic",
+    "text": "A woman's span closed with the ordinary dignity of ending.",
+    "when": { "status": ["dead"], "sex": ["girl"] }
+  },
+  {
+    "id": "sex-boy-dead-generic",
+    "text": "A man's measure completed, the account laid by.",
+    "when": { "status": ["dead"], "sex": ["boy"] }
+  },
+  {
+    "id": "sex-girl-alive-path",
+    "text": "A woman's path continues, its final turn still unseen.",
+    "when": { "status": ["alive"], "sex": ["girl"] }
+  },
+  {
+    "id": "sex-boy-alive-road",
+    "text": "A man's road stretches on, dust still rising.",
+    "when": { "status": ["alive"], "sex": ["boy"] }
+  },
+  {
+    "id": "era-new-stone-grain",
+    "text": "First grain and settled earth held this span of living.",
+    "when": { "status": ["dead"], "era": ["new-stone-age"] }
+  },
+  {
+    "id": "era-new-stone-pottery",
+    "text": "Clay and early harvest framed the measure of these years.",
+    "when": { "status": ["dead"], "era": ["new-stone-age"] }
+  },
+  {
+    "id": "era-new-stone-village",
+    "text": "Village life of the new stone age ended in common quiet.",
+    "when": { "status": ["dead"], "era": ["new-stone-age"] }
+  },
+  {
+    "id": "era-bronze-metal",
+    "text": "Bronze edge and early trade marked the working of this life.",
+    "when": { "status": ["dead"], "era": ["bronze-age"] }
+  },
+  {
+    "id": "era-bronze-cast",
+    "text": "Cast metal and rising walls framed the days now closed.",
+    "when": { "status": ["dead"], "era": ["bronze-age"] }
+  },
+  {
+    "id": "era-bronze-alloy",
+    "text": "Alloy of copper and tin outlasted the hands that shaped it.",
+    "when": { "status": ["dead"], "era": ["bronze-age"] }
+  },
+  {
+    "id": "era-iron-blade",
+    "text": "Iron blade and harder tools defined the labor of these years.",
+    "when": { "status": ["dead"], "era": ["iron-age"] }
+  },
+  {
+    "id": "era-iron-forge",
+    "text": "Forge smoke rose over a life now cooled to ash.",
+    "when": { "status": ["dead"], "era": ["iron-age"] }
+  },
+  {
+    "id": "era-iron-stronger",
+    "text": "Stronger metal could not strengthen the span of living.",
+    "when": { "status": ["dead"], "era": ["iron-age"] }
+  },
+  {
+    "id": "era-classical-polis",
+    "text": "City and reasoned speech shaped a life of the classical age.",
+    "when": { "status": ["dead"], "era": ["classical"] }
+  },
+  {
+    "id": "era-classical-column",
+    "text": "Columns and early empires framed the years now ended.",
+    "when": { "status": ["dead"], "era": ["classical"] }
+  },
+  {
+    "id": "era-classical-scroll",
+    "text": "Scroll and symposium light faded for this one.",
+    "when": { "status": ["dead"], "era": ["classical"], "literacy": ["literate"] }
+  },
+  {
+    "id": "era-middle-ages-castle",
+    "text": "Stone walls and feudal order held the measure of these days.",
+    "when": { "status": ["dead"], "era": ["middle-ages"] }
+  },
+  {
+    "id": "era-middle-ages-manuscript",
+    "text": "Manuscript and monastery quiet marked a life now still.",
+    "when": { "status": ["dead"], "era": ["middle-ages"], "literacy": ["literate"] }
+  },
+  {
+    "id": "era-middle-ages-plough",
+    "text": "Plough and manor field shaped the ordinary span.",
+    "when": { "status": ["dead"], "era": ["middle-ages"], "setting": ["land"] }
+  },
+  {
+    "id": "era-early-modern-sail",
+    "text": "Sail and new maps widened the world this life knew briefly.",
+    "when": { "status": ["dead"], "era": ["early-modern"] }
+  },
+  {
+    "id": "era-early-modern-press",
+    "text": "Printed word began to spread as this life closed.",
+    "when": { "status": ["dead"], "era": ["early-modern"], "literacy": ["literate"] }
+  },
+  {
+    "id": "era-early-modern-clock",
+    "text": "Clockwork time measured a span now fully spent.",
+    "when": { "status": ["dead"], "era": ["early-modern"] }
+  },
+  {
+    "id": "era-industrial-smoke",
+    "text": "Smoke of engines and mills marked the working years.",
+    "when": { "status": ["dead"], "era": ["industrial"] }
+  },
+  {
+    "id": "era-industrial-rail",
+    "text": "Rail and factory whistle framed a life of the industrial age.",
+    "when": { "status": ["dead"], "era": ["industrial"] }
+  },
+  {
+    "id": "era-industrial-steam",
+    "text": "Steam and iron reshaped the days until the last.",
+    "when": { "status": ["dead"], "era": ["industrial"] }
+  },
+  {
+    "id": "era-modern-wire",
+    "text": "Wire and signal carried voices this life once answered.",
+    "when": { "status": ["dead"], "era": ["modern"] }
+  },
+  {
+    "id": "era-modern-screen",
+    "text": "Screen light and rapid change marked the closing years.",
+    "when": { "status": ["dead"], "era": ["modern"] }
+  },
+  {
+    "id": "era-modern-network",
+    "text": "Networked world held a presence now disconnected.",
+    "when": { "status": ["dead"], "era": ["modern"] }
+  },
+  {
+    "id": "region-ssa-river",
+    "text": "River of the southern lands knew these footsteps for a time.",
+    "when": { "status": ["dead"], "region": ["ssa"] }
+  },
+  {
+    "id": "region-ssa-savanna",
+    "text": "Savanna wind moved over a life now still beneath it.",
+    "when": { "status": ["dead"], "region": ["ssa"] }
+  },
+  {
+    "id": "region-mena-desert",
+    "text": "Desert edge and ancient routes framed this span of days.",
+    "when": { "status": ["dead"], "region": ["mena"] }
+  },
+  {
+    "id": "region-mena-oasis",
+    "text": "Oasis and dry wind marked the measure until the end.",
+    "when": { "status": ["dead"], "region": ["mena"] }
+  },
+  {
+    "id": "region-eur-forest",
+    "text": "Forest and northern river held a life now returned to them.",
+    "when": { "status": ["dead"], "region": ["eur"] }
+  },
+  {
+    "id": "region-eur-coast",
+    "text": "Coastal fog and old stone watched the years close.",
+    "when": { "status": ["dead"], "region": ["eur"] }
+  },
+  {
+    "id": "region-sas-monsoon",
+    "text": "Monsoon rain fell on the living and the finished alike.",
+    "when": { "status": ["dead"], "region": ["sas"] }
+  },
+  {
+    "id": "region-sas-river-plain",
+    "text": "River plain of the south knew the labor of these hands.",
+    "when": { "status": ["dead"], "region": ["sas"] }
+  },
+  {
+    "id": "region-eas-mountain",
+    "text": "Mountain mist and eastern valleys framed the quiet end.",
+    "when": { "status": ["dead"], "region": ["eas"] }
+  },
+  {
+    "id": "region-eas-rice",
+    "text": "Rice field and terrace held a presence now absent.",
+    "when": { "status": ["dead"], "region": ["eas"] }
+  },
+  {
+    "id": "region-sea-coast",
+    "text": "Island coast and warm sea marked the days of living.",
+    "when": { "status": ["dead"], "region": ["sea"] }
+  },
+  {
+    "id": "region-sea-monsoon-wind",
+    "text": "Monsoon wind over water closed a life among the islands.",
+    "when": { "status": ["dead"], "region": ["sea"] }
+  },
+  {
+    "id": "region-ame-plain",
+    "text": "Wide plain and long river knew this span of breath.",
+    "when": { "status": ["dead"], "region": ["ame"] }
+  },
+  {
+    "id": "region-ame-forest-edge",
+    "text": "Forest edge of the western lands held a life now still.",
+    "when": { "status": ["dead"], "region": ["ame"] }
+  },
+  {
+    "id": "rich-elder-land-illiterate-clean",
+    "text": "Elder hands unlettered and clean worked the land until rest.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["elder"],
+      "setting": ["land"],
+      "literacy": ["illiterate"],
+      "sin": ["clean"]
+    }
+  },
+  {
+    "id": "rich-ancient-city-literate-natural",
+    "text": "Ancient city years of letters ended in ordinary quiet.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["ancient"],
+      "setting": ["city"],
+      "literacy": ["literate"],
+      "cause": ["natural"]
+    }
+  },
+  {
+    "id": "rich-young-boy-violence-catastrophe",
+    "text": "Young man of violence met a larger violence and fell.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["young"],
+      "sex": ["boy"],
+      "sin": ["violence"],
+      "cause": ["catastrophe"]
+    }
+  },
+  {
+    "id": "rich-mature-girl-land-clean",
+    "text": "Mature woman of the fields left no stain upon the record.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["mature"],
+      "sex": ["girl"],
+      "setting": ["land"],
+      "sin": ["clean"]
+    }
+  },
+  {
+    "id": "rich-adult-city-deceit",
+    "text": "Adult years in the city carried the weight of deceit to the end.",
+    "when": { "status": ["dead"], "ageBand": ["adult"], "setting": ["city"], "sin": ["deceit"] }
+  },
+  {
+    "id": "rich-elder-boy-literate-eur",
+    "text": "Elder man of letters in the northern lands set down the pen.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["elder"],
+      "sex": ["boy"],
+      "literacy": ["literate"],
+      "region": ["eur"]
+    }
+  },
+  {
+    "id": "rich-juvenile-girl-illiterate-land",
+    "text": "Growing girl of the countryside never learned the written word.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["juvenile"],
+      "sex": ["girl"],
+      "literacy": ["illiterate"],
+      "setting": ["land"]
+    }
+  },
+  {
+    "id": "rich-ancient-clean-natural-land",
+    "text": "Ancient and unstained, the land received what it had given.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["ancient"],
+      "sin": ["clean"],
+      "cause": ["natural"],
+      "setting": ["land"]
+    }
+  },
+  {
+    "id": "rich-young-girl-city-greed",
+    "text": "Young woman of the streets carried greed until the streets claimed her.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["young"],
+      "sex": ["girl"],
+      "setting": ["city"],
+      "sin": ["greed"]
+    }
+  },
+  {
+    "id": "rich-mature-boy-heresy-literate",
+    "text": "Mature man of letters asked forbidden questions and paid.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["mature"],
+      "sex": ["boy"],
+      "sin": ["heresy"],
+      "literacy": ["literate"]
+    }
+  },
+  {
+    "id": "rich-elder-girl-ssa-land",
+    "text": "Elder woman of the southern rivers returned to the soil.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["elder"],
+      "sex": ["girl"],
+      "region": ["ssa"],
+      "setting": ["land"]
+    }
+  },
+  {
+    "id": "rich-adult-boy-mena-city",
+    "text": "Adult man of the desert cities walked the streets no more.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["adult"],
+      "sex": ["boy"],
+      "region": ["mena"],
+      "setting": ["city"]
+    }
+  },
+  {
+    "id": "rich-child-illiterate-natural",
+    "text": "Child unlettered met the ordinary end of early years.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["child"],
+      "literacy": ["illiterate"],
+      "cause": ["natural"]
+    }
+  },
+  {
+    "id": "rich-ancient-boy-eas-literate",
+    "text": "Ancient man of eastern valleys kept letters until the last.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["ancient"],
+      "sex": ["boy"],
+      "region": ["eas"],
+      "literacy": ["literate"]
+    }
+  },
+  {
+    "id": "rich-young-girl-sea-clean",
+    "text": "Young woman of the island coasts left a clean account.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["young"],
+      "sex": ["girl"],
+      "region": ["sea"],
+      "sin": ["clean"]
+    }
+  },
+  {
+    "id": "alive-city-ongoing",
+    "text": "City streets still know these living footsteps.",
+    "when": { "status": ["alive"], "setting": ["city"] }
+  },
+  {
+    "id": "alive-land-ongoing",
+    "text": "Fields still wait the labor of hands not yet finished.",
+    "when": { "status": ["alive"], "setting": ["land"] }
+  },
+  {
+    "id": "alive-literate-ongoing",
+    "text": "Letters continue to shape a life still being written.",
+    "when": { "status": ["alive"], "literacy": ["literate"] }
+  },
+  {
+    "id": "alive-illiterate-ongoing",
+    "text": "Unlettered days continue their quiet counting.",
+    "when": { "status": ["alive"], "literacy": ["illiterate"] }
+  },
+  {
+    "id": "dead-infant-natural",
+    "text": "Ordinary ending for a life measured only in days.",
+    "when": { "status": ["dead"], "ageBand": ["infant"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-child-catastrophe",
+    "text": "Larger forces ended a childhood still in its early chapters.",
+    "when": { "status": ["dead"], "ageBand": ["child"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-juvenile-natural",
+    "text": "Natural close to years that had only begun to lengthen.",
+    "when": { "status": ["dead"], "ageBand": ["juvenile"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-young-catastrophe",
+    "text": "Catastrophe met youth and left no further seasons.",
+    "when": { "status": ["dead"], "ageBand": ["young"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-adult-natural",
+    "text": "Middle years yielded to the ordinary claim of time.",
+    "when": { "status": ["dead"], "ageBand": ["adult"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-mature-catastrophe",
+    "text": "Mature strength could not stand against the greater storm.",
+    "when": { "status": ["dead"], "ageBand": ["mature"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-elder-natural",
+    "text": "Elder years closed as elder years often do.",
+    "when": { "status": ["dead"], "ageBand": ["elder"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-ancient-catastrophe",
+    "text": "Even the long-lived could not outrun the sudden ruin.",
+    "when": { "status": ["dead"], "ageBand": ["ancient"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-girl-land-clean",
+    "text": "Woman of the fields left the soil cleaner than she found it.",
+    "when": { "status": ["dead"], "sex": ["girl"], "setting": ["land"], "sin": ["clean"] }
+  },
+  {
+    "id": "dead-boy-city-violence",
+    "text": "Man of the streets carried violence until violence answered.",
+    "when": { "status": ["dead"], "sex": ["boy"], "setting": ["city"], "sin": ["violence"] }
+  },
+  {
+    "id": "dead-literate-heresy",
+    "text": "Written thought wandered into forbidden ground and paid.",
+    "when": { "status": ["dead"], "literacy": ["literate"], "sin": ["heresy"] }
+  },
+  {
+    "id": "dead-illiterate-greed",
+    "text": "Unlettered hands still found ways to take more than due.",
+    "when": { "status": ["dead"], "literacy": ["illiterate"], "sin": ["greed"] }
+  },
+  {
+    "id": "dead-city-deceit-natural",
+    "text": "City deceit ended in the quiet way of ordinary time.",
+    "when": { "status": ["dead"], "setting": ["city"], "sin": ["deceit"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-land-clean-catastrophe",
+    "text": "Clean life of the land met a catastrophe not of its making.",
+    "when": { "status": ["dead"], "setting": ["land"], "sin": ["clean"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-young-literate-city",
+    "text": "Young years of letters in the city ended before their prime.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["young"],
+      "literacy": ["literate"],
+      "setting": ["city"]
+    }
+  },
+  {
+    "id": "dead-elder-illiterate-land",
+    "text": "Elder and unlettered, the land took back what it had lent.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["elder"],
+      "literacy": ["illiterate"],
+      "setting": ["land"]
+    }
+  },
+  {
+    "id": "dead-girl-ancient-clean",
+    "text": "Ancient woman unstained by the common marks of harm.",
+    "when": { "status": ["dead"], "sex": ["girl"], "ageBand": ["ancient"], "sin": ["clean"] }
+  },
+  {
+    "id": "dead-boy-infant-natural",
+    "text": "Boy child met the ordinary end before naming days.",
+    "when": { "status": ["dead"], "sex": ["boy"], "ageBand": ["infant"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-mature-literate-natural",
+    "text": "Mature years of writing closed in the common way of time.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["mature"],
+      "literacy": ["literate"],
+      "cause": ["natural"]
+    }
+  },
+  {
+    "id": "dead-juvenile-city-catastrophe",
+    "text": "Growing years in the city ended under larger forces.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["juvenile"],
+      "setting": ["city"],
+      "cause": ["catastrophe"]
+    }
+  },
+  {
+    "id": "dead-adult-land-illiterate",
+    "text": "Adult hands of the countryside never needed the written word.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["adult"],
+      "setting": ["land"],
+      "literacy": ["illiterate"]
+    }
+  },
+  {
+    "id": "dead-girl-young-deceit",
+    "text": "Young woman of false words found truth waiting at the end.",
+    "when": { "status": ["dead"], "sex": ["girl"], "ageBand": ["young"], "sin": ["deceit"] }
+  },
+  {
+    "id": "dead-boy-mature-greed",
+    "text": "Mature man who took more than due left empty-handed.",
+    "when": { "status": ["dead"], "sex": ["boy"], "ageBand": ["mature"], "sin": ["greed"] }
+  },
+  {
+    "id": "dead-elder-city-literate-clean",
+    "text": "Elder of the city, lettered and clean, set the pen aside.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["elder"],
+      "setting": ["city"],
+      "literacy": ["literate"],
+      "sin": ["clean"]
+    }
+  },
+  {
+    "id": "dead-ancient-land-illiterate-natural",
+    "text": "Ancient and unlettered of the fields met ordinary dusk.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["ancient"],
+      "setting": ["land"],
+      "literacy": ["illiterate"],
+      "cause": ["natural"]
+    }
+  },
+  {
+    "id": "dead-child-girl-land",
+    "text": "Girl child of the countryside knew only a few seasons.",
+    "when": { "status": ["dead"], "ageBand": ["child"], "sex": ["girl"], "setting": ["land"] }
+  },
+  {
+    "id": "dead-juvenile-boy-city",
+    "text": "Boy growing among the streets left them too soon.",
+    "when": { "status": ["dead"], "ageBand": ["juvenile"], "sex": ["boy"], "setting": ["city"] }
+  },
+  {
+    "id": "dead-young-girl-literate",
+    "text": "Young woman of letters closed the book mid-chapter.",
+    "when": { "status": ["dead"], "ageBand": ["young"], "sex": ["girl"], "literacy": ["literate"] }
+  },
+  {
+    "id": "dead-adult-boy-illiterate",
+    "text": "Adult man unlettered shaped the world by hand alone.",
+    "when": { "status": ["dead"], "ageBand": ["adult"], "sex": ["boy"], "literacy": ["illiterate"] }
+  },
+  {
+    "id": "dead-mature-girl-city",
+    "text": "Mature woman of the urban press walked no more.",
+    "when": { "status": ["dead"], "ageBand": ["mature"], "sex": ["girl"], "setting": ["city"] }
+  },
+  {
+    "id": "dead-elder-boy-land",
+    "text": "Elder man of the fields laid down the tools at last.",
+    "when": { "status": ["dead"], "ageBand": ["elder"], "sex": ["boy"], "setting": ["land"] }
+  },
+  {
+    "id": "dead-infant-girl-catastrophe",
+    "text": "Girl child taken by forces larger than any cradle.",
+    "when": { "status": ["dead"], "ageBand": ["infant"], "sex": ["girl"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-child-boy-natural",
+    "text": "Boy child met the quiet end that time sometimes brings early.",
+    "when": { "status": ["dead"], "ageBand": ["child"], "sex": ["boy"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-ancient-girl-city-literate",
+    "text": "Ancient woman of city letters outlasted most who knew her.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["ancient"],
+      "sex": ["girl"],
+      "setting": ["city"],
+      "literacy": ["literate"]
+    }
+  },
+  {
+    "id": "dead-young-boy-land-clean",
+    "text": "Young man of the fields left no mark of harm behind.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["young"],
+      "sex": ["boy"],
+      "setting": ["land"],
+      "sin": ["clean"]
+    }
+  },
+  {
+    "id": "dead-adult-girl-violence",
+    "text": "Adult woman whose hands knew violence met a hard close.",
+    "when": { "status": ["dead"], "ageBand": ["adult"], "sex": ["girl"], "sin": ["violence"] }
+  },
+  {
+    "id": "dead-mature-boy-city-deceit",
+    "text": "Mature man of city shadows carried deceit to the final door.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["mature"],
+      "sex": ["boy"],
+      "setting": ["city"],
+      "sin": ["deceit"]
+    }
+  },
+  {
+    "id": "dead-elder-girl-illiterate-clean",
+    "text": "Elder woman unlettered and clean rested after long labor.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["elder"],
+      "sex": ["girl"],
+      "literacy": ["illiterate"],
+      "sin": ["clean"]
+    }
+  },
+  {
+    "id": "dead-ancient-boy-land-natural",
+    "text": "Ancient man of the soil met the ordinary claim of years.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["ancient"],
+      "sex": ["boy"],
+      "setting": ["land"],
+      "cause": ["natural"]
+    }
+  },
+  {
+    "id": "dead-juvenile-girl-literate-city",
+    "text": "Growing girl of city letters found the page torn early.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["juvenile"],
+      "sex": ["girl"],
+      "literacy": ["literate"],
+      "setting": ["city"]
+    }
+  },
+  {
+    "id": "dead-child-boy-illiterate-land",
+    "text": "Boy child of the countryside never needed more than soil.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["child"],
+      "sex": ["boy"],
+      "literacy": ["illiterate"],
+      "setting": ["land"]
+    }
+  },
+  {
+    "id": "dead-young-girl-catastrophe-clean",
+    "text": "Young woman clean of harm taken by the greater storm.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["young"],
+      "sex": ["girl"],
+      "cause": ["catastrophe"],
+      "sin": ["clean"]
+    }
+  },
+  {
+    "id": "dead-adult-boy-natural-land",
+    "text": "Adult man of the fields yielded to time alone.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["adult"],
+      "sex": ["boy"],
+      "cause": ["natural"],
+      "setting": ["land"]
+    }
+  },
+  {
+    "id": "dead-mature-girl-illiterate-greed",
+    "text": "Mature woman unlettered still knew the hunger of more.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["mature"],
+      "sex": ["girl"],
+      "literacy": ["illiterate"],
+      "sin": ["greed"]
+    }
+  },
+  {
+    "id": "dead-elder-boy-city-violence",
+    "text": "Elder man of the streets carried old violence to the end.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["elder"],
+      "sex": ["boy"],
+      "setting": ["city"],
+      "sin": ["violence"]
+    }
+  },
+  {
+    "id": "dead-ancient-girl-land-heresy",
+    "text": "Ancient woman of the fields held thoughts the order forbade.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["ancient"],
+      "sex": ["girl"],
+      "setting": ["land"],
+      "sin": ["heresy"]
+    }
+  },
+  {
+    "id": "dead-infant-boy-city",
+    "text": "Boy child of the urban press knew only the briefest light.",
+    "when": { "status": ["dead"], "ageBand": ["infant"], "sex": ["boy"], "setting": ["city"] }
+  },
+  {
+    "id": "dead-child-girl-literate",
+    "text": "Girl child who had begun to know letters set them aside early.",
+    "when": { "status": ["dead"], "ageBand": ["child"], "sex": ["girl"], "literacy": ["literate"] }
+  },
+  {
+    "id": "dead-juvenile-boy-natural-clean",
+    "text": "Growing boy clean of harm met the quiet end of time.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["juvenile"],
+      "sex": ["boy"],
+      "cause": ["natural"],
+      "sin": ["clean"]
+    }
+  },
+  {
+    "id": "dead-young-girl-land-illiterate",
+    "text": "Young woman of the countryside never read the written word.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["young"],
+      "sex": ["girl"],
+      "setting": ["land"],
+      "literacy": ["illiterate"]
+    }
+  },
+  {
+    "id": "dead-adult-boy-city-literate-natural",
+    "text": "Adult man of city letters closed the account in ordinary time.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["adult"],
+      "sex": ["boy"],
+      "setting": ["city"],
+      "literacy": ["literate"],
+      "cause": ["natural"]
+    }
+  },
+  {
+    "id": "dead-mature-girl-land-catastrophe",
+    "text": "Mature woman of the fields taken by forces beyond the harvest.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["mature"],
+      "sex": ["girl"],
+      "setting": ["land"],
+      "cause": ["catastrophe"]
+    }
+  },
+  {
+    "id": "dead-elder-boy-illiterate-natural",
+    "text": "Elder man unlettered yielded to the common claim of years.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["elder"],
+      "sex": ["boy"],
+      "literacy": ["illiterate"],
+      "cause": ["natural"]
+    }
+  },
+  {
+    "id": "dead-ancient-girl-city-clean",
+    "text": "Ancient woman of the streets left no stain upon the final record.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["ancient"],
+      "sex": ["girl"],
+      "setting": ["city"],
+      "sin": ["clean"]
+    }
+  },
+  {
+    "id": "alive-young-path",
+    "text": "Young years continue, the later chapters still unwritten.",
+    "when": { "status": ["alive"], "ageBand": ["young"] }
+  },
+  {
+    "id": "alive-adult-measure",
+    "text": "Middle years continue their uncertain measure.",
+    "when": { "status": ["alive"], "ageBand": ["adult"] }
+  },
+  {
+    "id": "alive-elder-dusk",
+    "text": "Elder light continues, the final dusk not yet arrived.",
+    "when": { "status": ["alive"], "ageBand": ["elder"] }
+  },
+  {
+    "id": "alive-girl-ongoing",
+    "text": "A woman's days continue their quiet unfolding.",
+    "when": { "status": ["alive"], "sex": ["girl"] }
+  },
+  {
+    "id": "alive-boy-ongoing",
+    "text": "A man's span continues, its full weight still unknown.",
+    "when": { "status": ["alive"], "sex": ["boy"] }
+  },
+  {
+    "id": "dead-plague-justinian-elder",
+    "text": "Elder years ended under the Plague of Justinian.",
+    "when": { "status": ["dead"], "cause": ["plague-of-justinian"], "ageBand": ["elder"] }
+  },
+  {
+    "id": "dead-mongol-young-boy",
+    "text": "Young man fell beneath the advance of Mongol conquests.",
+    "when": {
+      "status": ["dead"],
+      "cause": ["mongol-conquests"],
+      "ageBand": ["young"],
+      "sex": ["boy"]
+    }
+  },
+  {
+    "id": "dead-black-death-city",
+    "text": "City streets emptied by the Black Death claimed this life too.",
+    "when": { "status": ["dead"], "cause": ["black-death"], "setting": ["city"] }
+  },
+  {
+    "id": "dead-post-contact-land",
+    "text": "Land of the western shores met new epidemics and this life ended.",
+    "when": { "status": ["dead"], "cause": ["post-contact-epidemics"], "setting": ["land"] }
+  },
+  {
+    "id": "dead-taiping-adult",
+    "text": "Adult years cut short by the Taiping Rebellion.",
+    "when": { "status": ["dead"], "cause": ["taiping-rebellion"], "ageBand": ["adult"] }
+  },
+  {
+    "id": "dead-first-war-mature-boy",
+    "text": "Mature man taken by the First World War before its close.",
+    "when": {
+      "status": ["dead"],
+      "cause": ["first-world-war"],
+      "ageBand": ["mature"],
+      "sex": ["boy"]
+    }
+  },
+  {
+    "id": "dead-influenza-young",
+    "text": "Young years ended in the grip of the great influenza.",
+    "when": { "status": ["dead"], "cause": ["1918-influenza"], "ageBand": ["young"] }
+  },
+  {
+    "id": "dead-second-war-girl",
+    "text": "Woman's life closed under the shadow of the Second World War.",
+    "when": { "status": ["dead"], "cause": ["second-world-war"], "sex": ["girl"] }
+  },
+  {
+    "id": "dead-famine-elder-land",
+    "text": "Elder of the fields taken by the great famine years.",
+    "when": {
+      "status": ["dead"],
+      "cause": ["great-chinese-famine"],
+      "ageBand": ["elder"],
+      "setting": ["land"]
+    }
+  },
+  {
+    "id": "dead-hiv-adult-ssa",
+    "text": "Adult years in the southern lands ended under the long epidemic.",
+    "when": { "status": ["dead"], "cause": ["hiv-aids"], "ageBand": ["adult"], "region": ["ssa"] }
+  },
+  {
+    "id": "dead-covid-ancient",
+    "text": "Ancient years closed during the COVID-19 pandemic.",
+    "when": { "status": ["dead"], "cause": ["covid-19"], "ageBand": ["ancient"] }
+  },
+  {
+    "id": "dead-era-bronze-land",
+    "text": "Bronze age fields knew the labor until the laborer rested.",
+    "when": { "status": ["dead"], "era": ["bronze-age"], "setting": ["land"] }
+  },
+  {
+    "id": "dead-era-iron-city",
+    "text": "Iron age city streets held a presence now absent.",
+    "when": { "status": ["dead"], "era": ["iron-age"], "setting": ["city"] }
+  },
+  {
+    "id": "dead-era-classical-literate",
+    "text": "Classical letters shaped a mind now quiet.",
+    "when": { "status": ["dead"], "era": ["classical"], "literacy": ["literate"] }
+  },
+  {
+    "id": "dead-era-middle-illiterate",
+    "text": "Middle ages unlettered life closed in common quiet.",
+    "when": { "status": ["dead"], "era": ["middle-ages"], "literacy": ["illiterate"] }
+  },
+  {
+    "id": "dead-era-early-modern-clean",
+    "text": "Early modern years unstained by the common harms.",
+    "when": { "status": ["dead"], "era": ["early-modern"], "sin": ["clean"] }
+  },
+  {
+    "id": "dead-era-industrial-catastrophe",
+    "text": "Industrial age life ended under larger forces of history.",
+    "when": { "status": ["dead"], "era": ["industrial"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-era-modern-natural",
+    "text": "Modern years yielded to the ordinary claim of time.",
+    "when": { "status": ["dead"], "era": ["modern"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-region-ssa-illiterate",
+    "text": "Unlettered life of the southern rivers returned to them.",
+    "when": { "status": ["dead"], "region": ["ssa"], "literacy": ["illiterate"] }
+  },
+  {
+    "id": "dead-region-mena-literate",
+    "text": "Lettered life of the desert edge set down the final word.",
+    "when": { "status": ["dead"], "region": ["mena"], "literacy": ["literate"] }
+  },
+  {
+    "id": "dead-region-eur-elder",
+    "text": "Elder of the northern forests rested after long seasons.",
+    "when": { "status": ["dead"], "region": ["eur"], "ageBand": ["elder"] }
+  },
+  {
+    "id": "dead-region-sas-young",
+    "text": "Young years of the monsoon plains ended early.",
+    "when": { "status": ["dead"], "region": ["sas"], "ageBand": ["young"] }
+  },
+  {
+    "id": "dead-region-eas-city",
+    "text": "City life of the eastern valleys closed its account.",
+    "when": { "status": ["dead"], "region": ["eas"], "setting": ["city"] }
+  },
+  {
+    "id": "dead-region-sea-land",
+    "text": "Island fields knew the labor until the end.",
+    "when": { "status": ["dead"], "region": ["sea"], "setting": ["land"] }
+  },
+  {
+    "id": "dead-region-ame-catastrophe",
+    "text": "Western plains life taken by forces beyond the horizon.",
+    "when": { "status": ["dead"], "region": ["ame"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-sin-clean-elder-land",
+    "text": "Elder of the fields, clean of hand, rested at last.",
+    "when": { "status": ["dead"], "sin": ["clean"], "ageBand": ["elder"], "setting": ["land"] }
+  },
+  {
+    "id": "dead-sin-violence-young-city",
+    "text": "Young violence of the streets met its answer early.",
+    "when": { "status": ["dead"], "sin": ["violence"], "ageBand": ["young"], "setting": ["city"] }
+  },
+  {
+    "id": "dead-sin-deceit-adult-literate",
+    "text": "Adult of letters whose words deceived found silence waiting.",
+    "when": {
+      "status": ["dead"],
+      "sin": ["deceit"],
+      "ageBand": ["adult"],
+      "literacy": ["literate"]
+    }
+  },
+  {
+    "id": "dead-sin-greed-mature-land",
+    "text": "Mature hands of the land that took too much left empty.",
+    "when": { "status": ["dead"], "sin": ["greed"], "ageBand": ["mature"], "setting": ["land"] }
+  },
+  {
+    "id": "dead-sin-heresy-ancient-city",
+    "text": "Ancient of the city whose thoughts diverged met the common end.",
+    "when": { "status": ["dead"], "sin": ["heresy"], "ageBand": ["ancient"], "setting": ["city"] }
+  },
+  {
+    "id": "dead-baseline-extra-1",
+    "text": "The measure completed, the account closed without flourish.",
+    "when": { "status": ["dead"] }
+  },
+  {
+    "id": "dead-baseline-extra-2",
+    "text": "One more weight settled upon the long balance of living.",
+    "when": { "status": ["dead"] }
+  },
+  {
+    "id": "dead-baseline-extra-3",
+    "text": "Breath that had numbered its days numbered them no more.",
+    "when": { "status": ["dead"] }
+  },
+  {
+    "id": "alive-baseline-extra-1",
+    "text": "The pans of the scale remain in motion for this one.",
+    "when": { "status": ["alive"] }
+  },
+  {
+    "id": "alive-baseline-extra-2",
+    "text": "Unfinished business of living continues its quiet work.",
+    "when": { "status": ["alive"] }
+  },
+  {
+    "id": "alive-baseline-extra-3",
+    "text": "The final line has not yet been written or read.",
+    "when": { "status": ["alive"] }
+  },
+  {
+    "id": "dead-natural-extra-1",
+    "text": "Time did the work that no catastrophe was needed for.",
+    "when": { "status": ["dead"], "cause": ["natural"] }
+  },
+  {
+    "id": "dead-catastrophe-extra-1",
+    "text": "History's larger hand closed a smaller account.",
+    "when": { "status": ["dead"], "cause": ["catastrophe"] }
+  },
+  {
+    "id": "dead-literacy-extra-1",
+    "text": "Written word and living breath shared the same span.",
+    "when": { "status": ["dead"], "literacy": ["literate"] }
+  },
+  {
+    "id": "dead-literacy-extra-2",
+    "text": "No letter marked the days, only the turning of seasons.",
+    "when": { "status": ["dead"], "literacy": ["illiterate"] }
+  },
+  {
+    "id": "dead-setting-extra-1",
+    "text": "Urban press and human density framed the years now ended.",
+    "when": { "status": ["dead"], "setting": ["city"] }
+  },
+  {
+    "id": "dead-setting-extra-2",
+    "text": "Open land and open sky held the measure until the close.",
+    "when": { "status": ["dead"], "setting": ["land"] }
+  },
+  {
+    "id": "dead-sex-extra-1",
+    "text": "Daughter of time returned to the silence that precedes names.",
+    "when": { "status": ["dead"], "sex": ["girl"] }
+  },
+  {
+    "id": "dead-sex-extra-2",
+    "text": "Son of the long continuum walked no farther.",
+    "when": { "status": ["dead"], "sex": ["boy"] }
+  },
+  {
+    "id": "dead-era-extra-2",
+    "text": "New stone settlements held a life now part of the soil.",
+    "when": { "status": ["dead"], "era": ["new-stone-age"] }
+  },
+  {
+    "id": "dead-region-extra-1",
+    "text": "Southern rivers and long rains marked the living and the end.",
+    "when": { "status": ["dead"], "region": ["ssa"] }
+  },
+  {
+    "id": "dead-region-extra-2",
+    "text": "Desert routes and dry horizons framed the final quiet.",
+    "when": { "status": ["dead"], "region": ["mena"] }
+  },
+  {
+    "id": "rich-extra-1",
+    "text": "Elder woman of eastern mountains, lettered and clean, rested.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["elder"],
+      "sex": ["girl"],
+      "region": ["eas"],
+      "literacy": ["literate"],
+      "sin": ["clean"]
+    }
+  },
+  {
+    "id": "rich-extra-2",
+    "text": "Young man of western plains met catastrophe with empty hands.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["young"],
+      "sex": ["boy"],
+      "region": ["ame"],
+      "cause": ["catastrophe"],
+      "sin": ["clean"]
+    }
+  },
+  {
+    "id": "rich-extra-3",
+    "text": "Mature unlettered life of island coasts closed in ordinary time.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["mature"],
+      "region": ["sea"],
+      "literacy": ["illiterate"],
+      "cause": ["natural"]
+    }
+  },
+  {
+    "id": "rich-extra-4",
+    "text": "Ancient man of monsoon lands carried no violence to the end.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["ancient"],
+      "sex": ["boy"],
+      "region": ["sas"],
+      "sin": ["clean"]
+    }
+  },
+  {
+    "id": "rich-extra-5",
+    "text": "Adult woman of desert cities, deceitful in life, silent in death.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["adult"],
+      "sex": ["girl"],
+      "region": ["mena"],
+      "setting": ["city"],
+      "sin": ["deceit"]
+    }
+  },
+  {
+    "id": "rich-extra-6",
+    "text": "Juvenile boy of northern forests ended under larger historical force.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["juvenile"],
+      "sex": ["boy"],
+      "region": ["eur"],
+      "cause": ["catastrophe"]
+    }
+  },
+  {
+    "id": "rich-extra-7",
+    "text": "Child girl of southern savannas knew only the briefest seasons.",
+    "when": { "status": ["dead"], "ageBand": ["child"], "sex": ["girl"], "region": ["ssa"] }
+  },
+  {
+    "id": "rich-extra-8",
+    "text": "Elder man of city letters and quiet harmlessness set the pen down.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["elder"],
+      "sex": ["boy"],
+      "setting": ["city"],
+      "literacy": ["literate"],
+      "sin": ["clean"]
+    }
+  },
+  {
+    "id": "rich-extra-9",
+    "text": "Young woman of the land, unlettered, met the ordinary dusk.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["young"],
+      "sex": ["girl"],
+      "setting": ["land"],
+      "literacy": ["illiterate"],
+      "cause": ["natural"]
+    }
+  },
+  {
+    "id": "rich-extra-10",
+    "text": "Mature man whose greed shaped the city left nothing to carry.",
+    "when": {
+      "status": ["dead"],
+      "ageBand": ["mature"],
+      "sex": ["boy"],
+      "setting": ["city"],
+      "sin": ["greed"]
+    }
+  }
 ]

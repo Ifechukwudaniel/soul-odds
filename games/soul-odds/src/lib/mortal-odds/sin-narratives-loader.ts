@@ -1,4 +1,4 @@
-import type { SinNarratives } from "@/lib/mortal-odds/sin-variants";
+import type { SinNarratives } from '@/lib/mortal-odds/sin-variants';
 
 export type SinNarrativesState = { ready: true; narratives: SinNarratives } | { ready: false };
 
@@ -27,7 +27,11 @@ export class SinNarrativesLoader {
     this.#fetchNarratives = options.fetchNarratives;
   }
 
-  request(key: string, fallback: SinNarratives, onResolved: (narratives: SinNarratives) => void): SinNarrativesState {
+  request(
+    key: string,
+    fallback: SinNarratives,
+    onResolved: (narratives: SinNarratives) => void,
+  ): SinNarrativesState {
     this.#latestKey = key;
 
     const cached = this.#cache.get(key);

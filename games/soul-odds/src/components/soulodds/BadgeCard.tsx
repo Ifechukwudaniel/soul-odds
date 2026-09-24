@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { ClaimReward } from "./ClaimReward";
-import numeral from "numeral";
+import numeral from 'numeral';
+import React, { useState } from 'react';
+import { ClaimReward } from './ClaimReward';
 
 type BadgeCardProps = {
   title: string;
@@ -38,11 +38,11 @@ export const BadgeCard: React.FC<BadgeCardProps> = ({
 
   return (
     <div key={title} className="flex flex-col items-center justify-center">
-      <div className="w-[85px] h-[85px] mb-4 flex justify-center items-center relative">
+      <div className="relative mb-4 flex h-[85px] w-[85px] items-center justify-center">
         {isUnlocked ? unlockedIcon : lockedIcon}
         {claimed && (
           <button
-            className="text-[0.65rem] px-2 purple-gradient rounded-full  py-[2px] border border-black absolute bottom-0 font-[500]"
+            className="purple-gradient absolute bottom-0 rounded-full border border-black px-2 py-[2px] text-[0.65rem] font-[500]"
             onClick={openModal}
             style={{
               boxShadow: `0.88px 2.63px 1.32px 0px #FFFFFF47 inset
@@ -53,17 +53,17 @@ export const BadgeCard: React.FC<BadgeCardProps> = ({
           </button>
         )}
       </div>
-      <h3 className="text-[0.8rem] sf-pro-medium"> {isUnlocked ? title : "???"}</h3>
+      <h3 className="sf-pro-medium text-[0.8rem]"> {isUnlocked ? title : '???'}</h3>
 
-      <p className="text-[0.72rem] text-center mt-1 text-[#B0AEB5] sf-pro-medium">
+      <p className="sf-pro-medium mt-1 text-center text-[0.72rem] text-[#B0AEB5]">
         {isUnlocked || !claimed
-          ? `${numeral(tokenMinned).format("Oa")} of ${numeral(requiredCoin).format("0a")} coins`
-          : "??"}
+          ? `${numeral(tokenMinned).format('Oa')} of ${numeral(requiredCoin).format('0a')} coins`
+          : '??'}
       </p>
 
-      <div className="w-[100px] rounded-xl h-[3px] mt-[10px] bg-white">
+      <div className="mt-[10px] h-[3px] w-[100px] rounded-xl bg-white">
         <div
-          className="font-medium text-white text-center h-full leading-none rounded-xl flex justify-center items-center bg-[#EAAD65] "
+          className="flex h-full items-center justify-center rounded-xl bg-[#EAAD65] text-center leading-none font-medium text-white"
           style={{ width: `100%` }}
         ></div>
       </div>

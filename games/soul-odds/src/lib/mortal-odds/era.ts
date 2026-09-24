@@ -1,5 +1,5 @@
-import { apiClient } from "@/libs/ApiClient";
-import type { EraConfig } from "@/lib/mortal-odds/config";
+import type { EraConfig } from '@/lib/mortal-odds/config';
+import { apiClient } from '@/libs/ApiClient';
 
 /**
  * `/api/mortal-odds/era`'s response: the demographic `EraConfig` for the year (same shape

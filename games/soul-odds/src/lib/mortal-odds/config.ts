@@ -1,15 +1,15 @@
-import * as z from "zod";
-import curvesJson from "@/config/mortal-odds/curves.json";
-import erasJson from "@/config/mortal-odds/eras.json";
-import jobsJson from "@/config/mortal-odds/jobs.json";
-import marketsJson from "@/config/mortal-odds/markets.json";
-import placesJson from "@/config/mortal-odds/places.json";
-import regionModifiersJson from "@/config/mortal-odds/region-modifiers.json";
-import shocksJson from "@/config/mortal-odds/shocks.json";
-import sinsJson from "@/config/mortal-odds/sins.json";
-import worldLandJson from "@/config/mortal-odds/world-land.json";
-import type { PricingConfig } from "@/lib/mortal-odds/pricing";
-import type { EraFilter, MarketConfig, MarketOption, RegionId } from "@/types";
+import * as z from 'zod';
+import curvesJson from '@/config/mortal-odds/curves.json';
+import erasJson from '@/config/mortal-odds/eras.json';
+import jobsJson from '@/config/mortal-odds/jobs.json';
+import marketsJson from '@/config/mortal-odds/markets.json';
+import placesJson from '@/config/mortal-odds/places.json';
+import regionModifiersJson from '@/config/mortal-odds/region-modifiers.json';
+import shocksJson from '@/config/mortal-odds/shocks.json';
+import sinsJson from '@/config/mortal-odds/sins.json';
+import worldLandJson from '@/config/mortal-odds/world-land.json';
+import type { PricingConfig } from '@/lib/mortal-odds/pricing';
+import type { EraFilter, MarketConfig, MarketOption, RegionId } from '@/types';
 
 export const MODES: Record<EraFilter, number> = { all: -Infinity, ce: 1, modern: 1750 };
 
@@ -27,18 +27,18 @@ export const PRICING_CONFIG: PricingConfig = { houseEdge: 0.08, maxOdds: 60, min
 export const SEX_BOY_SHARE = 0.512;
 
 export const REGIONS: Record<RegionId, string> = {
-  ssa: "Sub-Saharan Africa",
-  mena: "North Africa and the Middle East",
-  eur: "Europe",
-  sas: "South Asia",
-  eas: "East Asia",
-  sea: "Southeast Asia and Oceania",
-  ame: "the Americas",
+  ssa: 'Sub-Saharan Africa',
+  mena: 'North Africa and the Middle East',
+  eur: 'Europe',
+  sas: 'South Asia',
+  eas: 'East Asia',
+  sea: 'Southeast Asia and Oceania',
+  ame: 'the Americas',
 };
 
 export const HUMANS_EVER = 117e9;
 
-const regionIdSchema = z.enum(["ssa", "mena", "eur", "sas", "eas", "sea", "ame"]);
+const regionIdSchema = z.enum(['ssa', 'mena', 'eur', 'sas', 'eas', 'sea', 'ame']);
 
 /** Every region id, typed — avoids casting the result of Object.keys over region-keyed records. */
 export const REGION_IDS = regionIdSchema.options;
@@ -91,7 +91,7 @@ const marketOptionSchema = z.object({ id: z.string(), label: z.string() });
 
 const marketConfigSchema = z.object({
   id: z.string(),
-  kind: z.literal("choice"),
+  kind: z.literal('choice'),
   title: z.string(),
   note: z.string().optional(),
   options: z.array(marketOptionSchema).min(2),
@@ -131,15 +131,15 @@ const shocksConfigSchema = z.array(shockConfigSchema);
  * only changing the categories themselves would require a new title deployment.
  */
 export const SIN_CATEGORIES = [
-  { id: "violence", label: "Violence" },
-  { id: "deceit", label: "Deceit" },
-  { id: "greed", label: "Greed" },
-  { id: "heresy", label: "Heresy" },
+  { id: 'violence', label: 'Violence' },
+  { id: 'deceit', label: 'Deceit' },
+  { id: 'greed', label: 'Greed' },
+  { id: 'heresy', label: 'Heresy' },
 ] as const;
-export type SinCategoryId = (typeof SIN_CATEGORIES)[number]["id"];
+export type SinCategoryId = (typeof SIN_CATEGORIES)[number]['id'];
 
 /** Joins the categories of a multi-sin pick into one option id, e.g. "violence+greed". */
-export const SIN_ID_SEPARATOR = "+";
+export const SIN_ID_SEPARATOR = '+';
 
 /**
  * The bettable sin catalog. Hand-edited: add an entry here and it becomes a possible outcome
@@ -154,12 +154,18 @@ const sinConfigSchema = z.object({
   from: z.number(),
   to: z.number().nullable(),
   rate: shockRateSchema,
-  category: z.enum(SIN_CATEGORIES.map((category) => category.id) as [SinCategoryId, ...SinCategoryId[]]),
+  category: z.enum(
+    SIN_CATEGORIES.map((category) => category.id) as [SinCategoryId, ...SinCategoryId[]],
+  ),
 });
 
 const sinsConfigSchema = z.array(sinConfigSchema).min(1);
 
-const jobPoolSchema = z.object({ land: z.array(z.string()), city: z.array(z.string()), lit: z.array(z.string()) });
+const jobPoolSchema = z.object({
+  land: z.array(z.string()),
+  city: z.array(z.string()),
+  lit: z.array(z.string()),
+});
 const jobsConfigSchema = z.object({
   forager: jobPoolSchema,
   premodern: jobPoolSchema,
@@ -182,7 +188,11 @@ const sexPairSchema = z.object({ girl: z.number(), boy: z.number() });
 
 const regionModifiersConfigSchema = z.object({
   regionMods: z.object({ industrial: regionModPairsSchema, modern: regionModPairsSchema }),
-  literacyMultiplier: z.object({ ancient: regionSharesSchema, early: regionSharesSchema, modern: regionSharesSchema }),
+  literacyMultiplier: z.object({
+    ancient: regionSharesSchema,
+    early: regionSharesSchema,
+    modern: regionSharesSchema,
+  }),
   sexLiteracyMultiplier: z.object({ old: sexPairSchema, new: sexPairSchema }),
   cityMultiplier: z.object({ old: regionSharesSchema, new: regionSharesSchema }),
   sexChildMortalityMultiplier: sexPairSchema,
@@ -202,7 +212,8 @@ export const placesConfig: Record<RegionId, PlaceConfig[]> = placesConfigSchema.
 export const shocksConfig: ShockConfig[] = shocksConfigSchema.parse(shocksJson);
 export const sinsConfig: SinConfig[] = sinsConfigSchema.parse(sinsJson);
 export const jobsConfig: JobsConfig = jobsConfigSchema.parse(jobsJson);
-export const regionModifiersConfig: RegionModifiersConfig = regionModifiersConfigSchema.parse(regionModifiersJson);
+export const regionModifiersConfig: RegionModifiersConfig =
+  regionModifiersConfigSchema.parse(regionModifiersJson);
 
 /**
  * The "sins" market's options mirror every crime state the contract accepts: "Clean" for none,
@@ -211,24 +222,28 @@ export const regionModifiersConfig: RegionModifiersConfig = regionModifiersConfi
  * from `sins.json`) is flavor only — see `pickSin`.
  */
 const sinPairOptions = SIN_CATEGORIES.flatMap((first, index) =>
-  SIN_CATEGORIES.slice(index + 1).map(
-    (second): MarketOption => ({ id: `${first.id}${SIN_ID_SEPARATOR}${second.id}`, label: `${first.label} + ${second.label}` }),
-  ),
+  SIN_CATEGORIES.slice(index + 1).map((second): MarketOption => ({
+    id: `${first.id}${SIN_ID_SEPARATOR}${second.id}`,
+    label: `${first.label} + ${second.label}`,
+  })),
 );
 
 const sinsMarket: MarketConfig = {
-  id: "sins",
-  kind: "choice",
-  title: "The Weighing of the Heart",
+  id: 'sins',
+  kind: 'choice',
+  title: 'The Weighing of the Heart',
   note: "Anubis weighs every heart against Ma'at's feather before he lets a soul pass.",
   options: [
-    { id: "none", label: "Clean" },
+    { id: 'none', label: 'Clean' },
     ...SIN_CATEGORIES.map((category): MarketOption => ({ id: category.id, label: category.label })),
     ...sinPairOptions,
   ],
 };
 
-export const marketsConfig: MarketConfig[] = [...marketsConfigSchema.parse(marketsJson), sinsMarket];
+export const marketsConfig: MarketConfig[] = [
+  ...marketsConfigSchema.parse(marketsJson),
+  sinsMarket,
+];
 
 const curves = curvesConfigSchema.parse(curvesJson);
 export const worldPopCurve: ReadonlyArray<readonly [number, number]> = curves.worldPop;

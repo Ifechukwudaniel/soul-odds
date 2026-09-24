@@ -27,7 +27,7 @@ export function createRng(seed?: number): Rng {
 export function pickWeighted<T>(options: { items: T[]; weight: (item: T) => number; rng: Rng }): T {
   const { items, weight, rng } = options;
   const first = items[0];
-  if (!first) throw new Error("pickWeighted: items must not be empty");
+  if (!first) throw new Error('pickWeighted: items must not be empty');
   const total = items.reduce((sum, item) => sum + weight(item), 0);
   let r = rng() * total;
   for (const item of items) {

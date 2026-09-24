@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 interface StatPillProps {
   title: string;
@@ -8,11 +8,11 @@ interface StatPillProps {
 
 export function StatPill({ title, icon, count }: StatPillProps) {
   return (
-    <div className="green-gradient-shine py-4 px-3 rounded-lg h-full">
-      <h3 className="text-[0.8rem] font-[500] mb-[6px] leading-[1.8] text-[#AFAFAF] tracking-[-0.14px]">
+    <div className="green-gradient-shine h-full rounded-lg px-3 py-4">
+      <h3 className="mb-[6px] text-[0.8rem] leading-[1.8] font-[500] tracking-[-0.14px] text-[#AFAFAF]">
         {title}
       </h3>
-      <div className="text-base font-[700] flex items-center">
+      <div className="flex items-center text-base font-[700]">
         <span className="mr-2">{icon}</span> {count}
       </div>
     </div>

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { LuBookOpen, LuChevronDown } from "react-icons/lu";
-import { RevealSection } from "@/components/game/mortal-odds/stage/reveal/RevealSection";
-import type { LifeStoryState } from "@/hooks/useLifeStory";
+import { motion } from 'framer-motion';
+import { LuBookOpen, LuChevronDown } from 'react-icons/lu';
+import { RevealSection } from '@/components/game/mortal-odds/stage/reveal/RevealSection';
+import type { LifeStoryState } from '@/hooks/useLifeStory';
 
-const SKELETON_LINE_WIDTHS = ["w-full", "w-11/12", "w-full", "w-4/5"];
+const SKELETON_LINE_WIDTHS = ['w-full', 'w-11/12', 'w-full', 'w-4/5'];
 
 const StoryLoading = () => (
   <div className="flex flex-col gap-3" aria-label="Writing this soul's story…" role="status">
@@ -27,11 +27,11 @@ export const SoulStory = (props: { state: LifeStoryState }) => (
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-        className="flex flex-col gap-3 text-base text-white leading-relaxed"
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+        className="flex flex-col gap-3 text-base leading-relaxed text-white"
         style={{ color: `#ffffff !important` }}
       >
-        {props.state.payload.story.split("\n\n").map((paragraph) => (
+        {props.state.payload.story.split('\n\n').map((paragraph) => (
           <p key={paragraph}>{paragraph}</p>
         ))}
       </motion.div>
@@ -42,7 +42,7 @@ export const SoulStory = (props: { state: LifeStoryState }) => (
     <button
       type="button"
       disabled
-      className="mystic-glass-gold-strong inline-flex w-fit cursor-not-allowed items-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.12em]"
+      className="mystic-glass-gold-strong inline-flex w-fit cursor-not-allowed items-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold tracking-[0.12em] uppercase"
     >
       <span className="gold-text">Read the full record</span>
       <LuChevronDown size={14} className="text-[#F5B83D]" />

@@ -1,9 +1,16 @@
-import { IconProps } from "@/types/icontypes";
-
+import { IconProps } from '@/types/icontypes';
 
 export const TimerIcon = (props: IconProps) => {
   return (
-    <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg"  className={props.className} style={{ width: props.width, height: props.height }}>
+    <svg
+      width="14"
+      height="16"
+      viewBox="0 0 14 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={props.className}
+      style={{ width: props.width, height: props.height }}
+    >
       <path
         d="M13.6106 3.23732L5.93114 0.123726C5.7626 0.0553934 5.57058 0.136626 5.50225 0.305164L5.23983 0.952379C5.1715 1.12092 5.25273 1.31294 5.42127 1.38127L13.1008 4.49487C13.2693 4.5632 13.4613 4.48197 13.5297 4.31343L13.7921 3.66622C13.8604 3.49768 13.7792 3.30566 13.6106 3.23732Z"
         fill="url(#paint0_linear_372_8153)"
@@ -17,7 +24,7 @@ export const TimerIcon = (props: IconProps) => {
         fill="url(#paint2_linear_372_8153)"
       />
       <path
-        style={{ mixBlendMode: "multiply" }}
+        style={{ mixBlendMode: 'multiply' }}
         opacity="0.4"
         d="M8.74575 14.5115C8.74575 14.5115 10.2167 11.5171 8.12334 8.9479C8.05209 8.86398 8.0052 8.76215 7.98774 8.65346C7.97029 8.54477 7.98295 8.43337 8.02435 8.33137C8.06575 8.22937 8.1343 8.14066 8.22257 8.07487C8.31083 8.00908 8.41543 7.96874 8.52501 7.95821C11.8162 7.57102 12.8475 4.39751 12.8475 4.39751L10.6057 3.49286C10.3162 4.14963 9.21255 6.42754 7.36885 7.6054L6.92014 8.35083L6.54199 9.64267C6.54199 9.64267 6.86948 11.8229 6.72292 13.6955L8.74575 14.5115Z"
         fill="url(#paint3_linear_372_8153)"

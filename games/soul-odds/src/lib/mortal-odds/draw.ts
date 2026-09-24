@@ -1,11 +1,17 @@
-import type { EraConfig, PlaceConfig } from "@/lib/mortal-odds/config";
-import { HUMANS_EVER, MODES } from "@/lib/mortal-odds/config";
-import { interpolate } from "@/lib/mortal-odds/curves";
-import { fmtNumber, fmtPeople, fmtPeopleRounded, fmtYear, periodName } from "@/lib/mortal-odds/format";
-import { eraFor } from "@/lib/mortal-odds/geo";
-import { pickWeighted } from "@/lib/mortal-odds/rng";
-import type { Rng } from "@/lib/mortal-odds/rng";
-import type { Draw, EraFilter, Place, PlaceContext, RegionId } from "@/types";
+import type { EraConfig, PlaceConfig } from '@/lib/mortal-odds/config';
+import { HUMANS_EVER, MODES } from '@/lib/mortal-odds/config';
+import { interpolate } from '@/lib/mortal-odds/curves';
+import {
+  fmtNumber,
+  fmtPeople,
+  fmtPeopleRounded,
+  fmtYear,
+  periodName,
+} from '@/lib/mortal-odds/format';
+import { eraFor } from '@/lib/mortal-odds/geo';
+import { pickWeighted } from '@/lib/mortal-odds/rng';
+import type { Rng } from '@/lib/mortal-odds/rng';
+import type { Draw, EraFilter, Place, PlaceContext, RegionId } from '@/types';
 
 /**
  * The Cliopatria dataset's own last-updated year: a polity whose attested range ends here wasn't
@@ -35,12 +41,17 @@ const ENDURES_STILL_TEMPLATES: ((from: string) => string)[] = [
 
 function pickRandom<T>(items: readonly T[], rng: Rng): T {
   const item = items[Math.floor(rng() * items.length)];
-  if (item === undefined) throw new Error("pickRandom: items must not be empty");
+  if (item === undefined) throw new Error('pickRandom: items must not be empty');
   return item;
 }
 
 /** Weighted-picks an era and year within it, then a region from that era's shares. */
-export function drawBirth(options: { era: EraFilter; rng: Rng; erasConfig: EraConfig[]; currentYear: number }): {
+export function drawBirth(options: {
+  era: EraFilter;
+  rng: Rng;
+  erasConfig: EraConfig[];
+  currentYear: number;
+}): {
   year: number;
   region: RegionId;
 } {
@@ -59,21 +70,38 @@ export function drawBirth(options: { era: EraFilter; rng: Rng; erasConfig: EraCo
  * (`"City, Continent"`) to match the shape `/api/mortal-odds/place`'s synthetic fallback already
  * returns — see `lib/mortal-odds/place.ts`'s `toPlace`, which normalizes both into one `Place`.
  */
-export function pickPlace(options: { region: RegionId; rng: Rng; placesConfig: Record<RegionId, PlaceConfig[]> }): Place {
+export function pickPlace(options: {
+  region: RegionId;
+  rng: Rng;
+  placesConfig: Record<RegionId, PlaceConfig[]>;
+}): Place {
   const { region, rng, placesConfig } = options;
   const candidates = placesConfig[region];
   const picked = pickWeighted({ items: candidates, weight: (p) => p.weight, rng });
   const total = candidates.reduce((sum, p) => sum + p.weight, 0);
-  return { name: `${picked.name}, ${picked.continent}`, share: picked.weight / total, lat: picked.lat, lon: picked.lon };
+  return {
+    name: `${picked.name}, ${picked.continent}`,
+    share: picked.weight / total,
+    lat: picked.lat,
+    lon: picked.lon,
+  };
 }
 
 /** The continent of the configured place nearest a point, for a polity that comes without one. */
-export function continentNear(options: { lat: number; lon: number; placesConfig: Record<RegionId, PlaceConfig[]> }): string {
+export function continentNear(options: {
+  lat: number;
+  lon: number;
+  placesConfig: Record<RegionId, PlaceConfig[]>;
+}): string {
   const { lat, lon, placesConfig } = options;
   const rad = Math.PI / 180;
   // Haversine's `a` grows with distance, which is all that's needed to find the nearest.
-  const closeness = (p: PlaceConfig) => Math.sin(((p.lat - lat) * rad) / 2) ** 2 + Math.cos(lat * rad) * Math.cos(p.lat * rad) * Math.sin(((p.lon - lon) * rad) / 2) ** 2;
-  return Object.values(placesConfig).flat().reduce((nearest, p) => (closeness(p) < closeness(nearest) ? p : nearest)).continent;
+  const closeness = (p: PlaceConfig) =>
+    Math.sin(((p.lat - lat) * rad) / 2) ** 2 +
+    Math.cos(lat * rad) * Math.cos(p.lat * rad) * Math.sin(((p.lon - lon) * rad) / 2) ** 2;
+  return Object.values(placesConfig)
+    .flat()
+    .reduce((nearest, p) => (closeness(p) < closeness(nearest) ? p : nearest)).continent;
 }
 
 /** A region's share of births in an already-resolved era, relative to all regions that era. */
@@ -84,7 +112,11 @@ export function regionShareInEra(options: { region: RegionId; era: EraConfig }):
 }
 
 /** The drawn region's share of births in the year's era, relative to all regions that era. */
-export function regionShare(options: { year: number; region: RegionId; erasConfig: EraConfig[] }): number {
+export function regionShare(options: {
+  year: number;
+  region: RegionId;
+  erasConfig: EraConfig[];
+}): number {
   const { year, region, erasConfig } = options;
   return regionShareInEra({ region, era: eraFor({ year, erasConfig }) });
 }
@@ -106,11 +138,11 @@ export function placeContext(options: {
   worldPopCurve: ReadonlyArray<readonly [number, number]>;
   currentYear: number;
   rng: Rng;
-}): Omit<PlaceContext, "story"> {
+}): Omit<PlaceContext, 'story'> {
   const { draw, era, worldPopCurve, currentYear, rng } = options;
   const world = interpolate({ points: worldPopCurve, x: draw.year });
 
-  let local = "";
+  let local = '';
   if (draw.place.share !== undefined) {
     const share = regionShareInEra({ region: draw.region, era });
     local = `Estimated population: ${fmtPeople(world * share * draw.place.share)}.`;
@@ -120,13 +152,21 @@ export function placeContext(options: {
     local =
       draw.place.toYear >= CLIOPATRIA_DATA_CUTOFF_YEAR
         ? pickRandom(ENDURES_STILL_TEMPLATES, rng)(fmtYear(draw.place.fromYear))
-        : pickRandom(ENDURED_TEMPLATES, rng)(fmtYear(draw.place.fromYear), fmtYear(draw.place.toYear));
+        : pickRandom(ENDURED_TEMPLATES, rng)(
+            fmtYear(draw.place.fromYear),
+            fmtYear(draw.place.toYear),
+          );
   }
 
   // A synthetic place's name already ends in its continent ("City, Continent"); a polity's doesn't.
   // `fmtYear` leaves "CE" off recent years; the header always spells it out.
   const yearLabel = draw.year > 0 ? `${draw.year} CE` : fmtYear(draw.year);
-  const where = [...(draw.place.continent ? [draw.place.name, draw.place.continent] : draw.place.name.split(", ")), yearLabel].join(" · ");
+  const where = [
+    ...(draw.place.continent
+      ? [draw.place.name, draw.place.continent]
+      : draw.place.name.split(', ')),
+    yearLabel,
+  ].join(' · ');
 
   return {
     where,

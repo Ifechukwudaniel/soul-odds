@@ -97,7 +97,9 @@ export const sinCatalogSchema = pgTable(
     toYear: integer('to_year').notNull(),
     narratives: jsonb('narratives').$type<SinNarratives>().notNull(),
   },
-  (table) => [index('sin_variant_location_period_idx').on(table.location, table.fromYear, table.toYear)],
+  (table) => [
+    index('sin_variant_location_period_idx').on(table.location, table.fromYear, table.toYear),
+  ],
 );
 
 export type SinCatalogRow = InferSelectModel<typeof sinCatalogSchema>;

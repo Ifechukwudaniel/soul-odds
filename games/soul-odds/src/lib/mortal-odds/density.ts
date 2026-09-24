@@ -1,5 +1,5 @@
-import * as z from "zod";
-import countryPopulationsJson from "@/config/mortal-odds/country-populations.json";
+import * as z from 'zod';
+import countryPopulationsJson from '@/config/mortal-odds/country-populations.json';
 
 // Country populations come from Our World in Data's "Population" long-run series (population-long-run-with-projections;
 // HYDE 3.3 before 1800, Gapminder to 1949, UN WPP 2024 after, medium-variant projections to 2100), which
@@ -9,7 +9,9 @@ import countryPopulationsJson from "@/config/mortal-odds/country-populations.jso
 
 const countryPopulationsSchema = z.object({
   years: z.array(z.number()),
-  countries: z.array(z.object({ name: z.string(), landKm2: z.number(), population: z.array(z.number()) })),
+  countries: z.array(
+    z.object({ name: z.string(), landKm2: z.number(), population: z.array(z.number()) }),
+  ),
 });
 
 const { years, countries } = countryPopulationsSchema.parse(countryPopulationsJson);
@@ -32,13 +34,21 @@ function atYear(values: number[], year: number): number {
 /** People per km² across a country in a year, or 0 for a country the table doesn't know. */
 export function countryDensityAt(options: { country: number; year: number }): number {
   const country = countries[options.country];
-  return country && country.landKm2 > 0 ? atYear(country.population, options.year) / country.landKm2 : 0;
+  return country && country.landKm2 > 0
+    ? atYear(country.population, options.year) / country.landKm2
+    : 0;
 }
 
 /** The people a territory held in a year: each country's density then times the land the territory covers in it. */
-export function populationFromCountries(options: { year: number; landByCountry: LandByCountry }): number {
+export function populationFromCountries(options: {
+  year: number;
+  landByCountry: LandByCountry;
+}): number {
   const { year, landByCountry } = options;
-  return Object.entries(landByCountry).reduce((sum, [country, km2]) => sum + countryDensityAt({ country: Number(country), year }) * km2, 0);
+  return Object.entries(landByCountry).reduce(
+    (sum, [country, km2]) => sum + countryDensityAt({ country: Number(country), year }) * km2,
+    0,
+  );
 }
 
 /** The index of a country in the table by name, e.g. "Italy", or undefined. */

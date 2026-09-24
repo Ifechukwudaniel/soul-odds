@@ -1,9 +1,9 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
 
 /** One polity's territory over the date range it held that shape (see cliopatria.geojson/README for the source dataset). */
 export type CliopatriaFeature = {
-  type: "Feature";
+  type: 'Feature';
   properties: {
     Name: string;
     FromYear: number;
@@ -17,11 +17,15 @@ export type CliopatriaFeature = {
     MemberOf: string;
   };
   geometry:
-    | { type: "Polygon"; coordinates: number[][][] }
-    | { type: "MultiPolygon"; coordinates: number[][][][] };
+    | { type: 'Polygon'; coordinates: number[][][] }
+    | { type: 'MultiPolygon'; coordinates: number[][][][] };
 };
 
-const CLIOPATRIA_PATH = path.join(process.cwd(), "cliopatria.geojson", "cliopatria_polities_only.geojson");
+const CLIOPATRIA_PATH = path.join(
+  process.cwd(),
+  'cliopatria.geojson',
+  'cliopatria_polities_only.geojson',
+);
 
 let cached: Promise<CliopatriaFeature[]> | null = null;
 
@@ -32,7 +36,7 @@ let cached: Promise<CliopatriaFeature[]> | null = null;
  */
 export function loadCliopatria(): Promise<CliopatriaFeature[]> {
   if (!cached) {
-    cached = readFile(CLIOPATRIA_PATH, "utf8").then((raw) => {
+    cached = readFile(CLIOPATRIA_PATH, 'utf8').then((raw) => {
       const parsed = JSON.parse(raw) as { features: CliopatriaFeature[] };
       return parsed.features;
     });
@@ -41,10 +45,11 @@ export function loadCliopatria(): Promise<CliopatriaFeature[]> {
 }
 
 /** The outer ring to represent a feature's territory by: its one ring, or its largest sub-polygon's outer ring. */
-function outerRing(geometry: CliopatriaFeature["geometry"]): number[][] {
-  if (geometry.type === "Polygon") return geometry.coordinates[0] ?? [];
+function outerRing(geometry: CliopatriaFeature['geometry']): number[][] {
+  if (geometry.type === 'Polygon') return geometry.coordinates[0] ?? [];
   return geometry.coordinates.reduce<number[][]>(
-    (largest, polygon) => ((polygon[0]?.length ?? 0) > largest.length ? (polygon[0] ?? []) : largest),
+    (largest, polygon) =>
+      (polygon[0]?.length ?? 0) > largest.length ? (polygon[0] ?? []) : largest,
     [],
   );
 }
@@ -52,10 +57,13 @@ function outerRing(geometry: CliopatriaFeature["geometry"]): number[][] {
 /** A representative point for a feature: the plain average of its outer ring's vertices. */
 export function centroidOf(feature: CliopatriaFeature): { lat: number; lon: number } {
   const ring = outerRing(feature.geometry);
-  const sum = ring.reduce((acc, [lon, lat]) => ({ lon: acc.lon + (lon ?? 0), lat: acc.lat + (lat ?? 0) }), {
-    lon: 0,
-    lat: 0,
-  });
+  const sum = ring.reduce(
+    (acc, [lon, lat]) => ({ lon: acc.lon + (lon ?? 0), lat: acc.lat + (lat ?? 0) }),
+    {
+      lon: 0,
+      lat: 0,
+    },
+  );
   return { lon: sum.lon / ring.length, lat: sum.lat / ring.length };
 }
 

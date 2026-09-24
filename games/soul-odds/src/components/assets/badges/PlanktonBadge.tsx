@@ -1,5 +1,3 @@
-import React from "react";
-
 export const PlanktonBadge = ({
   unlocked = false,
   width,
@@ -30,11 +28,17 @@ export const PlanktonBadge = ({
               r="27.625"
               fill="url(#paint2_linear_251_2004)"
               fillOpacity="0.2"
-              style={{ mixBlendMode: "multiply" }}
+              style={{ mixBlendMode: 'multiply' }}
             />
           </g>
-          <circle cx="42.5" cy="42.5" r="30.2812" stroke="url(#paint3_linear_251_2004)" strokeWidth="5.3125" />
-          <g style={{ mixBlendMode: "overlay" }} opacity="0.25">
+          <circle
+            cx="42.5"
+            cy="42.5"
+            r="30.2812"
+            stroke="url(#paint3_linear_251_2004)"
+            strokeWidth="5.3125"
+          />
+          <g style={{ mixBlendMode: 'overlay' }} opacity="0.25">
             <circle cx="42.5" cy="42.5" r="33.2031" stroke="white" strokeWidth="0.53125" />
           </g>
           <defs>
@@ -58,7 +62,10 @@ export const PlanktonBadge = ({
               <feOffset />
               <feGaussianBlur stdDeviation="11.9531" />
               <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.358333 0 0 0 0 0.0840788 0 0 0 0 0.0627083 0 0 0 1 0" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.358333 0 0 0 0 0.0840788 0 0 0 0 0.0627083 0 0 0 1 0"
+              />
               <feBlend mode="normal" in2="shape" result="effect1_innerShadow_251_2004" />
             </filter>
             <linearGradient
@@ -108,7 +115,13 @@ export const PlanktonBadge = ({
           </defs>
         </svg>
       ) : (
-        <svg width="85" height="85" viewBox="0 0 85 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="85"
+          height="85"
+          viewBox="0 0 85 85"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <circle cx="42.5" cy="42.5" r="42.5" fill="url(#paint0_linear_251_2004)" />
           <g filter="url(#filter0_i_251_2004)">
             <circle cx="42.5" cy="42.5" r="27.625" fill="url(#paint1_radial_251_2004)" />
@@ -118,11 +131,17 @@ export const PlanktonBadge = ({
               r="27.625"
               fill="url(#paint2_linear_251_2004)"
               fillOpacity="0.2"
-              style={{ mixBlendMode: "multiply" }}
+              style={{ mixBlendMode: 'multiply' }}
             />
           </g>
-          <circle cx="42.5" cy="42.5" r="30.2812" stroke="url(#paint3_linear_251_2004)" strokeWidth="5.3125" />
-          <g style={{ mixBlendMode: "overlay" }} opacity="0.25">
+          <circle
+            cx="42.5"
+            cy="42.5"
+            r="30.2812"
+            stroke="url(#paint3_linear_251_2004)"
+            strokeWidth="5.3125"
+          />
+          <g style={{ mixBlendMode: 'overlay' }} opacity="0.25">
             <circle cx="42.5" cy="42.5" r="33.2031" stroke="white" strokeWidth="0.53125" />
           </g>
           <defs>
@@ -146,7 +165,10 @@ export const PlanktonBadge = ({
               <feOffset />
               <feGaussianBlur stdDeviation="11.9531" />
               <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.358333 0 0 0 0 0.0840788 0 0 0 0 0.0627083 0 0 0 1 0" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.358333 0 0 0 0 0.0840788 0 0 0 0 0.0627083 0 0 0 1 0"
+              />
               <feBlend mode="normal" in2="shape" result="effect1_innerShadow_251_2004" />
             </filter>
             <linearGradient

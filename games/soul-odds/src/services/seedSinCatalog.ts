@@ -24,21 +24,32 @@ export type SeedMode = 'dev' | 'prod';
 /** Stringifies with sorted keys, so a variant read back from jsonb (which reorders keys) compares equal to the file's. */
 const canonical = (value: unknown) =>
   JSON.stringify(value, (_key, v: unknown) =>
-    v && typeof v === 'object' && !Array.isArray(v) ? Object.fromEntries(Object.entries(v).sort(([a], [b]) => a.localeCompare(b))) : v,
+    v && typeof v === 'object' && !Array.isArray(v)
+      ? Object.fromEntries(Object.entries(v).sort(([a], [b]) => a.localeCompare(b)))
+      : v,
   );
 
-const keyOf = (row: NewSinCatalogRow) => canonical([row.location, row.fromYear, row.toYear, row.narratives]);
+const keyOf = (row: NewSinCatalogRow) =>
+  canonical([row.location, row.fromYear, row.toYear, row.narratives]);
 
 /**
  * One row per variant. A variant without a period of its own is given the window around its
  * place's midpoint year (the year it was generated for); one whose place has no year is skipped,
  * since it can't be shown to fit any period.
  */
-function toRows(catalog: Record<string, SeedEntry>, midYears: Map<string, number>): NewSinCatalogRow[] {
+function toRows(
+  catalog: Record<string, SeedEntry>,
+  midYears: Map<string, number>,
+): NewSinCatalogRow[] {
   return Object.entries(catalog).flatMap(([location, entry]) =>
     entry.variants.flatMap(({ fromYear, toYear, ...narratives }): NewSinCatalogRow[] => {
       const midYear = midYears.get(location);
-      const period = fromYear !== undefined && toYear !== undefined ? { fromYear, toYear } : midYear === undefined ? null : periodOf(midYear);
+      const period =
+        fromYear !== undefined && toYear !== undefined
+          ? { fromYear, toYear }
+          : midYear === undefined
+            ? null
+            : periodOf(midYear);
       return period ? [{ location, ...period, narratives }] : [];
     }),
   );
@@ -46,13 +57,18 @@ function toRows(catalog: Record<string, SeedEntry>, midYears: Map<string, number
 
 /** Imports a `location -> { variants }` JSON file into `sin_variant`. */
 export async function seedSinCatalog(file: string, mode: SeedMode = 'dev') {
-  const catalog = JSON.parse(fs.readFileSync(path.resolve(file), 'utf8')) as Record<string, SeedEntry>;
+  const catalog = JSON.parse(fs.readFileSync(path.resolve(file), 'utf8')) as Record<
+    string,
+    SeedEntry
+  >;
   const rows = toRows(catalog, await findMidYearByPlaceName());
 
   const existing = await findAllSinCatalogRows();
   const seededLocations = new Set(existing.map((row) => row.location));
   const seededKeys = new Set(existing.map(keyOf));
-  const missing = rows.filter((row) => (mode === 'prod' ? !seededKeys.has(keyOf(row)) : !seededLocations.has(row.location)));
+  const missing = rows.filter((row) =>
+    mode === 'prod' ? !seededKeys.has(keyOf(row)) : !seededLocations.has(row.location),
+  );
 
   for (let i = 0; i < missing.length; i += BATCH_SIZE) {
     await insertSinVariants(missing.slice(i, i + BATCH_SIZE));

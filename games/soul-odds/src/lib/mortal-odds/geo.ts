@@ -1,6 +1,6 @@
-import { REGION_IDS } from "@/lib/mortal-odds/config";
-import type { EraConfig, LandRing, PlaceConfig } from "@/lib/mortal-odds/config";
-import type { RegionId } from "@/types";
+import { REGION_IDS } from '@/lib/mortal-odds/config';
+import type { EraConfig, LandRing, PlaceConfig } from '@/lib/mortal-odds/config';
+import type { RegionId } from '@/types';
 
 export type Viewport = { width: number; height: number };
 export type Point = { x: number; y: number };
@@ -23,12 +23,12 @@ export function landPath(options: { rings: readonly LandRing[]; viewport: Viewpo
       ring
         .map(([lon, lat], index) => {
           const { x, y } = project({ lon, lat, viewport });
-          return `${index === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`;
+          return `${index === 0 ? 'M' : 'L'}${x.toFixed(1)} ${y.toFixed(1)}`;
         })
-        .join("")
-        .concat("Z")
+        .join('')
+        .concat('Z'),
     )
-    .join("");
+    .join('');
 }
 
 export type GraticuleLines = { verticals: number[]; horizontals: number[] };
@@ -55,7 +55,7 @@ export function eraFor(options: { year: number; erasConfig: EraConfig[] }): EraC
   const match = erasConfig.find((era) => year >= era.from && era.to !== null && year < era.to);
   const era = match ?? erasConfig.at(-1);
   if (!era) {
-    throw new Error("eraFor: erasConfig must not be empty");
+    throw new Error('eraFor: erasConfig must not be empty');
   }
   return era;
 }

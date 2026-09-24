@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
-import { requireApiSecret } from "@/libs/ApiAuth";
-import { erasConfig, placesConfig } from "@/lib/mortal-odds/config";
-import { continentNear, pickPlace, regionShare } from "@/lib/mortal-odds/draw";
-import { eraFor } from "@/lib/mortal-odds/geo";
-import { estimatePopulation } from "@/lib/mortal-odds/population-estimate";
-import { createRng, pickWeighted } from "@/lib/mortal-odds/rng";
-import { pickCliopatriaPlace } from "@/services/db/cliopatria";
-import type { RegionId } from "@/types";
+import { NextRequest, NextResponse } from 'next/server';
+import { erasConfig, placesConfig } from '@/lib/mortal-odds/config';
+import { continentNear, pickPlace, regionShare } from '@/lib/mortal-odds/draw';
+import { eraFor } from '@/lib/mortal-odds/geo';
+import { estimatePopulation } from '@/lib/mortal-odds/population-estimate';
+import { createRng, pickWeighted } from '@/lib/mortal-odds/rng';
+import { requireApiSecret } from '@/libs/ApiAuth';
+import { pickCliopatriaPlace } from '@/services/db/cliopatria';
+import type { RegionId } from '@/types';
 
 const MIN_SUPPORTED_YEAR = -10_000;
 
@@ -16,15 +16,21 @@ export async function GET(request: NextRequest) {
     return unauthorized;
   }
 
-  const yearParam = request.nextUrl.searchParams.get("year");
+  const yearParam = request.nextUrl.searchParams.get('year');
   const year = Number(yearParam);
 
   if (yearParam === null || !Number.isFinite(year)) {
-    return NextResponse.json({ message: 'Missing or invalid "year" query parameter.' }, { status: 400 });
+    return NextResponse.json(
+      { message: 'Missing or invalid "year" query parameter.' },
+      { status: 400 },
+    );
   }
 
   if (year < MIN_SUPPORTED_YEAR) {
-    return NextResponse.json({ message: `"year" must be no earlier than ${MIN_SUPPORTED_YEAR}.` }, { status: 400 });
+    return NextResponse.json(
+      { message: `"year" must be no earlier than ${MIN_SUPPORTED_YEAR}.` },
+      { status: 400 },
+    );
   }
 
   const rng = createRng();
@@ -37,11 +43,15 @@ export async function GET(request: NextRequest) {
       lon: cliopatriaPlace.lon,
       fromYear: cliopatriaPlace.fromYear,
       toYear: cliopatriaPlace.toYear,
-      continent: continentNear({ lat: cliopatriaPlace.lat, lon: cliopatriaPlace.lon, placesConfig }),
+      continent: continentNear({
+        lat: cliopatriaPlace.lat,
+        lon: cliopatriaPlace.lon,
+        placesConfig,
+      }),
       // Worked out from the region's density in this exact year times the polity's area.
       population: estimatePopulation({ empire: cliopatriaPlace.name, year })?.population,
       year,
-      source: "cliopatria",
+      source: 'cliopatria',
     });
   }
 
@@ -59,6 +69,6 @@ export async function GET(request: NextRequest) {
     region,
     regionShare: regionShare({ year, region, erasConfig }),
     year,
-    source: "places-fallback",
+    source: 'places-fallback',
   });
 }

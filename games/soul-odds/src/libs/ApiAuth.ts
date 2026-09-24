@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { Env } from "@/libs/Env";
+import { NextResponse } from 'next/server';
+import { Env } from '@/libs/Env';
 
 /**
  * Gates an API route behind `NEXT_PUBLIC_API_SECRET`, checked against the `x-api-secret` header.
@@ -13,8 +13,8 @@ export function requireApiSecret(request: Request): NextResponse | null {
     return null;
   }
 
-  if (request.headers.get("x-api-secret") !== secret) {
-    return NextResponse.json({ message: "Unauthorized." }, { status: 401 });
+  if (request.headers.get('x-api-secret') !== secret) {
+    return NextResponse.json({ message: 'Unauthorized.' }, { status: 401 });
   }
 
   return null;

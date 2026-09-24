@@ -1,10 +1,14 @@
-import React from "react";
-
 export const SharkBadge = ({ unlocked = false }: { unlocked: boolean }) => {
   return (
     <div>
       {unlocked ? (
-        <svg width="71" height="85" viewBox="0 0 71 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="71"
+          height="85"
+          viewBox="0 0 71 85"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             d="M7.43262 83.8198L7.43262 55.0704L29.647 55.0704L29.647 76.0876L8.52792 84.5606C8.00355 84.771 7.43262 84.3848 7.43262 83.8198Z"
             fill="#6B9BAA"
@@ -32,7 +36,7 @@ export const SharkBadge = ({ unlocked = false }: { unlocked: boolean }) => {
             <g opacity="0.5">
               <mask
                 id="mask0_672_1101"
-                style={{ maskType: "alpha" }}
+                style={{ maskType: 'alpha' }}
                 maskUnits="userSpaceOnUse"
                 x="9"
                 y="9"
@@ -78,9 +82,21 @@ export const SharkBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset dy="2.12833" />
               <feGaussianBlur stdDeviation="0.798122" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.475 0 0 0 0 0.425521 0 0 0 0 0.425521 0 0 0 0.35 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_672_1101" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_672_1101" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.475 0 0 0 0 0.425521 0 0 0 0 0.425521 0 0 0 0.35 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_672_1101"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_672_1101"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter1_f_672_1101"
@@ -115,7 +131,10 @@ export const SharkBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <feOffset />
               <feGaussianBlur stdDeviation="1.78889" />
               <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.508333 0 0 0 0 0.437506 0 0 0 0 0.415139 0 0 0 1 0" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.508333 0 0 0 0 0.437506 0 0 0 0 0.415139 0 0 0 1 0"
+              />
               <feBlend mode="normal" in2="shape" result="effect1_innerShadow_672_1101" />
             </filter>
             <linearGradient
@@ -165,7 +184,13 @@ export const SharkBadge = ({ unlocked = false }: { unlocked: boolean }) => {
           </defs>
         </svg>
       ) : (
-        <svg width="67" height="85" viewBox="0 0 67 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="67"
+          height="85"
+          viewBox="0 0 67 85"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             d="M5.43262 83.8197L5.43262 55.0703L27.647 55.0703L27.647 76.0875L6.52792 84.5605C6.00355 84.7708 5.43262 84.3847 5.43262 83.8197Z"
             fill="#040208"
@@ -198,7 +223,7 @@ export const SharkBadge = ({ unlocked = false }: { unlocked: boolean }) => {
           <g opacity="0.5">
             <mask
               id="mask0_742_8912"
-              style={{ maskType: "alpha" }}
+              style={{ maskType: 'alpha' }}
               maskUnits="userSpaceOnUse"
               x="7"
               y="9"
@@ -262,7 +287,10 @@ export const SharkBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <feOffset />
               <feGaussianBlur stdDeviation="1.78889" />
               <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.508333 0 0 0 0 0.437506 0 0 0 0 0.415139 0 0 0 1 0" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.508333 0 0 0 0 0.437506 0 0 0 0 0.415139 0 0 0 1 0"
+              />
               <feBlend mode="normal" in2="shape" result="effect1_innerShadow_742_8912" />
             </filter>
           </defs>

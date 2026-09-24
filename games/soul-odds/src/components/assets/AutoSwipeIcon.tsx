@@ -1,5 +1,5 @@
-import React from "react";
-import { IconProps } from "@/types/icontypes";
+import React from 'react';
+import { IconProps } from '@/types/icontypes';
 
 export const AutoSwipeIcon: React.FC<IconProps> = ({ width, height, className }) => {
   return (
@@ -46,7 +46,7 @@ export const AutoSwipeIcon: React.FC<IconProps> = ({ width, height, className })
         fill="url(#paint7_linear_255_3177)"
       />
       <path
-        style={{ mixBlendMode: "screen" }}
+        style={{ mixBlendMode: 'screen' }}
         d="M27.5565 4.39694C27.1392 3.52565 26.4887 2.78694 25.6772 2.26269C24.8657 1.73843 23.9249 1.44912 22.9591 1.42682H12.6499C11.6875 1.45357 10.7511 1.74489 9.94342 2.26883C9.13572 2.79277 8.48794 3.52907 8.07118 4.39694L2.90027 14.3844C2.26627 15.6392 2.05214 17.0645 2.28946 18.4503C7.64091 19.6183 13.1034 20.2014 18.5808 20.1894C23.5049 20.19 28.4174 19.7137 33.2496 18.7673C33.5856 17.2809 33.391 15.7237 32.6994 14.3657L27.5565 4.39694Z"
         fill="url(#paint8_linear_255_3177)"
       />

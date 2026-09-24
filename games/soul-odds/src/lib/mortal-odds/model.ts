@@ -1,9 +1,9 @@
-import { interpolate } from "@/lib/mortal-odds/curves";
-import { applyShocks } from "@/lib/mortal-odds/shocks";
-import { pickSin } from "@/lib/mortal-odds/sins";
-import type { RegionModifiersConfig, ShockConfig, SinConfig } from "@/lib/mortal-odds/config";
-import type { Rng } from "@/lib/mortal-odds/rng";
-import type { Life, RegionId, Sex, Shock } from "@/types";
+import type { RegionModifiersConfig, ShockConfig, SinConfig } from '@/lib/mortal-odds/config';
+import { interpolate } from '@/lib/mortal-odds/curves';
+import type { Rng } from '@/lib/mortal-odds/rng';
+import { applyShocks } from '@/lib/mortal-odds/shocks';
+import { pickSin } from '@/lib/mortal-odds/sins';
+import type { Life, RegionId, Sex, Shock } from '@/types';
 
 export type BookieCurves = {
   q5: ReadonlyArray<readonly [number, number]>;
@@ -13,7 +13,13 @@ export type BookieCurves = {
   urban: ReadonlyArray<readonly [number, number]>;
 };
 
-export type BookieLife = { age: number; deathYear: number; literate: boolean; city: boolean; sin: string | null };
+export type BookieLife = {
+  age: number;
+  deathYear: number;
+  literate: boolean;
+  city: boolean;
+  sin: string | null;
+};
 
 function clamp(x: number, lo: number, hi: number): number {
   return Math.min(hi, Math.max(lo, x));
@@ -25,7 +31,7 @@ function mix(a: number, b: number, t: number): number {
 
 /** A boy 51.2% of the time, matching the real sex ratio at birth. */
 export function drawSex(rng: Rng): Sex {
-  return rng() < 0.512 ? "boy" : "girl";
+  return rng() < 0.512 ? 'boy' : 'girl';
 }
 
 /** Box-Muller normal sample. */
@@ -48,7 +54,12 @@ function adultAge(options: { mean: number; sd: number; rng: Rng }): number {
  * The bookie's year-only life model: no region, sex or catastrophes, matching what
  * the odds are priced on. This must stay simpler than the full model on purpose.
  */
-export function sampleLifeBookie(options: { year: number; rng: Rng; curves: BookieCurves; sins: SinConfig[] }): BookieLife {
+export function sampleLifeBookie(options: {
+  year: number;
+  rng: Rng;
+  curves: BookieCurves;
+  sins: SinConfig[];
+}): BookieLife {
   const { year, rng, curves, sins } = options;
   const q5 = Math.min(0.9, interpolate({ points: curves.q5, x: year }));
   const age =
@@ -64,20 +75,30 @@ export function sampleLifeBookie(options: { year: number; rng: Rng; curves: Book
   return {
     age,
     deathYear,
-    literate: age >= 10 && rng() < Math.min(0.99, interpolate({ points: curves.literacy, x: year })),
+    literate:
+      age >= 10 && rng() < Math.min(0.99, interpolate({ points: curves.literacy, x: year })),
     city: rng() < Math.min(0.95, interpolate({ points: curves.urban, x: year })),
     sin: pickSin({ year, age, deathYear, region: null, rng, sins })?.id ?? null,
   };
 }
 
-export function simulateBookie(options: { year: number; rng: Rng; curves: BookieCurves; sins: SinConfig[]; sims: number }): BookieLife[] {
+export function simulateBookie(options: {
+  year: number;
+  rng: Rng;
+  curves: BookieCurves;
+  sins: SinConfig[];
+  sims: number;
+}): BookieLife[] {
   const { year, rng, curves, sins, sims } = options;
   const samples: BookieLife[] = new Array(sims);
   for (let i = 0; i < sims; i++) samples[i] = sampleLifeBookie({ year, rng, curves, sins });
   return samples;
 }
 
-function regionMod(options: { region: RegionId; year: number; mods: RegionModifiersConfig }): { q: number; shift: number } {
+function regionMod(options: { region: RegionId; year: number; mods: RegionModifiersConfig }): {
+  q: number;
+  shift: number;
+} {
   const { region, year, mods } = options;
   const a = clamp((year - 1800) / 150, 0, 1);
   const b = clamp((year - 1950) / 40, 0, 1);
@@ -88,7 +109,7 @@ function regionMod(options: { region: RegionId; year: number; mods: RegionModifi
 
 function sexShift(options: { sex: Sex; year: number }): number {
   const w = clamp((options.year - 1900) / 60, 0, 1);
-  return options.sex === "girl" ? 1 + 3 * w : -(1 + w);
+  return options.sex === 'girl' ? 1 + 3 * w : -(1 + w);
 }
 
 function literacyP(options: {
@@ -99,9 +120,9 @@ function literacyP(options: {
   mods: RegionModifiersConfig;
 }): number {
   const { year, region, sex, curve, mods } = options;
-  const era = year < 1500 ? "ancient" : year < 1950 ? "early" : "modern";
+  const era = year < 1500 ? 'ancient' : year < 1950 ? 'early' : 'modern';
   const r = mods.literacyMultiplier[era][region];
-  const s = mods.sexLiteracyMultiplier[year < 1950 ? "old" : "new"][sex];
+  const s = mods.sexLiteracyMultiplier[year < 1950 ? 'old' : 'new'][sex];
   return Math.min(0.99, interpolate({ points: curve, x: year }) * r * s);
 }
 
@@ -112,7 +133,7 @@ function cityP(options: {
   mods: RegionModifiersConfig;
 }): number {
   const { year, region, curve, mods } = options;
-  const r = mods.cityMultiplier[year < 1800 ? "old" : "new"][region];
+  const r = mods.cityMultiplier[year < 1800 ? 'old' : 'new'][region];
   return Math.min(0.95, interpolate({ points: curve, x: year }) * r);
 }
 
@@ -141,7 +162,10 @@ export function sampleLife(options: {
     rng() < q5
       ? Math.floor(rng() ** 2 * 5)
       : adultAge({
-          mean: interpolate({ points: config.curves.adultMean, x: year }) + mod.shift + sexShift({ sex, year }),
+          mean:
+            interpolate({ points: config.curves.adultMean, x: year }) +
+            mod.shift +
+            sexShift({ sex, year }),
           sd: interpolate({ points: config.curves.adultSd, x: year }),
           rng,
         });
@@ -165,9 +189,13 @@ export function sampleLife(options: {
     age,
     shock,
     deathYear,
-    literate: age >= 10 && rng() < literacyP({ year, region, sex, curve: config.curves.literacy, mods: config.mods }),
+    literate:
+      age >= 10 &&
+      rng() < literacyP({ year, region, sex, curve: config.curves.literacy, mods: config.mods }),
     city: rng() < cityP({ year, region, curve: config.curves.urban, mods: config.mods }),
-    sin: sin ? { id: sin.id, label: sin.label, phrase: sin.phrase, from: sin.from, to: sin.to } : null,
+    sin: sin
+      ? { id: sin.id, label: sin.label, phrase: sin.phrase, from: sin.from, to: sin.to }
+      : null,
   };
 }
 

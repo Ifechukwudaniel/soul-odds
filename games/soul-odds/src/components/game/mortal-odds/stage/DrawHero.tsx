@@ -1,20 +1,32 @@
-import { GiAnubis } from "react-icons/gi";
-import { GameCard } from "@/components/game/home/GameCard";
-import { HUMANS_EVER } from "@/lib/mortal-odds/config";
-import { fmtNumber } from "@/lib/mortal-odds/format";
-import { ButtonDemo } from "@/components/assets/ButtonDemo";
+import { GiAnubis } from 'react-icons/gi';
+import { ButtonDemo } from '@/components/assets/ButtonDemo';
+import { GameCard } from '@/components/game/home/GameCard';
+import { HUMANS_EVER } from '@/lib/mortal-odds/config';
+import { fmtNumber } from '@/lib/mortal-odds/format';
 
-export const DrawHero = (props: { currentYear: number; onDraw: () => void; drawCost: number; canAfford: boolean }) => (
+export const DrawHero = (props: {
+  currentYear: number;
+  onDraw: () => void;
+  drawCost: number;
+  canAfford: boolean;
+}) => (
   <GameCard
     scrollable
     className="flex flex-col items-center justify-center gap-3 py-10 text-center"
     containerClassName="flex h-full w-full flex-col"
   >
     <GiAnubis size={104} className="text-[#F5B83D]" />
-    <p className="max-w-lg font-bold text-lg text-white">Over {fmtNumber(HUMANS_EVER)} people have ever lived.</p>
-    <p className="max-w-sm text-sm text-white/60">Anubis weighs every one of them. Read the life right and you are paid; the scales do not care either way.</p>
+    <p className="max-w-lg text-lg font-bold text-white">
+      Over {fmtNumber(HUMANS_EVER)} people have ever lived.
+    </p>
+    <p className="max-w-sm text-sm text-white/60">
+      Anubis weighs every one of them. Read the life right and you are paid; the scales do not care
+      either way.
+    </p>
 
-    <p className="mt-4 font-semibold text-white/80 text-xs uppercase tracking-[0.2em]">Choose one</p>
+    <p className="mt-4 text-xs font-semibold tracking-[0.2em] text-white/80 uppercase">
+      Choose one
+    </p>
 
     {/* <button
       type="button"
@@ -24,20 +36,21 @@ export const DrawHero = (props: { currentYear: number; onDraw: () => void; drawC
     >
       Summon a soul
     </button> */}
-   <button
-  type="button"
-  disabled={!props.canAfford}
-  onClick={props.onDraw}
-  aria-label="Summon a soul"
-  className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
->
-  <ButtonDemo />
-</button>
-    <p className="text-white/40 text-xs">Locks in a {props.drawCost} deben stake for this soul</p>
-    {!props.canAfford && <p className="text-[#B7410E] text-xs">Not enough chips</p>}
+    <button
+      type="button"
+      disabled={!props.canAfford}
+      onClick={props.onDraw}
+      aria-label="Summon a soul"
+      className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
+    >
+      <ButtonDemo />
+    </button>
+    <p className="text-xs text-white/40">Locks in a {props.drawCost} deben stake for this soul</p>
+    {!props.canAfford && <p className="text-xs text-[#B7410E]">Not enough chips</p>}
 
-    <p className="mt-4 max-w-sm text-[#b0aeb5] text-xs leading-[1.5]">
-      The Duat gives up a soul in stages: an age, a land, then the life itself — each drawn at random from real data.
+    <p className="mt-4 max-w-sm text-xs leading-[1.5] text-[#b0aeb5]">
+      The Duat gives up a soul in stages: an age, a land, then the life itself — each drawn at
+      random from real data.
     </p>
   </GameCard>
 );

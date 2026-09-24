@@ -43,7 +43,7 @@ async function isHashValid(data: Record<string, string>, botToken: string) {
     encoder.encode('WebAppData'),
     { name: 'HMAC', hash: 'SHA-256' },
     true,
-    ['sign']
+    ['sign'],
   );
 
   const secret = await webcrypto.subtle.sign('HMAC', secretKey, encoder.encode(botToken));
@@ -53,7 +53,7 @@ async function isHashValid(data: Record<string, string>, botToken: string) {
     secret,
     { name: 'HMAC', hash: 'SHA-256' },
     true,
-    ['sign']
+    ['sign'],
   );
 
   const signature = await webcrypto.subtle.sign('HMAC', signatureKey, encoder.encode(checkString));

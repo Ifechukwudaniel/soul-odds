@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { isSoundMuted, MUTED_STORAGE_KEY } from "@/utils/soundPreferences";
+import { useEffect, useState } from 'react';
+import { isSoundMuted, MUTED_STORAGE_KEY } from '@/utils/soundPreferences';
 
-const BG_MUSIC_SRC = "/sound/bg.mp3";
-const VOLUME_STORAGE_KEY = "game-bg-music-volume:v1";
+const BG_MUSIC_SRC = '/sound/bg.mp3';
+const VOLUME_STORAGE_KEY = 'game-bg-music-volume:v1';
 const DEFAULT_VOLUME = 0.5;
 
 let sharedAudio: HTMLAudioElement | null = null;
@@ -27,7 +27,7 @@ function getAudio(): HTMLAudioElement {
   if (!sharedAudio) {
     sharedAudio = new Audio(BG_MUSIC_SRC);
     sharedAudio.loop = true;
-    sharedAudio.preload = "auto";
+    sharedAudio.preload = 'auto';
     sharedAudio.volume = readVolume();
   }
   return sharedAudio;
@@ -66,13 +66,13 @@ export function useBackgroundMusic(): {
 
     // Direct play works where autoplay is allowed; otherwise music starts on the first user gesture.
     audio.play().catch(() => {
-      document.addEventListener("pointerdown", start, { once: true });
-      document.addEventListener("keydown", start, { once: true });
+      document.addEventListener('pointerdown', start, { once: true });
+      document.addEventListener('keydown', start, { once: true });
     });
 
     return () => {
-      document.removeEventListener("pointerdown", start);
-      document.removeEventListener("keydown", start);
+      document.removeEventListener('pointerdown', start);
+      document.removeEventListener('keydown', start);
       audio.pause();
     };
   }, [isMuted]);
@@ -81,7 +81,7 @@ export function useBackgroundMusic(): {
     setIsMuted((previous) => {
       const next = !previous;
       try {
-        localStorage.setItem(MUTED_STORAGE_KEY, next ? "1" : "0");
+        localStorage.setItem(MUTED_STORAGE_KEY, next ? '1' : '0');
       } catch {
         // storage unavailable: the mute state stays in memory
       }

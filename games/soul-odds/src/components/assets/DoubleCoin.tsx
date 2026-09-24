@@ -1,5 +1,3 @@
-import React from "react";
-
 export const DoubleCoin = () => {
   return (
     <svg width="18" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -7,7 +5,7 @@ export const DoubleCoin = () => {
         d="M11.3858 10.0554C10.452 9.21781 9.43046 8.48348 8.33897 7.86521C7.25798 7.22871 6.11122 6.71118 4.91876 6.32169L2.5044 4.92775L1.63112 6.44032C1.04617 7.45349 3.10407 9.73863 6.22981 11.5433C9.35555 13.3479 12.3671 13.9896 12.952 12.9765L13.8253 11.4639L11.3858 10.0554Z"
         fill="url(#paint0_linear_372_8017)"
       />
-      <g style={{ mixBlendMode: "multiply" }} opacity="0.25">
+      <g style={{ mixBlendMode: 'multiply' }} opacity="0.25">
         <path
           d="M8.44639 12.641L10.3008 9.42899L9.70801 9.08673L7.81417 12.367L8.44639 12.641Z"
           fill="url(#paint1_linear_372_8017)"
@@ -38,7 +36,7 @@ export const DoubleCoin = () => {
         fill="url(#paint7_linear_372_8017)"
       />
       <path
-        style={{ mixBlendMode: "screen" }}
+        style={{ mixBlendMode: 'screen' }}
         d="M11.9353 10.3728C11.5433 11.0519 9.53937 10.623 7.45554 9.41994C5.37172 8.21685 3.9984 6.69582 4.39044 6.01678C4.78248 5.33774 6.78432 5.77015 8.86814 6.97325C10.952 8.17634 12.3253 9.69737 11.9353 10.3728Z"
         fill="url(#paint8_linear_372_8017)"
       />
@@ -50,7 +48,7 @@ export const DoubleCoin = () => {
         d="M12.3597 3.64114C11.7805 4.94852 11.3474 6.31579 11.0681 7.71815C10.7624 9.11499 10.6117 10.5413 10.6188 11.9712L9.96494 15.0996L11.9086 15.5058C13.2137 15.7785 14.9562 12.7328 15.7977 8.7066C16.6391 4.68042 16.2622 1.19171 14.9571 0.918965L13.0135 0.512752L12.3597 3.64114Z"
         fill="url(#paint10_linear_372_8017)"
       />
-      <g style={{ mixBlendMode: "multiply" }} opacity="0.25">
+      <g style={{ mixBlendMode: 'multiply' }} opacity="0.25">
         <path
           d="M16.2024 5.89778L12.0697 5.03409L11.9092 5.80231L16.1297 6.68437C16.1617 6.41575 16.1872 6.15542 16.2024 5.89778Z"
           fill="url(#paint11_linear_372_8017)"
@@ -81,7 +79,7 @@ export const DoubleCoin = () => {
         fill="url(#paint17_linear_372_8017)"
       />
       <path
-        style={{ mixBlendMode: "screen" }}
+        style={{ mixBlendMode: 'screen' }}
         d="M13.0721 8.11747C13.6329 5.43382 13.3811 3.11062 12.5095 2.92848C11.638 2.74633 10.4768 4.7742 9.91592 7.45786C9.35506 10.1415 9.60692 12.4647 10.4785 12.6469C11.35 12.829 12.5112 10.8011 13.0721 8.11747Z"
         fill="url(#paint18_linear_372_8017)"
       />

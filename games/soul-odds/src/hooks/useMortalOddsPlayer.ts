@@ -1,15 +1,21 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { accumulateSkill } from "@/lib/mortal-odds/skill";
-import { addPoints, addWinnings, consumeFreeRedraw, getUser } from "@/services/data/user";
-import { useAppStore } from "@/services/store/store";
+import { useEffect, useState } from 'react';
+import { accumulateSkill } from '@/lib/mortal-odds/skill';
+import { addPoints, addWinnings, consumeFreeRedraw, getUser } from '@/services/data/user';
+import { useAppStore } from '@/services/store/store';
 
-export type MortalOddsPlayerStats = { bankroll: number; rounds: number; bestRound: number; streak: number; skill: number };
+export type MortalOddsPlayerStats = {
+  bankroll: number;
+  rounds: number;
+  bestRound: number;
+  streak: number;
+  skill: number;
+};
 
-type RoundStats = Omit<MortalOddsPlayerStats, "bankroll" | "skill">;
+type RoundStats = Omit<MortalOddsPlayerStats, 'bankroll' | 'skill'>;
 
-const STORAGE_KEY = "mortal-odds-player:v1";
+const STORAGE_KEY = 'mortal-odds-player:v1';
 const DEFAULT_ROUND_STATS: RoundStats = { rounds: 0, bestRound: 0, streak: 0 };
 
 function readRoundStats(): RoundStats {
@@ -27,21 +33,21 @@ export function useMortalOddsPlayer(): {
   canAfford: (amount: number) => boolean;
   spend: (amount: number) => boolean;
   freeRedraws: number;
-  payRedraw: (fee: number) => "free" | "paid" | null;
+  payRedraw: (fee: number) => 'free' | 'paid' | null;
   commitRound: (options: { net: number; skill: number; totalStake: number }) => void;
   reset: () => void;
 } {
-  const balance = useAppStore(state => state.user.balance);
-  const skill = useAppStore(state => state.user.skill);
-  const address = useAppStore(state => state.user.address);
+  const balance = useAppStore((state) => state.user.balance);
+  const skill = useAppStore((state) => state.user.skill);
+  const address = useAppStore((state) => state.user.address);
   /**
    * A round's stake and payout now move for real through `hostApi.openSession`/`submitAction`,
    * so `user.balance` is driven entirely by the host's pushed snapshot (see the balance-sync
    * effect in `page.tsx`) — this delta is only for the local, chain-unaware redraw fee.
    */
-  const applyRedrawFeeDelta = useAppStore(state => state.applyBalanceDelta);
-  const updateUser = useAppStore(state => state.updateUser);
-  const freeRedraws = useAppStore(state => state.user.freeRedraws);
+  const applyRedrawFeeDelta = useAppStore((state) => state.applyBalanceDelta);
+  const updateUser = useAppStore((state) => state.updateUser);
+  const freeRedraws = useAppStore((state) => state.user.freeRedraws);
   const [roundStats, setRoundStats] = useState<RoundStats>(DEFAULT_ROUND_STATS);
 
   useEffect(() => {
@@ -78,11 +84,11 @@ export function useMortalOddsPlayer(): {
       consumeFreeRedraw(address).catch(() =>
         getUser(address)
           .then((user) => updateUser({ freeRedraws: user.freeRedraws }))
-          .catch((error) => console.error("Could not sync free redraws:", error)),
+          .catch((error) => console.error('Could not sync free redraws:', error)),
       );
-      return "free";
+      return 'free';
     }
-    return spend(fee) ? "paid" : null;
+    return spend(fee) ? 'paid' : null;
   };
 
   /**
@@ -96,10 +102,14 @@ export function useMortalOddsPlayer(): {
   const commitRound = (options: { net: number; skill: number }) => {
     updateUser({ skill: accumulateSkill(skill, options.skill) });
     if (address && options.skill !== 0) {
-      addPoints(address, options.skill).catch((error) => console.error("Could not persist skill points:", error));
+      addPoints(address, options.skill).catch((error) =>
+        console.error('Could not persist skill points:', error),
+      );
     }
     if (address && options.net > 0) {
-      addWinnings(address, options.net).catch((error) => console.error("Could not persist winnings:", error));
+      addWinnings(address, options.net).catch((error) =>
+        console.error('Could not persist winnings:', error),
+      );
     }
     persistRoundStats({
       rounds: roundStats.rounds + 1,

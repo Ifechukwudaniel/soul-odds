@@ -1,6 +1,6 @@
-import fs from "node:fs";
-import path from "node:path";
-import { centroidOf, loadCliopatria } from "@/lib/mortal-odds/cliopatria";
+import fs from 'node:fs';
+import path from 'node:path';
+import { centroidOf, loadCliopatria } from '@/lib/mortal-odds/cliopatria';
 
 /**
  * Builds the game's population figures from two files: Our World in Data's long-run population by
@@ -29,34 +29,74 @@ const COLS = 4320;
 const ROWS = 2160;
 const CELL = 360 / COLS;
 const EARTH_RADIUS_KM = 6371.0088;
-const DATA_DIR = path.join(process.cwd(), "cliopatria.geojson");
-const POLYGON_DIR = path.join(process.cwd(), "country-polygons");
-const FILE = path.join(DATA_DIR, "cliopatria-population.json");
-const RESEARCHED_FILE = path.join(DATA_DIR, "cliopatria-population.researched.json");
-const COUNTRIES_FILE = path.join(process.cwd(), "src", "config", "mortal-odds", "country-populations.json");
-const MERGED_FILE = path.join(POLYGON_DIR, "countries-with-population.geojson");
-const DEFAULT_GEOJSON = path.join(POLYGON_DIR, "countries.geojson");
-const DEFAULT_CSV = path.join(process.cwd(), "population-long-run-with-projections", "population-long-run-with-projections.csv");
-const COLUMNS = ["name", "fromYear", "toYear", "wikidata", "seshatId", "areaKm2", "population", "low", "high", "method", "countries"] as const;
+const DATA_DIR = path.join(process.cwd(), 'cliopatria.geojson');
+const POLYGON_DIR = path.join(process.cwd(), 'country-polygons');
+const FILE = path.join(DATA_DIR, 'cliopatria-population.json');
+const RESEARCHED_FILE = path.join(DATA_DIR, 'cliopatria-population.researched.json');
+const COUNTRIES_FILE = path.join(
+  process.cwd(),
+  'src',
+  'config',
+  'mortal-odds',
+  'country-populations.json',
+);
+const MERGED_FILE = path.join(POLYGON_DIR, 'countries-with-population.geojson');
+const DEFAULT_GEOJSON = path.join(POLYGON_DIR, 'countries.geojson');
+const DEFAULT_CSV = path.join(
+  process.cwd(),
+  'population-long-run-with-projections',
+  'population-long-run-with-projections.csv',
+);
+const COLUMNS = [
+  'name',
+  'fromYear',
+  'toYear',
+  'wikidata',
+  'seshatId',
+  'areaKm2',
+  'population',
+  'low',
+  'high',
+  'method',
+  'countries',
+] as const;
 /** The spread around a territory's best estimate: the density model has no uncertainty of its own to report. */
 const LOW = 0.7;
 const HIGH = 1.4;
 
 /** Polygons the file gives no alpha-3 code (or a different one from the CSV) mapped to the CSV's code; a polygon in neither place is left out. */
 const CODE_BY_POLYGON_NAME: Record<string, string> = {
-  France: "FRA",
-  Norway: "NOR",
-  Kosovo: "OWID_KOS",
-  "Northern Cyprus": "CYP",
-  "Cyprus No Mans Area": "CYP",
-  Somaliland: "SOM",
-  "Dhekelia Sovereign Base Area": "OWID_AKD",
-  "Akrotiri Sovereign Base Area": "OWID_AKD",
+  France: 'FRA',
+  Norway: 'NOR',
+  Kosovo: 'OWID_KOS',
+  'Northern Cyprus': 'CYP',
+  'Cyprus No Mans Area': 'CYP',
+  Somaliland: 'SOM',
+  'Dhekelia Sovereign Base Area': 'OWID_AKD',
+  'Akrotiri Sovereign Base Area': 'OWID_AKD',
 };
 
 type Polygon = number[][][];
-type CountryFeature = { type: "Feature"; properties: { name: string; "ISO3166-1-Alpha-3"?: string }; geometry: { type: "Polygon"; coordinates: Polygon } | { type: "MultiPolygon"; coordinates: Polygon[] } };
-type Row = { name: string; fromYear: number; toYear: number; wikidata: string; seshatId: string; areaKm2: number; population: number; low: number; high: number; method: string; countries: string };
+type CountryFeature = {
+  type: 'Feature';
+  properties: { name: string; 'ISO3166-1-Alpha-3'?: string };
+  geometry:
+    | { type: 'Polygon'; coordinates: Polygon }
+    | { type: 'MultiPolygon'; coordinates: Polygon[] };
+};
+type Row = {
+  name: string;
+  fromYear: number;
+  toYear: number;
+  wikidata: string;
+  seshatId: string;
+  areaKm2: number;
+  population: number;
+  low: number;
+  high: number;
+  method: string;
+  countries: string;
+};
 
 /** Area in km² of one cell of each row of the grid: the sphere between two parallels, over the cell's width. */
 const rowAreaKm2 = Array.from({ length: ROWS }, (_, row) => {
@@ -67,13 +107,14 @@ const rowAreaKm2 = Array.from({ length: ROWS }, (_, row) => {
 
 /** The CSV's country series: Population up to 2023 and the medium-variant projection after, by code and year. */
 function readPopulations(file: string) {
-  const [, ...lines] = fs.readFileSync(file, "utf8").trim().split("\n");
+  const [, ...lines] = fs.readFileSync(file, 'utf8').trim().split('\n');
   const byCode = new Map<string, { name: string; series: Map<number, number> }>();
   const years = new Set<number>();
   for (const line of lines) {
-    const [entity = "", code = "", year = "", projected = "", population = ""] = line.split(",");
-    const value = population !== "" ? Number(population) : projected !== "" ? Number(projected) : NaN;
-    if (code === "" || Number.isNaN(value)) continue;
+    const [entity = '', code = '', year = '', projected = '', population = ''] = line.split(',');
+    const value =
+      population !== '' ? Number(population) : projected !== '' ? Number(projected) : NaN;
+    if (code === '' || Number.isNaN(value)) continue;
     years.add(Number(year));
     const country = byCode.get(code) ?? { name: entity, series: new Map() };
     country.series.set(Number(year), value);
@@ -133,33 +174,42 @@ function forEachCell(polygons: Polygon[], visit: (row: number, cell: number) => 
         for (let i = 1; i < ring.length; i++) {
           const [x1 = 0, y1 = 0] = ring[i - 1] ?? [];
           const [x2 = 0, y2 = 0] = ring[i] ?? [];
-          if ((y1 <= y && y2 > y) || (y2 <= y && y1 > y)) crossings.push(x1 + ((y - y1) * (x2 - x1)) / (y2 - y1));
+          if ((y1 <= y && y2 > y) || (y2 <= y && y1 > y))
+            crossings.push(x1 + ((y - y1) * (x2 - x1)) / (y2 - y1));
         }
       }
       crossings.sort((a, b) => a - b);
       for (let pair = 0; pair + 1 < crossings.length; pair += 2) {
         const from = Math.ceil((crossings[pair]! + 180) / CELL - 0.5);
         const to = Math.floor((crossings[pair + 1]! + 180) / CELL - 0.5);
-        for (let col = from; col <= to; col++) visit(row, row * COLS + (((col % COLS) + COLS) % COLS));
+        for (let col = from; col <= to; col++)
+          visit(row, row * COLS + (((col % COLS) + COLS) % COLS));
       }
     }
   }
 }
 
-const polygonsOf = (geometry: CountryFeature["geometry"]): Polygon[] => (geometry.type === "Polygon" ? [geometry.coordinates] : geometry.coordinates);
+const polygonsOf = (geometry: CountryFeature['geometry']): Polygon[] =>
+  geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.coordinates;
 
 async function main() {
   const [geojsonFile = DEFAULT_GEOJSON, csv = DEFAULT_CSV] = process.argv.slice(2);
   const { years, byCode } = readPopulations(csv);
-  const { features: polygons } = JSON.parse(fs.readFileSync(geojsonFile, "utf8")) as { features: CountryFeature[] };
+  const { features: polygons } = JSON.parse(fs.readFileSync(geojsonFile, 'utf8')) as {
+    features: CountryFeature[];
+  };
 
   const codeOf = (feature: CountryFeature) => {
-    const alpha3 = feature.properties["ISO3166-1-Alpha-3"];
-    const code = CODE_BY_POLYGON_NAME[feature.properties.name] ?? (alpha3 && alpha3 !== "-99" ? alpha3 : undefined);
+    const alpha3 = feature.properties['ISO3166-1-Alpha-3'];
+    const code =
+      CODE_BY_POLYGON_NAME[feature.properties.name] ??
+      (alpha3 && alpha3 !== '-99' ? alpha3 : undefined);
     return code !== undefined && byCode.has(code) ? code : undefined;
   };
 
-  const codes = [...new Set(polygons.flatMap((feature) => codeOf(feature) ?? []))].sort((a, b) => (byCode.get(a)?.name ?? "").localeCompare(byCode.get(b)?.name ?? ""));
+  const codes = [...new Set(polygons.flatMap((feature) => codeOf(feature) ?? []))].sort((a, b) =>
+    (byCode.get(a)?.name ?? '').localeCompare(byCode.get(b)?.name ?? ''),
+  );
   const indexOfCode = new Map(codes.map((code, i) => [code, i]));
 
   // Paint each country's index onto the grid, counting its land as the cells' areas.
@@ -181,18 +231,39 @@ async function main() {
   const series = (code: string) => filledSeries(byCode.get(code)?.series ?? new Map(), years);
   fs.writeFileSync(
     COUNTRIES_FILE,
-    JSON.stringify({ years, countries: codes.map((code, i) => ({ name: byCode.get(code)!.name, code, landKm2: Math.round(landKm2[i]!), population: series(code) })) }),
+    JSON.stringify({
+      years,
+      countries: codes.map((code, i) => ({
+        name: byCode.get(code)!.name,
+        code,
+        landKm2: Math.round(landKm2[i]!),
+        population: series(code),
+      })),
+    }),
   );
   console.log(`Wrote ${COUNTRIES_FILE}`);
 
   fs.writeFileSync(
     MERGED_FILE,
     JSON.stringify({
-      type: "FeatureCollection",
+      type: 'FeatureCollection',
       years,
       features: polygons.flatMap((feature) => {
         const code = codeOf(feature);
-        return code === undefined ? [] : [{ ...feature, properties: { name: feature.properties.name, code, entity: byCode.get(code)!.name, landKm2: Math.round(landKm2[indexOfCode.get(code)!]!), population: series(code) } }];
+        return code === undefined
+          ? []
+          : [
+              {
+                ...feature,
+                properties: {
+                  name: feature.properties.name,
+                  code,
+                  entity: byCode.get(code)!.name,
+                  landKm2: Math.round(landKm2[indexOfCode.get(code)!]!),
+                  population: series(code),
+                },
+              },
+            ];
       }),
     }),
   );
@@ -201,7 +272,7 @@ async function main() {
   if (!fs.existsSync(RESEARCHED_FILE)) fs.copyFileSync(FILE, RESEARCHED_FILE);
 
   // Imported now, not at the top: it reads the file written above.
-  const { populationFromCountries } = await import("@/lib/mortal-odds/density");
+  const { populationFromCountries } = await import('@/lib/mortal-odds/density');
   const territories = await loadCliopatria();
   const rows = territories.map((territory, index): Row => {
     const { Name, FromYear, ToYear, Wikidata, SeshatID, Area } = territory.properties;
@@ -213,10 +284,19 @@ async function main() {
     if (land.size === 0) {
       // Smaller than a single cell, or all sea: the country its centre lies in gets its whole area.
       const { lat, lon } = centroidOf(territory);
-      const country = countryOfCell[Math.min(ROWS - 1, Math.max(0, Math.floor((90 - lat) / CELL))) * COLS + (Math.floor((lon + 180) / CELL) % COLS)]!;
+      const country =
+        countryOfCell[
+          Math.min(ROWS - 1, Math.max(0, Math.floor((90 - lat) / CELL))) * COLS +
+            (Math.floor((lon + 180) / CELL) % COLS)
+        ]!;
       if (country >= 0) land.set(country, Area);
     }
-    const total = Math.round(populationFromCountries({ year: (FromYear + ToYear) / 2, landByCountry: Object.fromEntries(land) }));
+    const total = Math.round(
+      populationFromCountries({
+        year: (FromYear + ToYear) / 2,
+        landByCountry: Object.fromEntries(land),
+      }),
+    );
     if ((index + 1) % 2000 === 0) console.log(`${index + 1}/${territories.length} territories`);
     return {
       name: Name,
@@ -228,12 +308,18 @@ async function main() {
       population: total,
       low: Math.round(total * LOW),
       high: Math.round(total * HIGH),
-      method: "density",
-      countries: [...land].map(([country, km2]) => `${country}:${Math.round(km2)}`).join(","),
+      method: 'density',
+      countries: [...land].map(([country, km2]) => `${country}:${Math.round(km2)}`).join(','),
     };
   });
 
-  fs.writeFileSync(FILE, JSON.stringify({ columns: COLUMNS, rows: rows.map((row) => COLUMNS.map((column) => row[column])) }));
+  fs.writeFileSync(
+    FILE,
+    JSON.stringify({
+      columns: COLUMNS,
+      rows: rows.map((row) => COLUMNS.map((column) => row[column])),
+    }),
+  );
   console.log(`Wrote ${rows.length} territories to ${FILE}`);
 }
 

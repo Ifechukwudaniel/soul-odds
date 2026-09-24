@@ -1,5 +1,5 @@
-import { FaTrophy } from "react-icons/fa";
-import { playClickSound } from "@/utils/playClickSound";
+import { FaTrophy } from 'react-icons/fa';
+import { playClickSound } from '@/utils/playClickSound';
 
 export const LeaderboardRankRow = (props: { rank: number; onClick?: () => void }) => (
   <button

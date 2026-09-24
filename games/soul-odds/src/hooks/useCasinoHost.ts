@@ -1,8 +1,13 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { connectGameToHost, observeGameContentSize, type HostApiV1, type HostSnapshotV1 } from "@chain/casino-sdk/guest";
-import { connectDemoHost, isStandalone } from "@/lib/demo-host";
+import {
+  connectGameToHost,
+  observeGameContentSize,
+  type HostApiV1,
+  type HostSnapshotV1,
+} from '@chain/casino-sdk/guest';
+import { useEffect, useState } from 'react';
+import { connectDemoHost, isStandalone } from '@/lib/demo-host';
 
 type SnapshotListener = (snapshot: HostSnapshotV1 | null) => void;
 

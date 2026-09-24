@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { TimerIcon } from "@/components/assets/TimerIcon";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
+import { TimerIcon } from '@/components/assets/TimerIcon';
 
 interface WeeklyCountdownProps {
   /** Timestamp the current weekly cycle ends and points reset. */
@@ -26,7 +26,7 @@ function getTimeParts(target: Date): TimeParts {
 }
 
 function pad(value: number) {
-  return String(value).padStart(2, "0");
+  return String(value).padStart(2, '0');
 }
 
 export function WeeklyCountdown({ resetAt }: WeeklyCountdownProps) {
@@ -39,11 +39,12 @@ export function WeeklyCountdown({ resetAt }: WeeklyCountdownProps) {
   }, [resetAt]);
 
   return (
-<div className="flex flex-row items-center gap-1 text-left">
-  <TimerIcon className="w-[28px] h-[30px]"/>
-  <p className="text-[0.75rem] text-[#AFAFAF] mr-3 ml-1">Resets in:</p>
-  <p className="text-base font-[500] text-white tabular-nums">
-    {time.days}d {pad(time.hours)}h {pad(time.minutes)}m {pad(time.seconds)}s
-  </p>
-</div>  );
+    <div className="flex flex-row items-center gap-1 text-left">
+      <TimerIcon className="h-[30px] w-[28px]" />
+      <p className="mr-3 ml-1 text-[0.75rem] text-[#AFAFAF]">Resets in:</p>
+      <p className="text-base font-[500] text-white tabular-nums">
+        {time.days}d {pad(time.hours)}h {pad(time.minutes)}m {pad(time.seconds)}s
+      </p>
+    </div>
+  );
 }

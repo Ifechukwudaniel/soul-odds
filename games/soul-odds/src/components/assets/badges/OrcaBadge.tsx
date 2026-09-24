@@ -1,10 +1,14 @@
-import React from "react";
-
 export const OrcaBadge = ({ unlocked = false }: { unlocked: boolean }) => {
   return (
     <div>
       {unlocked ? (
-        <svg width="95" height="116" viewBox="0 0 95 116" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="95"
+          height="116"
+          viewBox="0 0 95 116"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <g filter="url(#filter0_dd_672_653)">
             <path
               d="M23.1113 84.5767V56.7335H72.1405V84.3334C72.1405 84.593 72.0017 84.8327 71.7766 84.9619L47.6762 98.7922C47.452 98.9208 47.1763 98.9203 46.9526 98.7909L23.473 85.2038C23.2492 85.0743 23.1113 84.8353 23.1113 84.5767Z"
@@ -53,7 +57,7 @@ export const OrcaBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <g opacity="0.5">
                 <mask
                   id="mask0_672_653"
-                  style={{ maskType: "alpha" }}
+                  style={{ maskType: 'alpha' }}
                   maskUnits="userSpaceOnUse"
                   x="23"
                   y="22"
@@ -100,7 +104,10 @@ export const OrcaBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset />
               <feGaussianBlur stdDeviation="2.56445" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.558594 0 0 0 0 0.869297 0 0 0 0 0.9375 0 0 0 0.04 0" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.558594 0 0 0 0 0.869297 0 0 0 0 0.9375 0 0 0 0.04 0"
+              />
               <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_672_653" />
               <feColorMatrix
                 in="SourceAlpha"
@@ -110,9 +117,21 @@ export const OrcaBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset dy="1.02578" />
               <feGaussianBlur stdDeviation="7.69336" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.670833 0 0 0 0 1 0 0 0 0 0.94075 0 0 0 0.33 0" />
-              <feBlend mode="normal" in2="effect1_dropShadow_672_653" result="effect2_dropShadow_672_653" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_672_653" result="shape" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.670833 0 0 0 0 1 0 0 0 0 0.94075 0 0 0 0.33 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="effect1_dropShadow_672_653"
+                result="effect2_dropShadow_672_653"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect2_dropShadow_672_653"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter1_d_672_653"
@@ -132,9 +151,17 @@ export const OrcaBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               />
               <feOffset dy="2.01145" />
               <feGaussianBlur stdDeviation="0.754295" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.208958 0 0 0 0 0.389892 0 0 0 0 0.491667 0 0 0 0.54 0" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.208958 0 0 0 0 0.389892 0 0 0 0 0.491667 0 0 0 0.54 0"
+              />
               <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_672_653" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_672_653" result="shape" />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_672_653"
+                result="shape"
+              />
             </filter>
             <filter
               id="filter2_f_672_653"
@@ -169,7 +196,10 @@ export const OrcaBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <feOffset />
               <feGaussianBlur stdDeviation="1.69066" />
               <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.37849 0 0 0 0 0.586923 0 0 0 0 0.704167 0 0 0 1 0" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.37849 0 0 0 0 0.586923 0 0 0 0 0.704167 0 0 0 1 0"
+              />
               <feBlend mode="normal" in2="shape" result="effect1_innerShadow_672_653" />
             </filter>
             <linearGradient
@@ -219,7 +249,13 @@ export const OrcaBadge = ({ unlocked = false }: { unlocked: boolean }) => {
           </defs>
         </svg>
       ) : (
-        <svg width="63" height="83" viewBox="0 0 63 83" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="63"
+          height="83"
+          viewBox="0 0 63 83"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             d="M7.11133 68.5651V40.7219H56.1405V68.3219C56.1405 68.5814 56.0017 68.8211 55.7766 68.9503L31.6762 82.7806C31.452 82.9093 31.1763 82.9088 30.9526 82.7793L7.47299 69.1923C7.24916 69.0627 7.11133 68.8237 7.11133 68.5651Z"
             fill="#040208"
@@ -257,7 +293,11 @@ export const OrcaBadge = ({ unlocked = false }: { unlocked: boolean }) => {
             strokeWidth="0.241523"
           />
           <mask id="path-6-inside-2_2030_185" fill="white">
-            <path fillRule="evenodd" clipRule="evenodd" d="M42.373 76.7081V40.4805H41.89V76.9876L42.373 76.7081Z" />
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M42.373 76.7081V40.4805H41.89V76.9876L42.373 76.7081Z"
+            />
           </mask>
           <path
             fillRule="evenodd"
@@ -279,7 +319,7 @@ export const OrcaBadge = ({ unlocked = false }: { unlocked: boolean }) => {
           <g opacity="0.5">
             <mask
               id="mask0_2030_185"
-              style={{ maskType: "alpha" }}
+              style={{ maskType: 'alpha' }}
               maskUnits="userSpaceOnUse"
               x="7"
               y="8"
@@ -334,7 +374,10 @@ export const OrcaBadge = ({ unlocked = false }: { unlocked: boolean }) => {
               <feOffset />
               <feGaussianBlur stdDeviation="1.69066" />
               <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0.37849 0 0 0 0 0.586923 0 0 0 0 0.704167 0 0 0 1 0" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.37849 0 0 0 0 0.586923 0 0 0 0 0.704167 0 0 0 1 0"
+              />
               <feBlend mode="normal" in2="shape" result="effect1_innerShadow_2030_185" />
             </filter>
           </defs>

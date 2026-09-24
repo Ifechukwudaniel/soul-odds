@@ -1,4 +1,4 @@
-import type { SinCategoryId } from "@/lib/mortal-odds/config";
+import type { SinCategoryId } from '@/lib/mortal-odds/config';
 
 /** One crime per on-chain category: a short title-case name and a past-tense clause describing the act. */
 export type SinNarratives = Record<SinCategoryId, { label: string; phrase: string }>;

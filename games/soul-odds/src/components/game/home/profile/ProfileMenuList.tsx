@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useRef, useState } from "react";
-import { ProfileMenuItem } from "@/components/game/home/profile/ProfileMenuItem";
-import type { ProfileMenuAction } from "@/components/game/home/profile/types";
+import { useRef, useState } from 'react';
+import { ProfileMenuItem } from '@/components/game/home/profile/ProfileMenuItem';
+import type { ProfileMenuAction } from '@/components/game/home/profile/types';
 
 // Up/Down move between items; Home/End jump to the ends.
 const MOVE: Record<string, number> = { ArrowDown: 1, ArrowUp: -1 };
@@ -18,7 +18,14 @@ export const ProfileMenuList = (props: { actions: ProfileMenuAction[] }) => {
 
   const moveFocus = (fromIndex: number, key: string) => {
     const delta = MOVE[key];
-    const targetIndex = key === "Home" ? 0 : key === "End" ? props.actions.length - 1 : delta === undefined ? null : fromIndex + delta;
+    const targetIndex =
+      key === 'Home'
+        ? 0
+        : key === 'End'
+          ? props.actions.length - 1
+          : delta === undefined
+            ? null
+            : fromIndex + delta;
     if (targetIndex === null) {
       return;
     }
@@ -42,7 +49,7 @@ export const ProfileMenuList = (props: { actions: ProfileMenuAction[] }) => {
             itemRefs.current[action.id] = node;
           }}
           onKeyDown={(event) => {
-            if (event.key in MOVE || event.key === "Home" || event.key === "End") {
+            if (event.key in MOVE || event.key === 'Home' || event.key === 'End') {
               event.preventDefault();
               moveFocus(index, event.key);
             }

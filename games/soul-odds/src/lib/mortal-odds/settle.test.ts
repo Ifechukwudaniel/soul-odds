@@ -1,28 +1,40 @@
-import { describe, expect, it } from "vitest";
-import { computeBetSkill } from "@/lib/mortal-odds/skill";
-import { resolveBets } from "@/lib/mortal-odds/settle";
-import type { Bet, Life, MarketPrices, Price } from "@/types";
+import { describe, expect, it } from 'vitest';
+import { resolveBets } from '@/lib/mortal-odds/settle';
+import { computeBetSkill } from '@/lib/mortal-odds/skill';
+import type { Bet, Life, MarketPrices, Price } from '@/types';
 
-const LIFE: Life = { year: 1900, region: "eur", sex: "boy", age: 40, deathYear: 1940, shock: null, literate: true, city: false, sin: null };
+const LIFE: Life = {
+  year: 1900,
+  region: 'eur',
+  sex: 'boy',
+  age: 40,
+  deathYear: 1940,
+  shock: null,
+  literate: true,
+  city: false,
+  sin: null,
+};
 
 const PRICES: MarketPrices = {
   sex: {
-    boy: { p: 0.5, odds: 1.84, tag: "Toss-up" },
-    girl: { p: 0.5, odds: 1.84, tag: "Toss-up" },
+    boy: { p: 0.5, odds: 1.84, tag: 'Toss-up' },
+    girl: { p: 0.5, odds: 1.84, tag: 'Toss-up' },
   },
   age: {
-    m: { p: 0.4, odds: 2.3, tag: "Toss-up" },
+    m: { p: 0.4, odds: 2.3, tag: 'Toss-up' },
   },
 };
 
 const priceDeathYear = (guessYear: number): Price =>
-  guessYear === 1940 ? { p: 0.1, odds: 8.28, tag: "Long shot" } : { p: 0, odds: null, tag: "Long shot" };
+  guessYear === 1940
+    ? { p: 0.1, odds: 8.28, tag: 'Long shot' }
+    : { p: 0, odds: null, tag: 'Long shot' };
 
-describe("resolveBets", () => {
-  it("nets stake * (odds - 1) on a win, and just -stake on a loss", () => {
+describe('resolveBets', () => {
+  it('nets stake * (odds - 1) on a win, and just -stake on a loss', () => {
     const bets: Record<string, Bet> = {
-      sex: { marketId: "sex", kind: "choice", optionId: "boy", stake: 10 }, // wins: life.sex === "boy"
-      age: { marketId: "age", kind: "choice", optionId: "m", stake: 10 }, // wins: life.age (40) is in 30-59 bracket
+      sex: { marketId: 'sex', kind: 'choice', optionId: 'boy', stake: 10 }, // wins: life.sex === "boy"
+      age: { marketId: 'age', kind: 'choice', optionId: 'm', stake: 10 }, // wins: life.age (40) is in 30-59 bracket
     };
     const { results } = resolveBets({
       life: LIFE,
@@ -33,14 +45,16 @@ describe("resolveBets", () => {
       truthSamples: [LIFE],
     });
 
-    const sexResult = results.find((r) => r.marketId === "sex");
+    const sexResult = results.find((r) => r.marketId === 'sex');
     expect(sexResult?.won).toBe(true);
     expect(sexResult?.net).toBeCloseTo(10 * (1.84 - 1));
     expect(sexResult?.skill).toBeCloseTo(computeBetSkill({ stake: 10, won: true, odds: 1.84 }));
   });
 
   it("a losing bet's net is exactly -stake, independent of odds", () => {
-    const bets: Record<string, Bet> = { sex: { marketId: "sex", kind: "choice", optionId: "girl", stake: 10 } };
+    const bets: Record<string, Bet> = {
+      sex: { marketId: 'sex', kind: 'choice', optionId: 'girl', stake: 10 },
+    };
     const { results, net } = resolveBets({
       life: LIFE,
       bets,
@@ -54,8 +68,10 @@ describe("resolveBets", () => {
     expect(net).toBe(-10);
   });
 
-  it("a losing bet still earns skill from participation alone, never the true probability", () => {
-    const bets: Record<string, Bet> = { sex: { marketId: "sex", kind: "choice", optionId: "girl", stake: 10 } };
+  it('a losing bet still earns skill from participation alone, never the true probability', () => {
+    const bets: Record<string, Bet> = {
+      sex: { marketId: 'sex', kind: 'choice', optionId: 'girl', stake: 10 },
+    };
     const { results } = resolveBets({
       life: LIFE,
       bets,
@@ -70,8 +86,10 @@ describe("resolveBets", () => {
     expect(results[0]?.skill).toBeGreaterThan(0);
   });
 
-  it("settles a year-of-death (range) bet the same way", () => {
-    const bets: Record<string, Bet> = { dy: { marketId: "dy", kind: "range", guessYear: 1940, stake: 20 } };
+  it('settles a year-of-death (range) bet the same way', () => {
+    const bets: Record<string, Bet> = {
+      dy: { marketId: 'dy', kind: 'range', guessYear: 1940, stake: 20 },
+    };
     const { results } = resolveBets({
       life: LIFE,
       bets,
@@ -84,8 +102,10 @@ describe("resolveBets", () => {
     expect(results[0]?.net).toBeCloseTo(20 * (8.28 - 1));
   });
 
-  it("skips a bet whose market is closed (odds null)", () => {
-    const bets: Record<string, Bet> = { dy: { marketId: "dy", kind: "range", guessYear: 1800, stake: 20 } };
+  it('skips a bet whose market is closed (odds null)', () => {
+    const bets: Record<string, Bet> = {
+      dy: { marketId: 'dy', kind: 'range', guessYear: 1800, stake: 20 },
+    };
     const { results, net, skill } = resolveBets({
       life: LIFE,
       bets,
@@ -99,26 +119,26 @@ describe("resolveBets", () => {
     expect(skill).toBe(0);
   });
 
-  it("wins a sins bet only on the exact set of sins the chain recorded", () => {
+  it('wins a sins bet only on the exact set of sins the chain recorded', () => {
     const sin = (id: string) => ({ id, label: id, phrase: id, from: 1900, to: null });
-    const life: Life = { ...LIFE, sin: sin("violence"), sins: [sin("violence"), sin("greed")] };
+    const life: Life = { ...LIFE, sin: sin('violence'), sins: [sin('violence'), sin('greed')] };
     const prices: MarketPrices = {
       sins: {
-        violence: { p: 0.1, odds: 9, tag: "Unlikely" },
-        "violence+greed": { p: 0.02, odds: 45, tag: "Long shot" },
+        violence: { p: 0.1, odds: 9, tag: 'Unlikely' },
+        'violence+greed': { p: 0.02, odds: 45, tag: 'Long shot' },
       },
     };
     const settle = (optionId: string) =>
       resolveBets({
         life,
-        bets: { sins: { marketId: "sins", kind: "choice", optionId, stake: 10 } },
+        bets: { sins: { marketId: 'sins', kind: 'choice', optionId, stake: 10 } },
         prices,
         priceDeathYear,
-        trueProbabilities: { sins: { violence: 0.1, "violence+greed": 0.02 } },
+        trueProbabilities: { sins: { violence: 0.1, 'violence+greed': 0.02 } },
         truthSamples: [],
       }).results[0];
 
-    expect(settle("violence+greed")?.won).toBe(true);
-    expect(settle("violence")?.won).toBe(false);
+    expect(settle('violence+greed')?.won).toBe(true);
+    expect(settle('violence')?.won).toBe(false);
   });
 });

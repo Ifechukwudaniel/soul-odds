@@ -1,5 +1,3 @@
-import React from "react";
-
 export const RefillIcon = () => {
   return (
     <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -16,16 +14,16 @@ export const RefillIcon = () => {
         fill="url(#paint0_radial_349_5998)"
       />
       <g opacity="0.2">
-        <g style={{ mixBlendMode: "overlay" }}>
+        <g style={{ mixBlendMode: 'overlay' }}>
           <ellipse cx="19.5" cy="22" rx="4.5" ry="3" fill="url(#paint1_linear_349_5998)" />
         </g>
-        <g style={{ mixBlendMode: "overlay", opacity: "0.46" }}>
+        <g style={{ mixBlendMode: 'overlay', opacity: '0.46' }}>
           <ellipse cx="57.5" cy="39" rx="4.5" ry="3" fill="url(#paint2_linear_349_5998)" />
         </g>
-        <g style={{ mixBlendMode: "overlay" }}>
+        <g style={{ mixBlendMode: 'overlay' }}>
           <ellipse cx="47.5" cy="51" rx="4.5" ry="3" fill="url(#paint3_linear_349_5998)" />
         </g>
-        <g style={{ mixBlendMode: "overlay" }} opacity="0.4">
+        <g style={{ mixBlendMode: 'overlay' }} opacity="0.4">
           <ellipse
             cx="42.5"
             cy="24"
@@ -35,7 +33,7 @@ export const RefillIcon = () => {
             fill="url(#paint4_linear_349_5998)"
           />
         </g>
-        <g style={{ mixBlendMode: "overlay" }} opacity="0.56">
+        <g style={{ mixBlendMode: 'overlay' }} opacity="0.56">
           <ellipse
             cx="63.5"
             cy="8.99994"
@@ -45,10 +43,10 @@ export const RefillIcon = () => {
             fill="url(#paint5_linear_349_5998)"
           />
         </g>
-        <g style={{ mixBlendMode: "overlay" }}>
+        <g style={{ mixBlendMode: 'overlay' }}>
           <ellipse cx="13.5" cy="55" rx="4.5" ry="3" fill="url(#paint6_linear_349_5998)" />
         </g>
-        <g style={{ mixBlendMode: "overlay" }} opacity="0.76">
+        <g style={{ mixBlendMode: 'overlay' }} opacity="0.76">
           <ellipse cx="9.5" cy="45.5" rx="4.5" ry="2.5" fill="url(#paint7_linear_349_5998)" />
         </g>
       </g>
@@ -87,7 +85,7 @@ export const RefillIcon = () => {
         fill="url(#paint11_linear_349_5998)"
       />
       <path
-        style={{ mixBlendMode: "multiply" }}
+        style={{ mixBlendMode: 'multiply' }}
         d="M46.4705 34.0595L42.5625 30.2722C41.8364 29.5653 41.3675 28.636 41.2303 27.6321C41.0931 26.6281 41.2954 25.607 41.8052 24.7313L43.2211 22.3468L30.3164 18.889L30.3597 20.9409L35.2903 22.262C36.4428 22.5709 37.4373 23.3013 38.0769 24.3086C38.7164 25.3158 38.9545 26.5265 38.7438 27.701C36.9233 37.9484 33.572 47.0027 20.8643 46.0413L21.0229 47.0209C21.1497 47.8128 21.503 48.551 22.0402 49.1464C22.5774 49.7419 23.2755 50.1691 24.0501 50.3764L32.9429 52.7593C33.7181 52.9676 34.5371 52.9471 35.301 52.7003C36.0649 52.4535 36.7411 51.9909 37.2479 51.3684L46.4478 43.7507C46.5557 43.6116 46.6707 43.478 46.7922 43.3507C46.8332 43.3083 46.8742 43.2659 46.9097 43.222C48.0361 41.9346 48.6196 40.2608 48.5377 38.5522C48.4558 36.8436 47.7148 35.2332 46.4705 34.0595Z"
         fill="url(#paint12_linear_349_5998)"
       />
@@ -159,19 +157,47 @@ export const RefillIcon = () => {
           <stop stopColor="#9181F0" />
           <stop offset="1" stopColor="#6752EF" />
         </radialGradient>
-        <linearGradient id="paint1_linear_349_5998" x1="19.5" y1="19" x2="19.5" y2="25" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="paint1_linear_349_5998"
+          x1="19.5"
+          y1="19"
+          x2="19.5"
+          y2="25"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop stopColor="#D9D9D9" />
           <stop offset="1" stopColor="#737373" />
         </linearGradient>
-        <linearGradient id="paint2_linear_349_5998" x1="57.5" y1="36" x2="57.5" y2="42" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="paint2_linear_349_5998"
+          x1="57.5"
+          y1="36"
+          x2="57.5"
+          y2="42"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop stopColor="#D9D9D9" />
           <stop offset="1" stopColor="#737373" />
         </linearGradient>
-        <linearGradient id="paint3_linear_349_5998" x1="47.5" y1="48" x2="47.5" y2="54" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="paint3_linear_349_5998"
+          x1="47.5"
+          y1="48"
+          x2="47.5"
+          y2="54"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop stopColor="#D9D9D9" />
           <stop offset="1" stopColor="#737373" />
         </linearGradient>
-        <linearGradient id="paint4_linear_349_5998" x1="42.5" y1="21" x2="42.5" y2="27" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="paint4_linear_349_5998"
+          x1="42.5"
+          y1="21"
+          x2="42.5"
+          y2="27"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop stopColor="#D9D9D9" />
           <stop offset="1" stopColor="#737373" />
         </linearGradient>
@@ -186,11 +212,25 @@ export const RefillIcon = () => {
           <stop stopColor="#D9D9D9" />
           <stop offset="1" stopColor="#737373" />
         </linearGradient>
-        <linearGradient id="paint6_linear_349_5998" x1="13.5" y1="52" x2="13.5" y2="58" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="paint6_linear_349_5998"
+          x1="13.5"
+          y1="52"
+          x2="13.5"
+          y2="58"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop stopColor="#D9D9D9" />
           <stop offset="1" stopColor="#737373" />
         </linearGradient>
-        <linearGradient id="paint7_linear_349_5998" x1="9.5" y1="43" x2="9.5" y2="48" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="paint7_linear_349_5998"
+          x1="9.5"
+          y1="43"
+          x2="9.5"
+          y2="48"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop stopColor="#D9D9D9" />
           <stop offset="1" stopColor="#737373" />
         </linearGradient>

@@ -1,6 +1,6 @@
-import { centroidOf, loadCliopatria } from "@/lib/mortal-odds/cliopatria";
-import type { CliopatriaFeature } from "@/lib/mortal-odds/cliopatria";
-import { periodOf } from "@/lib/mortal-odds/sin-variants";
+import { centroidOf, loadCliopatria } from '@/lib/mortal-odds/cliopatria';
+import type { CliopatriaFeature } from '@/lib/mortal-odds/cliopatria';
+import { periodOf } from '@/lib/mortal-odds/sin-variants';
 
 /** One piece of work per fixed window (see `periodOf`) that a Cliopatria polity's span touches. */
 export type WindowJob = {
@@ -20,14 +20,17 @@ export function yearsFor(fromYear: number, toYear: number): number[] {
   const years: number[] = [];
   for (let year = fromYear; year <= toYear; year = periodOf(year).toYear + 1) {
     const window = periodOf(year);
-    years.push(Math.round((Math.max(fromYear, window.fromYear) + Math.min(toYear, window.toYear)) / 2));
+    years.push(
+      Math.round((Math.max(fromYear, window.fromYear) + Math.min(toYear, window.toYear)) / 2),
+    );
   }
   return years;
 }
 
 /** The slice of a polity holding territory in `year`, else the one whose range is nearest to it. */
 function sliceAt(slices: CliopatriaFeature[], year: number): CliopatriaFeature {
-  const distance = ({ properties: p }: CliopatriaFeature) => (year < p.FromYear ? p.FromYear - year : year > p.ToYear ? year - p.ToYear : 0);
+  const distance = ({ properties: p }: CliopatriaFeature) =>
+    year < p.FromYear ? p.FromYear - year : year > p.ToYear ? year - p.ToYear : 0;
   return slices.reduce((best, slice) => (distance(slice) < distance(best) ? slice : best));
 }
 
@@ -44,7 +47,15 @@ export async function buildWindowJobs(): Promise<WindowJob[]> {
     return yearsFor(fromYear, toYear).map((year) => {
       const slice = sliceAt(slices, year);
       const { Area, Wikidata, SeshatID } = slice.properties;
-      return { name, year, window: periodOf(year), place: { ...centroidOf(slice), fromYear, toYear }, areaKm2: Area, wikidata: Wikidata, seshatId: SeshatID };
+      return {
+        name,
+        year,
+        window: periodOf(year),
+        place: { ...centroidOf(slice), fromYear, toYear },
+        areaKm2: Area,
+        wikidata: Wikidata,
+        seshatId: SeshatID,
+      };
     });
   }).flat();
 }

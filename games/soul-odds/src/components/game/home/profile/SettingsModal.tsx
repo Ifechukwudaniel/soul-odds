@@ -1,18 +1,23 @@
-"use client";
+'use client';
 
-import { useId } from "react";
-import { FaVolumeMute, FaVolumeUp } from "react-icons/fa";
-import { GameDialog } from "@/components/game/GameDialog";
-import { ModalCloseButton, ModalHeader } from "@/components/game/GameModalParts";
-import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
-import { playClickSound } from "@/utils/playClickSound";
+import { useId } from 'react';
+import { FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
+import { GameDialog } from '@/components/game/GameDialog';
+import { ModalCloseButton, ModalHeader } from '@/components/game/GameModalParts';
+import { useBackgroundMusic } from '@/hooks/useBackgroundMusic';
+import { playClickSound } from '@/utils/playClickSound';
 
 export const SettingsModal = (props: { isOpen: boolean; onClose: () => void }) => {
   const { isMuted, toggle, volume, setVolume } = useBackgroundMusic();
   const titleId = useId();
 
   return (
-    <GameDialog isOpen={props.isOpen} onClose={props.onClose} labelledBy={titleId} className="w-full max-w-md">
+    <GameDialog
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+      labelledBy={titleId}
+      className="w-full max-w-md"
+    >
       <div className="relative flex flex-col gap-5 p-6">
         <ModalCloseButton onClick={props.onClose} />
 
@@ -23,7 +28,7 @@ export const SettingsModal = (props: { isOpen: boolean; onClose: () => void }) =
             <p className="text-sm text-white/60">Music volume</p>
             <button
               type="button"
-              aria-label={isMuted ? "Unmute sound" : "Mute sound"}
+              aria-label={isMuted ? 'Unmute sound' : 'Mute sound'}
               onClick={() => {
                 playClickSound();
                 toggle();
