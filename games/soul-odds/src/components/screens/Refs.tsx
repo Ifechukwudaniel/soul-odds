@@ -33,7 +33,7 @@ export const InviteComponent = ({ copyInvite }: { copyInvite: () => void }) => {
           </div>
         </div>
         <GameButton variant="papyrus" onClick={copyInvite} className="w-full py-4 text-base">
-          Invite a Friend!
+          Invite a Soul!
         </GameButton>
       </div>
     </div>
@@ -92,7 +92,7 @@ export const RefsScreen: React.FC = () => {
             )}
           </div>
           <GameButton variant="papyrus" onClick={copyInvite} className="px-3 py-3 text-[13px]">
-            Invite a Friend!
+            Invite a Soul!
           </GameButton>
         </div>
 

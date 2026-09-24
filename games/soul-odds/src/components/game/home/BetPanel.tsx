@@ -68,7 +68,7 @@ export const BetPanel = (props: {
       <h2 className={`${serifFont.className} text-white" font-bold`}>Your wager</h2>
 
       {props.chipLocked ? (
-        <GameTooltip text="Your stake is locked in for this round." className="w-full">
+        <GameTooltip text="You can't change your stake when a round is in progress." className="w-full">
           <div className="mystic-glass flex w-full items-center gap-2 rounded-xl px-4 py-3">
             <CurrencyCoinIcon width={28} height={'28'} />
             <span className="text-2xl font-bold text-white">{atRisk.toFixed(2)}</span>
