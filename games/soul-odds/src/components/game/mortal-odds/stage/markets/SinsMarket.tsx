@@ -42,7 +42,7 @@ export const SinsMarket = (props: {
     return (
       <div className="flex min-h-full flex-col items-center justify-center gap-5 text-center max-md:gap-3">
         <div className="flex flex-col items-center gap-1">
-          <GiFeather size={32} className="text-[#3FB6A8]" />
+          <GiFeather size={32} className="gold-icon" />
           <h3 className="text-xl font-bold text-white">The Weighing of the Heart</h3>
           <p className="max-w-xs text-xs text-white/40">
             Anubis sets the heart on the scale against Ma'at's feather. Does it balance, or sink
@@ -86,7 +86,7 @@ export const SinsMarket = (props: {
   return (
     <div className="flex min-h-full flex-col items-center justify-center gap-5 text-center max-md:gap-3">
       <div className="flex flex-col items-center gap-1">
-        <GiFeather size={32} className="text-[#3FB6A8]" />
+        <GiFeather size={32} className="gold-icon" />
         <h3 className="text-xl font-bold text-white">Which sin tipped the scale?</h3>
         <p className="max-w-xs text-xs text-white/40">
           Anubis has seen every sin recorded. Name every sin that weighed on this heart — one or

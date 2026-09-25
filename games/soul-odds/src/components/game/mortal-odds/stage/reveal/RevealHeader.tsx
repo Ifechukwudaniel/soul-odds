@@ -23,7 +23,7 @@ export const RevealHeader = (props: {
   <header className="flex flex-col items-center gap-1 px-2 py-3 text-center">
     <div className="flex w-full max-w-md items-center gap-3">
       <span className="h-px flex-1 bg-linear-to-r from-transparent to-[#F5B83D]/60" />
-      <GiEyeOfHorus size={34} className="text-[#F5B83D]" />
+      <GiEyeOfHorus size={34} className="gold-icon" />
       <span className="h-px flex-1 bg-linear-to-l from-transparent to-[#F5B83D]/60" />
     </div>
 
@@ -34,7 +34,7 @@ export const RevealHeader = (props: {
 
     <div className="mt-2 flex items-center gap-6">
       <YearStamp year={props.bornYear} label="Born" />
-      <LuSparkle className="text-[#F5B83D]" />
+      <LuSparkle className="gold-icon" />
       <YearStamp year={props.deathYear} label={props.alive ? 'Projected' : 'Died'} />
     </div>
 

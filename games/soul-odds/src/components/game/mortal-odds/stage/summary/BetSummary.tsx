@@ -86,8 +86,8 @@ export const BetSummary = (props: {
                   className="grid grid-cols-3 items-center gap-x-3 gap-y-2 rounded-xl border border-white/10 bg-black/40 px-3 py-3 md:grid-cols-[1fr_auto_auto_auto] md:gap-4 md:px-4"
                 >
                   <div className="col-span-3 flex min-w-0 items-center gap-3 md:col-span-1">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#F5B83D]/30 bg-[#F5B83D]/10 text-[#F5B83D]">
-                      <Icon size={16} />
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#F5B83D]/30 bg-[#F5B83D]/10">
+                      <Icon size={16} className="gold-icon" />
                     </span>
                     <div className="min-w-0">
                       <p className="truncate text-[11px] text-white/50">{row.label.market}</p>

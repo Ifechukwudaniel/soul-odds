@@ -4,7 +4,12 @@ import { useId, useRef } from 'react';
 import type { IconType } from 'react-icons';
 import { LuInfo } from 'react-icons/lu';
 import { GameButton } from '@/components/game/GameButton';
-import { ModalCloseButton, ModalHeader } from '@/components/game/GameModalParts';
+import {
+  GOLD_ARROW_FLANK,
+  ModalCloseButton,
+  ModalCornerFrame,
+  ModalHeader,
+} from '@/components/game/GameModalParts';
 import { playClickSound } from '@/utils/playClickSound';
 
 export type InfoPoint = { icon: IconType; title: string; text: string; soon?: boolean };
@@ -43,18 +48,25 @@ export const InfoDialog = (props: { title: string; intro: string; points: InfoPo
             close();
           }
         }}
-        className="info-dialog game-modal-panel fixed inset-0 m-auto h-fit w-[min(28rem,calc(100vw-2rem))] overflow-visible rounded-2xl p-0 text-white backdrop:bg-black/60"
+        className="info-dialog game-modal-panel fixed inset-0 m-auto h-fit w-[min(28rem,calc(100vw-2rem))] overflow-visible rounded-2xl rounded-tl-md rounded-br-md p-0 text-white backdrop:bg-black/60"
       >
-        <div className="relative flex max-h-[calc(100dvh-2rem)] flex-col gap-5 overflow-y-auto rounded-2xl p-6 text-left">
+        <ModalCornerFrame />
+
+        <div className="relative flex max-h-[calc(100dvh-3rem)] flex-col gap-5 overflow-y-auto rounded-2xl rounded-tl-md rounded-br-md p-6 text-left max-md:gap-4 max-md:p-5">
           <ModalCloseButton onClick={close} />
 
-          <ModalHeader title={props.title} titleId={titleId} intro={props.intro} />
+          <ModalHeader
+            title={props.title}
+            titleId={titleId}
+            intro={props.intro}
+            flank={GOLD_ARROW_FLANK}
+          />
 
           <ul className="flex flex-col gap-4">
             {props.points.map((point) => (
               <li key={point.title} className="flex gap-3">
-                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#d4af37]/40 bg-[#F5B83D]/10 text-[#F5B83D]">
-                  <point.icon size={18} />
+                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#d4af37]/40 bg-[#F5B83D]/10">
+                  <point.icon size={18} className="gold-icon" />
                 </span>
                 <div>
                   <p className="text-sm font-semibold text-white">

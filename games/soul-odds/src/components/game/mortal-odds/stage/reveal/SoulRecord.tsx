@@ -31,7 +31,7 @@ const RecordGroup = (props: { rows: RecordRow[] }) => (
     {props.rows.map((row) => (
       <div key={row.label} className="flex items-center justify-between gap-3 max-md:flex-wrap">
         <dt className="flex items-center gap-2 text-[11px] tracking-[0.15em] text-white/50 uppercase">
-          <row.icon size={16} className="shrink-0 text-[#F5B83D]" />
+          <row.icon size={16} className="gold-icon shrink-0" />
 
           {row.label}
         </dt>

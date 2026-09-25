@@ -13,7 +13,7 @@ export const RevealSection = (props: {
     <h4
       className={`${serifFont.className} flex items-center gap-2 text-sm font-bold tracking-[0.12em] text-[#F3D38F] uppercase`}
     >
-      <props.icon size={20} className="text-[#F5B83D]" />
+      <props.icon size={20} className="gold-icon" />
       {props.title}
     </h4>
     {props.children}

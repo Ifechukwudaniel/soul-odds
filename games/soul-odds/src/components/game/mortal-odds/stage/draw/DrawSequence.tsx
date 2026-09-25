@@ -64,7 +64,7 @@ export const DrawSequence = (props: {
         )}
       </StageSlide>
 
-      <div className="grid grid-cols-[auto_1fr] items-center gap-2 md:flex md:justify-between md:gap-3">
+      <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-2 md:flex md:justify-between md:gap-3">
         <GameButton
           variant="secondary"
           silent={!isWhere}
@@ -76,7 +76,7 @@ export const DrawSequence = (props: {
               props.onRedraw();
             }
           }}
-          className="group px-5 py-2.5 text-sm max-md:px-4"
+          className="group px-5 py-2.5 text-sm max-md:px-3 max-md:text-[0.8rem]"
         >
           {isWhere ? (
             <>
@@ -101,7 +101,7 @@ export const DrawSequence = (props: {
             variant="papyrus"
             disabled={props.isSpinning}
             onClick={props.onAdvance}
-            className="group px-5 py-2.5 text-sm whitespace-nowrap max-md:px-3"
+            className="group px-5 py-2.5 text-sm whitespace-nowrap max-md:px-3 max-md:text-[0.8rem]"
           >
             {isWhere ? 'Weigh their fate' : 'Reveal the land'}
             <PiArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" />

@@ -4,6 +4,7 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { FrameOrnaments } from '@/components/assets/FrameOrnaments';
 import { worldPopCurve } from '@/lib/mortal-odds/config';
 import { interpolate } from '@/lib/mortal-odds/curves';
 import { CHART_INTRO_MS, HOP_ROLL_MS, SETTLE_ROLL_MS } from '@/lib/mortal-odds/spin-timeline';
@@ -355,6 +356,7 @@ export const PopulationChart = (props: {
 
   return (
     <div className="relative w-full rounded-xl border border-white/10 bg-[#081514]/60 p-4">
+      <FrameOrnaments />
       <svg
         ref={svgRef}
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}

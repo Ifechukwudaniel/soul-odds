@@ -1,4 +1,6 @@
 import { GiSunbeams } from 'react-icons/gi';
+import { LuSun } from "react-icons/lu";
+
 import { serifFont } from '@/styles/serif-font';
 
 export const PotentialWinSummary = (props: {
@@ -11,8 +13,8 @@ export const PotentialWinSummary = (props: {
       <p
         className={`${serifFont.className} flex items-center gap-1.5 text-[0.8rem] text-white/90 uppercase`}
       >
-        <GiSunbeams className="mr-1 text-xl text-[#F5B83D]" />
-        Potential win
+        <LuSun  className="mr-1 text-lg gold-icon" />
+       <span>Potential win</span> 
       </p>
       <p className="font-medium text-[#F5B83D]">
         {props.amount.toFixed(2)} {props.currency}

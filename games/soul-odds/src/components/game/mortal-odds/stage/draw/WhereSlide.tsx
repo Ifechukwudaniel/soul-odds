@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { PiArrowsClockwise } from 'react-icons/pi';
 import { CurrencyCoinIcon } from '@/components/assets/CurrencyCoinIcon';
+import { FrameOrnaments } from '@/components/assets/FrameOrnaments';
 import { InfoDialog } from '@/components/game/InfoDialog';
 import { LAND_INFO } from '@/components/game/mortal-odds/stage/draw/slide-info';
 import { ROAM_DURATION, WorldMap } from '@/components/game/mortal-odds/stage/map/WorldMap';
@@ -44,8 +45,11 @@ export const WhereSlide = (props: {
         transition={{ duration: 0.4, ease: 'easeOut' }}
         className="relative aspect-2/1 h-full max-w-full overflow-hidden rounded-lg border border-[#FDE991]/15"
       >
+        {/* ✦ Smaller on phones, where this map is only ~190px wide; the bottom corners clear the credits strip from md up. */}
+        {/* ✦ Smaller on phones, where this map is only ~190px wide. */}
+        <FrameOrnaments className="w-5 sm:w-8 md:w-10" />
         <WorldMap year={props.year} marker={{ lat: props.place.lat, lon: props.place.lon }} />
-        <p className="pointer-events-none absolute inset-x-0 bottom-0 bg-black/50 px-2 py-0.5 text-left text-[0.5rem] leading-tight text-[#f1f1f2a0] max-md:hidden sm:text-[0.6rem]">
+        <p className="pointer-events-none absolute inset-x-0 bottom-0 bg-black/80 px-12 py-1 text-left text-[0.5rem] leading-tight text-[#f1f1f2d0] backdrop-blur-sm max-md:hidden sm:text-[0.6rem]">
           {MAP_SOURCES}
         </p>
       </motion.div>

@@ -155,6 +155,7 @@ export const HomeScreen = (props: { player: ReturnType<typeof useMortalOddsPlaye
           onRedrawLocation={onRedrawLocation}
           drawCost={drawCost}
           canAffordDraw={player.canAfford(drawCost) && !round.isOpeningSession}
+          insufficientFunds={!player.canAfford(drawCost)}
           charges={charges}
           quickAmounts={CHIP_SIZES}
           onSelectChip={setChipSize}

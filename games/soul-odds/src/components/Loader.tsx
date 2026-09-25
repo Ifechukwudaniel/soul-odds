@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useRef } from 'react';
 import { GiScales } from 'react-icons/gi';
 import backdrop from '@/public/img/annibals.png';
-import logo from '@/public/img/logo.png';
+import logo from '@/public/img/logo-gold.png';
 import { serifFont } from '@/styles/serif-font';
 
 gsap.registerPlugin(useGSAP);

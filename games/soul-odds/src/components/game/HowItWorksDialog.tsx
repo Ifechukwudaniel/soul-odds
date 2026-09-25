@@ -1,10 +1,9 @@
 'use client';
 
 import { useId, useSyncExternalStore } from 'react';
-import { CardCorner } from '@/components/assets/CardCorner';
 import { GameButton } from '@/components/game/GameButton';
 import { GameDialog } from '@/components/game/GameDialog';
-import { ModalCloseButton } from '@/components/game/GameModalParts';
+import { ModalCloseButton, ModalCornerFrame } from '@/components/game/GameModalParts';
 import { HowItWorksHeader, HowItWorksSteps } from '@/components/game/HowItWorksParts';
 import {
   getHowItWorksSeen,
@@ -24,9 +23,7 @@ const HowItWorksDialog = (props: { isOpen: boolean; onClose: () => void }) => {
       labelledBy={titleId}
       className="w-full max-w-md rounded-tl-md rounded-br-md"
     >
-      {/* ✦ The corners sit on the dialog itself, not inside the scrolling body, so they stay put while it scrolls. They are nudged out by the art's own empty margin so their lines sit flush on the border. */}
-      <CardCorner className="pointer-events-none absolute top-0 left-0 h-auto w-14 -translate-x-[2.469%] -translate-y-[1.656%] rotate-180 md:w-[72px]" />
-      <CardCorner className="pointer-events-none absolute right-0 bottom-0 h-auto w-14 translate-x-[2.469%] translate-y-[1.656%] md:w-[72px]" />
+      <ModalCornerFrame />
 
       <div className="relative flex max-h-[calc(100dvh-3rem)] flex-col gap-5 overflow-y-auto rounded-2xl rounded-tl-md rounded-br-md p-6 text-left max-md:gap-4 max-md:p-5">
         <ModalCloseButton onClick={props.onClose} />

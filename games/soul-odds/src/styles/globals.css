@@ -1034,6 +1034,64 @@ a[href][aria-disabled='true'],
 }
 
 /* =====================================
+   ⬢ Gold icons
+   ===================================== */
+
+/*
+ * ✦ Gradient fill for react-icons. The gradient itself lives in <GoldGradientDefs />; a CSS fill beats the
+ *   icon's own fill="currentColor". Each path gets its own left-to-right sweep, so it suits single-path icons.
+ */
+/* ✦ The trailing colour is the fallback: if a browser can't resolve the gradient, the icon is amber, not invisible. */
+.gold-icon {
+  fill: url(#gold-icon-gradient) #f0c868;
+}
+
+.gold-icon-stroke {
+  stroke: url(#gold-icon-gradient) #f0c868;
+}
+
+/* =====================================
+   ⬢ Gold artwork
+   ===================================== */
+
+/*
+ * ✦ Re-tints gold PNGs (see GoldArtImage) toward the brand gradient without flattening them. The
+ *   filter tames the source's over-saturated, darker gold; the `color` layer takes the gradient's hue
+ *   and saturation and keeps the artwork's own light and dark; the `soft-light` layer adds the
+ *   gradient's pale-left, bronze-right lightness. Tune the three together.
+ */
+.gold-art {
+  position: relative;
+  display: block;
+  isolation: isolate;
+}
+
+.gold-art-img {
+  filter: brightness(1.2) saturate(0.75) contrast(0.95);
+}
+
+.gold-art-layer {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.gold-art-hue {
+  background: linear-gradient(90deg, #ffedce 0%, #f0c868 41%, #d09a5d 75%, #e5b864 96%);
+  mix-blend-mode: color;
+}
+
+.gold-art-light {
+  background: linear-gradient(90deg, #fff 0%, #9a9a9a 38%, #606060 75%, #909090 96%);
+  mix-blend-mode: soft-light;
+  opacity: 0.7;
+}
+
+/* =====================================
    ⬢  Gold Text
    ===================================== */
    .gold-text-2 {

@@ -28,6 +28,8 @@ export const MortalOddsStage = (props: {
   onRedrawLocation: () => void;
   drawCost: number;
   canAffordDraw: boolean;
+  /** True only when the balance can't cover the draw; unlike `canAffordDraw` it ignores a session that is still opening. */
+  insufficientFunds: boolean;
   charges: RoundCharge[];
   quickAmounts: number[];
   onSelectChip: (amount: number) => void;
@@ -97,6 +99,7 @@ export const MortalOddsStage = (props: {
               onDraw={props.onDraw}
               drawCost={props.drawCost}
               canAfford={props.canAffordDraw}
+              insufficientFunds={props.insufficientFunds}
               currency={props.currency}
             />
           )}

@@ -3,6 +3,7 @@
 import { Suspense, useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { GoldGradientDefs } from '@/components/game/GoldGradientDefs';
 import { DesertHorizon } from '@/components/game/mortal-odds/DesertHorizon';
 import { Loader } from '@/components/Loader';
 import { AppWalletProvider } from '@/components/provider/AppWalletProvider';
@@ -43,6 +44,7 @@ export const GameProviders = (props: { children: React.ReactNode }) => {
           className="relative overflow-x-hidden"
           style={{ background: `url('/img/stars.svg') repeat` }}
         >
+          <GoldGradientDefs />
           <DesertHorizon />
           <div className="relative z-10">
             <AppWalletProvider>{props.children}</AppWalletProvider>

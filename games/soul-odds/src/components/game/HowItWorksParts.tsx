@@ -1,8 +1,6 @@
 import type { IconType } from 'react-icons';
 import { GiAnubis, GiHourglass, GiScales } from 'react-icons/gi';
-import { GoldArrowLeft } from '@/components/assets/GoldArrowLeft';
-import { GoldArrowRight } from '@/components/assets/GoldArrowRight';
-import { ModalHeader } from '@/components/game/GameModalParts';
+import { GOLD_ARROW_FLANK, ModalHeader } from '@/components/game/GameModalParts';
 
 // =====================================
 // ⬢ Shared by the first-visit dialog and the profile card's view, so the copy can't drift.
@@ -34,10 +32,7 @@ export const HowItWorksHeader = (props: { titleId?: string; intro?: string }) =>
     title="How it works"
     titleId={props.titleId}
     intro={props.intro}
-    flank={{
-      before: <GoldArrowLeft className="h-auto w-full max-w-[84px] min-w-0 flex-1" />,
-      after: <GoldArrowRight className="h-auto w-full max-w-[84px] min-w-0 flex-1" />,
-    }}
+    flank={GOLD_ARROW_FLANK}
   />
 );
 
@@ -48,9 +43,9 @@ export const HowItWorksSteps = () => (
       <li key={step.title} className="flex gap-3">
         <span
           aria-hidden="true"
-          className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#d4af37]/40 bg-[#F5B83D]/10 text-[#F5B83D]"
+          className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#d4af37]/40 bg-[#F5B83D]/10"
         >
-          <step.icon size={18} />
+          <step.icon size={18} className="gold-icon" />
         </span>
         <div>
           <p className="text-sm font-semibold text-white">
