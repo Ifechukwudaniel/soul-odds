@@ -45,7 +45,9 @@ soul from those weights using randomness supplied by a real **Verify Network VRF
 
 Payout for a pick is `wager * titleRtp / probability(prediction)` — i.e. the game pays out exactly
 the title's RTP in expectation, whatever combination the player chooses. **Current title RTP:
-90%** (`rtpWad: "0.9"` in the title config above).
+98%** (`rtpWad: "0.98"` in every era of the title config above; the deployer enforces 93–98%).
+`pnpm --filter @chain/soul-odds-engine run verify-rtp` enumerates the sampler exactly and proves every
+prediction returns that RTP.
 
 The same sampling logic exists twice, and the engine's test suite cross-checks them bit-for-bit:
 

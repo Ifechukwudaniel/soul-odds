@@ -17,6 +17,7 @@
     "check-types": "tsc --noEmit",
     "cli": "tsx src/cli.ts",
     "clean": "hardhat clean",
+    "verify-rtp": "tsx scripts/verify-rtp.ts",
     "start": "hardhat compile && tsx scripts/stack.ts",
     "e2e:simulator": "hardhat compile && tsx e2e/simulator.ts",
     "deploy-mortal-odds-title": "hardhat compile && tsx scripts/deploy-mortal-odds-title.ts"
