@@ -132,6 +132,8 @@ export const MortalOddsStage = (props: {
 
           {round.phase === 'predicting' && round.draw && props.prices && (
             <PredictionsPanel
+              draw={round.draw}
+              context={round.context}
               prices={props.prices}
               chipSize={props.chipSize}
               bets={props.bets}

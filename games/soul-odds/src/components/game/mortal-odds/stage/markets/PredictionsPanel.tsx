@@ -6,10 +6,11 @@ import { GameButton } from '@/components/game/GameButton';
 import { GameCard } from '@/components/game/home/GameCard';
 import { ChoiceMarket } from '@/components/game/mortal-odds/stage/markets/ChoiceMarket';
 import { SinsMarket } from '@/components/game/mortal-odds/stage/markets/SinsMarket';
+import { SoulFileDialog } from '@/components/game/mortal-odds/stage/markets/SoulFileDialog';
 import { StageSlide } from '@/components/game/mortal-odds/stage/StageSlide';
 import { marketsConfig } from '@/lib/mortal-odds/config';
 import type { SinNarratives } from '@/lib/mortal-odds/sin-variants';
-import type { Bet, MarketPrices } from '@/types';
+import type { Bet, Draw, MarketPrices, PlaceContext } from '@/types';
 import { playClickSound } from '@/utils/playClickSound';
 
 const LAST_STEP = marketsConfig.length - 1;
@@ -18,6 +19,8 @@ const LAST_STEP = marketsConfig.length - 1;
 const stakePerMarket = (chipSize: number) => chipSize / marketsConfig.length;
 
 export const PredictionsPanel = (props: {
+  draw: Draw;
+  context: PlaceContext | null;
   chipSize: number;
   prices: MarketPrices;
   bets: Record<string, Bet>;
@@ -48,10 +51,13 @@ export const PredictionsPanel = (props: {
     >
       <div className="flex min-h-0 flex-1 flex-col gap-4">
         <div className="flex min-h-0 flex-1 flex-col gap-3">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <GameButton variant="papyrus" onClick={props.onBack} className="px-4 py-1.5 text-xs">
               ← Back
             </GameButton>
+            {props.context && (
+              <SoulFileDialog draw={props.draw} context={props.context} />
+            )}
             <span className="text-xs text-white/40">
               {step + 1} of {marketsConfig.length}
             </span>

@@ -18,26 +18,36 @@ export type InfoPoint = { icon: IconType; title: string; text: string; soon?: bo
  * A small "i" button that opens a themed dialog explaining why a round step matters. Built on the
  * native <dialog>, so focus is trapped and returned for free.
  */
-export const InfoDialog = (props: { title: string; intro: string; points: InfoPoint[] }) => {
+export const InfoDialog = (props: {
+  title: string;
+  intro: string;
+  points: InfoPoint[];
+  trigger?: (open: () => void) => React.ReactNode;
+}) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
 
   const close = () => dialogRef.current?.close();
+  const open = () => {
+    playClickSound();
+    dialogRef.current?.showModal();
+  };
 
   return (
     <>
-      <button
-        type="button"
-        aria-label={props.title}
-        aria-haspopup="dialog"
-        onClick={() => {
-          playClickSound();
-          dialogRef.current?.showModal();
-        }}
-        className="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[#d4af37]/50 bg-[#F5B83D]/10 text-[#F5B83D] transition-colors hover:bg-[#F5B83D]/25 hover:text-[#FDE991]"
-      >
-        <LuInfo size={15} />
-      </button>
+      {props.trigger ? (
+        props.trigger(open)
+      ) : (
+        <button
+          type="button"
+          aria-label={props.title}
+          aria-haspopup="dialog"
+          onClick={open}
+          className="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[#d4af37]/50 bg-[#F5B83D]/10 text-[#F5B83D] transition-colors hover:bg-[#F5B83D]/25 hover:text-[#FDE991]"
+        >
+          <LuInfo size={15} />
+        </button>
+      )}
 
       <dialog
         ref={dialogRef}
