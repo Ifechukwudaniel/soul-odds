@@ -74,7 +74,9 @@ export const StatsScreen = () => {
     <section className="flex h-screen flex-col overflow-hidden max-md:h-auto">
       <div className="container mx-auto my-5 px-4">
         <h2 className="mb-3 text-2xl font-bold tracking-tight">Statistics</h2>
-        <p className="my-3 text-sm font-medium text-white">This are our application stats</p>
+        <p className="my-3 text-sm font-medium text-white max-md:text-[0.8rem] max-md:leading-[1.5] max-md:text-white/70">
+          This are our application stats
+        </p>
         <div className="my-5 h-px w-full bg-gray-800" />
         <div className="mt-3">
           <div className="grid grid-cols-2 gap-2">

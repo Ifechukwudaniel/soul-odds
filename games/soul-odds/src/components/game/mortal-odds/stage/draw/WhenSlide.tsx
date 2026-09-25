@@ -43,7 +43,7 @@ export const WhenSlide = (props: {
       </div>
       <p className="max-w-lg text-[0.8rem] text-[#f1f1f2c0]">{INTRO}</p>
 
-      <div className="w-full max-w-2xl">
+      <div className="w-full md:px-3">
         <PopulationChart
           year={props.year}
           currentYear={props.currentYear}
@@ -77,7 +77,7 @@ export const WhenSlide = (props: {
           >
             <span>{fmtNumber(yearsAgo)} years ago</span>
             <GiPlainCircle aria-hidden className="h-1.5 w-1.5 text-white/30" />
-            <span className="text-[0.9rem] text-[#DEAE56]">
+            <span className="gold-text-2 text-[0.9rem]">
               the {periodName(props.year).toLowerCase()}
             </span>
           </motion.p>

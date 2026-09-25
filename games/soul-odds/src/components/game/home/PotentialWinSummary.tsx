@@ -1,4 +1,3 @@
-import { GiSunbeams } from 'react-icons/gi';
 import { LuSun } from "react-icons/lu";
 
 import { serifFont } from '@/styles/serif-font';

@@ -9,6 +9,14 @@ const baseConfig: NextConfig = {
     position: 'bottom-right',
   },
   poweredByHeader: false,
+  // ✦ Dev only: without this Next.js answers 403 to every script requested from another device, so a
+  //   phone on the same Wi-Fi never gets past the server-rendered loader. Covers the private LAN ranges.
+  allowedDevOrigins: [
+    '192.168.*.*',
+    '10.*.*.*',
+    ...Array.from({ length: 16 }, (_, index) => `172.${16 + index}.*.*`),
+    '*.local',
+  ],
   reactStrictMode: true,
   // @chain/casino-sdk and @chain/soul-odds-engine both ship raw .ts source via their package exports.
   transpilePackages: ['@chain/casino-sdk', '@chain/soul-odds-engine'],

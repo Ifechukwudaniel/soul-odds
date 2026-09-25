@@ -132,7 +132,9 @@ export const OpenQuestDetailScreen: React.FC<Props> = ({
           </button>
         </div>
         <h2 className="mb-3 text-2xl font-[500]">{quest.title}</h2>
-        <p className="text-[13px] leading-[1.7] text-white">{quest.desc}</p>
+        <p className="text-[13px] leading-[1.7] text-white max-md:text-[0.8rem] max-md:leading-[1.5] max-md:text-white/70">
+          {quest.desc}
+        </p>
         <div className="mt-8">
           <Tasks
             tasks={quest.tasks}

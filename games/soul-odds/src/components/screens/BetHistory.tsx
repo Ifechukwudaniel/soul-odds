@@ -44,7 +44,7 @@ export const BetHistoryScreen = () => {
   return (
     <div className="container mx-auto px-4 py-4 pb-32 max-md:pb-4">
       <h2 className="mb-3 text-2xl font-[500] max-md:text-xl">Bet history</h2>
-      <p className="text-sm leading-[1.7] text-white">
+      <p className="text-sm leading-[1.7] text-white max-md:text-[0.8rem] max-md:leading-[1.5] max-md:text-white/70">
         Every soul you&apos;ve weighed, and how the scales fell.
       </p>
 

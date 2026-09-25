@@ -17,19 +17,52 @@ const CURVE_DRAW_S = INTRO_S * 0.78;
 const PROJECTION_S = INTRO_S - CURVE_DRAW_S;
 const MARKER_RADIUS = 5.5;
 
-const WIDTH = 900;
-const HEIGHT = 240;
+// ✦ Two canvas shapes: the wide one for desktop, and a squarer one for phones so the chart gets real
+//   height and its labels stay legible instead of shrinking with a 900-unit-wide canvas.
+function makeGeometry(size: {
+  width: number;
+  height: number;
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+  tickGap: number;
+}) {
+  return {
+    WIDTH: size.width,
+    HEIGHT: size.height,
+    LEFT: size.left,
+    RIGHT: size.right,
+    TOP: size.top,
+    BOTTOM: size.bottom,
+    PLOT_WIDTH: size.width - size.left - size.right,
+    PLOT_HEIGHT: size.height - size.top - size.bottom,
+    MIN_TICK_GAP_PX: size.tickGap,
+  };
+}
 
-const LEFT = 44;
-const RIGHT = 44;
-const TOP = 16;
-const BOTTOM = 34;
+type Geometry = ReturnType<typeof makeGeometry>;
 
-const PLOT_WIDTH = WIDTH - LEFT - RIGHT;
-const PLOT_HEIGHT = HEIGHT - TOP - BOTTOM;
+const WIDE_GEOMETRY = makeGeometry({
+  width: 900,
+  height: 200,
+  left: 44,
+  right: 44,
+  top: 16,
+  bottom: 34,
+  tickGap: 62,
+});
+const COMPACT_GEOMETRY = makeGeometry({
+  width: 380,
+  height: 270,
+  left: 30,
+  right: 18,
+  top: 14,
+  bottom: 30,
+  tickGap: 44,
+});
 
 const PAST_FRACTION = 0.82;
-const MIN_TICK_GAP_PX = 62;
 
 const MIN_YEAR = worldPopCurve[0]![0];
 const MAX_YEAR = worldPopCurve[worldPopCurve.length - 1]![0];
@@ -52,7 +85,8 @@ function formatEraLabel(year: number): string {
   return `${rounded}`;
 }
 
-function makeXScale(nowYear: number) {
+function makeXScale(nowYear: number, geometry: Geometry) {
+  const { LEFT, PLOT_WIDTH } = geometry;
   const clampedNow = Math.min(Math.max(nowYear, MIN_YEAR), MAX_YEAR);
 
   const nowX = LEFT + PLOT_WIDTH * PAST_FRACTION;
@@ -96,7 +130,11 @@ function makeXScale(nowYear: number) {
   };
 }
 
-function selectTicks(candidates: readonly number[], toX: (year: number) => number): number[] {
+function selectTicks(
+  candidates: readonly number[],
+  toX: (year: number) => number,
+  minGap: number,
+): number[] {
   const sorted = [...new Set(candidates)]
     .filter((year) => year >= MIN_YEAR && year <= MAX_YEAR)
     .sort((a, b) => a - b);
@@ -107,7 +145,7 @@ function selectTicks(candidates: readonly number[], toX: (year: number) => numbe
   for (const year of sorted) {
     const x = toX(year);
 
-    if (x - lastX >= MIN_TICK_GAP_PX) {
+    if (x - lastX >= minGap) {
       kept.push(year);
       lastX = x;
     }
@@ -165,7 +203,16 @@ export const PopulationChart = (props: {
   const [hoverX, setHoverX] = useState<number | null>(null);
   const [animatedYear, setAnimatedYear] = useState(props.year);
 
-  const scale = useMemo(() => makeXScale(props.currentYear), [props.currentYear]);
+  // ✦ Read once at mount: this chart only ever renders on the client, so there is no server markup to disagree with.
+  const [geometry] = useState(() =>
+    window.matchMedia('(max-width: 767.98px)').matches ? COMPACT_GEOMETRY : WIDE_GEOMETRY,
+  );
+  const { WIDTH, HEIGHT, LEFT, TOP, PLOT_HEIGHT, MIN_TICK_GAP_PX } = geometry;
+
+  const scale = useMemo(
+    () => makeXScale(props.currentYear, geometry),
+    [props.currentYear, geometry],
+  );
 
   const maxPop = useMemo(() => worldPopCurve.reduce((max, [, pop]) => Math.max(max, pop), 0), []);
 
@@ -326,7 +373,10 @@ export const PopulationChart = (props: {
   const markerX = scale.toX(animatedYear);
   const markerY = yForPop(markerPop);
 
-  const ticks = useMemo(() => selectTicks(TICK_CANDIDATES, scale.toX), [scale]);
+  const ticks = useMemo(
+    () => selectTicks(TICK_CANDIDATES, scale.toX, MIN_TICK_GAP_PX),
+    [scale, MIN_TICK_GAP_PX],
+  );
 
   const hoverYear = hoverX === null ? null : scale.toYear(hoverX);
 
@@ -355,7 +405,7 @@ export const PopulationChart = (props: {
   };
 
   return (
-    <div className="relative w-full rounded-xl border border-white/10 bg-[#081514]/60 p-4">
+    <div className="relative w-full rounded-xl border border-white/10 bg-[#081514]/60 p-4 max-md:p-3">
       <FrameOrnaments />
       <svg
         ref={svgRef}
@@ -508,7 +558,7 @@ export const PopulationChart = (props: {
         </div>
       )}
 
-      <p className="mt-2 text-center text-xs text-white/30">
+      <p className="mt-2 text-center text-xs text-white/30 max-md:hidden">
         log scale before {formatEraLabel(props.currentYear)}, projected after · HYDE / UN WPP
         estimates
       </p>

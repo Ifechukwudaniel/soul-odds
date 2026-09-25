@@ -174,6 +174,8 @@ export const RevealPanel = (props: {
           <BetResultStamp
             results={results}
             skill={skill}
+            betsNet={net}
+            fees={fees}
             roundNet={roundNet}
             currency={props.currency}
             onDismiss={handleDismiss}

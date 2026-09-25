@@ -20,9 +20,12 @@ export function Leaderboard({ users, currentUser, resetAt }: LeaderboardProps) {
     const node = currentUserRowRef.current;
     if (!node) return;
 
-    const observer = new IntersectionObserver(([entry]) => setIsRowVisible(entry?.isIntersecting ?? true), {
-      threshold: 0.3,
-    });
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsRowVisible(entry?.isIntersecting ?? true),
+      {
+        threshold: 0.3,
+      },
+    );
     observer.observe(node);
     return () => observer.disconnect();
   }, [currentUser]);
@@ -37,7 +40,7 @@ export function Leaderboard({ users, currentUser, resetAt }: LeaderboardProps) {
   return (
     <div className="container mx-auto px-4 py-4">
       <h2 className="mb-3 text-2xl font-[500] max-md:text-xl">Leaderboard</h2>
-      <p className="text-sm leading-[1.7] text-white">
+      <p className="text-sm leading-[1.7] text-white max-md:text-[0.8rem] max-md:leading-[1.5] max-md:text-white/70">
         See how you stack up against everyone else this week and climb the ranks.
       </p>
 

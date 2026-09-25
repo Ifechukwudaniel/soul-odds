@@ -41,7 +41,7 @@ export const DrawSequence = (props: {
     >
       <StageStepper steps={STEPS.map((entry) => entry.label)} activeIndex={activeIndex} />
 
-      <StageSlide slideKey={props.step} direction={isWhere ? 1 : -1} reserveGutter>
+      <StageSlide slideKey={props.step} direction={isWhere ? 1 : -1} reserveGutter={false}>
         {isWhere ? (
           <WhereSlide
             year={props.draw.year}

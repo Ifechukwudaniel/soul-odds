@@ -7,11 +7,15 @@ import type { BetResult } from '@/types';
 export const BetResultStamp = (props: {
   results: BetResult[];
   skill: number;
+  /** What the bets alone returned, before any redraw fees. */
+  betsNet: number;
+  /** Total paid to the scribe (redraw fees), already taken out of `roundNet`. */
+  fees: number;
   roundNet: number;
   currency: string;
   onDismiss: () => void;
 }) => {
-  const { results, skill, roundNet, currency } = props;
+  const { results, skill, betsNet, fees, roundNet, currency } = props;
 
   return (
     <motion.div
@@ -31,7 +35,7 @@ export const BetResultStamp = (props: {
         transition={{ type: 'spring', stiffness: 260, damping: 20 }}
         className="relative w-full max-w-sm rounded-2xl border border-[#d4af37] bg-gradient-to-b from-[#f3ead2] to-[#e8dcc0] px-6 py-7 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.6)]"
       >
-        <span className="absolute -top-2.5 left-1/2 h-5 w-5 -translate-x-1/2 rounded-full border-2  gold shadow" />
+        <span className="gold absolute -top-2.5 left-1/2 h-5 w-5 -translate-x-1/2 rounded-full border-2 shadow" />
 
         <p className="text-center text-xs font-bold tracking-[0.2em] text-[#33353D]/70 uppercase">
           The scales have spoken
@@ -77,6 +81,22 @@ export const BetResultStamp = (props: {
               {Math.abs(Math.round(skill))} pts
             </RevealStamp>
           </div>
+        )}
+
+        {fees > 0 && (
+          <dl className="mt-4 flex flex-col gap-1 border-t border-black/10 pt-3 text-sm">
+            <div className="flex justify-between gap-2">
+              <dt className="text-[#33353D]/70">Bets</dt>
+              <dd className={`font-semibold ${betsNet >= 0 ? 'text-[#6BA84F]' : 'text-[#B7410E]'}`}>
+                {betsNet >= 0 ? '+' : '−'}
+                {Math.abs(betsNet).toFixed(2)}
+              </dd>
+            </div>
+            <div className="flex justify-between gap-2">
+              <dt className="text-[#33353D]/70">Paid to the scribe</dt>
+              <dd className="font-semibold text-[#B7410E]">−{fees.toFixed(2)}</dd>
+            </div>
+          </dl>
         )}
 
         <div className="mt-4 border-t border-black/10 pt-4 text-center">

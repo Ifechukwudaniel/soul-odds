@@ -67,6 +67,8 @@ main {
   --nav-h: 6.25rem;
   --slip-h: 3.25rem;
   --anubis-gold: #f5b83d;
+  /* ✦ Focus rings use the soft mid stop of the gold gradient, not the deeper amber above, which reads as orange on the dark panels. */
+  --anubis-focus: #f0c868;
   --anubis-gold-leaf: #d4af37;
   --anubis-faience: #3fb6a8;
   --anubis-lapis: #1f3a93;
@@ -281,6 +283,20 @@ main {
  *   instead. --os-gutter is its total right padding and --os-inset-x/-y (default 4px) set how far the
  *   bar sits from the edges.
  */
+/*
+ * ✦ A swipe that starts inside a scroll area stays there: without this, once the inner area hits its end
+ *   (or has only a few pixels to give) the gesture chains to the container behind it, which reads as
+ *   "the outside moves instead of the list". The document itself never rubber-bands either.
+ */
+[data-overlayscrollbars-viewport] {
+  overscroll-behavior: contain;
+}
+
+html,
+body {
+  overscroll-behavior: none;
+}
+
 [data-os-overflow-y] > [data-overlayscrollbars-viewport] > * {
   padding-right: var(--os-gutter, 36px);
 }
@@ -352,15 +368,14 @@ select:focus-visible,
 textarea:focus-visible,
 summary:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid var(--anubis-gold);
+  outline: 2px solid var(--anubis-focus);
   outline-offset: 2px;
-  border-radius: 2px;
 }
 
 .chamfer-btn:focus-visible,
 .stat-card:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px var(--anubis-gold);
+  box-shadow: 0 0 0 3px var(--anubis-focus);
 }
 
 /*
@@ -375,8 +390,8 @@ summary:focus-visible,
 .game-nav-btn:focus-visible .nav-bubble {
   border-radius: 9999px;
   box-shadow:
-    0 0 0 3px var(--anubis-gold),
-    0 0 14px 3px rgba(245, 184, 61, 0.6);
+    0 0 0 3px var(--anubis-focus),
+    0 0 14px 3px rgba(240, 200, 104, 0.5);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -659,6 +674,11 @@ a[href][aria-disabled='true'],
 /* ✦ Selected/active fill: gold leaf. Pairs with dark text. */
 .accent-gradient {
   background: linear-gradient(180deg, #ffb359 0%, #fbbb3f 100%);
+}
+
+/* ✦ A round frame in the brand gold gradient, for avatar-style badges (give it 2px of padding for the ring). */
+.gold-ring {
+  background: linear-gradient(135deg, #ffedce 0%, #f0c868 45%, #d09a5d 100%);
 }
 
 /* =====================================
@@ -1051,6 +1071,118 @@ a[href][aria-disabled='true'],
 }
 
 /* =====================================
+   ⬢ Wager slider
+   ===================================== */
+
+/* ✦ The track is filled with the gold gradient up to `--fill` (set inline from the value); the thumb is a gold bead. */
+.wager-slider {
+  height: 1.25rem;
+  cursor: pointer;
+  appearance: none;
+  background: transparent;
+}
+
+.wager-slider:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.wager-slider::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    #ffedce 0%,
+    #f0c868 calc(var(--fill) * 0.41),
+    #d09a5d var(--fill),
+    rgba(255, 255, 255, 0.12) var(--fill),
+    rgba(255, 255, 255, 0.12) 100%
+  );
+}
+
+.wager-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.wager-slider::-moz-range-progress {
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #ffedce, #f0c868 45%, #d09a5d);
+}
+
+.wager-slider::-webkit-slider-thumb {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: -6px;
+  appearance: none;
+  border: 1px solid #000;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #ffedce, #f0c868 55%, #d09a5d);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.wager-slider::-moz-range-thumb {
+  width: 1.125rem;
+  height: 1.125rem;
+  border: 1px solid #000;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #ffedce, #f0c868 55%, #d09a5d);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* =====================================
+   ⬢ Gold fading border
+   ===================================== */
+
+/*
+ * ✦ A 1px border that runs #E0B263 at full strength in the top-left and fades to 20% by the
+ *   bottom-right, as if lit from the corner. It is a masked pseudo-element rather than a real border
+ *   gradient, so the element keeps its own translucent background and its radius. The element needs
+ *   `border border-transparent` (it reserves the 1px) and a `rounded-*`.
+ */
+.gold-border-fade {
+  position: relative;
+}
+
+.gold-border-fade::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(224, 178, 99, 1) 0%, rgba(224, 178, 99, 0.2) 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  pointer-events: none;
+}
+
+/* ✦ The matching fill: the same 135deg sweep, from 5% gold to nothing, so it lines up with the border. */
+.gold-fill-fade {
+  background: linear-gradient(135deg, rgba(245, 184, 61, 0.05) 0%, rgba(245, 184, 61, 0) 100%);
+}
+
+/* ✦ Gradient gold text for small labels (the "Skill" stamp): the brand gradient, plus a thin bronze outline so the pale end stays legible on light paper as well as on dark panels. */
+.gold-stamp-text {
+  background: linear-gradient(90deg, #ffedce 0%, #f0c868 41%, #d09a5d 75%, #e5b864 96%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  -webkit-text-stroke: 0.6px rgba(140, 98, 34, 0.75);
+}
+
+/* =====================================
    ⬢ Gold artwork
    ===================================== */
 
@@ -1060,8 +1192,8 @@ a[href][aria-disabled='true'],
  *   and saturation and keeps the artwork's own light and dark; the `soft-light` layer adds the
  *   gradient's pale-left, bronze-right lightness. Tune the three together.
  */
+/* ✦ No `position` here on purpose: this rule is unlayered, so it would beat a caller's `absolute` utility. Callers position it (absolute or relative) themselves; the tint layers need a positioned box. */
 .gold-art {
-  position: relative;
   display: block;
   isolation: isolate;
 }
@@ -1105,7 +1237,6 @@ a[href][aria-disabled='true'],
     -webkit-text-fill-color: transparent;
     color: transparent;
   
-    -webkit-text-stroke: 1px rgba(255, 246, 215, 0.75);
   
    }
 

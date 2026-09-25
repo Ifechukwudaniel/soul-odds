@@ -203,7 +203,7 @@ export const Loader = (props: {
           </p>
           <p
             ref={loreRef}
-            className={`${serifFont.className} text-center text-[0.7rem] text-[#f5b83d]`}
+            className={`${serifFont.className} text-center text-[0.7rem] text-white`}
           >
             {LORE_LINES[0]}
           </p>

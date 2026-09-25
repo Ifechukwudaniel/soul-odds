@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { CurrencyCoinIcon } from '@/components/assets/CurrencyCoinIcon';
 import { GameTooltip } from '@/components/game/GameTooltip';
+import { BetAmountSlider } from '@/components/game/home/BetAmountSlider';
 import { BetQuickAmounts } from '@/components/game/home/BetQuickAmounts';
 import { GameCard } from '@/components/game/home/GameCard';
 import { PlaceBetButton } from '@/components/game/home/PlaceBetButton';
@@ -31,6 +32,7 @@ export const BetPanel = (props: {
   sinNarratives: SinNarratives | null;
 }) => {
   const minWager = Math.min(...props.quickAmounts);
+  const maxWager = Math.max(...props.quickAmounts);
   // ✦ Local buffer so the field can be cleared or mid-typed ("1.") without snapping back; re-syncs
   //   when chipSize changes elsewhere and only pushes valid numbers upstream.
   const [customWager, setCustomWager] = useState(() => String(props.chipSize));
@@ -64,7 +66,10 @@ export const BetPanel = (props: {
       <h2 className={`${serifFont.className} font-bold text-white`}>Your wager</h2>
 
       {props.chipLocked ? (
-        <GameTooltip text="You can't change your stake when a round is in progress." className="w-full">
+        <GameTooltip
+          text="You can't change your stake when a round is in progress."
+          className="w-full"
+        >
           <div className="mystic-glass flex w-full items-center gap-2 rounded-xl px-4 py-3">
             <CurrencyCoinIcon width={28} height={'28'} />
             <span className="text-2xl font-bold text-white">{atRisk.toFixed(2)}</span>
@@ -102,34 +107,39 @@ export const BetPanel = (props: {
 
       <Scroller className="min-h-32 flex-1">
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1">
-            {props.charges.map((charge) => (
-              <motion.div
-                key={charge.id}
-                initial={{ opacity: 0, x: -6 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.25, ease: 'easeOut' }}
-                className="flex items-center justify-between text-sm"
-              >
-                <span className="text-white/60">{charge.label}</span>
-                <span className="flex items-center gap-1 font-semibold text-[#F5B83D]">
-                  −{charge.amount.toFixed(2)} <CurrencyCoinIcon width={14} height="14" />
-                </span>
-              </motion.div>
-            ))}
-            {props.charges.length === 0 && (
-              <p className="text-sm text-white/40">
-                Nothing on the scales yet. Pick your stake, then summon a soul.
-              </p>
-            )}
-          </div>
+          {props.charges.length > 0 && (
+            <div className="flex flex-col gap-1">
+              {props.charges.map((charge) => (
+                <motion.div
+                  key={charge.id}
+                  initial={{ opacity: 0, x: -6 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.25, ease: 'easeOut' }}
+                  className="flex items-center justify-between text-sm"
+                >
+                  <span className="text-white/60">{charge.label}</span>
+                  <span className="flex items-center gap-1 font-semibold text-[#F5B83D]">
+                    −{charge.amount.toFixed(2)} <CurrencyCoinIcon width={14} height="14" />
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          )}
 
-          <div>
+          <div className="flex flex-col gap-3">
             <BetQuickAmounts
               amounts={props.quickAmounts}
               selected={props.chipSize}
               onSelect={props.onSelectChip}
               disabled={props.chipLocked}
+            />
+            <BetAmountSlider
+              min={minWager}
+              max={maxWager}
+              value={props.chipSize}
+              onChange={props.onSelectChip}
+              disabled={props.chipLocked}
+              label={`Wager amount, ${minWager} to ${maxWager} ${props.currency}`}
             />
           </div>
 

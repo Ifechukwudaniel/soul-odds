@@ -6,20 +6,55 @@ import { serifFont } from '@/styles/serif-font';
 //   the box is cropped to the plaque's own 790×174 and the image is shifted up to match.
 //   The two wing ornaments leave a clear gap between x≈190 and x≈600, which is where the label goes.
 
-/** The gold plaque button face: the frame art with the label centred between its two wings. */
+/**
+ * The gold plaque button face: the frame art with the label centred between its two wings.
+ *
+ * Sized by percentage padding and drawn with an SVG label, not `aspect-ratio` and container query
+ * units: iOS Safari collapses the former inside a `<button>`, which left the plaque squashed with
+ * its label riding the top edge. Fill the parent's width; the height follows.
+ */
 export const ButtonDemo = (props: { label?: string }) => (
-  <span className="@container relative block aspect-790/174 w-[340px] max-w-full overflow-hidden">
+  <span className="relative block w-full overflow-hidden">
+    {/* ✦ 174 / 790: the plaque's own height over its width. Percentage padding is relative to width. */}
+    <span aria-hidden="true" className="block pb-[22.025%]" />
     <GoldArtImage
       src={buttonFrame}
       alt=""
       priority
-      sizes="340px"
+      sizes="380px"
       className="absolute top-[-36.2%] left-0 h-[181.6%] w-full"
     />
-    <span
-      className={`${serifFont.className} absolute inset-y-0 right-[24%] left-[24%] flex items-center justify-center text-[4.8cqw] leading-none font-bold tracking-[0.05em] whitespace-nowrap text-[#3a2708] uppercase [text-shadow:0_1px_0_rgba(255,236,170,0.55)]`}
+    {/* ✦ A 790 x 174 drawing space, so the label scales with the plaque. The wings leave a clear gap from x 190 to 600. */}
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      viewBox="0 0 790 174"
+      className={`${serifFont.className} pointer-events-none absolute inset-0 size-full`}
     >
-      {props.label ?? 'Summon a soul'}
-    </span>
+      <text
+        x="395"
+        y="88.5"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fontSize="38"
+        fontWeight="700"
+        letterSpacing="2"
+        fill="rgba(255,236,170,0.55)"
+      >
+        {(props.label ?? 'Summon a soul').toUpperCase()}
+      </text>
+      <text
+        x="395"
+        y="87"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fontSize="38"
+        fontWeight="700"
+        letterSpacing="2"
+        fill="#3a2708"
+      >
+        {(props.label ?? 'Summon a soul').toUpperCase()}
+      </text>
+    </svg>
   </span>
 );

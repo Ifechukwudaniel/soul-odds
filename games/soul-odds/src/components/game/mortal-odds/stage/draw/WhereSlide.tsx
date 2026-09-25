@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { GiPlainCircle } from 'react-icons/gi';
 import { PiArrowsClockwise } from 'react-icons/pi';
 import { CurrencyCoinIcon } from '@/components/assets/CurrencyCoinIcon';
 import { FrameOrnaments } from '@/components/assets/FrameOrnaments';
@@ -23,7 +24,7 @@ export const WhereSlide = (props: {
   canAffordDraw: boolean;
   currency: string;
 }) => (
-  <div className="flex h-full flex-col items-center gap-3 overflow-hidden text-center">
+  <div className="flex h-full flex-col items-center gap-3 overflow-hidden text-center max-md:h-auto max-md:min-h-full max-md:overflow-visible">
     <div className="shrink-0">
       <div className="flex items-center justify-center gap-3">
         <h3
@@ -38,12 +39,12 @@ export const WhereSlide = (props: {
       </p>
     </div>
 
-    <div className="flex min-h-0 w-full flex-1 items-center justify-center">
+    <div className="flex min-h-0 w-full flex-1 items-center justify-center max-md:flex-none md:px-3">
       <motion.div
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="relative aspect-2/1 h-full max-w-full overflow-hidden rounded-lg border border-[#FDE991]/15"
+        className="relative h-full w-full overflow-hidden rounded-lg border border-[#FDE991]/15 max-md:aspect-2/1 max-md:h-auto"
       >
         {/* ✦ Smaller on phones, where this map is only ~190px wide; the bottom corners clear the credits strip from md up. */}
         {/* ✦ Smaller on phones, where this map is only ~190px wide. */}
@@ -55,7 +56,7 @@ export const WhereSlide = (props: {
       </motion.div>
     </div>
 
-    <p className="shrink-0 px-1 text-left text-[0.5rem] leading-tight text-[#f1f1f2a0] md:hidden">
+    <p className="order-last shrink-0 px-1 text-left text-[0.5rem] leading-tight text-[#f1f1f2a0] md:hidden">
       {MAP_SOURCES}
     </p>
 
@@ -66,7 +67,17 @@ export const WhereSlide = (props: {
       className="shrink-0"
     >
       <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
-        <p className="text-xl font-bold text-white max-md:text-lg">{props.where}</p>
+        <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 text-xl font-bold text-white max-md:text-lg">
+          {/* ✦ `where` is one display string joined with " · "; each part after the first gets a gold dot in front, so a wrapped line starts on a dot, never ends on one. */}
+          {props.where.split(' · ').map((part, index) => (
+            <span key={part} className="inline-flex items-center gap-2">
+              {index > 0 && (
+                <GiPlainCircle aria-hidden className="gold-icon h-1.5 w-1.5 shrink-0" />
+              )}
+              {part}
+            </span>
+          ))}
+        </p>
         <button
           type="button"
           aria-label={

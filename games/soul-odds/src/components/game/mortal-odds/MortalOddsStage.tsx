@@ -2,6 +2,7 @@
 
 import { MotionConfig } from 'framer-motion';
 import { useId, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { BetPanel } from '@/components/game/home/BetPanel';
 import { GameCard } from '@/components/game/home/GameCard';
 import { SlipBar, SlipSheetHandle } from '@/components/game/home/SlipBar';
@@ -10,6 +11,7 @@ import { DrawHero } from '@/components/game/mortal-odds/stage/DrawHero';
 import { PredictionsPanel } from '@/components/game/mortal-odds/stage/markets/PredictionsPanel';
 import { RevealPanel } from '@/components/game/mortal-odds/stage/reveal/RevealPanel';
 import { BetSummary } from '@/components/game/mortal-odds/stage/summary/BetSummary';
+import { useClientMediaQuery } from '@/hooks/useClientMediaQuery';
 import type { MortalOddsBets } from '@/hooks/useMortalOddsBets';
 import type { MortalOddsRound } from '@/hooks/useMortalOddsDraw';
 import { slipTotals } from '@/lib/mortal-odds/bets';
@@ -37,7 +39,6 @@ export const MortalOddsStage = (props: {
   prices: MarketPrices | null;
   priceDeathYear: (guessYear: number) => Price;
   onRemoveBet: MortalOddsBets['remove'];
-  
 }) => {
   const { round } = props;
   const [slipOpen, setSlipOpen] = useState(false);
@@ -52,45 +53,52 @@ export const MortalOddsStage = (props: {
   const inDrawSequence =
     round.phase === 'drawing' || round.phase === 'when' || round.phase === 'where';
 
+  // ✦ Phones: the wager panel is a bottom sheet opened from the slip bar; lg+: the side panel. On phones it is
+  //   portalled to <body>, so no scroll container or stacking context can trap or clip it, and it sits above the nav.
+  const phoneSheet = useClientMediaQuery('(max-width: 1023.98px)');
+  const slipLayers = (
+    <>
+      {slipOpen && (
+        <button
+          type="button"
+          aria-label="Close wager slip"
+          onClick={() => setSlipOpen(false)}
+          className="fixed inset-0 z-[59] cursor-default bg-black/60 lg:hidden"
+        />
+      )}
+      <div
+        id={slipId}
+        className={`order-last shrink-0 motion-reduce:transition-none max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-[60] max-lg:max-h-[80dvh] max-lg:overflow-y-auto max-lg:overscroll-contain max-lg:rounded-t-2xl max-lg:bg-[#0b1512] max-lg:p-2 max-lg:pb-[max(0.5rem,env(safe-area-inset-bottom))] max-lg:shadow-[0_-12px_40px_rgba(0,0,0,0.6)] max-lg:transition-[transform,visibility] max-lg:duration-200 lg:order-first lg:h-full lg:w-80 ${slipOpen ? '' : 'max-lg:invisible max-lg:translate-y-full'}`}
+      >
+        <SlipSheetHandle onClose={() => setSlipOpen(false)} />
+        <BetPanel
+          currency={props.currency}
+          chipSize={props.chipSize}
+          quickAmounts={props.quickAmounts}
+          onSelectChip={props.onSelectChip}
+          chipLocked={props.chipLocked}
+          bets={props.bets}
+          prices={props.prices}
+          priceDeathYear={props.priceDeathYear}
+          onRemoveBet={props.onRemoveBet}
+          charges={props.charges}
+          onPlaceBet={round.advance}
+          canPlaceBet={round.phase === 'predicting'}
+          isLocked={round.phase === 'confirming' || round.phase === 'settling'}
+          requiredBets={marketsConfig.length}
+          sinNarratives={round.sinNarratives}
+        />
+      </div>
+    </>
+  );
+
   return (
     <MotionConfig reducedMotion="user">
       <div
         className="flex w-full flex-1 flex-col gap-4 max-lg:min-h-0 max-lg:gap-2 lg:h-[min(calc(100dvh-14rem),44rem)] lg:flex-row"
         aria-live="polite"
       >
-        {slipOpen && (
-          <button
-            type="button"
-            aria-label="Close wager slip"
-            onClick={() => setSlipOpen(false)}
-            className="fixed inset-0 z-20 cursor-default bg-black/50 lg:hidden"
-          />
-        )}
-
-        {/* ✦ Phones: the wager panel is a bottom sheet opened from the slip bar. lg+: the side panel. */}
-        <div
-          id={slipId}
-          className={`order-last shrink-0 max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-30 max-lg:max-h-[75dvh] max-lg:overflow-y-auto max-lg:overscroll-contain max-lg:rounded-t-2xl max-lg:bg-[#0b1512] max-lg:p-2 max-lg:pb-[max(0.5rem,env(safe-area-inset-bottom))] md:max-lg:pb-28 max-lg:shadow-[0_-12px_40px_rgba(0,0,0,0.6)] max-lg:transition-[transform,visibility] max-lg:duration-200 motion-reduce:transition-none lg:order-first lg:h-full lg:w-80 ${slipOpen ? '' : 'max-lg:invisible max-lg:translate-y-full'}`}
-        >
-          <SlipSheetHandle onClose={() => setSlipOpen(false)} />
-          <BetPanel
-            currency={props.currency}
-            chipSize={props.chipSize}
-            quickAmounts={props.quickAmounts}
-            onSelectChip={props.onSelectChip}
-            chipLocked={props.chipLocked}
-            bets={props.bets}
-            prices={props.prices}
-            priceDeathYear={props.priceDeathYear}
-            onRemoveBet={props.onRemoveBet}
-            charges={props.charges}
-            onPlaceBet={round.advance}
-            canPlaceBet={round.phase === 'predicting'}
-            isLocked={round.phase === 'confirming' || round.phase === 'settling'}
-            requiredBets={marketsConfig.length}
-            sinNarratives={round.sinNarratives}
-          />
-        </div>
+        {phoneSheet ? createPortal(slipLayers, document.body) : slipLayers}
 
         <div className="flex min-w-0 flex-1 flex-col max-lg:min-h-0 lg:h-full">
           {round.phase === 'idle' && (
@@ -154,23 +162,18 @@ export const MortalOddsStage = (props: {
               className="flex min-h-0 flex-1 items-center justify-center"
               containerClassName="flex h-full w-full flex-col"
             >
-             
-              <div
-    className="story-loading"
-    aria-label="Writing this soul's story…"
-    role="status"
-  >
-    <div className="story-loading__bar">
-      <div className="story-loading__fill" />
-      <div className="story-loading__shine" />
-    </div>
+              <div className="story-loading" aria-label="Writing this soul's story…" role="status">
+                <div className="story-loading__bar">
+                  <div className="story-loading__fill" />
+                  <div className="story-loading__shine" />
+                </div>
 
-    <span className="story-loading__text">
-    {round.awaitingSinNarrative
-                  ? 'Consulting the record of sins…'
-                  : 'Reading the omens…'}
-    </span>
-  </div>
+                <span className="story-loading__text">
+                  {round.awaitingSinNarrative
+                    ? 'Consulting the record of sins…'
+                    : 'Reading the omens…'}
+                </span>
+              </div>
             </GameCard>
           )}
 

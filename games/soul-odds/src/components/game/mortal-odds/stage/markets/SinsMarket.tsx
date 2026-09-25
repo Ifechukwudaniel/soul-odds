@@ -43,15 +43,15 @@ export const SinsMarket = (props: {
       <div className="flex min-h-full flex-col items-center justify-center gap-5 text-center max-md:gap-3">
         <div className="flex flex-col items-center gap-1">
           <GiFeather size={32} className="gold-icon" />
-          <h3 className="text-xl font-bold text-white">The Weighing of the Heart</h3>
-          <p className="max-w-xs text-xs text-white/40">
+          <h3 className="text-xl font-bold text-white max-md:text-lg">The Weighing of the Heart</h3>
+          <p className="max-w-xs text-xs text-white/40 max-md:text-[0.7rem] max-md:leading-snug">
             Anubis sets the heart on the scale against Ma'at's feather. Does it balance, or sink
             under a sin's weight?
           </p>
           <BookieOdds odds={selectedOdds} />
         </div>
 
-        <div className="grid w-full max-w-xl grid-cols-2 gap-3">
+        <div className="grid w-full max-w-xl grid-cols-2 gap-3 max-md:grid-cols-1 max-md:gap-2">
           <button
             type="button"
             aria-pressed={props.selectedOptionId === 'none'}
@@ -59,7 +59,7 @@ export const SinsMarket = (props: {
               playClickSound();
               props.onSelect('none');
             }}
-            className={`rounded-lg border px-4 py-4 text-base max-md:py-3 font-semibold ${
+            className={`rounded-lg border px-4 py-4 text-base font-semibold max-md:py-3 ${
               props.selectedOptionId === 'none'
                 ? 'gold border-black text-slate-950 shadow-[inset_1px_1px_1.5px_0px_#FFFFFF66]'
                 : 'border-black bg-[#262433] text-[#AFAFAF]'
@@ -73,7 +73,7 @@ export const SinsMarket = (props: {
               playClickSound();
               setHeartIsHeavy(true);
             }}
-            className="rounded-lg border border-black bg-[#262433] px-4 py-4 text-base max-md:py-3 font-semibold text-[#AFAFAF]"
+            className="rounded-lg border border-black bg-[#262433] px-4 py-4 text-base font-semibold text-[#AFAFAF] max-md:py-3"
           >
             The heart is heavy
             <span className="mt-1 block text-xs opacity-70">name the sins</span>
@@ -87,8 +87,8 @@ export const SinsMarket = (props: {
     <div className="flex min-h-full flex-col items-center justify-center gap-5 text-center max-md:gap-3">
       <div className="flex flex-col items-center gap-1">
         <GiFeather size={32} className="gold-icon" />
-        <h3 className="text-xl font-bold text-white">Which sin tipped the scale?</h3>
-        <p className="max-w-xs text-xs text-white/40">
+        <h3 className="text-xl font-bold text-white max-md:text-lg">Which sin tipped the scale?</h3>
+        <p className="max-w-xs text-xs text-white/40 max-md:text-[0.7rem] max-md:leading-snug">
           Anubis has seen every sin recorded. Name every sin that weighed on this heart — one or
           two. Only an exact match pays.
         </p>
@@ -96,7 +96,7 @@ export const SinsMarket = (props: {
       </div>
 
       {props.narratives ? (
-        <div className="grid w-full max-w-2xl grid-cols-2 gap-3">
+        <div className="grid w-full max-w-2xl grid-cols-2 gap-3 max-md:grid-cols-1">
           {SIN_CATEGORIES.map((category) => {
             const isSelected = selectedSins.includes(category.id);
             const phrase = narrativeFor(props.narratives, category.id)?.phrase ?? category.label;
@@ -107,7 +107,7 @@ export const SinsMarket = (props: {
                 disabled={!isSelected && atSinLimit}
                 aria-pressed={isSelected}
                 onClick={() => toggleSin(category.id)}
-                className={`rounded-lg border px-4 py-4 text-sm leading-snug font-semibold max-md:px-2.5 max-md:py-3 max-md:text-[0.8rem] disabled:opacity-40 ${
+                className={`rounded-lg border px-4 py-4 text-sm leading-snug font-semibold disabled:opacity-40 max-md:px-2.5 max-md:py-3 max-md:text-[0.8rem] ${
                   isSelected
                     ? 'gold border-black text-slate-950 shadow-[inset_1px_1px_1.5px_0px_#FFFFFF66]'
                     : 'border-black bg-[#262433] text-[#AFAFAF]'

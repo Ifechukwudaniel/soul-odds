@@ -18,7 +18,7 @@ import { fmtYear } from '@/lib/mortal-odds/format';
 import { serifFont } from '@/styles/serif-font';
 
 const SECTION =
-  'flex flex-col gap-3 rounded-xl border border-[#d4af37]/25 bg-[#F5B83D]/5 px-4 py-3';
+  'gold-border-fade gold-fill-fade flex flex-col gap-3 rounded-xl border border-transparent px-4 py-3';
 
 const Section = (props: { title: string; children: React.ReactNode }) => (
   <section className={SECTION}>

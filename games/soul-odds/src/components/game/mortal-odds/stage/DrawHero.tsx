@@ -61,7 +61,7 @@ export const DrawHero = (props: {
       disabled={!props.canAfford}
       onClick={props.onDraw}
       aria-label="Summon a soul"
-      className="max-w-full cursor-pointer transition duration-150 hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:brightness-100"
+      className="block w-full max-w-[380px] cursor-pointer transition duration-150 hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:brightness-100 md:w-[340px]"
     >
       <ButtonDemo />
     </button>

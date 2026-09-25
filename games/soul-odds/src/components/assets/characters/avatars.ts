@@ -1,6 +1,9 @@
 import type { ComponentType } from 'react';
 import type { AvatarId } from '@/components/assets/characters/avatar-ids';
 import { Black } from '@/components/assets/characters/Black';
+import { Ghost } from '@/components/assets/characters/Ghost';
+import { Mummy } from '@/components/assets/characters/Mummy';
+import { Raven } from '@/components/assets/characters/Raven';
 import { Skull } from '@/components/assets/characters/Skull';
 import { Slime } from '@/components/assets/characters/Slime';
 import type { IconProps } from '@/types/icontypes';
@@ -19,6 +22,9 @@ export const AVATARS: Avatar[] = [
   DEFAULT_AVATAR,
   { id: 'slime', name: 'Slime', Icon: Slime, cost: 0 },
   { id: 'black', name: 'Black', Icon: Black, cost: 0 },
+  { id: 'mummy', name: 'Mummy', Icon: Mummy, cost: 0 },
+  { id: 'ghost', name: 'Ghost', Icon: Ghost, cost: 0 },
+  { id: 'raven', name: 'Raven', Icon: Raven, cost: 0 },
 ];
 
 export const DEFAULT_AVATAR_ID = DEFAULT_AVATAR.id;
@@ -31,4 +37,3 @@ export const LEGACY_DEFAULT_AVATAR_ID: AvatarId = 'slime';
 
 export const getAvatarById = (id: string): Avatar =>
   AVATARS.find((avatar) => avatar.id === id) ?? DEFAULT_AVATAR;
-

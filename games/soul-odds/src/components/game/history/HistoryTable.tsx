@@ -1,4 +1,4 @@
-import { GiSkullCrossedBones } from 'react-icons/gi';
+import { IoMan, IoWoman } from 'react-icons/io5';
 import { CurrencyCoinIcon } from '@/components/assets/CurrencyCoinIcon';
 import { fateLine, fmtShortDate, fmtSigned } from '@/components/game/history/format';
 import { GameCard } from '@/components/game/home/GameCard';
@@ -34,10 +34,10 @@ export const HistoryTable = (props: {
         >
           {COLUMNS.map((column) => (
             <div
-            key={column}
-            role="columnheader"
-            className={cn('font-[500]', PHONE_HIDDEN.includes(column) && 'max-md:hidden')}
-          >
+              key={column}
+              role="columnheader"
+              className={cn('font-[500]', PHONE_HIDDEN.includes(column) && 'max-md:hidden')}
+            >
               {column}
             </div>
           ))}
@@ -54,9 +54,13 @@ export const HistoryTable = (props: {
             )}
           >
             <span role="cell" className="flex min-w-0 items-center gap-3">
-              <span className="accent-gradient flex h-12 w-12 shrink-0 items-center justify-center rounded-full p-[2px] ring-offset-2 ring-offset-[#18131F] max-md:h-9 max-md:w-9">
+              <span className="gold-ring flex h-12 w-12 shrink-0 items-center justify-center rounded-full p-[2px] ring-offset-2 ring-offset-[#18131F] max-md:h-9 max-md:w-9">
                 <span className="flex h-full w-full items-center justify-center rounded-full border border-black/70 bg-slate-950">
-                  <GiSkullCrossedBones size={22} className="text-[#F5B83D]" />
+                  {entry.sex === 'girl' ? (
+                    <IoWoman aria-label="Girl" size={26} className="gold-icon" />
+                  ) : (
+                    <IoMan aria-label="Boy" size={26} className="gold-icon" />
+                  )}
                 </span>
               </span>
               <span className="min-w-0">
@@ -65,8 +69,9 @@ export const HistoryTable = (props: {
                 >
                   {fateLine(entry)}
                 </span>
-                <span className="block truncate text-xs text-white/50">
-                  Born {fmtYear(entry.bornYear)}
+                <span className="block truncate text-xs text-white/50 max-md:overflow-visible max-md:whitespace-normal">
+                  Born {fmtYear(entry.bornYear)} ·{'\u00A0'}
+                  {entry.placeName}
                 </span>
                 <span className="block truncate text-xs text-white/50 md:hidden">
                   {entry.bets.length === 0

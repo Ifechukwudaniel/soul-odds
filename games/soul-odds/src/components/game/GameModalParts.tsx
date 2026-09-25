@@ -41,7 +41,7 @@ export const ModalHeader = (props: {
     <header className="flex flex-col items-center gap-2 text-center">
       <div className="flex w-full items-center gap-3">
         <span className="h-px flex-1 bg-linear-to-r from-transparent to-[#F5B83D]/60" />
-        <GiEyeOfHorus size={28} className="text-[#F5B83D]" />
+        <GiEyeOfHorus size={28} className="gold-icon" />
         <span className="h-px flex-1 bg-linear-to-l from-transparent to-[#F5B83D]/60" />
       </div>
       {props.flank ? (

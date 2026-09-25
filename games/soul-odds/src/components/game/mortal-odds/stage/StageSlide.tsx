@@ -35,6 +35,8 @@ export const StageSlide = (props: {
           exit="exit"
           transition={{ duration: 0.2, ease: 'easeOut' }}
           drag={onSwipe ? 'x' : false}
+          // ✦ Lock to the first direction of the gesture, so a vertical scroll never starts a horizontal drag.
+          dragDirectionLock
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.15}
           onDragEnd={(_event, info) => {

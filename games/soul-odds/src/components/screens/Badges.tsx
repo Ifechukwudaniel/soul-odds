@@ -138,7 +138,7 @@ export const BadgesScreen = () => {
         </div>
         <div className="mt-10 max-md:mt-2">
           <h2 className="mb-3 text-2xl font-[500] max-md:text-xl">Ranks</h2>
-          <p className="sf-pro-medium text-sm leading-[1.7]">
+          <p className="sf-pro-medium text-sm leading-[1.7] max-md:text-[0.8rem] max-md:leading-[1.5] max-md:text-white/70">
             Consistently show up, climb up the ladder and unlock all the ranks! Your skill points
             determine the rank you are in.
           </p>

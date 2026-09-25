@@ -41,7 +41,7 @@ export const GameProviders = (props: { children: React.ReactNode }) => {
       <EnableErudaConsole />
       <Suspense fallback={<Loader />}>
         <main
-          className="relative overflow-x-hidden"
+          className="relative overflow-hidden"
           style={{ background: `url('/img/stars.svg') repeat` }}
         >
           <GoldGradientDefs />

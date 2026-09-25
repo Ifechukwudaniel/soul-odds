@@ -82,7 +82,9 @@ export const RefsScreen: React.FC = () => {
         <div className="flex items-center justify-between max-md:flex-col max-md:items-stretch max-md:gap-3">
           <div>
             <h2 className="mb-3 text-2xl font-bold max-md:text-xl">Referrals</h2>
-            <p className="text-[0.8rem] font-[500] text-white">Refer a friend</p>
+            <p className="text-[0.8rem] font-[500] text-white max-md:text-white/70">
+              Refer a friend
+            </p>
             <p className="my-3 text-[0.8rem] text-[#AFAFAF]">{refsList.length} referrals</p>
             {isGuest && (
               <p className="mb-3 text-[0.8rem] text-[#AFAFAF]">
@@ -91,7 +93,11 @@ export const RefsScreen: React.FC = () => {
               </p>
             )}
           </div>
-          <GameButton variant="papyrus" onClick={copyInvite} className="px-3 py-3 text-[13px] max-md:w-full">
+          <GameButton
+            variant="papyrus"
+            onClick={copyInvite}
+            className="px-3 py-3 text-[13px] max-md:w-full"
+          >
             Invite a Soul!
           </GameButton>
         </div>
@@ -119,6 +125,6 @@ export const RefsScreen: React.FC = () => {
           </div>
         )}
       </div>
-    </section> 
+    </section>
   );
 };

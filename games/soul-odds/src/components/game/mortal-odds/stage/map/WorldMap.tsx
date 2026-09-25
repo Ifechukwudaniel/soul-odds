@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useMotionValue, animate as animateValue } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { erasConfig, placesConfig, worldLand } from '@/lib/mortal-odds/config';
 import { densityField, graticule, landPath, project } from '@/lib/mortal-odds/geo';
 import { playSound } from '@/utils/playSound';
@@ -27,6 +27,26 @@ export const WorldMap = (props: { year: number; marker: { lat: number; lon: numb
   const pin = props.marker
     ? project({ lon: props.marker.lon, lat: props.marker.lat, viewport: VIEWPORT })
     : null;
+
+  // ✦ When the box is wider than the map's 2:1 shape, show a horizontal band of the world (full width)
+  //   instead of letterboxing it. The band is centred on the pin, so the pin is never cropped away.
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [aspect, setAspect] = useState(VIEWPORT.width / VIEWPORT.height);
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const observer = new ResizeObserver(([entry]) => {
+      const { width, height } = entry!.contentRect;
+      if (width > 0 && height > 0) setAspect(width / height);
+    });
+    observer.observe(svg);
+    return () => observer.disconnect();
+  }, []);
+  const bandHeight = Math.min(VIEWPORT.height, VIEWPORT.width / aspect);
+  const bandTop = Math.min(
+    Math.max((pin?.y ?? VIEWPORT.height / 2) - bandHeight / 2, 0),
+    VIEWPORT.height - bandHeight,
+  );
 
   const pinX = useMotionValue(pin?.x ?? VIEWPORT.width / 2);
   const pinY = useMotionValue(pin?.y ?? VIEWPORT.height / 2);
@@ -66,7 +86,8 @@ export const WorldMap = (props: { year: number; marker: { lat: number; lon: numb
 
   return (
     <svg
-      viewBox={`0 0 ${VIEWPORT.width} ${VIEWPORT.height}`}
+      ref={svgRef}
+      viewBox={`0 ${bandTop} ${VIEWPORT.width} ${bandHeight}`}
       preserveAspectRatio="xMidYMid meet"
       className="h-full w-full"
       role="img"
