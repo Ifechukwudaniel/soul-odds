@@ -124,6 +124,21 @@ export async function addWinnings(address: string, delta: number): Promise<void>
     .where(eq(userSchema.address, normalizeAddress(address)));
 }
 
+/**
+ * Saves the avatar a user picked so every player sees it, e.g. on the leaderboard.
+ * @param address The user's address.
+ * @param avatarId The chosen avatar's id.
+ * @returns True when the user exists and was updated.
+ */
+export async function setAvatar(address: string, avatarId: string): Promise<boolean> {
+  const updated = await db
+    .update(userSchema)
+    .set({ avatarId })
+    .where(eq(userSchema.address, normalizeAddress(address)))
+    .returning({ address: userSchema.address });
+  return updated.length > 0;
+}
+
 export async function useTokens(address: string, amount: number): Promise<void> {
   const user = await findUser(address);
 

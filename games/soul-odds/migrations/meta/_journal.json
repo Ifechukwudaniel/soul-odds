@@ -71,6 +71,13 @@
       "when": 1790201566805,
       "tag": "0009_drop_sin_use_count",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1790280654691,
+      "tag": "0010_add_user_avatar",
+      "breakpoints": true
     }
   ]
 }

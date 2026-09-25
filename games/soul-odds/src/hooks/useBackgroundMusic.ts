@@ -1,101 +1,39 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { MUTED_STORAGE_KEY, VOLUME_STORAGE_KEY } from '@/constants/storage';
-import { isSoundMuted } from '@/utils/soundPreferences';
+import { useSyncExternalStore } from 'react';
+import { initBackgroundMusic } from '@/utils/backgroundMusic';
+import {
+  getServerSoundPreferences,
+  getSoundPreferences,
+  setSoundMuted,
+  setSoundVolume,
+  subscribeSoundPreferences,
+} from '@/utils/soundPreferences';
 
-const BG_MUSIC_SRC = '/sound/bg.mp3';
-const DEFAULT_VOLUME = 0.5;
+// ✦ Subscribing is the first thing that runs on the client, so it also starts the music (once,
+//   however many components use this hook).
+const subscribe = (listener: () => void) => {
+  initBackgroundMusic();
+  return subscribeSoundPreferences(listener);
+};
 
-let sharedAudio: HTMLAudioElement | null = null;
-
-function readVolume(): number {
-  try {
-    const stored = localStorage.getItem(VOLUME_STORAGE_KEY);
-    if (stored === null) {
-      return DEFAULT_VOLUME;
-    }
-    const parsed = Number(stored);
-    return Number.isFinite(parsed) ? Math.min(1, Math.max(0, parsed)) : DEFAULT_VOLUME;
-  } catch {
-    return DEFAULT_VOLUME;
-  }
-}
-
-function getAudio(): HTMLAudioElement {
-  if (!sharedAudio) {
-    sharedAudio = new Audio(BG_MUSIC_SRC);
-    sharedAudio.loop = true;
-    sharedAudio.preload = 'auto';
-    sharedAudio.volume = readVolume();
-  }
-  return sharedAudio;
-}
-
+/** The shared mute flag and volume; every component using it sees the same values. */
 export function useBackgroundMusic(): {
   isMuted: boolean;
   toggle: () => void;
   volume: number;
   setVolume: (volume: number) => void;
 } {
-  const [isMuted, setIsMuted] = useState(false);
-  const [volumeValue, setVolumeValue] = useState(DEFAULT_VOLUME);
+  const preferences = useSyncExternalStore(
+    subscribe,
+    getSoundPreferences,
+    getServerSoundPreferences,
+  );
 
-  useEffect(() => {
-    setIsMuted(isSoundMuted());
-    setVolumeValue(readVolume());
-  }, []);
-
-  useEffect(() => {
-    getAudio().volume = volumeValue;
-  }, [volumeValue]);
-
-  useEffect(() => {
-    const audio = getAudio();
-
-    if (isMuted) {
-      audio.pause();
-      return;
-    }
-
-    const start = () => {
-      audio.play().catch(() => {});
-    };
-
-    // ✦ Direct play works where autoplay is allowed; otherwise music starts on the first user gesture.
-    audio.play().catch(() => {
-      document.addEventListener('pointerdown', start, { once: true });
-      document.addEventListener('keydown', start, { once: true });
-    });
-
-    return () => {
-      document.removeEventListener('pointerdown', start);
-      document.removeEventListener('keydown', start);
-      audio.pause();
-    };
-  }, [isMuted]);
-
-  const toggle = () => {
-    setIsMuted((previous) => {
-      const next = !previous;
-      try {
-        localStorage.setItem(MUTED_STORAGE_KEY, next ? '1' : '0');
-      } catch {
-        // ✦ storage unavailable: the mute state stays in memory
-      }
-      return next;
-    });
+  return {
+    isMuted: preferences.muted,
+    toggle: () => setSoundMuted(!getSoundPreferences().muted),
+    volume: preferences.volume,
+    setVolume: setSoundVolume,
   };
-
-  const setVolume = (next: number) => {
-    const clamped = Math.min(1, Math.max(0, next));
-    setVolumeValue(clamped);
-    try {
-      localStorage.setItem(VOLUME_STORAGE_KEY, String(clamped));
-    } catch {
-      // ✦ storage unavailable: the volume stays in memory
-    }
-  };
-
-  return { isMuted, toggle, volume: volumeValue, setVolume };
 }

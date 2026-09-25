@@ -10,5 +10,8 @@ export const STORE_NAME = 'Soul_Odds_Store';
 export const MUTED_STORAGE_KEY = 'game-bg-music-muted:v1';
 export const VOLUME_STORAGE_KEY = 'game-bg-music-volume:v1';
 
+// ✦ Set once the first-visit "How it works" dialog has been closed, so it only ever shows once per browser.
+export const HOW_IT_WORKS_SEEN_STORAGE_KEY = 'soul-odds-how-it-works-seen:v1';
+
 export const DEMO_HOST_STORAGE_KEY = 'soul-odds-demo-host:v1';
 export const DEMO_HOST_WALLET_STORAGE_KEY = 'soul-odds-demo-host:wallet';

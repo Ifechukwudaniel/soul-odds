@@ -47,3 +47,8 @@ export const addWinnings = async (address: string, delta: number): Promise<void>
 export const consumeFreeRedraw = async (address: string): Promise<{ freeRedraws: number }> => {
   return (await apiClient.post(`/api/user/${address}/free-redraw`)).data;
 };
+
+/** Saves the player's chosen avatar server-side so it shows for them everywhere, including the leaderboard. */
+export const setUserAvatar = async (address: string, avatarId: string): Promise<void> => {
+  await apiClient.put(`/api/user/${address}/avatar`, { avatarId });
+};

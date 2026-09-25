@@ -542,7 +542,7 @@ a[href][aria-disabled='true'],
    ===================================== */
 
 /*
- * ✦ Shared modal surface (InfoDialog, SettingsModal): a mystic-glass gold border on a ~90% opaque
+ * ✦ Shared modal surface (InfoDialog, the profile card, HowItWorksDialog): a mystic-glass gold border on a ~90% opaque
  *   dark card that blurs what is behind it. Pair it with a `bg-black/60` overlay for the dimmed page.
  */
 .game-modal-panel {
@@ -1033,6 +1033,24 @@ a[href][aria-disabled='true'],
   );
 }
 
+/* =====================================
+   ⬢  Gold Text
+   ===================================== */
+   .gold-text-2 {
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  
+    background: linear-gradient(90deg, #FFEDCE 0%, #F0C868 41%, #D09A5D 75%, #E5B864 96%);
+    background-blend-mode: multiply, screen, normal;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  
+    -webkit-text-stroke: 1px rgba(255, 246, 215, 0.75);
+  
+   }
+
 /*
  * ✦ Layered so Tailwind utilities can still override this default; an unlayered rule would always
  *   beat a color class on a <p>.
@@ -1187,14 +1205,12 @@ a[href][aria-disabled='true'],
 }
 
 .gold{
-  background:
-  linear-gradient(
-    180deg,
-    #ffe28a 0%,
-    #f3c452 16%,
-    #c98a27 48%,
-    #9a6119 78%,
-    #704313 100%
+  background: linear-gradient(
+    90deg,
+    #FFEDCE 0%,
+    #F0C868 41%,
+    #D09A5D 75%,
+    #E5B864 96%
   );
 }
 

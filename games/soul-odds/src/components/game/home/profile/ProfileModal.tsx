@@ -1,19 +1,11 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
-import { FaCog, FaMedal, FaUser } from 'react-icons/fa';
+import { CardCorner } from '@/components/assets/CardCorner';
 import { CloseIcon } from '@/components/assets/CloseIcon';
-import { AvatarPickerModal } from '@/components/game/home/profile/AvatarPickerModal';
-import { LeaderboardRankRow } from '@/components/game/home/profile/LeaderboardRankRow';
-import { ProfileHeader } from '@/components/game/home/profile/ProfileHeader';
-import { ProfileMenuList } from '@/components/game/home/profile/ProfileMenuList';
-import { SettingsModal } from '@/components/game/home/profile/SettingsModal';
-import type { ProfileMenuAction } from '@/components/game/home/profile/types';
+import { ProfilePanelBody } from '@/components/game/home/profile/ProfilePanelBody';
 import { useAppStore } from '@/services/store/store';
 import { playClickSound } from '@/utils/playClickSound';
-
-const MENU_ICON_CLASS = 'h-5 w-5 text-white/80';
 
 export const ProfileModal = (props: {
   isOpen: boolean;
@@ -24,34 +16,11 @@ export const ProfileModal = (props: {
   onViewRankPage?: () => void;
 }) => {
   const avatarId = useAppStore((state) => state.user.avatarId);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [isAvatarPickerOpen, setIsAvatarPickerOpen] = useState(false);
 
   const goToRankPage = () => {
     props.onViewRankPage?.();
     props.onClose();
   };
-
-  const menuActions: ProfileMenuAction[] = [
-    {
-      id: 'edit-icon',
-      label: 'Edit Profile Icon',
-      icon: <FaUser className={MENU_ICON_CLASS} />,
-      onClick: () => setIsAvatarPickerOpen(true),
-    },
-    {
-      id: 'rank-page',
-      label: 'View Rank Page',
-      icon: <FaMedal className={MENU_ICON_CLASS} />,
-      onClick: goToRankPage,
-    },
-    {
-      id: 'settings',
-      label: 'Settings',
-      icon: <FaCog className={MENU_ICON_CLASS} />,
-      onClick: () => setIsSettingsOpen(true),
-    },
-  ];
 
   return (
     <AnimatePresence>
@@ -73,9 +42,12 @@ export const ProfileModal = (props: {
             exit={{ scale: 0.95, opacity: 0 }}
             transition={{ type: 'spring', bounce: 0, duration: 0.3 }}
             onClick={(event) => event.stopPropagation()}
-            className="relative flex w-full max-w-md flex-col gap-5 rounded-3xl bg-[#18131FE5] p-6"
-            style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}
+            className="game-modal-panel relative flex w-full max-w-md flex-col gap-5 rounded-2xl rounded-tl-md rounded-br-md p-6"
           >
+            {/* ✦ Same corner frame as the round record: nudged out by the art's own empty margin so its lines sit flush on the border. */}
+            <CardCorner className="pointer-events-none absolute top-0 left-0 h-auto w-14 -translate-x-[2.469%] -translate-y-[1.656%] rotate-180 md:w-[72px]" />
+            <CardCorner className="pointer-events-none absolute right-0 bottom-0 h-auto w-14 translate-x-[2.469%] translate-y-[1.656%] md:w-[72px]" />
+
             <button
               type="button"
               onClick={() => {
@@ -87,29 +59,16 @@ export const ProfileModal = (props: {
               <CloseIcon />
             </button>
 
-            <ProfileHeader
+            <ProfilePanelBody
               username={props.username}
               handle={props.handle}
               rank={props.rank}
               avatarId={avatarId}
-              onEditAvatar={() => setIsAvatarPickerOpen(true)}
+              onViewRankPage={goToRankPage}
             />
-            <LeaderboardRankRow rank="" onClick={goToRankPage} />
-            <hr className="border-white/10" />
-            <ProfileMenuList actions={menuActions} />
           </motion.div>
         </motion.div>
       )}
-      <SettingsModal
-        key="settings-modal"
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-      />
-      <AvatarPickerModal
-        key="avatar-picker-modal"
-        isOpen={isAvatarPickerOpen}
-        onClose={() => setIsAvatarPickerOpen(false)}
-      />
     </AnimatePresence>
   );
 };

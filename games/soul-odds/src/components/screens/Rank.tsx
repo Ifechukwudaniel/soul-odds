@@ -21,6 +21,7 @@ function toLeaderboardUser(user: User, rank: number): LeaderboardUser {
     followers: 0,
     points: user.points,
     reward: Math.round(user.totalProfit),
+    avatarId: user.avatarId,
   };
 }
 

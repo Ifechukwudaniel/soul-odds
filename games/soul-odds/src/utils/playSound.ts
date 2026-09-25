@@ -27,19 +27,39 @@ let spendBuffer: Promise<AudioBuffer> | null = null;
 const getSpendBuffer = (ctx: AudioContext) => {
   spendData ??= fetchSpendData();
   spendBuffer ??= spendData.then((data) => ctx.decodeAudioData(data));
+  // ✦ A failed fetch or decode must not stick: without this reset the coin sound stays silent until a reload.
+  spendBuffer.catch(() => {
+    spendData = null;
+    spendBuffer = null;
+  });
   return spendBuffer;
 };
 
 let context: AudioContext | null = null;
 
-/** Lazily creates the shared audio context; returns null until the browser lets it run (needs a prior user gesture). */
-const getRunningContext = () => {
+/** Wakes the shared audio context; browsers only allow this from a user gesture. */
+const resumeContext = () => {
+  if (typeof AudioContext === 'undefined') {
+    return;
+  }
   context ??= new AudioContext();
   if (context.state !== 'running') {
-    void context.resume();
-    return null;
+    context.resume().catch(() => {});
   }
-  return context;
+};
+
+// ✦ Created inside the player's first tap so it starts running instead of suspended. The listener
+//   stays on for good, because iOS suspends the context again after a call, a lock or a tab switch.
+if (typeof window !== 'undefined') {
+  for (const type of ['pointerup', 'keydown']) {
+    window.addEventListener(type, resumeContext, { capture: true, passive: true });
+  }
+}
+
+/** The shared audio context, or null while the browser still has it suspended (the sound is skipped, not queued). */
+const getRunningContext = () => {
+  resumeContext();
+  return context?.state === 'running' ? context : null;
 };
 
 /** How much of the coin clip a spend of `amount` plays: the first burst of hits, then more of the cascade, then the whole thing. */

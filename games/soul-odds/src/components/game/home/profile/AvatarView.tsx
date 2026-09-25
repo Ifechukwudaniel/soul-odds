@@ -1,11 +1,14 @@
 'use client';
 
-import { useId, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { FaCheck, FaLock } from 'react-icons/fa';
 import { AVATARS, getAvatarById } from '@/components/assets/characters/avatars';
-import { GameDialog } from '@/components/game/GameDialog';
-import { ModalCloseButton, ModalHeader } from '@/components/game/GameModalParts';
+import { GameButton } from '@/components/game/GameButton';
+import { ModalHeader } from '@/components/game/GameModalParts';
+import { Scroller } from '@/components/Scroller';
+import { setUserAvatar } from '@/services/data/user';
 import { useAppStore } from '@/services/store/store';
+import { notification } from '@/utils/notifications';
 import { playClickSound } from '@/utils/playClickSound';
 
 // ✦ The grid is 3 columns wide (see the `grid-cols-3` below); arrow-key roving needs that number to move up/down a row.
@@ -17,13 +20,20 @@ const ARROW_MOVE: Record<string, number> = {
   ArrowUp: -GRID_COLUMNS,
 };
 
-export const AvatarPickerModal = (props: { isOpen: boolean; onClose: () => void }) => {
+/**
+ * The avatar picker shown inside the profile card. It fills the height the card already has: the
+ * avatar grid scrolls when there are more avatars than fit, so adding avatars never grows the card.
+ */
+export const AvatarView = (props: { onBack: () => void }) => {
   const equippedAvatarId = useAppStore((state) => state.user.avatarId);
   const balance = useAppStore((state) => state.user.balance);
+  const address = useAppStore((state) => state.user.address);
   const updateUser = useAppStore((state) => state.updateUser);
-  const [selectedId, setSelectedId] = useState(equippedAvatarId);
+  // ✦ Null until the player taps a tile, so the picker follows the equipped avatar (e.g. when the
+  //   login sync loads the saved one) instead of freezing on whatever was equipped when it mounted.
+  const [pickedId, setPickedId] = useState<string | null>(null);
+  const selectedId = pickedId ?? equippedAvatarId;
   const tileRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const titleId = useId();
 
   const selectedAvatar = getAvatarById(selectedId);
   const isAlreadyEquipped = selectedId === equippedAvatarId;
@@ -58,23 +68,40 @@ export const AvatarPickerModal = (props: { isOpen: boolean; onClose: () => void 
     if (!target) {
       return;
     }
-    setSelectedId(target.id);
+    setPickedId(target.id);
     tileRefs.current[target.id]?.focus();
   };
 
+  const goBack = () => {
+    setPickedId(null);
+    props.onBack();
+  };
+
+  const equip = () => {
+    playClickSound();
+    const previousId = equippedAvatarId;
+    updateUser({ avatarId: selectedId });
+    goBack();
+    // ✦ Saved server-side so the leaderboard shows it; if that fails, the choice rolls back so
+    //   what the player sees never drifts from what everyone else sees.
+    if (address) {
+      setUserAvatar(address, selectedId).catch(() => {
+        updateUser({ avatarId: previousId });
+        notification.error('Avatar not saved');
+      });
+    }
+  };
+
   return (
-    <GameDialog
-      isOpen={props.isOpen}
-      onClose={props.onClose}
-      labelledBy={titleId}
-      className="w-full max-w-md"
-    >
-      <div className="relative flex flex-col gap-5 p-6 max-md:max-h-[calc(100dvh-2rem)] max-md:gap-4 max-md:overflow-y-auto max-md:p-4">
-        <ModalCloseButton onClick={props.onClose} />
+    <>
+      <ModalHeader title="Choose your avatar" />
 
-        <ModalHeader title="Choose your avatar" titleId={titleId} />
-
-        <div role="radiogroup" aria-label="Choose your avatar" className="grid grid-cols-3 gap-3">
+      <Scroller className="min-h-0 flex-1">
+        <div
+          role="radiogroup"
+          aria-label="Choose your avatar"
+          className="grid grid-cols-3 gap-3 p-1"
+        >
           {AVATARS.map((avatar, index) => {
             const isSelected = avatar.id === selectedId;
             const isEquipped = avatar.id === equippedAvatarId;
@@ -99,7 +126,7 @@ export const AvatarPickerModal = (props: { isOpen: boolean; onClose: () => void 
                 }}
                 onClick={() => {
                   playClickSound();
-                  setSelectedId(avatar.id);
+                  setPickedId(avatar.id);
                 }}
                 className={`relative flex flex-col items-center gap-2 rounded-2xl border p-3 transition-colors ${
                   isSelected ? 'border-[#F5B83D] bg-white/10' : 'border-white/10 bg-white/5'
@@ -108,7 +135,7 @@ export const AvatarPickerModal = (props: { isOpen: boolean; onClose: () => void 
                 {isEquipped && (
                   <span
                     aria-hidden="true"
-                    className="accent-gradient absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full border border-black"
+                    className="gold absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full border border-black"
                   >
                     <FaCheck className="h-2.5 w-2.5 text-slate-950" />
                   </span>
@@ -143,24 +170,25 @@ export const AvatarPickerModal = (props: { isOpen: boolean; onClose: () => void 
             );
           })}
         </div>
+      </Scroller>
 
+      <div className="flex items-center gap-3">
+        <GameButton variant="secondary" onClick={goBack} className="shrink-0 px-5 py-2.5 text-sm">
+          ← Back
+        </GameButton>
         <button
           type="button"
           disabled={isAlreadyEquipped || !canAfford}
-          onClick={() => {
-            playClickSound();
-            updateUser({ avatarId: selectedId });
-            props.onClose();
-          }}
-          className={`btn w-full cursor-pointer rounded-lg py-3 font-bold disabled:cursor-not-allowed ${
+          onClick={equip}
+          className={`btn min-w-0 flex-1 cursor-pointer rounded-lg py-3 font-bold disabled:cursor-not-allowed ${
             isAlreadyEquipped || !canAfford
               ? 'bg-[#A7A7A7] text-black opacity-50'
-              : 'accent-gradient text-slate-950'
+              : 'gold text-slate-950'
           }`}
         >
           {equipButtonLabel()}
         </button>
       </div>
-    </GameDialog>
+    </>
   );
 };

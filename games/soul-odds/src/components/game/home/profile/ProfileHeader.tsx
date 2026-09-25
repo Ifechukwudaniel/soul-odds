@@ -28,6 +28,7 @@ export const ProfileHeader = (props: {
         </div>
         <button
           type="button"
+          aria-label="Edit profile icon"
           onClick={() => {
             playClickSound();
             props.onEditAvatar?.();

@@ -12,6 +12,7 @@ export const ProfileMenuItem = (
     ref={props.innerRef}
     type="button"
     role="menuitem"
+    data-action={props.id}
     tabIndex={props.tabIndex}
     onKeyDown={props.onKeyDown}
     onClick={() => {

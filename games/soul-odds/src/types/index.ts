@@ -122,6 +122,8 @@ export interface LeaderboardUser {
   followers: number;
   points: number;
   reward: number;
+  /** The avatar the player picked; null or absent until they choose one. */
+  avatarId?: string | null;
 }
 
 export interface PodiumUser extends LeaderboardUser {

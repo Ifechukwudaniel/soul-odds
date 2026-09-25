@@ -101,7 +101,7 @@ export const ChoiceMarket = (props: {
               }}
               className={`rounded-lg border px-4 py-4 text-base max-md:py-3 font-semibold disabled:opacity-40 ${
                 isSelected
-                  ? 'accent-gradient border-black text-slate-950 shadow-[inset_1px_1px_1.5px_0px_#FFFFFF66]'
+                  ? 'gold border-black text-slate-950 shadow-[inset_1px_1px_1.5px_0px_#FFFFFF66]'
                   : 'border-black bg-[#262433] text-[#AFAFAF]'
               }`}
             >

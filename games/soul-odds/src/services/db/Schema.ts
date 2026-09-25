@@ -19,6 +19,8 @@ import type { SinNarratives } from '@/lib/mortal-odds/sin-variants';
 export const userSchema = pgTable('user', {
   address: varchar('address', { length: 42 }).primaryKey(),
   username: varchar('username', { length: 255 }),
+  // ✦ Null until the player picks or first syncs one, so the sync can tell "never chosen" from a choice.
+  avatarId: varchar('avatar_id', { length: 32 }),
   referredBy: varchar('referred_by', { length: 42 }),
   rank: integer('rank').default(0).notNull(),
   points: integer('points').default(0).notNull(),

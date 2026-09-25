@@ -1,7 +1,10 @@
 'use client';
 
 import { useId } from 'react';
+import { CardCorner } from '@/components/assets/CardCorner';
 import { CurrencyCoinIcon } from '@/components/assets/CurrencyCoinIcon';
+import { GoldArrowLeft } from '@/components/assets/GoldArrowLeft';
+import { GoldArrowRight } from '@/components/assets/GoldArrowRight';
 import { GameDialog } from '@/components/game/GameDialog';
 import { ModalCloseButton, ModalHeader } from '@/components/game/GameModalParts';
 import {
@@ -51,14 +54,29 @@ export const HistoryRoundModal = (props: { entry: BetHistoryEntry; onClose: () =
   const titleId = useId();
 
   return (
-    <GameDialog isOpen onClose={props.onClose} labelledBy={titleId} className="w-full max-w-lg md:min-w-[600px] overflow-y-hidden">
-      <div className="relative flex max-h-[calc(100dvh-2rem)] flex-col gap-5 overflow-y-auto rounded-2xl p-6 text-left">
+    <GameDialog
+      isOpen
+      onClose={props.onClose}
+      labelledBy={titleId}
+      className="w-full max-w-lg rounded-tl-md rounded-br-md md:min-w-[600px]"
+    >
+      {/* ✦ The corners sit on the dialog itself, not inside the scrolling body, so they stay put while the record scrolls.
+          The art has a little empty margin (its lines end 4/162 of its width in from the right edge and 2.5/151 of its height
+          up from the bottom), so it is nudged out by exactly those fractions to put the lines flush against the frame. */}
+      <CardCorner className="pointer-events-none absolute top-0 left-0 h-auto w-14 -translate-x-[2.469%] -translate-y-[1.656%] rotate-180 md:w-24" />
+      <CardCorner className="pointer-events-none absolute right-0 bottom-0 h-auto w-14 translate-x-[2.469%] translate-y-[1.656%] md:w-24" />
+
+      <div className="relative flex max-h-[calc(100dvh-3rem)] flex-col gap-5 overflow-y-auto rounded-2xl rounded-tl-md rounded-br-md p-6 text-left">
         <ModalCloseButton onClick={props.onClose} />
 
         <ModalHeader
           title={soulLabel(entry)}
           titleId={titleId}
           intro={fmtSettledAt(entry.settledAt)}
+          flank={{
+            before: <GoldArrowLeft className="h-auto w-full max-w-[84px] min-w-0 flex-1" />,
+            after: <GoldArrowRight className="h-auto w-full max-w-[84px] min-w-0 flex-1" />,
+          }}
         />
 
         <Section title="Soul record">

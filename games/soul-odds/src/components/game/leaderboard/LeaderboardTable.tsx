@@ -1,6 +1,6 @@
 import type { RefObject } from 'react';
 import { BronzeBadge } from '@/components/assets/BronzeBadge';
-import { getRandomAvatarForUser } from '@/components/assets/characters/avatars';
+import { DEFAULT_AVATAR_ID, getAvatarById } from '@/components/assets/characters/avatars';
 import { CurrencyCoinIcon } from '@/components/assets/CurrencyCoinIcon';
 import { GoldBadge } from '@/components/assets/GoldBadge';
 import { SilverBadge } from '@/components/assets/SilverBadge';
@@ -73,7 +73,7 @@ export function LeaderboardTable({
           {users.map((user) => {
             const isCurrentUser = user.id === currentUserId;
             const RankBadge = RANK_BADGES[user.rank];
-            const AvatarIcon = getRandomAvatarForUser(user.id).Icon;
+            const AvatarIcon = getAvatarById(user.avatarId ?? DEFAULT_AVATAR_ID).Icon;
             return (
               <div
                 key={user.id}
