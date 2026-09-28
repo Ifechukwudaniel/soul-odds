@@ -4,7 +4,7 @@ import { findAnachronism } from '@/lib/mortal-odds/life-story-lint';
 import { checkPopulation } from '@/lib/mortal-odds/population-lint';
 import type { PopulationRange } from '@/lib/mortal-odds/population-lint';
 import type { SinPlaceContext } from '@/lib/mortal-odds/sin-variants';
-import { Env } from '@/libs/Env';
+import { Env } from '@/lib/Env';
 
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const MODEL = 'mistralai/mistral-nemo';
@@ -88,8 +88,11 @@ export type LifeStoryNarrative = z.infer<typeof lifeStorySchema> & { birthYear: 
 
 const LIFE_STORY_ATTEMPTS = 2;
 
+// ✦ One real detail true to the exact place and decade (a ruler, war, famine, invention, trade good,
+//   custom) is asked for so a player picks up something they didn't know, without it reading as a
+//   trivia aside. The model can still misremember history; nothing here checks that detail is true.
 const LIFE_STORY_SYSTEM_PROMPT =
-  'You write short, period-accurate prose life stories for a historical fortune-telling game, expanding a bare list of facts into 3-5 flowing sentences. Reply with strict JSON: {"story": string, "name": string}. `name` is a single given name fitting the era, place and sex; use that same name throughout `story` in place of "the girl"/"the boy". Stay third person, past tense, no dialogue. Match technology, work, weapons and daily life to the exact years given: from 1900 on there are no bows, swords, spears or raiding parties, and years after 2025 are the near future. Do not invent battles, heroics, special skills or events beyond the given facts; describe ordinary daily life instead. Do not contradict or omit any given fact.';
+  'You write short, period-accurate prose life stories for a historical fortune-telling game, expanding a bare list of facts into 3-5 flowing sentences. Reply with strict JSON: {"story": string, "name": string}. `name` is a single given name fitting the era, place and sex; use that same name throughout `story` in place of "the girl"/"the boy". Stay third person, past tense, no dialogue. Match technology, work, weapons and daily life to the exact years given: from 1900 on there are no bows, swords, spears or raiding parties, and years after 2025 are the near future. Weave in, as backdrop rather than something the person did, one real and specific detail true to that exact place and decade — an actual ruler, war, famine, plague, invention, trade good or custom a history book would confirm — so the story teaches something true in passing. Write so the person feels real, not like a case file: ground the given facts in one small sensory or human detail (a sound, a smell, an ache, a worry, someone they loved) so the reader feels they briefly lived this life. Do not invent battles, heroics, special skills or events beyond the given facts; the person only lives an ordinary life against that backdrop. Do not contradict or omit any given fact.';
 
 /** Asks OpenRouter for the soul's life story, retrying once when it uses weapons that don't fit the era. */
 export async function generateLifeStory(options: {

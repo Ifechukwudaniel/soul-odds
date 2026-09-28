@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateLifeStory } from '@/lib/mortal-odds/openrouter';
-import { requireApiSecret } from '@/libs/ApiAuth';
+import { requireApiSecret } from '@/lib/ApiAuth';
 
 export async function GET(request: NextRequest) {
   const unauthorized = requireApiSecret(request);

@@ -4,7 +4,7 @@ import { continentNear, pickPlace, regionShare } from '@/lib/mortal-odds/draw';
 import { eraFor } from '@/lib/mortal-odds/geo';
 import { estimatePopulation } from '@/lib/mortal-odds/population-estimate';
 import { createRng, pickWeighted } from '@/lib/mortal-odds/rng';
-import { requireApiSecret } from '@/libs/ApiAuth';
+import { requireApiSecret } from '@/lib/ApiAuth';
 import { pickCliopatriaPlace } from '@/services/db/cliopatria';
 import type { RegionId } from '@/types';
 

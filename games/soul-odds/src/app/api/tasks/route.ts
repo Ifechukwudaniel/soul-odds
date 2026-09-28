@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SOCIAL_TASK_IDS, SOCIAL_TASKS } from '@/lib/social-quests';
-import { requireApiSecret } from '@/libs/ApiAuth';
+import { requireApiSecret } from '@/lib/ApiAuth';
 import { findUser, updateTasks } from '@/services/db/user';
 import { UserTask } from '@/types';
 

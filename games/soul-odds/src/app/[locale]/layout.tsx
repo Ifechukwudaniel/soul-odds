@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-import { Env } from '@/libs/Env';
-import { routing } from '@/libs/I18nRouting';
+import { Env } from '@/lib/Env';
+import { routing } from '@/lib/I18nRouting';
 import '@/styles/global.css';
 
 export async function generateMetadata(props: {

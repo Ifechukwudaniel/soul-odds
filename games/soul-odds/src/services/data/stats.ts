@@ -1,5 +1,5 @@
 import { Stat } from '@/app/api/user/stats/route';
-import { apiClient } from '@/libs/ApiClient';
+import { apiClient } from '@/lib/ApiClient';
 
 export const getStats = async (): Promise<Stat> => {
   try {

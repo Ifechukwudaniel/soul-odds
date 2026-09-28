@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { usePathname, useRouter } from '@/libs/I18nNavigation';
+import { usePathname, useRouter } from '@/lib/I18nNavigation';
 import { useAppStore } from '@/services/store/store';
 import { redirectToScreenFromCode } from '@/utils/redirectToScreenFromCode';
 

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { Env } from '@/libs/Env';
+import { Env } from '@/lib/Env';
 
 /**
  * Gates an API route behind `NEXT_PUBLIC_API_SECRET` (the `x-api-secret` header). Returns a 401

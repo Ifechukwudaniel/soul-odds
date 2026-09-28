@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { requireApiSecret } from '@/libs/ApiAuth';
+import { requireApiSecret } from '@/lib/ApiAuth';
 import { findAllUsers, getAllTokensInCirculation } from '@/services/db/user';
 
 export type Stat = {

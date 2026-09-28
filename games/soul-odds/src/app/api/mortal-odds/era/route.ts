@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import titleFile from '@/config/mortal-odds/soul-odds-title.json';
 import { erasConfig } from '@/lib/mortal-odds/config';
 import { eraFor } from '@/lib/mortal-odds/geo';
-import { requireApiSecret } from '@/libs/ApiAuth';
+import { requireApiSecret } from '@/lib/ApiAuth';
 
 /** The on-chain `SoulEra` name for a birth year, mirroring `eraFor`'s find-or-fall-back-to-last pattern. */
 function soulEraFor(year: number): string {

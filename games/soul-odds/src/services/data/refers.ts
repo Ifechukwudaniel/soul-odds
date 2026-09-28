@@ -1,4 +1,4 @@
-import { apiClient } from '@/libs/ApiClient';
+import { apiClient } from '@/lib/ApiClient';
 import { User } from '../db/user';
 
 export const getUserRefers = async (address: string): Promise<User[]> => {

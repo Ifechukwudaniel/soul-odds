@@ -1,5 +1,5 @@
 import type { BetHistoryEntry } from '@/lib/mortal-odds/bet-history';
-import { apiClient } from '@/libs/ApiClient';
+import { apiClient } from '@/lib/ApiClient';
 
 export const getBetHistory = async (address: string): Promise<BetHistoryEntry[]> => {
   return (await apiClient.get(`/api/user/${address}/history`)).data;

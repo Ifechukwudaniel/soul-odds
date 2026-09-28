@@ -7,7 +7,7 @@ import {
 } from '@/lib/mortal-odds/life-story-loader';
 import type { LifeStoryPayload, LifeStoryState } from '@/lib/mortal-odds/life-story-loader';
 import { sinsOf } from '@/lib/mortal-odds/sin-selection';
-import { apiClient } from '@/libs/ApiClient';
+import { apiClient } from '@/lib/ApiClient';
 import type { Life } from '@/types';
 
 // ✦ Backstop for a hung or dropped request so the player never stares at the loader forever; the

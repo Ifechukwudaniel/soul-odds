@@ -1,4 +1,4 @@
-import { apiClient } from '@/libs/ApiClient';
+import { apiClient } from '@/lib/ApiClient';
 import { UserTask } from '@/types';
 
 export const getUserTasks = async (address: string): Promise<UserTask[]> => {

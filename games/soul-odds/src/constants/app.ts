@@ -1,4 +1,4 @@
-import { Env } from '@/libs/Env';
+import { Env } from '@/lib/Env';
 
 export const SERVER_URL =
   Env.NEXT_PUBLIC_BACKEND_URL ?? 'https://63b0-104-28-219-97.ngrok-free.app';

@@ -4,7 +4,7 @@ import {
   estimatePopulation,
   estimatesAt,
 } from '@/lib/mortal-odds/population-estimate';
-import { requireApiSecret } from '@/libs/ApiAuth';
+import { requireApiSecret } from '@/lib/ApiAuth';
 
 /**
  * Estimated population of an empire in a year: `?empire=Roman Empire&year=100` (or `?wikidata=Q2277&year=100`); the response includes a `text` line saying it in words.

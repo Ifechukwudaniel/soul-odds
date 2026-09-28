@@ -1,5 +1,5 @@
-import { Env } from '@/libs/Env';
-import { routing } from '@/libs/I18nRouting';
+import { Env } from '@/lib/Env';
+import { routing } from '@/lib/I18nRouting';
 
 /**
  * Resolves the public base URL of the application.

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireApiSecret } from '@/libs/ApiAuth';
+import { requireApiSecret } from '@/lib/ApiAuth';
 import { getLeaderboard, type LeaderboardSort } from '@/services/db/user';
 
 const SORT_OPTIONS: LeaderboardSort[] = ['points', 'balance'];

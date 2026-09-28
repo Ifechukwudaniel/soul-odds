@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isAvatarId } from '@/components/assets/characters/avatar-ids';
-import { requireApiSecret } from '@/libs/ApiAuth';
+import { requireApiSecret } from '@/lib/ApiAuth';
 import { setAvatar } from '@/services/db/user';
 
 export async function PUT(request: Request, props: { params: Promise<{ address: string }> }) {

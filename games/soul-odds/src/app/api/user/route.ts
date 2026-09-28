@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAddress } from 'viem';
-import { requireApiSecret } from '@/libs/ApiAuth';
+import { requireApiSecret } from '@/lib/ApiAuth';
 import { createUser, findAllUsers, findUser, updateUser } from '@/services/db/user';
 
 export async function GET(request: NextRequest) {

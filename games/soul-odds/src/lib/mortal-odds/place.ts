@@ -1,4 +1,4 @@
-import { apiClient } from '@/libs/ApiClient';
+import { apiClient } from '@/lib/ApiClient';
 import type { Place } from '@/types';
 
 type PlaceApiResponse =

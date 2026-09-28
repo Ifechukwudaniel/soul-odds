@@ -1,7 +1,7 @@
 import { webcrypto } from 'crypto';
 import { NextResponse } from 'next/server';
-import { requireApiSecret } from '@/libs/ApiAuth';
-import { Env } from '@/libs/Env';
+import { requireApiSecret } from '@/lib/ApiAuth';
+import { Env } from '@/lib/Env';
 
 export async function POST(request: Request) {
   const unauthorized = requireApiSecret(request);

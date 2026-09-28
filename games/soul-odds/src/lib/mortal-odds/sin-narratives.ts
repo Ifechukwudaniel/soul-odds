@@ -1,5 +1,5 @@
 import type { SinNarratives, SinPlaceContext } from '@/lib/mortal-odds/sin-variants';
-import { apiClient } from '@/libs/ApiClient';
+import { apiClient } from '@/lib/ApiClient';
 
 export async function fetchSinNarratives(options: {
   year: number;

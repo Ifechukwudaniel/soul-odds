@@ -1,4 +1,4 @@
-import './src/libs/Env';
+import './src/lib/Env';
 import { withSentryConfig } from '@sentry/nextjs';
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
@@ -34,7 +34,7 @@ const baseConfig: NextConfig = {
 };
 
 // Initialize the Next-Intl plugin
-let configWithPlugins = createNextIntlPlugin('./src/libs/I18n.ts')(baseConfig);
+let configWithPlugins = createNextIntlPlugin('./src/lib/I18n.ts')(baseConfig);
 
 // Conditionally enable Sentry configuration
 if (!process.env.NEXT_PUBLIC_SENTRY_DISABLED) {

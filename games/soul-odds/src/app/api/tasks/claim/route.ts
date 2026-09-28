@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SOCIAL_TASK_IDS } from '@/lib/social-quests';
-import { requireApiSecret } from '@/libs/ApiAuth';
+import { requireApiSecret } from '@/lib/ApiAuth';
 import { claimSocialReward } from '@/services/db/user';
 
 export async function POST(request: NextRequest) {

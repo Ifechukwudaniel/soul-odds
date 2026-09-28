@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { requireApiSecret } from '@/libs/ApiAuth';
+import { requireApiSecret } from '@/lib/ApiAuth';
 import { addPoints } from '@/services/db/user';
 
 export async function POST(request: Request, props: { params: Promise<{ address: string }> }) {

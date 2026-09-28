@@ -1,4 +1,4 @@
-import { apiClient } from '@/libs/ApiClient';
+import { apiClient } from '@/lib/ApiClient';
 import type { LeaderboardSort, User } from '@/services/db/user';
 
 type GetLeaderboardOptions = {

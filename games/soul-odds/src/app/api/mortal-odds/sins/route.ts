@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sinsConfig } from '@/lib/mortal-odds/config';
 import type { SinPlaceContext } from '@/lib/mortal-odds/sin-variants';
-import { requireApiSecret } from '@/libs/ApiAuth';
+import { requireApiSecret } from '@/lib/ApiAuth';
 import { findNearestCliopatriaPlace } from '@/services/db/cliopatria';
 import { findSinVariantsCovering } from '@/services/db/sin-catalog';
 

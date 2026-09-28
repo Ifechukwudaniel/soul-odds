@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import * as z from 'zod';
 import { betHistoryEntrySchema } from '@/lib/mortal-odds/bet-history';
-import { requireApiSecret } from '@/libs/ApiAuth';
+import { requireApiSecret } from '@/lib/ApiAuth';
 import { findBetHistory, insertBetHistory, patchBetHistoryStory } from '@/services/db/bet-history';
 
 const MAX_UPLOAD_ENTRIES = 100;
