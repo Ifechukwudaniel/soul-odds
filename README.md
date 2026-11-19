@@ -101,12 +101,12 @@ the shipped content.
 
 The game embeds inside the Chain.wtf host as a sandboxed `<iframe>` and never touches a wallet or
 signs a transaction itself. Everything crosses a promise-based `postMessage` bridge
-(`@chain/casino-sdk`, built on [Penpal](https://github.com/Aaronius/penpal)):
+(`@chain-protocol/casino-sdk`, built on [Penpal](https://github.com/Aaronius/penpal)):
 
 - **Host** (Chain.wtf) owns the wallet, the session keys, and all signing. It pushes state to the
-  game via `guestApi.setState(snapshot: HostSnapshotV1)` whenever wallet, balance, or session data
+  game via `guestApi.setState(snapshot: HostSnapshot)` whenever wallet, balance, or session data
   changes.
-- **Guest** (this app, via `@chain/casino-sdk/guest`) only encodes player intent and calls
+- **Guest** (this app, via `@chain-protocol/casino-sdk/guest`) only encodes player intent and calls
   `hostApi.openSession`, `hostApi.submitAction`, and `hostApi.revealOutcome` — see
   [`games/soul-odds/src/hooks/useCasinoHost.ts`](games/soul-odds/src/hooks/useCasinoHost.ts).
 - The game's manifest — capabilities, presentation mode, locale metadata — lives at
@@ -114,6 +114,30 @@ signs a transaction itself. Everything crosses a promise-based `postMessage` bri
 
 Full protocol and the on-chain `ICasinoGameV2` interface the round settles against:
 [`docs/CHAIN_WTF_CASINO_GAMES.md`](docs/CHAIN_WTF_CASINO_GAMES.md).
+
+## Deploying to chain.wtf
+
+The platform builds games for its own engines, so Mortal Odds deploys as a **graph title**
+([`games/soul-odds/chain/title.ts`](games/soul-odds/chain/title.ts)), not as the Soul Odds engine
+contracts. Nothing here is compiled or deployed from `soul-odds-engine/`.
+
+- `deployment.ts` at the repository root (and `games/soul-odds/deployment.ts` for a platform
+  project rooted at the game) names the title and where the frontend lives. Keep the two in step.
+- The title keeps the round as it was: opening a session draws the **era** (a chance node), the
+  player then sees it and picks one of **88 predictions** (a decision node: 2 genders × 4 lifespan
+  buckets × 11 crime states), and one draw settles it (a table node whose tiers are the
+  combinations of gender / lifespan / crime that hit).
+- Each category still stakes a third of the wager and pays `wager / 3 × RTP / p`. Every category
+  is now priced from its **true** probability in the era, so every prediction returns exactly the
+  RTP (97.99997%, under the 98% approval ceiling). The Soul Odds engine priced crime from the
+  predicted lifespan bucket's odds instead, which returned 65–115% depending on the pick.
+- The chain settles which categories hit; the soul shown on the reveal screen is one that hit
+  exactly those, picked from the era's true distribution and seeded by the round's own VRF word
+  (`chain/soul-settle.ts`).
+- Edit the odds in `games/soul-odds/src/config/mortal-odds/soul-odds-title.json`. If you change
+  crime selection weights, run `pnpm run generate:crime-masks`; `pnpm run test:unit` checks the file
+  is current, that every table stays at or under its RTP, and that the tables settle the same as
+  the SDK's graph walker.
 
 ## Requirements
 
@@ -202,9 +226,9 @@ simulator/           # Local chain + VRF node + host harness (Vite, port 3300)
 
 The engine already supports multiple **titles** — different eras, weight tables, and RTPs — as
 clones of the same immutable sampler ([`soul-odds-engine/README.md`](soul-odds-engine/README.md));
-today only one, `Mortal Odds` (the "Contemporary" all-time era), is deployed. The natural next
-steps are additional titles/eras and moving the deployed title from the local/simulator stack to a
-production Chain.wtf deployment.
+today the title is `Mortal Odds`, with all eight eras. Its chain.wtf deployment is described under
+"Deploying to chain.wtf"; the local simulator flow below still runs the Soul Odds engine contracts
+and has not been moved to the graph title yet.
 
 ## License
 

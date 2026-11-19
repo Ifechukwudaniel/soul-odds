@@ -73,6 +73,9 @@ importers:
       '@arcjet/next':
         specifier: 1.10.0
         version: 1.10.0(next@16.3.1(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(@types/node@25.9.5)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))
+      '@chain-protocol/casino-sdk':
+        specifier: 0.7.0
+        version: 0.7.0(@openzeppelin/contracts@5.4.0)(bufferutil@4.1.0)(typescript@7.0.2)(utf-8-validate@6.0.6)
       '@chain/casino-sdk':
         specifier: file:../..
         version: 'file:'
@@ -600,6 +603,15 @@ packages:
 
   '@bufbuild/protobuf@2.12.1':
     resolution: {integrity: sha512-BvAMfS6LrgZiryOAZ4pBYucu4wG/Ei/9o9DZ9akbREnMLbPJiom2i8b9C8IsKErQoiKqVhrerzt3kOT/RrzLHg==}
+
+  '@chain-protocol/casino-sdk@0.7.0':
+    resolution: {integrity: sha512-XCTtxi0o8dYMMlGcxTLuYtKNjUNgMaONqM9eUDvoP2mfL7hsLiz7CxHYLBfo7AdAcfP/IvjYSKWyCvO6UlSMcA==}
+    engines: {bun: '>=1.4.2', node: '>=22'}
+    peerDependencies:
+      '@openzeppelin/contracts': ^5.4.0
+    peerDependenciesMeta:
+      '@openzeppelin/contracts':
+        optional: true
 
   '@chain/casino-sdk@file:':
     resolution: {directory: '', type: directory}
@@ -5189,6 +5201,9 @@ packages:
   penpal@7.0.6:
     resolution: {integrity: sha512-iZ70OhtiZ959V57j7vSKBuv1UEXwCEu7C+TK7YxAkrB1JahB4pElHs1S1ThzMuGYNQ+SbExOXmvqrEeGwX/A8g==}
 
+  penpal@8.0.1:
+    resolution: {integrity: sha512-5lQ2w58dlM/2bMbaTAybPc+brRzR6UcdbaL5SgkjhEldPEjbZl7vOakvHBAOopVUuOu9iGxNdney+a10IgXGQw==}
+
   pg-cloudflare@1.4.0:
     resolution: {integrity: sha512-Vo7z/6rrQYxpNRylp4Tlob2elzbh+N/MOQbxFVWCxS7oEx6jF53GTJFxK2WWpKuBRkmiin4Mt+xofFDjx09R0A==}
 
@@ -6499,6 +6514,18 @@ snapshots:
   '@blazediff/core@1.9.1': {}
 
   '@bufbuild/protobuf@2.12.1': {}
+
+  '@chain-protocol/casino-sdk@0.7.0(@openzeppelin/contracts@5.4.0)(bufferutil@4.1.0)(typescript@7.0.2)(utf-8-validate@6.0.6)':
+    dependencies:
+      penpal: 8.0.1
+      viem: 2.56.8(bufferutil@4.1.0)(typescript@7.0.2)(utf-8-validate@6.0.6)(zod@4.4.3)
+      zod: 4.4.3
+    optionalDependencies:
+      '@openzeppelin/contracts': 5.4.0
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
 
   '@chain/casino-sdk@file:':
     dependencies:
@@ -10692,6 +10719,8 @@ snapshots:
   pathval@2.0.1: {}
 
   penpal@7.0.6: {}
+
+  penpal@8.0.1: {}
 
   pg-cloudflare@1.4.0:
     optional: true
