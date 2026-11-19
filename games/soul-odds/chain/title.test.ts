@@ -5,8 +5,6 @@ import {
   sampleOutcome as sdkSampleOutcome,
   walkChance,
 } from '@chain-protocol/casino-sdk/graph-engine';
-import { toConfiguration, toConfigurationInput } from '@chain/soul-odds-engine/configuration';
-import { generateSoul } from '@chain/soul-odds-engine/soul';
 import { bytesToHex } from 'viem';
 import { describe, expect, it } from 'vitest';
 import titleFile from '../src/config/mortal-odds/soul-odds-title.json';
@@ -15,6 +13,7 @@ import crimeMaskFile from './era-crime-masks.json';
 import {
   CRIME_MASKS,
   CRIME_MATCH,
+  crimeProbability,
   ERAS,
   GENDER_MATCH,
   LIFESPAN_MATCH,
@@ -39,37 +38,18 @@ describe('era-crime-masks.json', () => {
       );
     }
   });
+});
 
-  it("agrees with the engine sampler's crime states", () => {
-    const samples = 60_000;
-    for (const [eraIndex, era] of ERAS.entries()) {
-      const configuration = toConfiguration(
-        toConfigurationInput(titleFile.betConfigurations[eraIndex] as never),
-      );
-      const observed = new Map<number, number>();
-      for (let i = 0; i < samples; i++) {
-        const { crimeMask } = generateSoul(configuration, word());
-        observed.set(crimeMask, (observed.get(crimeMask) ?? 0) + 1);
-      }
-      for (const mask of CRIME_MASKS) {
-        const expected = (() => {
-          let mass = 0;
-          for (let bucket = 0; bucket < 4; bucket++) {
-            const weight = Number(era.lifespanWeights[bucket]) / Number(era.lifespanTotal);
-            const noCrime = Number(era.noCrimeWeights[bucket]) / 10_000;
-            mass +=
-              weight *
-              (mask === 0
-                ? noCrime
-                : (1 - noCrime) *
-                  (Number(era.maskCounts.get(mask) ?? 0n) / Number(era.maskDenominator)));
-          }
-          return mass;
-        })();
-        expect(Math.abs((observed.get(mask) ?? 0) / samples - expected)).toBeLessThan(0.012);
-      }
+describe('crime states', () => {
+  it('cover every soul: the chances of the 11 states sum to one in every era', () => {
+    for (const era of ERAS) {
+      const total = CRIME_MASKS.reduce<number>((sum, mask) => {
+        const { n, d } = crimeProbability(era, mask);
+        return sum + Number(n) / Number(d);
+      }, 0);
+      expect(total).toBeCloseTo(1, 9);
     }
-  }, 60_000);
+  });
 });
 
 describe('prediction index', () => {

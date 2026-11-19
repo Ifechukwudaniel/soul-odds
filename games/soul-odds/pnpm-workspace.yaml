@@ -1,0 +1,4 @@
+# Makes games/soul-odds its own pnpm root, so the platform can build it from this folder alone with
+# the lockfile next to it. Inside the monorepo, the root pnpm-workspace.yaml still lists it.
+packages:
+  - '.'

@@ -1,21 +1,4 @@
-import {
-  toConfiguration,
-  toConfigurationInput,
-  type SoulConfigurationDefinition,
-} from '@chain/soul-odds-engine/configuration';
-// ✦ Imported from the `soul`/`configuration` subpaths, not the package root: the root barrel
-//   re-exports `title.ts`, which reads title files via `node:fs` and would drag a Node built-in into
-//   the browser bundle, where Turbopack refuses to chunk it.
-import {
-  type SoulConfiguration,
-  type SoulMatchBreakdown,
-  type SoulPrediction,
-  genderOdds,
-  lifespanOdds,
-  validCrimeMasks,
-} from '@chain/soul-odds-engine/soul';
 import { encodeAbiParameters, type Hex } from 'viem';
-import titleFile from '@/config/mortal-odds/soul-odds-title.json';
 import { chanceTag } from '@/lib/mortal-odds/pricing';
 import {
   categoriesOfCrimeMask,
@@ -24,28 +7,37 @@ import {
 } from '@/lib/mortal-odds/sin-selection';
 import type { Bet, Price } from '@/types';
 import {
+  CRIME_MASKS,
   CRIME_MATCH,
   crimeProbability,
+  type Era,
   ERAS,
+  type Fraction,
   GENDER_MATCH,
+  genderProbability,
   LIFESPAN_MATCH,
+  lifespanProbability,
   predictionIndex,
 } from '../../../chain/soul-math';
 import { deriveSoul, eraFromWord, settleTier } from '../../../chain/soul-settle';
 
 // =====================================
-// ⬢ Era configurations
+// ⬢ Eras
 // =====================================
-const definitions = titleFile.betConfigurations as SoulConfigurationDefinition[];
 
-/**
- * Every era configuration the deployed title carries (see `soul-odds-title.json`). The engine picks
- * one uniformly at random per session (`pickConfigurationIndex`), so the preview averages across
- * all of them instead of assuming one.
- */
-export const soulOddsConfigurations: SoulConfiguration[] = definitions.map((definition) =>
-  toConfiguration(toConfigurationInput(definition)),
-);
+/** Which of the three categories a prediction pairs with the soul: sex, lifespan bucket, crime state. */
+export type SoulPrediction = {
+  gender: number;
+  lifespanBucket: number;
+  sins: boolean;
+  crimeMask: number;
+};
+
+export type SoulMatchBreakdown = {
+  genderMatch: boolean;
+  lifespanMatch: boolean;
+  crimeMatch: boolean;
+};
 
 type SessionRaw = {
   randomness?: Hex;
@@ -71,30 +63,27 @@ export function configurationIndexFromSession(raw: SessionRaw): number | null {
   return first ? eraFromWord(first) : null;
 }
 
-/** The one configuration a session is pinned to, or every era when it isn't known yet. */
-function configurationsFor(configurationIndex: number | null): SoulConfiguration[] {
-  const pinned =
-    configurationIndex === null ? undefined : soulOddsConfigurations[configurationIndex];
-  return pinned ? [pinned] : soulOddsConfigurations;
+/** The one era a session is pinned to, or every era when it isn't known yet. */
+function erasFor(configurationIndex: number | null): readonly Era[] {
+  const pinned = configurationIndex === null ? undefined : ERAS[configurationIndex];
+  return pinned ? [pinned] : ERAS;
 }
 
+type CategoryOdds = { probabilityWad: bigint; payout: bigint };
+
 /**
- * Standalone odds and payout for a crime state in one era. The crime category is priced from the
- * chance a soul has that crime state at all, over every lifespan bucket, so that each category
- * returns exactly the RTP. Pricing it from the predicted bucket's own chance, as the Soul Odds
- * engine did, let some picks return up to 115%.
+ * One category's odds and payout in one era. Each category stakes a third of the wager and pays
+ * `wager / 3 * RTP / p`, rounded up to a whole unit, where p is the category's true chance.
+ *
+ * ✦ The crime category is priced from the chance a soul has that crime state over every lifespan
+ *   bucket, so every category returns exactly the RTP. Pricing it from the predicted bucket's own
+ *   chance, as the Soul Odds engine did, let some picks return up to 115%.
  */
-function crimeOdds(
-  configuration: SoulConfiguration,
-  wager: bigint,
-  crimeMask: number,
-): { probabilityWad: bigint; payout: bigint } {
-  const era = ERAS[soulOddsConfigurations.indexOf(configuration)];
-  if (!era) throw new Error('Unknown era configuration');
-  const { n, d } = crimeProbability(era, crimeMask);
-  const probabilityWad = (n * WAD) / d;
+function categoryOdds(era: Era, wager: bigint, probability: Fraction): CategoryOdds {
+  const probabilityWad = (probability.n * WAD) / probability.d;
   if (probabilityWad === 0n) return { probabilityWad, payout: 0n };
-  const product = wager * configuration.rtpWad;
+  const rtpWad = (era.rtp.n * WAD) / era.rtp.d;
+  const product = wager * rtpWad;
   return { probabilityWad, payout: (product - 1n) / (probabilityWad * CATEGORY_COUNT) + 1n };
 }
 
@@ -225,12 +214,12 @@ export function previewSinsPrices(
   configurationIndex: number | null = null,
 ): Record<string, Price> {
   const previewWager = wager > 0n ? wager : WAD;
-  const configurations = configurationsFor(configurationIndex);
+  const eras = erasFor(configurationIndex);
   const sins: Record<string, Price> = {};
-  for (const crimeMask of validCrimeMasks()) {
+  for (const crimeMask of CRIME_MASKS) {
     sins[sinOptionId(categoriesOfCrimeMask(crimeMask))] = averagePrice(
       previewWager,
-      configurations.map((configuration) => crimeOdds(configuration, previewWager, crimeMask)),
+      eras.map((era) => categoryOdds(era, previewWager, crimeProbability(era, crimeMask))),
     );
   }
   return sins;
@@ -243,13 +232,13 @@ export function previewCategoryPrices(
   configurationIndex: number | null = null,
 ): { sex: Record<string, Price>; age: Record<string, Price>; sins: Record<string, Price> } {
   const previewWager = wager > 0n ? wager : WAD;
-  const configurations = configurationsFor(configurationIndex);
+  const eras = erasFor(configurationIndex);
 
   const sex: Record<string, Price> = {};
   for (const [optionId, gender] of [['girl', 1] as const, ['boy', 0] as const]) {
     sex[optionId] = averagePrice(
       previewWager,
-      configurations.map((configuration) => genderOdds(configuration, previewWager, gender)),
+      eras.map((era) => categoryOdds(era, previewWager, genderProbability(era, gender))),
     );
   }
 
@@ -257,7 +246,7 @@ export function previewCategoryPrices(
   AGE_BUCKET_ORDER.forEach((optionId, index) => {
     age[optionId] = averagePrice(
       previewWager,
-      configurations.map((configuration) => lifespanOdds(configuration, previewWager, index)),
+      eras.map((era) => categoryOdds(era, previewWager, lifespanProbability(era, index))),
     );
   });
 

@@ -8,9 +8,11 @@ import {
   encodeMortalOddsPrediction,
   previewCategoryPrices,
   previewSinsPrices,
-  soulOddsConfigurations,
 } from '@/lib/mortal-odds/soul-odds-contract';
 import type { Bet } from '@/types';
+import { ERAS } from '../../../chain/soul-math';
+
+const rtpOf = (era: number) => Number(ERAS[era]!.rtp.n) / Number(ERAS[era]!.rtp.d);
 
 const WAGER = 10n ** 19n;
 const bet = (marketId: string, optionId: string): Bet => ({
@@ -29,24 +31,20 @@ describe('previewSinsPrices', () => {
   });
 
   it("pays the multiplier on a category's third of the wager, rtp / p", () => {
-    const rtp = Number(soulOddsConfigurations[0]!.rtpWad) / 1e18;
+    const rtp = rtpOf(0);
     for (const price of Object.values(previewSinsPrices(WAGER, 2, 0))) {
       expect(price.odds).toBeCloseTo(rtp / price.p, 2);
     }
   });
 
   it("pins to one era's odds instead of averaging every era", () => {
-    const perEra = soulOddsConfigurations.map(
-      (_configuration, index) => previewSinsPrices(WAGER, 2, index).heresy!.odds!,
-    );
+    const perEra = ERAS.map((_era, index) => previewSinsPrices(WAGER, 2, index).heresy!.odds!);
     expect(Math.max(...perEra)).toBeGreaterThan(Math.min(...perEra) * 2);
   });
 
   it('before the era is known, pays the multiplier that goes with the average chance, not the average multiplier', () => {
-    const rtp = Number(soulOddsConfigurations[0]!.rtpWad) / 1e18;
-    const perEra = soulOddsConfigurations.map(
-      (_configuration, index) => previewSinsPrices(WAGER, 2, index).heresy!.odds!,
-    );
+    const rtp = rtpOf(0);
+    const perEra = ERAS.map((_era, index) => previewSinsPrices(WAGER, 2, index).heresy!.odds!);
     const average = previewSinsPrices(WAGER, 2).heresy!;
     expect(average.odds).toBeCloseTo(rtp / average.p, 6);
     expect(average.odds).toBeLessThan(perEra.reduce((sum, odds) => sum + odds, 0) / perEra.length);
@@ -62,15 +60,13 @@ describe('previewCategoryPrices', () => {
   it('prices a 5 to 29 death near 8x before the era is known, and no era pays a silly amount for it', () => {
     const { age } = previewCategoryPrices(WAGER);
     expect(age.y!.odds).toBeCloseTo(8, 0);
-    const perEra = soulOddsConfigurations.map(
-      (_configuration, index) => previewCategoryPrices(WAGER, 0, index).age.y!.odds!,
-    );
+    const perEra = ERAS.map((_era, index) => previewCategoryPrices(WAGER, 0, index).age.y!.odds!);
     expect(Math.max(...perEra)).toBeLessThan(40);
   });
 
   it('makes the youngest and oldest ages likelier to be missed in the era they are rare', () => {
     const first = previewCategoryPrices(WAGER, 0, 0).age;
-    const last = previewCategoryPrices(WAGER, 0, soulOddsConfigurations.length - 1).age;
+    const last = previewCategoryPrices(WAGER, 0, ERAS.length - 1).age;
     expect(last.o!.p).toBeGreaterThan(first.o!.p);
     expect(last.u5!.p).toBeLessThan(first.u5!.p);
   });
@@ -127,7 +123,7 @@ describe('configurationIndexFromSession', () => {
       randomnessRequests: [{ nonce: '0', randomness: first, fulfilled: true }],
     });
     expect(era).toBeGreaterThanOrEqual(0);
-    expect(era).toBeLessThan(soulOddsConfigurations.length);
+    expect(era).toBeLessThan(ERAS.length);
     expect(configurationIndexFromSession({ randomness: first })).toBe(era);
   });
 
@@ -166,7 +162,7 @@ describe('decodeSettledSoul', () => {
 describe('crime pricing', () => {
   it('does not depend on the age bucket picked, and returns exactly the RTP per category', () => {
     expect(previewSinsPrices(WAGER, 0, 2)).toEqual(previewSinsPrices(WAGER, 3, 2));
-    const rtp = Number(soulOddsConfigurations[2]!.rtpWad) / 1e18;
+    const rtp = rtpOf(2);
     for (const price of Object.values(previewSinsPrices(WAGER, 0, 2))) {
       expect(price.p * price.odds!).toBeCloseTo(rtp, 6);
     }

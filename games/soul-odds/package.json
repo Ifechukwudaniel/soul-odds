@@ -30,8 +30,6 @@
   "dependencies": {
     "@arcjet/next": "1.10.0",
     "@chain-protocol/casino-sdk": "0.7.0",
-    "@chain/casino-sdk": "file:../..",
-    "@chain/soul-odds-engine": "file:../../soul-odds-engine",
     "@gsap/react": "^2.1.2",
     "@heroicons/react": "^2.2.0",
     "@number-flow/react": "^0.6.2",
