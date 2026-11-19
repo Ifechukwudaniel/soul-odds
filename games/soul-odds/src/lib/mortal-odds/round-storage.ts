@@ -1,4 +1,4 @@
-import type { HostSnapshotV1 } from '@chain/casino-sdk/guest';
+import type { HostSnapshot } from '@chain-protocol/casino-sdk/guest';
 import type { MortalOddsDrawPhase, RevealResult } from '@/hooks/useMortalOddsDraw';
 import type { Bet, Draw, EraFilter, RoundCharge } from '@/types';
 
@@ -39,8 +39,8 @@ export function toResumablePhase(phase: MortalOddsDrawPhase): ResumablePhase | n
 }
 
 /** One saved round per chain, game and wallet, so switching wallets never resumes someone else's round. */
-export function roundStorageKey(snapshot: HostSnapshotV1): string | null {
-  const wallet = snapshot.wallet.smartVaultAddress ?? snapshot.wallet.address;
+export function roundStorageKey(snapshot: HostSnapshot): string | null {
+  const wallet = snapshot.wallet.smartWalletAddress ?? snapshot.wallet.address;
   if (!wallet) return null;
   return `mortal-odds-round:v${VERSION}:${snapshot.integration.chainId}:${snapshot.integration.gameAddress}:${wallet}`;
 }

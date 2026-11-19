@@ -1,13 +1,5 @@
-import { type HostApiV1, type HostSnapshotV1, SessionPhase } from '@chain/casino-sdk/guest';
-import {
-  decodePrediction,
-  generateSoul,
-  matchBreakdown,
-  pickConfigurationIndex,
-  predictionPayout,
-  validatePrediction,
-} from '@chain/soul-odds-engine/soul';
-import { decodeAbiParameters, encodeAbiParameters, type Hex, toHex } from 'viem';
+import { type HostApi, type HostSnapshot, SessionPhase } from '@chain-protocol/casino-sdk/guest';
+import { decodeAbiParameters, type Hex, toHex } from 'viem';
 import {
   DEMO_DECIMALS,
   DEMO_GAME,
@@ -18,9 +10,11 @@ import {
   DEMO_STARTING_BALANCE,
 } from '@/constants/demo-host';
 import { DEMO_HOST_STORAGE_KEY, DEMO_HOST_WALLET_STORAGE_KEY } from '@/constants/storage';
-import { settledGameStateAbi, soulOddsConfigurations } from '@/lib/mortal-odds/soul-odds-contract';
+import { configurationIndexFromSession } from '@/lib/mortal-odds/soul-odds-contract';
+import { PREDICTION_COUNT, prizeDenominator } from '../../chain/soul-math';
+import { settleTier } from '../../chain/soul-settle';
 
-type Session = HostSnapshotV1['sessions']['items'][number];
+type Session = HostSnapshot['sessions']['items'][number];
 
 const randomAddress = (): `0x${string}` => toHex(crypto.getRandomValues(new Uint8Array(20)));
 
@@ -77,13 +71,9 @@ const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve,
 
 const randomHex32 = (): Hex => toHex(crypto.getRandomValues(new Uint8Array(32)));
 
-function buildSnapshot(
-  wallet: `0x${string}`,
-  balance: bigint,
-  sessions: Session[],
-): HostSnapshotV1 {
+function buildSnapshot(wallet: `0x${string}`, balance: bigint, sessions: Session[]): HostSnapshot {
   return {
-    apiVersion: 1,
+    sdkVersion: '0.7.0',
     integration: {
       chainId: 0,
       slug: 'soul-odds',
@@ -91,14 +81,13 @@ function buildSnapshot(
       manifest: {
         schemaVersion: 1,
         gameId: 'SoulOddsGame',
-        apiVersion: 1,
         defaultLocale: 'en',
         locales: { en: { name: 'Soul Odds' } },
       },
     },
-    wallet: { address: wallet, smartVaultAddress: wallet, status: 'ready' },
+    wallet: { address: wallet, smartWalletAddress: wallet, status: 'ready' },
     token: { symbol: 'chUSD', decimals: DEMO_DECIMALS },
-    balances: { smartVaultBalance: balance.toString() },
+    balances: { smartWalletBalance: balance.toString() },
     sessions: { items: sessions },
     ui: { locale: 'en', theme: 'dark' },
   };
@@ -109,7 +98,7 @@ function buildSnapshot(
  * balance and settles rounds locally with the deployed contract's odds and payout maths, pushing
  * each change through `publish` like the real host.
  */
-export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Promise<HostApiV1> {
+export function connectDemoHost(publish: (snapshot: HostSnapshot) => void): Promise<HostApi> {
   const wallet = loadOrCreateWallet();
   const saved = loadSaved();
   let balance = saved ? BigInt(saved.balance) : DEMO_STARTING_BALANCE;
@@ -130,7 +119,12 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
     );
   };
 
-  const hostApi: HostApiV1 = {
+  const hostApi: HostApi = {
+    // ✦ Play money has no vault to cap it; the only limit is the demo balance.
+    async getMaxWager() {
+      return { kind: 'no-limit' };
+    },
+
     async openSession(input) {
       await delay(DEMO_OPEN_LATENCY_MS);
       const wager = BigInt(input.wager);
@@ -139,11 +133,9 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
 
       const sessionId = String(nextSessionId++);
       const sessionKey = randomHex32();
-      // ✦ Like the real engine, the era configuration is fixed when the session starts, before any prediction.
-      const configurationIndex = pickConfigurationIndex(
-        randomHex32(),
-        soulOddsConfigurations.length,
-      );
+      // ✦ Like the real title, the era is drawn when the session opens, before any prediction: the
+      //   first VRF word picks it.
+      const eraWord = randomHex32();
       const now = Math.floor(Date.now() / 1000);
       balance -= wager;
       sessions = [
@@ -160,7 +152,10 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
           lastEventTimestamp: now,
           raw: {
             gameData: '0x',
-            gameState: encodeAbiParameters([{ type: 'uint256' }], [BigInt(configurationIndex)]),
+            randomness: eraWord,
+            randomnessRequests: [
+              { nonce: '0', requestId: randomHex32(), randomness: eraWord, fulfilled: true },
+            ],
           },
         },
         ...sessions,
@@ -175,8 +170,8 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
       if (session?.phase !== SessionPhase.WAITING_PLAYER_ACTION)
         throw new Error('This round is no longer open.');
 
-      const prediction = decodePrediction(input.actionData);
-      validatePrediction(prediction);
+      const [predictionIndex] = decodeAbiParameters([{ type: 'uint256' }], input.actionData);
+      if (predictionIndex >= BigInt(PREDICTION_COUNT)) throw new Error('Not a valid prediction.');
 
       patchSession(session.sessionId, {
         phase: SessionPhase.WAITING_RANDOMNESS,
@@ -185,18 +180,11 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
       push();
 
       const wager = BigInt(session.wager ?? '0');
-      const randomness = randomHex32();
-      const [configurationIndex] = decodeAbiParameters(
-        [{ type: 'uint256' }],
-        session.raw.gameState as Hex,
-      );
-      const configuration =
-        soulOddsConfigurations[Number(configurationIndex)] ?? soulOddsConfigurations[0];
-      if (!configuration)
-        throw new Error('Mortal Odds title has no era configurations to draw from.');
-      const result = generateSoul(configuration, randomness);
-      const breakdown = matchBreakdown(prediction, result);
-      const payout = predictionPayout(configuration, wager, prediction, result);
+      const settleWord = randomHex32();
+      const eraIndex = configurationIndexFromSession(session.raw);
+      if (eraIndex === null) throw new Error('This round has no era to settle against.');
+      const tier = settleTier(eraIndex, Number(predictionIndex), settleWord);
+      const payout = (wager * tier.prizeUnits) / prizeDenominator();
       const now = Math.floor(Date.now() / 1000);
 
       // ✦ A demo player who busts gets a fresh bankroll instead of a dead end.
@@ -212,12 +200,11 @@ export function connectDemoHost(publish: (snapshot: HostSnapshotV1) => void): Pr
         lastEventTimestamp: now,
         raw: {
           ...session.raw,
-          gameState: encodeAbiParameters(settledGameStateAbi, [
-            prediction,
-            result,
-            payout > 0n,
-            breakdown,
-          ]),
+          randomnessRequests: [
+            ...(session.raw.randomnessRequests ?? []),
+            { nonce: '1', requestId: randomHex32(), randomness: settleWord, fulfilled: true },
+          ],
+          actions: [{ step: '1', actionData: input.actionData }],
         },
       });
       // ✦ Saved before the settle delay, so a refresh mid-wait comes back to an already-settled round.

@@ -3,18 +3,18 @@
 import {
   connectGameToHost,
   observeGameContentSize,
-  type HostApiV1,
-  type HostSnapshotV1,
-} from '@chain/casino-sdk/guest';
+  type HostApi,
+  type HostSnapshot,
+} from '@chain-protocol/casino-sdk/guest';
 import { useEffect, useState } from 'react';
 import { connectDemoHost, isStandalone } from '@/lib/demo-host';
 
-type SnapshotListener = (snapshot: HostSnapshotV1 | null) => void;
+type SnapshotListener = (snapshot: HostSnapshot | null) => void;
 
 type HostBridge = {
-  promise: Promise<HostApiV1>;
+  promise: Promise<HostApi>;
   listeners: Set<SnapshotListener>;
-  latest: () => HostSnapshotV1 | null;
+  latest: () => HostSnapshot | null;
 };
 
 let bridge: HostBridge | undefined;
@@ -27,8 +27,8 @@ let bridge: HostBridge | undefined;
 function hostBridge(): HostBridge {
   if (bridge) return bridge;
   const listeners = new Set<SnapshotListener>();
-  let latest: HostSnapshotV1 | null = null;
-  const publish = (snapshot: HostSnapshotV1 | null) => {
+  let latest: HostSnapshot | null = null;
+  const publish = (snapshot: HostSnapshot | null) => {
     latest = snapshot;
     listeners.forEach((listener) => listener(snapshot));
   };
@@ -48,11 +48,11 @@ function hostBridge(): HostBridge {
  * handshake resolves, and mirrors every `setState` push into React state.
  */
 export function useCasinoHost(): {
-  hostApi: HostApiV1 | null;
-  snapshot: HostSnapshotV1 | null;
+  hostApi: HostApi | null;
+  snapshot: HostSnapshot | null;
 } {
-  const [hostApi, setHostApi] = useState<HostApiV1 | null>(null);
-  const [snapshot, setSnapshot] = useState<HostSnapshotV1 | null>(null);
+  const [hostApi, setHostApi] = useState<HostApi | null>(null);
+  const [snapshot, setSnapshot] = useState<HostSnapshot | null>(null);
 
   useEffect(() => {
     const { promise, listeners, latest } = hostBridge();

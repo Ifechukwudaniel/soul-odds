@@ -1,9 +1,9 @@
 'use client';
 
-import { SessionPhase } from '@chain/casino-sdk/guest';
+import { SessionPhase } from '@chain-protocol/casino-sdk/guest';
 import { animate } from 'framer-motion';
 import { useEffect, useReducer, useRef, useState } from 'react';
-import { parseUnits } from 'viem';
+import { formatUnits, parseUnits } from 'viem';
 import { useCasinoHost } from '@/hooks/useCasinoHost';
 import { pickCauseOfDeath } from '@/lib/mortal-odds/cause-of-death';
 import {
@@ -42,8 +42,9 @@ import { categoriesOfCrimeMask } from '@/lib/mortal-odds/sin-selection';
 import type { SinNarratives } from '@/lib/mortal-odds/sin-variants';
 import {
   ageBucketIndex,
-  configurationIndexFromGameState,
+  configurationIndexFromSession,
   decodeSettledSoul,
+  buildPrediction,
   encodeMortalOddsPrediction,
   isTerminalPhase,
   previewCategoryPrices,
@@ -470,7 +471,17 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     openingSession.current = true;
     setIsOpeningSession(true);
     void hostApi
-      .openSession({ wager: wagerWei.toString(), gameData: '0x' })
+      .getMaxWager({ gameData: '0x' })
+      // ✦ The vault caps wagers by what the title could pay out; ask rather than open a session it
+      //   would refuse. An answer of `unknown` falls through to the host's own refusal.
+      .then((max) => {
+        if (max.kind === 'limit' && wagerWei > BigInt(max.maxWager)) {
+          throw new Error(
+            `The most you can wager right now is ${formatUnits(BigInt(max.maxWager), decimals)}.`,
+          );
+        }
+        return hostApi.openSession({ wager: wagerWei.toString(), gameData: '0x' });
+      })
       .then(async ({ sessionKey }) => {
         setSession({ key: sessionKey, wagerWei });
         setConfigurationIndex(null);
@@ -508,8 +519,8 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
   useEffect(() => {
     if (!session || !snapshot) return;
     const row = snapshot.sessions.items.find((item) => item.sessionKey === session.key);
-    if (row?.phase !== SessionPhase.WAITING_PLAYER_ACTION || !row.raw.gameState) return;
-    setConfigurationIndex(configurationIndexFromGameState(row.raw.gameState));
+    if (row?.phase !== SessionPhase.WAITING_PLAYER_ACTION) return;
+    setConfigurationIndex(configurationIndexFromSession(row.raw));
   }, [session, snapshot]);
 
   // ✦ A round the host cancelled or forfeited while the player was away can never settle; drop it instead of hanging.
@@ -551,14 +562,18 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
     if (state.phase !== 'settling' || !session?.id || !snapshot || !state.draw || !state.samples)
       return;
     const row = snapshot.sessions.items.find((item) => item.sessionKey === session.key);
-    if (!row || !(row.isSettled || isTerminalPhase(row.phase)) || !row.raw.gameState) return;
+    if (!row || !(row.isSettled || isTerminalPhase(row.phase))) return;
 
     const bets = pendingBets.current;
     if (!bets) return;
 
     try {
       const { draw, samples: bookieSamples } = state;
-      const { result } = decodeSettledSoul(row.raw.gameState);
+      // ✦ A cancelled or forfeited round has no settling word; the effect above reports those.
+      if (row.phase === SessionPhase.FORFEITED || row.phase === SessionPhase.CANCELLED) return;
+      const settledEra = configurationIndex ?? configurationIndexFromSession(row.raw);
+      if (settledEra === null) return;
+      const { result } = decodeSettledSoul(row.raw, buildPrediction(bets), settledEra);
       const sex: Sex = result.gender === 1 ? 'girl' : 'boy';
       const deathYear = draw.year + result.age;
       const categories = categoriesOfCrimeMask(result.crimeMask);
@@ -599,11 +614,10 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
       const life: Life = { ...flavor, sex, age: result.age, deathYear, sin: sins[0] ?? null, sins };
       life.cause = pickCauseOfDeath({ life, currentYear: CURRENT_YEAR, rng });
 
-      // ✦ Crime odds are conditioned on the bucket the player's own prediction paired them with, not
-      //   the soul's actual one; see `previewSinsPrices`.
+      // ✦ Prices come from the era the round drew, the same odds the player saw while picking.
       const ageBet = bets.age;
       const predictedBucket = ageBet?.kind === 'choice' ? ageBucketIndex(ageBet.optionId) : 0;
-      const prices = previewCategoryPrices(session.wagerWei, predictedBucket, configurationIndex);
+      const prices = previewCategoryPrices(session.wagerWei, predictedBucket, settledEra);
       const trueProbabilities = toTrueProbabilities(prices);
       const { results, net, skill } = resolveBets({
         life,
@@ -671,7 +685,15 @@ export function useMortalOddsDraw(options: { reducedMotion: boolean }): {
         error: 'Could not read the settled soul — redeploy the title against the current contract.',
       });
     }
-  }, [snapshot, state.phase, session, state.draw, state.samples, sinNarrativesState]);
+  }, [
+    snapshot,
+    state.phase,
+    session,
+    state.draw,
+    state.samples,
+    sinNarrativesState,
+    configurationIndex,
+  ]);
 
   // =====================================
   // ⬢ Pricing

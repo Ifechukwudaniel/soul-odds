@@ -64,7 +64,7 @@ export default function GamePage() {
 
   const hostBalance = Number(
     formatUnits(
-      BigInt(snapshot?.balances.smartVaultBalance ?? '0'),
+      BigInt(snapshot?.balances.smartWalletBalance ?? '0'),
       snapshot?.token.decimals ?? 18,
     ),
   );

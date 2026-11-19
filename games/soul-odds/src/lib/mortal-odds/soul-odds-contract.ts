@@ -7,17 +7,14 @@ import {
 //   re-exports `title.ts`, which reads title files via `node:fs` and would drag a Node built-in into
 //   the browser bundle, where Turbopack refuses to chunk it.
 import {
-  encodePrediction,
   type SoulConfiguration,
   type SoulMatchBreakdown,
   type SoulPrediction,
-  type SoulResult,
-  crimeOdds,
   genderOdds,
   lifespanOdds,
   validCrimeMasks,
 } from '@chain/soul-odds-engine/soul';
-import { decodeAbiParameters, type Hex } from 'viem';
+import { encodeAbiParameters, type Hex } from 'viem';
 import titleFile from '@/config/mortal-odds/soul-odds-title.json';
 import { chanceTag } from '@/lib/mortal-odds/pricing';
 import {
@@ -26,6 +23,15 @@ import {
   sinOptionId,
 } from '@/lib/mortal-odds/sin-selection';
 import type { Bet, Price } from '@/types';
+import {
+  CRIME_MATCH,
+  crimeProbability,
+  ERAS,
+  GENDER_MATCH,
+  LIFESPAN_MATCH,
+  predictionIndex,
+} from '../../../chain/soul-math';
+import { deriveSoul, eraFromWord, settleTier } from '../../../chain/soul-settle';
 
 // =====================================
 // ⬢ Era configurations
@@ -41,17 +47,28 @@ export const soulOddsConfigurations: SoulConfiguration[] = definitions.map((defi
   toConfiguration(toConfigurationInput(definition)),
 );
 
+type SessionRaw = {
+  randomness?: Hex;
+  randomnessRequests?: { nonce: string; randomness?: Hex; fulfilled: boolean }[];
+};
+
+/** Every fulfilled VRF word of a session in step order: the first picks the era, the last settles the round. */
+export function randomnessWords(raw: SessionRaw): Hex[] {
+  const fulfilled = (raw.randomnessRequests ?? [])
+    .filter((request) => request.fulfilled && request.randomness)
+    .sort((a, b) => Number(BigInt(a.nonce) - BigInt(b.nonce)))
+    .map((request) => request.randomness!);
+  return fulfilled.length > 0 ? fulfilled : raw.randomness ? [raw.randomness] : [];
+}
+
 /**
- * The era configuration the contract fixed for a session, read from its `gameState` while it waits
- * for the player's prediction. Null when the state doesn't hold one.
+ * The era the title drew for a session, read from the VRF word that opened it. The title's first
+ * node is a chance over the eras, so the era is fixed before any prediction and is known while the
+ * session waits for the player. Null until that word has arrived.
  */
-export function configurationIndexFromGameState(gameState: Hex): number | null {
-  try {
-    const [index] = decodeAbiParameters([{ type: 'uint256' }], gameState);
-    return index < BigInt(soulOddsConfigurations.length) ? Number(index) : null;
-  } catch {
-    return null;
-  }
+export function configurationIndexFromSession(raw: SessionRaw): number | null {
+  const [first] = randomnessWords(raw);
+  return first ? eraFromWord(first) : null;
 }
 
 /** The one configuration a session is pinned to, or every era when it isn't known yet. */
@@ -59,6 +76,26 @@ function configurationsFor(configurationIndex: number | null): SoulConfiguration
   const pinned =
     configurationIndex === null ? undefined : soulOddsConfigurations[configurationIndex];
   return pinned ? [pinned] : soulOddsConfigurations;
+}
+
+/**
+ * Standalone odds and payout for a crime state in one era. The crime category is priced from the
+ * chance a soul has that crime state at all, over every lifespan bucket, so that each category
+ * returns exactly the RTP. Pricing it from the predicted bucket's own chance, as the Soul Odds
+ * engine did, let some picks return up to 115%.
+ */
+function crimeOdds(
+  configuration: SoulConfiguration,
+  wager: bigint,
+  crimeMask: number,
+): { probabilityWad: bigint; payout: bigint } {
+  const era = ERAS[soulOddsConfigurations.indexOf(configuration)];
+  if (!era) throw new Error('Unknown era configuration');
+  const { n, d } = crimeProbability(era, crimeMask);
+  const probabilityWad = (n * WAD) / d;
+  if (probabilityWad === 0n) return { probabilityWad, payout: 0n };
+  const product = wager * configuration.rtpWad;
+  return { probabilityWad, payout: (product - 1n) / (probabilityWad * CATEGORY_COUNT) + 1n };
 }
 
 // =====================================
@@ -92,44 +129,18 @@ export function buildPrediction(bets: Record<string, Bet>): SoulPrediction {
   return { gender, lifespanBucket, sins: crimeMask !== 0, crimeMask };
 }
 
+/** The decision node's action: the prediction's index among the title's 88, as a uint256. */
 export function encodeMortalOddsPrediction(bets: Record<string, Bet>): Hex {
-  return encodePrediction(buildPrediction(bets));
+  const { gender, lifespanBucket, crimeMask } = buildPrediction(bets);
+  return encodeAbiParameters(
+    [{ type: 'uint256' }],
+    [BigInt(predictionIndex({ gender, lifespanBucket, crimeMask }))],
+  );
 }
 
 // =====================================
 // ⬢ Settlement
 // =====================================
-export const settledGameStateAbi = [
-  {
-    type: 'tuple',
-    components: [
-      { type: 'uint8', name: 'gender' },
-      { type: 'uint8', name: 'lifespanBucket' },
-      { type: 'bool', name: 'sins' },
-      { type: 'uint8', name: 'crimeMask' },
-    ],
-  },
-  {
-    type: 'tuple',
-    components: [
-      { type: 'uint8', name: 'gender' },
-      { type: 'uint16', name: 'age' },
-      { type: 'int16', name: 'birthYear' },
-      { type: 'uint8', name: 'lifespanBucket' },
-      { type: 'uint8', name: 'crimeMask' },
-    ],
-  },
-  { type: 'bool' },
-  {
-    type: 'tuple',
-    components: [
-      { type: 'bool', name: 'genderMatch' },
-      { type: 'bool', name: 'lifespanMatch' },
-      { type: 'bool', name: 'crimeMatch' },
-    ],
-  },
-] as const;
-
 // ✦ SessionPhase enum from ICasinoGameV2.sol
 const PHASE_SETTLED = 3;
 const PHASE_FORFEITED = 4;
@@ -139,12 +150,37 @@ export function isTerminalPhase(phase: number | undefined): boolean {
   return phase === PHASE_SETTLED || phase === PHASE_FORFEITED || phase === PHASE_CANCELLED;
 }
 
-export type SettledSoul = { result: SoulResult; won: boolean; breakdown: SoulMatchBreakdown };
+export type SettledSoul = {
+  result: { gender: number; age: number; lifespanBucket: number; crimeMask: number };
+  won: boolean;
+  breakdown: SoulMatchBreakdown;
+};
 
-/** Decodes a settled session's `gameState`, mirroring `example/frontend`'s reference decode. */
-export function decodeSettledSoul(gameState: Hex): SettledSoul {
-  const [, result, won, breakdown] = decodeAbiParameters(settledGameStateAbi, gameState);
-  return { result, won, breakdown };
+/**
+ * Reads a settled round. The chain settles which of the three categories hit (the settling tier's
+ * label); the soul shown is one that hit exactly those, seeded by the round's own VRF word.
+ * Throws when the round's randomness is not available yet.
+ */
+export function decodeSettledSoul(
+  raw: SessionRaw,
+  prediction: SoulPrediction,
+  eraIndex: number,
+): SettledSoul {
+  const words = randomnessWords(raw);
+  const settling = words.length > 1 ? words[words.length - 1] : undefined;
+  if (!settling) throw new Error('The round has not been settled with randomness yet.');
+
+  const index = predictionIndex(prediction);
+  const tier = settleTier(eraIndex, index, settling);
+  return {
+    result: deriveSoul(eraIndex, prediction, tier.flags, settling),
+    won: tier.prizeUnits > 0n,
+    breakdown: {
+      genderMatch: (tier.flags & GENDER_MATCH) !== 0,
+      lifespanMatch: (tier.flags & LIFESPAN_MATCH) !== 0,
+      crimeMatch: (tier.flags & CRIME_MATCH) !== 0,
+    },
+  };
 }
 
 // =====================================
@@ -179,13 +215,13 @@ function averagePrice(
 }
 
 /**
- * Live odds for every crime state the contract accepts (none, each category, each pair) for one
- * lifespan bucket. Each bucket has its own `noCrimeWeight` (a child is far likelier to be "Clean"),
- * so these only mean something once an age bucket is picked.
+ * Live odds for every crime state the title accepts (none, each category, each pair). The crime
+ * price no longer depends on the age bucket picked, so `lifespanBucket` is kept only so callers
+ * and the options' order stay as they were.
  */
 export function previewSinsPrices(
   wager: bigint,
-  lifespanBucket: number,
+  _lifespanBucket: number,
   configurationIndex: number | null = null,
 ): Record<string, Price> {
   const previewWager = wager > 0n ? wager : WAD;
@@ -194,9 +230,7 @@ export function previewSinsPrices(
   for (const crimeMask of validCrimeMasks()) {
     sins[sinOptionId(categoriesOfCrimeMask(crimeMask))] = averagePrice(
       previewWager,
-      configurations.map((configuration) =>
-        crimeOdds(configuration, previewWager, lifespanBucket, crimeMask),
-      ),
+      configurations.map((configuration) => crimeOdds(configuration, previewWager, crimeMask)),
     );
   }
   return sins;

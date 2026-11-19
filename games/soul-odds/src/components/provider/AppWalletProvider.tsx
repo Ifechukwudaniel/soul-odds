@@ -1,13 +1,13 @@
 'use client';
 
-import type { HostApiV1, HostSnapshotV1 } from '@chain/casino-sdk/guest';
+import type { HostApi, HostSnapshot } from '@chain-protocol/casino-sdk/guest';
 import { createContext, use, useState } from 'react';
 import { Loader } from '@/components/Loader';
 import { useCasinoHost } from '@/hooks/useCasinoHost';
 
 type CasinoHostContextValue = {
-  hostApi: HostApiV1 | null;
-  snapshot: HostSnapshotV1 | null;
+  hostApi: HostApi | null;
+  snapshot: HostSnapshot | null;
 };
 
 const CasinoHostContext = createContext<CasinoHostContextValue | null>(null);

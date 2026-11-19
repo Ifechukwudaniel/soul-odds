@@ -21,6 +21,7 @@
     "db:seed:sin-catalog:prod": "dotenv -e .env -- tsx src/services/seedSinCatalog.ts --prod",
     "db:seed:cliopatria:zip": "dotenv -e .env -- tsx src/scripts/seed-cliopatria-from-zip.ts",
     "game:socket-server": "tsx src/server/index.ts",
+    "generate:crime-masks": "tsx scripts/generate-crime-masks.ts",
     "check:types": "tsc --noEmit --pretty",
     "test:unit": "vitest run --config vitest.unit.config.ts",
     "lint": "ultracite check --type-aware --type-check",
@@ -28,6 +29,7 @@
   },
   "dependencies": {
     "@arcjet/next": "1.10.0",
+    "@chain-protocol/casino-sdk": "0.7.0",
     "@chain/casino-sdk": "file:../..",
     "@chain/soul-odds-engine": "file:../../soul-odds-engine",
     "@gsap/react": "^2.1.2",

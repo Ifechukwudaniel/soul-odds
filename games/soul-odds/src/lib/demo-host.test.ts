@@ -1,4 +1,4 @@
-import type { HostSnapshotV1 } from '@chain/casino-sdk/guest';
+import type { HostSnapshot } from '@chain-protocol/casino-sdk/guest';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { connectDemoHost } from '@/lib/demo-host';
 import { encodeMortalOddsPrediction, isTerminalPhase } from '@/lib/mortal-odds/soul-odds-contract';
@@ -13,7 +13,7 @@ const PREDICTION = encodeMortalOddsPrediction({
 
 /** Connects a fresh demo host, as a page load would, and tracks the latest snapshot it pushes. */
 const load = async () => {
-  const latest: { snapshot: HostSnapshotV1 | null } = { snapshot: null };
+  const latest: { snapshot: HostSnapshot | null } = { snapshot: null };
   const hostApi = await connectDemoHost((snapshot) => {
     latest.snapshot = snapshot;
   });
@@ -47,7 +47,7 @@ describe('connectDemoHost persistence', () => {
       (item) => item.sessionKey === sessionKey,
     );
     expect(row?.isSettled).toBe(false);
-    expect(BigInt(second.latest.snapshot?.balances.smartVaultBalance ?? '0')).toBe(
+    expect(BigInt(second.latest.snapshot?.balances.smartWalletBalance ?? '0')).toBe(
       990n * 10n ** 18n,
     );
   });
@@ -68,9 +68,10 @@ describe('connectDemoHost persistence', () => {
     const row = second.latest.snapshot?.sessions.items.find(
       (item) => item.sessionKey === sessionKey,
     );
-    expect(row?.isSettled && isTerminalPhase(row.phase) && row.raw.gameState).toBeTruthy();
-    expect(second.latest.snapshot?.balances.smartVaultBalance).toBe(
-      first.latest.snapshot?.balances.smartVaultBalance,
+    expect(row?.isSettled && isTerminalPhase(row.phase)).toBe(true);
+    expect(row?.raw.randomnessRequests).toHaveLength(2);
+    expect(second.latest.snapshot?.balances.smartWalletBalance).toBe(
+      first.latest.snapshot?.balances.smartWalletBalance,
     );
   });
 
@@ -95,7 +96,7 @@ describe('connectDemoHost persistence', () => {
   it('starts fresh when nothing usable is saved', async () => {
     store.set('soul-odds-demo-host:v1', '{broken');
     const { latest } = await load();
-    expect(latest.snapshot?.balances.smartVaultBalance).toBe((1000n * 10n ** 18n).toString());
+    expect(latest.snapshot?.balances.smartWalletBalance).toBe((1000n * 10n ** 18n).toString());
     expect(latest.snapshot?.sessions.items).toEqual([]);
   });
 });

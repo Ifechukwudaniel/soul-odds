@@ -1,4 +1,4 @@
-import type { HostSnapshotV1 } from '@chain/casino-sdk/guest';
+import type { HostSnapshot } from '@chain-protocol/casino-sdk/guest';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   clearRound,
@@ -126,13 +126,13 @@ describe('toResumablePhase', () => {
 });
 
 describe('roundStorageKey', () => {
-  const snapshot = (wallet: HostSnapshotV1['wallet']): HostSnapshotV1 => ({
-    apiVersion: 1,
+  const snapshot = (wallet: HostSnapshot['wallet']): HostSnapshot => ({
+    sdkVersion: '0.7.0',
     integration: {
       chainId: 7,
       slug: 's',
       gameAddress: '0x0000000000000000000000000000000000000002',
-      manifest: { schemaVersion: 1, gameId: 'g', apiVersion: 1, defaultLocale: 'en', locales: {} },
+      manifest: { schemaVersion: 1, gameId: 'g', defaultLocale: 'en', locales: {} },
     },
     wallet,
     token: {},
@@ -145,13 +145,13 @@ describe('roundStorageKey', () => {
     const a = roundStorageKey(
       snapshot({
         status: 'ready',
-        smartVaultAddress: '0x00000000000000000000000000000000000000a1',
+        smartWalletAddress: '0x00000000000000000000000000000000000000a1',
       }),
     );
     const b = roundStorageKey(
       snapshot({
         status: 'ready',
-        smartVaultAddress: '0x00000000000000000000000000000000000000b2',
+        smartWalletAddress: '0x00000000000000000000000000000000000000b2',
       }),
     );
     expect(a).toContain(':7:');

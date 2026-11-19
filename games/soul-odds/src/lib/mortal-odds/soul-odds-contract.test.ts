@@ -1,8 +1,11 @@
-import { encodeAbiParameters } from 'viem';
+import { randomBytes } from 'node:crypto';
+import { bytesToHex } from 'viem';
 import { describe, expect, it } from 'vitest';
 import {
   buildPrediction,
-  configurationIndexFromGameState,
+  configurationIndexFromSession,
+  decodeSettledSoul,
+  encodeMortalOddsPrediction,
   previewCategoryPrices,
   previewSinsPrices,
   soulOddsConfigurations,
@@ -98,17 +101,74 @@ describe('buildPrediction', () => {
   });
 });
 
-describe('configurationIndexFromGameState', () => {
-  it('reads the era index the contract stored', () => {
-    expect(configurationIndexFromGameState(encodeAbiParameters([{ type: 'uint256' }], [3n]))).toBe(
-      3,
-    );
+describe('encodeMortalOddsPrediction', () => {
+  it("encodes the prediction's index among the title's 88 as a uint256", () => {
+    const first = encodeMortalOddsPrediction({
+      sex: bet('sex', 'boy'),
+      age: bet('age', 'u5'),
+      sins: bet('sins', 'none'),
+    });
+    expect(BigInt(first)).toBe(0n);
+    const last = encodeMortalOddsPrediction({
+      sex: bet('sex', 'girl'),
+      age: bet('age', 'o'),
+      sins: bet('sins', 'greed+heresy'),
+    });
+    expect(BigInt(last)).toBe(87n);
+  });
+});
+
+const word = () => bytesToHex(randomBytes(32));
+
+describe('configurationIndexFromSession', () => {
+  it('reads the era from the first VRF word', () => {
+    const first = word();
+    const era = configurationIndexFromSession({
+      randomnessRequests: [{ nonce: '0', randomness: first, fulfilled: true }],
+    });
+    expect(era).toBeGreaterThanOrEqual(0);
+    expect(era).toBeLessThan(soulOddsConfigurations.length);
+    expect(configurationIndexFromSession({ randomness: first })).toBe(era);
   });
 
-  it("returns null for an empty state or an index past the title's eras", () => {
-    expect(configurationIndexFromGameState('0x')).toBeNull();
+  it('is null until a word has arrived', () => {
+    expect(configurationIndexFromSession({})).toBeNull();
     expect(
-      configurationIndexFromGameState(encodeAbiParameters([{ type: 'uint256' }], [99n])),
+      configurationIndexFromSession({ randomnessRequests: [{ nonce: '0', fulfilled: false }] }),
     ).toBeNull();
+  });
+});
+
+describe('decodeSettledSoul', () => {
+  const prediction = { gender: 1, lifespanBucket: 2, sins: false, crimeMask: 0 };
+
+  it('needs the settling word, not just the one that drew the era', () => {
+    expect(() => decodeSettledSoul({ randomness: word() }, prediction, 0)).toThrow();
+  });
+
+  it('shows a soul that matches exactly the categories the chain settled', () => {
+    for (let trial = 0; trial < 50; trial++) {
+      const raw = {
+        randomnessRequests: [
+          { nonce: '0', randomness: word(), fulfilled: true },
+          { nonce: '1', randomness: word(), fulfilled: true },
+        ],
+      };
+      const { result, breakdown, won } = decodeSettledSoul(raw, prediction, 3);
+      expect(result.gender === prediction.gender).toBe(breakdown.genderMatch);
+      expect(result.lifespanBucket === prediction.lifespanBucket).toBe(breakdown.lifespanMatch);
+      expect(result.crimeMask === prediction.crimeMask).toBe(breakdown.crimeMatch);
+      expect(won).toBe(breakdown.genderMatch || breakdown.lifespanMatch || breakdown.crimeMatch);
+    }
+  });
+});
+
+describe('crime pricing', () => {
+  it('does not depend on the age bucket picked, and returns exactly the RTP per category', () => {
+    expect(previewSinsPrices(WAGER, 0, 2)).toEqual(previewSinsPrices(WAGER, 3, 2));
+    const rtp = Number(soulOddsConfigurations[2]!.rtpWad) / 1e18;
+    for (const price of Object.values(previewSinsPrices(WAGER, 0, 2))) {
+      expect(price.p * price.odds!).toBeCloseTo(rtp, 6);
+    }
   });
 });
