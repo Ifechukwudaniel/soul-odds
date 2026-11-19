@@ -7,9 +7,17 @@
 // from src/config/mortal-odds/soul-odds-title.json by chain/title.ts.
 import type { DeploymentInput } from '@chain-protocol/casino-sdk';
 
+// ✦ The platform picks npm when the build directory has no lockfile; this repo is a pnpm
+//   workspace (pnpm-lock.yaml at the root, `file:` links between packages), where npm install
+//   crashes. These commands run pnpm from wherever the build starts.
+
 export default {
   kind: 'graph',
   name: 'Mortal Odds',
   title: 'chain/title.ts',
-  frontend: { framework: 'nextjs', buildCommand: 'pnpm run build:next' },
+  frontend: {
+    framework: 'nextjs',
+    installCommand: 'npx --yes pnpm@10.33.0 install --frozen-lockfile --filter soulodds...',
+    buildCommand: 'npx --yes pnpm@10.33.0 run build:next',
+  },
 } satisfies DeploymentInput;
